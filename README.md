@@ -126,6 +126,7 @@ composer update modules/<nome>
 Tudo o que não cabe neste README fica em [`docs/`](docs/):
 
 - [`produto.md`](docs/produto.md): visão, módulos do MVP e fases seguintes, decisões em aberto
+- [Design do admin](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83): protótipo/telas do `front-admin`
 - ADRs com o porquê de cada decisão de arquitetura (a escrever)
 - Guia para a comunidade anfitriã: criar a edição, conectar o gateway, tematizar e abrir o CFP (a escrever)
 
