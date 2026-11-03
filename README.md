@@ -22,6 +22,8 @@ Esta plataforma existe para mudar isso. Os motivos:
 
 Em uma frase: transformar a organização do PHPeste em algo que se herda de um ano para o outro, em vez de algo que se reconstrói a cada edição.
 
+![Visão geral da edição — painel da organização](docs/design/admin-visao-geral.png)
+
 ## O que a plataforma cobre
 
 - **Comunidades e edições:** cada edição tem equipe, papéis, status e tema próprios.
