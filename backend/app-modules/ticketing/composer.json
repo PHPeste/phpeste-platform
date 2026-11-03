@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/ticketing",
+	"description": "Tipos de ingresso, lotes, cupons, pedidos, ingressos e QR",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Ticketing\\": "src/",
+			"PHPeste\\Ticketing\\Tests\\": "tests/",
+			"PHPeste\\Ticketing\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Ticketing\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Ticketing\\Providers\\TicketingServiceProvider"
+			]
+		}
+	}
+}

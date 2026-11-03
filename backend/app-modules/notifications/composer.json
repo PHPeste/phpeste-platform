@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/notifications",
+	"description": "E-mail transacional e push por edição",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Notifications\\": "src/",
+			"PHPeste\\Notifications\\Tests\\": "tests/",
+			"PHPeste\\Notifications\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Notifications\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Notifications\\Providers\\NotificationsServiceProvider"
+			]
+		}
+	}
+}

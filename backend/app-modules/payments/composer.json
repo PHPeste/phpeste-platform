@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/payments",
+	"description": "Interface de gateway, drivers, webhooks idempotentes e estornos",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Payments\\": "src/",
+			"PHPeste\\Payments\\Tests\\": "tests/",
+			"PHPeste\\Payments\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Payments\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Payments\\Providers\\PaymentsServiceProvider"
+			]
+		}
+	}
+}

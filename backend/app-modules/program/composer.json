@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/program",
+	"description": "Salas, sessões, grade e agenda pessoal",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Program\\": "src/",
+			"PHPeste\\Program\\Tests\\": "tests/",
+			"PHPeste\\Program\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Program\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Program\\Providers\\ProgramServiceProvider"
+			]
+		}
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/community",
+	"description": "Comunidades, edições, equipe e onboarding de nova edição",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Community\\": "src/",
+			"PHPeste\\Community\\Tests\\": "tests/",
+			"PHPeste\\Community\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Community\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Community\\Providers\\CommunityServiceProvider"
+			]
+		}
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/audit",
+	"description": "Trilha de ações sensíveis (pagamento, check-in)",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Audit\\": "src/",
+			"PHPeste\\Audit\\Tests\\": "tests/",
+			"PHPeste\\Audit\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Audit\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Audit\\Providers\\AuditServiceProvider"
+			]
+		}
+	}
+}
