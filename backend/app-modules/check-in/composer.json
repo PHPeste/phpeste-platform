@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/check-in",
+	"description": "Leitura de QR, credenciamento e equipe de check-in",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\CheckIn\\": "src/",
+			"PHPeste\\CheckIn\\Tests\\": "tests/",
+			"PHPeste\\CheckIn\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\CheckIn\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\CheckIn\\Providers\\CheckInServiceProvider"
+			]
+		}
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/branding",
+	"description": "Tema, domínio e tokens visuais por edição",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Branding\\": "src/",
+			"PHPeste\\Branding\\Tests\\": "tests/",
+			"PHPeste\\Branding\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Branding\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Branding\\Providers\\BrandingServiceProvider"
+			]
+		}
+	}
+}
