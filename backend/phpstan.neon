@@ -1,0 +1,11 @@
+includes:
+    - phpstan.modules.php
+
+parameters:
+    level: 7
+    checkImplicitMixed: true
+
+    tmpDir: .cache/phpstan
+
+    paths:
+        - app
