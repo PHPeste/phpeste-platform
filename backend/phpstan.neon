@@ -2,7 +2,7 @@ includes:
     - phpstan.modules.php
 
 parameters:
-    level: 7
+    level: 8
     checkImplicitMixed: true
 
     tmpDir: .cache/phpstan
