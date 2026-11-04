@@ -19,8 +19,16 @@ services:
         networks:
             - phpeste
         depends_on:
-            - mysql
-            - redis
+            mysql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        healthcheck:
+            test: ['CMD', 'curl', '-fsS', 'http://localhost/up']
+            interval: 10s
+            retries: 6
+            timeout: 5s
+            start_period: 30s
 
     horizon:
         build:
@@ -35,9 +43,36 @@ services:
         networks:
             - phpeste
         depends_on:
-            - mysql
-            - redis
+            mysql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
         entrypoint: ['php', '/var/www/html/artisan', 'horizon']
+        healthcheck:
+            test: ['CMD', 'php', '/var/www/html/artisan', 'horizon:status']
+            interval: 15s
+            retries: 6
+            timeout: 5s
+            start_period: 20s
+
+    scheduler:
+        build:
+            context: ../backend/vendor/laravel/sail/runtimes/8.4
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: phpeste-backend/app
+        environment: *backend-env
+        volumes:
+            - '../backend:/var/www/html'
+        networks:
+            - phpeste
+        depends_on:
+            mysql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        entrypoint: ['php', '/var/www/html/artisan', 'schedule:work']
 
     mysql:
         image: 'mysql/mysql-server:8.0'
