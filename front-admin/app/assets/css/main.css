@@ -1,2 +1,51 @@
 @import 'tailwindcss';
 @plugin 'daisyui';
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap');
+
+/*
+ * Tema "Sertão" — tokens oficiais (docs/design/tema-sertao-tokens.png).
+ * Cada edição pode sobrescrever marca/destaque/detalhe/logo/fonte/raio
+ * via `edition_settings.theme`; cores de estado e de texto ficam fixas
+ * para manter o contraste mínimo de 4,5:1.
+ */
+:root {
+  /* Marca */
+  --ph-brand: #6b2a12; /* ações primárias */
+  --ph-accent: #e8b544; /* destaque, item ativo */
+  --ph-terra: #b4532a; /* gráficos e detalhes */
+  --ph-link: #9c4220; /* links */
+
+  /* Superfícies */
+  --ph-bg: #fbf4e4; /* fundo da página */
+  --ph-surface: #fffbf2; /* cards e campos */
+  --ph-surface-2: #f5ead0; /* fundo secundário */
+  --ph-line: #e4d3ab; /* bordas */
+
+  /* Texto */
+  --ph-ink: #3a1607; /* texto e menu lateral */
+  --ph-ink-2: #6f4a38; /* texto secundário */
+  --ph-ink-3: #7f5a47; /* legendas */
+  --ph-on-brand: #fff8e8; /* texto sobre marca */
+
+  /* Estados (texto / fundo) */
+  --ph-ok: #4b6a24;
+  --ph-ok-bg: #e6ebcf;
+  --ph-warn: #8a5a00;
+  --ph-warn-bg: #f8e7b9;
+  --ph-danger: #a12b1f;
+  --ph-danger-bg: #f6d9d2;
+  --ph-info: #2f5d6b;
+  --ph-info-bg: #d9e7e9;
+
+  /* Tipografia e forma */
+  --ph-font-heading: 'Lexend', sans-serif;
+  --ph-radius: 10px;
+}
+
+body {
+  background-color: var(--ph-bg);
+  color: var(--ph-ink);
+  font-family: var(--ph-font-heading);
+  font-variant-numeric: tabular-nums;
+}
