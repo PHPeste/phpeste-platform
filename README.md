@@ -139,4 +139,4 @@ Credenciais de gateway são criptografadas e nunca devolvidas pela API. Webhooks
 
 ## Contribuindo
 
-A definir: guia de contribuição, código de conduta e licença.
+Ver [`CONTRIBUTING.md`](CONTRIBUTING.md). Código de conduta e licença: a definir.
