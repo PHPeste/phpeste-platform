@@ -73,6 +73,12 @@ services:
             redis:
                 condition: service_healthy
         entrypoint: ['php', '/var/www/html/artisan', 'schedule:work']
+        healthcheck:
+            test: ['CMD-SHELL', "pgrep -f 'schedule:work' || exit 1"]
+            interval: 15s
+            retries: 6
+            timeout: 5s
+            start_period: 20s
 
     mysql:
         image: 'mysql/mysql-server:8.0'
