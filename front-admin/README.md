@@ -1,91 +1,76 @@
-# base_nuxt_modular
+# front-admin
 
-[Versão em português](README.pt-BR.md)
+Painel da organização da [PHPeste Platform](../README.md). Nuxt 4, módulo-por-feature (`app/modules/{name}/`: types → services → composables → components → views), a partir do template [`base_nuxt_modular`](https://github.com/tecrodrigocastro/base_nuxt_modular).
 
-> Design/protótipo das telas deste admin: [claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83).
+> Design/protótipo das telas: [claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83) · tokens do tema em [`../docs/design/tema-sertao-tokens.png`](../docs/design/tema-sertao-tokens.png).
 
-A Nuxt 4 **template** with a module-per-feature convention (`app/modules/{name}/`: types → services → composables → components → views), extracted from a real production app's own architecture document instead of invented from scratch.
-
-This repo is a [GitHub template repository](https://docs.github.com/articles/creating-a-repository-from-a-template) — use the **"Use this template"** button (or `gh repo create my-project --template tecrodrigocastro/base_nuxt_modular`) to start a new frontend with this content and a fresh Git history, not extended into a product itself — same spirit as [`base_clean_arch_bloc`](../base_clean_arch_bloc) (its Flutter counterpart) and [`base_laravel_modular`](../base_laravel_modular), the Laravel monorepo this frontend is designed to sit next to as `apps/web`.
-
-> **Status:** runnable and tested. `login` is a complete, working reference module (types, service + error class, composable, component, view, tests for every layer — unit and end-to-end). 40 unit tests pass, 6 Playwright e2e tests pass, typecheck passes, `npm run build` produces a working production build.
+> **Status:** `login` é o módulo de referência completo (types, service + error class, composable, component, view, testes em cada camada — unitário e e2e). 40 testes unitários e 6 e2e (Playwright) passam, typecheck passa, `npm run build` gera um build de produção funcional.
 
 ```bash
 npm install
-npx playwright install chromium   # once — downloads the browser Playwright drives
+npx playwright install chromium   # uma vez — baixa o browser que o Playwright usa
 cp .env.example .env
 npm run dev
-npm test           # vitest — fast, mocks the composable boundary
-npm run test:e2e   # playwright — real browser, mocks only the network
+npm run lint        # eslint (via @nuxt/eslint)
+npm run typecheck    # nuxt typecheck (vue-tsc)
+npm test             # vitest — mocka a fronteira do composable/service
+npm run test:e2e     # playwright — browser real, mocka só a rede
 ```
 
-> **Working with AI assistants**: this project ships a `CLAUDE.md` and `.claude/rules/` so Claude Code (or any assistant that reads `CLAUDE.md`) already knows the architecture and naming conventions before generating anything.
+## A ideia
 
-## The idea
+Cada funcionalidade é um módulo em `app/modules/{name}/`, com separação estrita de camadas: `types/` (só interfaces) → `services/` (chamada crua ao backend, sem traduzir a resposta) → `composables/` (estado + tradução + mapeamento de erro) → `components/` (cada um faz suas próprias chamadas) → `views/` (só orquestração, nunca chama service direto). Regras completas: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
-Every feature is a module under `app/modules/{name}/`, with a strict layer separation: `types/` (interfaces only) → `services/` (raw backend calls, no response translation) → `composables/` (state + translation + error mapping) → `components/` (each makes its own requests) → `views/` (orchestration only, no service calls). Full rules: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+`login` é o módulo de referência — imite o formato dele ao criar um novo. `app/application/shared/` guarda composables/services cross-cutting (como `useLogout`) que mais de um módulo precisa mas que não são estado global; `app/stores/` (Pinia) é só para estado genuinamente global — `authStore` é o único hoje.
 
-`login` is the reference module — imitate its shape when creating a new one. `app/application/shared/` holds cross-cutting composables/services (like `useLogout`) that more than one module needs but that aren't global state; `app/stores/` (Pinia) is reserved for state that's genuinely global — `authStore` is the only one here.
-
-## Structure
+## Estrutura
 
 ```
 app/
   application/
-    locales/pt-br/index.ts        # aggregates every module's locale — one import+key per module
+    locales/pt-br/index.ts        # agrega o locale de cada módulo — um import+chave por módulo
     shared/
-      composables/                 # cross-cutting, not owned by one module (useLogout, useAuthSubmit)
-      services/                    # backend calls not owned by one module (authService)
+      composables/                 # cross-cutting, não é de um módulo só (useLogout, useAuthSubmit)
+      services/                    # chamada ao backend que não é de um módulo só (authService)
   infrastructure/
-    http/HttpClient.ts             # the only place that calls fetch() — Bearer auth, Laravel-shaped errors
+    http/HttpClient.ts             # único lugar que chama fetch() — auth Bearer, erros no formato Laravel
   modules/
-    login/                         # reference module
+    login/                         # módulo de referência
       types/index.ts
       services/{loginService,loginError}.ts
       composables/useLogin.ts
       components/LoginForm.vue
       views/LoginView.vue
       locales/pt-br/index.ts
-      router/index.ts              # documental — Nuxt file-based routing resolves navigation today
+      router/index.ts              # documental — o roteamento por arquivo do Nuxt resolve a navegação hoje
   stores/
-    authStore.ts                   # the one legitimate global (Pinia) store — session data
+    authStore.ts                   # o único store (Pinia) global de verdade — dados da sessão
   pages/
-    login.vue                      # wires the login module into Nuxt's file-based router
+    login.vue                      # liga o módulo login no roteamento por arquivo do Nuxt
     index.vue
   plugins/
-    auth.client.ts                 # hydrates authStore from localStorage on boot
+    auth.client.ts                 # hidrata o authStore a partir do localStorage ao iniciar
 e2e/
-  login.spec.ts                    # Playwright — real browser, mocks only the network boundary
+  login.spec.ts                    # Playwright — browser real, mocka só a fronteira de rede
 ```
 
-## Core rules
+## Regras principais
 
-- A module's `services/` never translates the API response — only the composable does.
-- A module's `views/` never calls a service directly.
-- No per-module Pinia store — global state is only for things genuinely read across unrelated parts of the app.
-- Every module with a view is registered in Nuxt's file-based routing and in `app/application/locales/pt-br/index.ts`.
+- `services/` de um módulo nunca traduz a resposta da API — só o composable faz isso.
+- `views/` de um módulo nunca chama service direto.
+- Sem store Pinia por módulo — estado global é só pra coisa lida de verdade em partes não relacionadas do app.
+- Todo módulo com view é registrado no roteamento por arquivo do Nuxt e em `app/application/locales/pt-br/index.ts`.
 
-Full rationale: [`.claude/rules/architecture.md`](.claude/rules/architecture.md). Naming table: [`.claude/rules/naming-conventions.md`](.claude/rules/naming-conventions.md).
+Racional completo: [`.claude/rules/architecture.md`](.claude/rules/architecture.md). Tabela de nomenclatura: [`.claude/rules/naming-conventions.md`](.claude/rules/naming-conventions.md).
 
-## UI kit
+## Tema Sertão e UI kit
 
-[DaisyUI](https://daisyui.com/) is wired via Tailwind v4's CSS-first plugin syntax (`@plugin 'daisyui';` in `app/assets/css/main.css`, no config file needed). `LoginForm.vue` is the reference for the intended markup — `fieldset`/`label`/`input`/`btn`/`alert` component classes, not raw utilities, for form controls, buttons and alerts.
+[DaisyUI](https://daisyui.com/) vem via sintaxe CSS-first do Tailwind v4 (`@plugin 'daisyui';` em `app/assets/css/main.css`, sem arquivo de config). Os tokens do tema Sertão (`--ph-*`, fonte Lexend) estão no mesmo arquivo — ver `CLAUDE.md`. `LoginForm.vue` é a referência de marcação — classes de componente (`fieldset`/`label`/`input`/`btn`/`alert`), não utilitárias cruas, para controle de formulário, botão e alerta.
 
-## Testing
+## Testes
 
-Two layers: `npm test` (Vitest) mocks the composable/service boundary and runs fast — one test per layer of a module. `npm run test:e2e` (Playwright, `e2e/*.spec.ts`) drives an actual browser against an ephemeral Nuxt server, mocking only the network (`page.route()`), so it catches real hydration/accessibility/navigation bugs the component tests can't. A screen or form-flow change isn't verified by `npm test` alone — see [`.claude/rules/architecture.md`](.claude/rules/architecture.md), "Testing", for when to reach for each.
+Duas camadas: `npm test` (Vitest) mocka a fronteira composable/service e roda rápido — um teste por camada de cada módulo. `npm run test:e2e` (Playwright, `e2e/*.spec.ts`) dirige um browser de verdade contra um servidor Nuxt efêmero, mockando só a rede (`page.route()`), pegando bug real de hidratação/acessibilidade/navegação que o teste de componente não pega. Mudança de tela ou de fluxo de formulário não está verificada só com `npm test` — ver [`.claude/rules/architecture.md`](.claude/rules/architecture.md), "Testing".
 
-## Why the backend error shape is opinionated
+## Por que o formato de erro do backend é opinativo
 
-`HttpClient.ts` expects a Laravel-style `{message, errors}` JSON body on non-2xx responses, and Bearer-token auth matching a Sanctum-style `{user, token}` login response — built to pair with [`base_laravel_modular`](../base_laravel_modular)'s `apps/backend`. That backend doesn't have `/auth/login`/`/auth/logout` built yet (no Sanctum installed there as of this writing) — see that repo's roadmap.
-
-## Roadmap
-
-- [x] `login` as a fully-implemented reference module (types, service+error, composable, component, view — all tested).
-- [x] `authStore` + `useAuthSubmit`/`useLogout` as the shared session pattern.
-- [x] DaisyUI wired and demonstrated in `LoginForm.vue`.
-- [x] Playwright e2e suite (`e2e/login.spec.ts`, 6 cases) alongside the Vitest unit/component suite.
-- [ ] No generator/skill scaffolding a new module yet — by hand, following `login`'s shape.
-- [ ] `register` (the natural second consumer of `useAuthSubmit`) isn't built.
-- [ ] No navigation chrome (sidebar/navbar) yet.
-- [ ] `apps/backend`'s Sanctum-shaped auth endpoints — needed for this app to talk to a real backend.
+`HttpClient.ts` espera corpo JSON `{message, errors}` no estilo Laravel em respostas não-2xx, e autenticação Bearer batendo com uma resposta de login estilo Sanctum (`{user, token}`) — feito pra conversar com `../backend` desta plataforma.

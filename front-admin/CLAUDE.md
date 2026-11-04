@@ -52,7 +52,15 @@ npm test              # vitest run — every module ships layer-by-layer tests, 
 npm run test:e2e      # playwright test — real browser, see e2e/login.spec.ts
 npm run test:e2e:ui   # same, with Playwright's interactive UI mode (watch it click through the app)
 npm run typecheck     # nuxt typecheck (vue-tsc)
+npm run lint          # eslint (via @nuxt/eslint) — inclui regras de formatação, sem Prettier separado
+npm run build         # build de produção (nitro + nuxt)
 ```
+
+CI (`.github/workflows/front-admin-ci.yml`): lint, typecheck, test e build em jobs separados.
+
+## Tema "Sertão"
+
+Tokens oficiais em `../docs/design/tema-sertao-tokens.png`, aplicados em `app/assets/css/main.css`: fonte Lexend + variáveis CSS `--ph-brand`, `--ph-accent`, `--ph-terra`, `--ph-link` (marca), `--ph-bg`, `--ph-surface`, `--ph-surface-2`, `--ph-line` (superfícies), `--ph-ink`, `--ph-ink-2`, `--ph-ink-3`, `--ph-on-brand` (texto) e `--ph-ok`/`--ph-warn`/`--ph-danger`/`--ph-info` com seus `-bg` (estados). Trocar um valor muda o visual do painel inteiro sem tocar em componente. Marca/destaque/detalhe/logo/fonte/raio são sobrescrevíveis por edição; cores de estado e de texto ficam fixas (contraste mínimo 4,5:1).
 
 ## Non-negotiables
 

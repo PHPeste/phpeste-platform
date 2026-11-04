@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', '@nuxt/eslint'],
   css: ['~/assets/css/main.css'],
   vite: {
     plugins: [tailwindcss()]
@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   // Laravel packages/* module directly, only HTTP. See .claude/rules/architecture.md.
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000/api/v1'
+      apiBase: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'
     }
   }
 })

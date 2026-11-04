@@ -116,7 +116,7 @@ composer update modules/<nome>
   ```bash
   cd front-admin
   npm install
-  cp .env.example .env   # NUXT_PUBLIC_API_BASE=http://localhost:8000/api/v1
+  cp .env.example .env   # NUXT_PUBLIC_API_URL=http://localhost:8000/api/v1
   npm run dev
   ```
 
@@ -139,4 +139,4 @@ Credenciais de gateway são criptografadas e nunca devolvidas pela API. Webhooks
 
 ## Contribuindo
 
-A definir: guia de contribuição, código de conduta e licença.
+Ver [`CONTRIBUTING.md`](CONTRIBUTING.md). Código de conduta e licença: a definir.
