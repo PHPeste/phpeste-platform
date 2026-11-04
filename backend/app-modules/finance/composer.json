@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/finance",
+	"description": "Orçamento, despesas, comprovantes e resultado da edição",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Finance\\": "src/",
+			"PHPeste\\Finance\\Tests\\": "tests/",
+			"PHPeste\\Finance\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Finance\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Finance\\Providers\\FinanceServiceProvider"
+			]
+		}
+	}
+}

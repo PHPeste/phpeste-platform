@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/sponsors",
+	"description": "Cotas, contrapartidas, contratos e entregas de patrocinadores",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Sponsors\\": "src/",
+			"PHPeste\\Sponsors\\Tests\\": "tests/",
+			"PHPeste\\Sponsors\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Sponsors\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Sponsors\\Providers\\SponsorsServiceProvider"
+			]
+		}
+	}
+}

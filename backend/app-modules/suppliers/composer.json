@@ -1,0 +1,24 @@
+{
+	"name": "phpeste/suppliers",
+	"description": "Cadastro global de fornecedores e contratos por edição",
+	"type": "library",
+	"version": "1.0.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"PHPeste\\Suppliers\\": "src/",
+			"PHPeste\\Suppliers\\Tests\\": "tests/",
+			"PHPeste\\Suppliers\\Database\\Factories\\": "database/factories/",
+			"PHPeste\\Suppliers\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PHPeste\\Suppliers\\Providers\\SuppliersServiceProvider"
+			]
+		}
+	}
+}
