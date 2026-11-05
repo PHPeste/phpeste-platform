@@ -32,7 +32,8 @@
         "phpeste/suppliers": "^1.0.0",
         "phpeste/tasks": "^1.0.0",
         "phpeste/ticketing": "^1.0.0",
-        "predis/predis": "^3.0"
+        "predis/predis": "^3.0",
+        "sentry/sentry-laravel": "^4.29"
     },
     "require-dev": {
         "driftingly/rector-laravel": "^2.6",
@@ -81,7 +82,7 @@
             "./vendor/bin/pint"
         ],
         "phpstan": [
-            "./vendor/bin/phpstan analyse"
+            "./vendor/bin/phpstan analyse --memory-limit=512M"
         ],
         "rector": [
             "./vendor/bin/rector process --dry-run"
