@@ -44,6 +44,14 @@ Route::post('/orders', StoreOrderController::class)->middleware('idempotent');
 
 Sem o header `Idempotency-Key`, a requisição recebe 400. Com o header, a resposta da primeira chamada fica em cache por 24h; uma segunda chamada com a mesma chave recebe a resposta cacheada em vez de repetir o efeito colateral — é isso que impede dois ingressos quando o gateway reenvia o mesmo webhook.
 
+## Rate limiting
+
+Rota sensível usa `throttle:<nome>` com um limiter nomeado em `App\Providers\SecurityServiceProvider`: `login`, `password-reset` (por IP + e-mail), `checkout`, `webhooks` (por IP). Limites configuráveis via `.env` (`RATE_LIMIT_LOGIN_ATTEMPTS`, `RATE_LIMIT_LOGIN_DECAY_MINUTES`, etc.) — estourar o limite responde 429.
+
+## CORS
+
+`config/cors.php` libera só as origens em `CORS_ALLOWED_ORIGINS` (lista separada por vírgula no `.env`) — nunca `*` fora de `local`. `X-Request-Id` está em `exposed_headers`, então o front consegue ler o header da resposta mesmo em requisição cross-origin.
+
 ## Paginação
 
 - **Cursor** (`cursorPaginate()`): listas públicas ou potencialmente grandes (programação, propostas do CFP). Não permite pular página, mas escala sem `OFFSET`.
