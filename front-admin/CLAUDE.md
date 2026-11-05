@@ -22,7 +22,8 @@ app/
       composables/                 # cross-cutting, not owned by one module (useLogout, useAuthSubmit)
       services/                    # backend calls not owned by one module (authService)
   infrastructure/
-    http/HttpClient.ts             # the only place that calls fetch() — Bearer auth, Laravel-shaped errors
+    http/HttpClient.ts             # the only place that calls fetch() — Bearer auth, API-envelope errors
+    http/api-types.d.ts            # gerado por `npm run api:gen` a partir do OpenAPI do Scramble — não editar à mão
   modules/
     login/                         # reference module
       types/index.ts
@@ -33,7 +34,8 @@ app/
       locales/pt-br/index.ts
       router/index.ts              # documental — Nuxt file-based routing resolves navigation today
   stores/
-    authStore.ts                   # the one legitimate global (Pinia) store — session data
+    authStore.ts                   # session data
+    editionStore.ts                # edição ativa do painel — lido em quase toda tela
   pages/
     login.vue                      # wires the login module into Nuxt's file-based router
     index.vue
@@ -76,15 +78,19 @@ Tokens oficiais em `../docs/design/tema-sertao-tokens.png`, aplicados em `app/as
 
 [DaisyUI](https://daisyui.com/) is wired in `app/assets/css/main.css` via `@plugin 'daisyui';` (Tailwind v4 CSS-first config, no JS config file). `LoginForm.vue` demonstrates the intended usage: `fieldset`/`fieldset-legend`/`label` for form fields, `input`/`input-error`, `btn`/`btn-primary`/`btn-ghost`, `alert`/`alert-error` — component classes, not raw utilities, for anything that's a form control, button, or alert. See `.claude/rules/architecture.md`, "UI kit: DaisyUI".
 
-## Why the backend error shape is opinionated
+## Cliente de API
 
-`HttpClient.ts` expects a Laravel-style `{message, errors}` JSON body on non-2xx responses, and Bearer-token auth matching a Sanctum-style `{user, token}` login response. This isn't generic REST client boilerplate — it's built to pair with `base_laravel_modular`'s `apps/backend`. See `.claude/rules/architecture.md` for what that backend still needs to build (`POST /auth/login`, `POST /auth/logout`) before this frontend's `login` module is more than a working shape.
+`HttpClient.ts` espera o envelope de erro da API (`../docs/api.md`): `{code, message, errors, request_id}` em toda resposta não-2xx, e autenticação Bearer batendo com login estilo Sanctum (`{user, token}`). `HttpClientError` carrega `statusCode`, `fieldErrors`, `code` e `requestId`.
+
+- **Tipos gerados do contrato**: `npm run api:gen` lê `http://localhost:8000/docs/api.json` (backend rodando) e escreve `app/infrastructure/http/api-types.d.ts`, commitado — mudar o contrato da API sem rodar `api:gen` de novo quebra o typecheck do front. Ver `app/application/shared/services/pingService.ts` como referência de serviço tipado a partir de `operations['<nome>']`.
+- **401 em requisição autenticada** chama o handler registrado por `httpClient.setUnauthorizedHandler()` — hoje só `app/plugins/auth.client.ts` registra (limpa `authStore`, navega pro `/login`). Um 401 sem token (ex.: login errado) não dispara isso — `HttpClient` só decide que a sessão expirou quando *tinha* token.
+- **Token Bearer, não cookie httpOnly** — decisão registrada em `docs/adr/0005-token-bearer-no-client.md` (o app mobile também consome a mesma API com o mesmo token).
+- `useEdition()` (`app/application/shared/composables/useEdition.ts`) guarda a edição ativa — hoje só em memória, sem API por trás; liga no módulo Community quando ele existir.
 
 ## Roadmap (not built yet)
 
-- No generator/skill scaffolding a new module (`base_laravel_modular` has `make new-module` wrapping a real Composer package generator; there's no equivalent tool for a Nuxt module — creating one is by hand, following `login`'s shape and `docs/ARCHITECTURE.md`).
-- `register` (the natural second consumer of `useAuthSubmit`, alongside `login`) isn't built — only documented as the reason `useAuthSubmit` exists as a shared composable rather than living inside `login/`.
-- No navigation chrome (sidebar/navbar) yet — the "register every module's view in it" step from `docs/ARCHITECTURE.md`'s checklist has nothing to register into today.
-- `apps/backend`'s Sanctum-shaped `/auth/login`/`/auth/logout` endpoints (see above) — needed for this app to talk to a real backend instead of just having the client-side shape ready.
-
-Done: `npm test` passes (40 tests across 7 files, one per layer of the reference module plus the shared composables and `HttpClient`); `npm run test:e2e` passes (6 Playwright cases covering `login`'s full user-facing behavior in a real browser, network mocked at the `fetch` boundary); `npm run typecheck` passes; `npm run build` produces a working production build.
+- No generator/skill scaffolding a new module — creating one is by hand, following `login`'s shape and `docs/ARCHITECTURE.md`.
+- `register` (the natural second consumer of `useAuthSubmit`, alongside `login`) isn't built.
+- No navigation chrome (sidebar/navbar) yet.
+- `backend`'s Sanctum-shaped `/auth/login`/`/auth/logout` endpoints don't exist yet — needed for this app to talk to a real backend instead of just having the client-side shape ready.
+- `useEdition()` não tem fonte de dados real (ver acima).
