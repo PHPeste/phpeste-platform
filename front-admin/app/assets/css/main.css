@@ -30,6 +30,8 @@
   --ph-ink-2: #6f4a38; /* texto secundário */
   --ph-ink-3: #7f5a47; /* legendas */
   --ph-on-brand: #fff8e8; /* texto sobre marca */
+  --ph-side-text: #f3e3c0; /* texto do menu lateral */
+  --ph-side-muted: #d9bf94; /* títulos de seção do menu lateral */
 
   /* Estados (texto / fundo) */
   --ph-ok: #4b6a24;
@@ -98,3 +100,13 @@ body {
   font-family: var(--ph-font-heading);
   font-variant-numeric: tabular-nums;
 }
+
+/* Botões da barra superior (seletor de edição, notificações, menu do usuário). */
+.ph-topbtn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  min-width: 44px; min-height: 44px; padding: 0 8px;
+  border: 1px solid var(--ph-line); border-radius: var(--ph-radius);
+  background: var(--ph-surface); color: var(--ph-ink);
+  font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none;
+}
+.ph-topbtn:hover { background: var(--ph-surface-2); }

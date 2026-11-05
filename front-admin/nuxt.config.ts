@@ -4,11 +4,15 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  // Painel autenticado: a sessão vive no navegador (localStorage), então não há o que
+  // renderizar no servidor. SPA evita 404 de SSR antes da guarda de rota (403) rodar.
+  ssr: false,
   modules: ['@pinia/nuxt', '@nuxt/eslint'],
   css: ['~/assets/css/main.css'],
   // Kit de UI do tema Sertão: <PhButton>, <PhInput>, <PhCard>… (ver app/application/shared/components/ui)
   components: [
     { path: '~/application/shared/components/ui', pathPrefix: false, prefix: 'Ph' },
+    { path: '~/application/shared/components/layout', pathPrefix: false },
     { path: '~/components', pathPrefix: false },
   ],
   vite: {

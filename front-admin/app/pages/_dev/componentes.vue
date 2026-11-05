@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { Inbox } from '@lucide/vue'
 import { useToast } from '@/application/shared/composables/useToast'
 
+definePageMeta({ layout: 'blank', auth: false })
+
 // Catálogo do kit de UI. Só existe em desenvolvimento (ou com NUXT_PUBLIC_UI_CATALOG=true,
 // usado pelos testes e2e): em produção devolve 404.
 if (!import.meta.dev && !useRuntimeConfig().public.uiCatalog) {
