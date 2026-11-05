@@ -76,6 +76,6 @@ test.describe('Login', () => {
     await page.getByRole('button', { name: 'Entrar' }).click()
 
     await expect(page).toHaveURL(/\/$/)
-    await expect(page.getByText('Ada Lovelace')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Menu do usuário' })).toContainText('Ada Lovelace')
   })
 })

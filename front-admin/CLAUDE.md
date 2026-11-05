@@ -8,6 +8,8 @@ Design/protótipo das telas: [claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N](https:/
 
 Kit de UI do tema Sertão (componentes `Ph*`, tokens, acessibilidade): [`docs/UI-KIT.md`](docs/UI-KIT.md). Use-o antes de criar markup próprio.
 
+Layout do painel (menu, barra superior, papéis, guarda de rota, erro global): [`docs/LAYOUT.md`](docs/LAYOUT.md).
+
 Full layer rules live in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — read that first, it's the actual convention document, not a summary. `.claude/rules/` covers what's specific to this being a template (which module is the reference, why `HttpClient` is shaped the way it is, the two different reasons something is "shared").
 
 `app/modules/login/` is the reference module — a complete, working example of every layer, with tests for each. Imitate its shape when creating a new module.
@@ -85,12 +87,11 @@ Tokens oficiais em `../docs/design/tema-sertao-tokens.png`, aplicados em `app/as
 - **Tipos gerados do contrato**: `npm run api:gen` lê `http://localhost:8000/docs/api.json` (backend rodando) e escreve `app/infrastructure/http/api-types.d.ts`, commitado — mudar o contrato da API sem rodar `api:gen` de novo quebra o typecheck do front. Ver `app/application/shared/services/pingService.ts` como referência de serviço tipado a partir de `operations['<nome>']`.
 - **401 em requisição autenticada** chama o handler registrado por `httpClient.setUnauthorizedHandler()` — hoje só `app/plugins/auth.client.ts` registra (limpa `authStore`, navega pro `/login`). Um 401 sem token (ex.: login errado) não dispara isso — `HttpClient` só decide que a sessão expirou quando *tinha* token.
 - **Token Bearer, não cookie httpOnly** — decisão registrada em `docs/adr/0005-token-bearer-no-client.md` (o app mobile também consome a mesma API com o mesmo token).
-- `useEdition()` (`app/application/shared/composables/useEdition.ts`) guarda a edição ativa — hoje só em memória, sem API por trás; liga no módulo Community quando ele existir.
+- `useEdition()` (`app/application/shared/composables/useEdition.ts`) guarda a edição ativa (store `edition`), a lista de edições da pessoa e o papel dela (`load`, `select`, `role`). Consome `GET /editions` (ainda não existe no backend; sai do OpenAPI/`api:gen` quando o módulo Community expuser). Ver `docs/LAYOUT.md`.
 
 ## Roadmap (not built yet)
 
 - No generator/skill scaffolding a new module — creating one is by hand, following `login`'s shape and `docs/ARCHITECTURE.md`.
 - `register` (the natural second consumer of `useAuthSubmit`, alongside `login`) isn't built.
-- No navigation chrome (sidebar/navbar) yet.
 - `backend`'s Sanctum-shaped `/auth/login`/`/auth/logout` endpoints don't exist yet — needed for this app to talk to a real backend instead of just having the client-side shape ready.
-- `useEdition()` não tem fonte de dados real (ver acima).
+- `GET /editions` não existe no backend: sem ele o menu mostra só a Visão geral (ver `docs/LAYOUT.md`).
