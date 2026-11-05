@@ -9,6 +9,7 @@ describe('httpClient', () => {
   afterEach(() => {
     vi.unstubAllGlobals()
     httpClient.setAuthToken(null)
+    httpClient.setUnauthorizedHandler(null)
   })
 
   it('appends a query string when query params are given', async () => {
@@ -80,5 +81,51 @@ describe('httpClient', () => {
       message: 'Unauthenticated.',
     })
     await expect(httpClient.get('/profile')).rejects.toBeInstanceOf(HttpClientError)
+  })
+
+  it('reads code and request_id from the API error envelope', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({ code: 'not_found', message: 'Recurso não encontrado.', errors: null, request_id: 'req-1' }),
+        { status: 404 },
+      ),
+    )
+
+    await expect(httpClient.get('/editions/404')).rejects.toMatchObject({
+      code: 'not_found',
+      requestId: 'req-1',
+    })
+  })
+
+  it('falls back to the X-Request-Id header when the body has none', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      new Response(JSON.stringify({ message: 'Erro interno.' }), {
+        status: 500,
+        headers: { 'X-Request-Id': 'from-header' },
+      }),
+    )
+
+    await expect(httpClient.get('/boom')).rejects.toMatchObject({ requestId: 'from-header' })
+  })
+
+  it('calls the unauthorized handler on 401 when a token was set', async () => {
+    const onUnauthorized = vi.fn()
+    httpClient.setUnauthorizedHandler(onUnauthorized)
+    httpClient.setAuthToken('expired-token')
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({ message: 'Unauthenticated.' }), { status: 401 }))
+
+    await expect(httpClient.get('/profile')).rejects.toBeInstanceOf(HttpClientError)
+
+    expect(onUnauthorized).toHaveBeenCalledOnce()
+  })
+
+  it('does not call the unauthorized handler on 401 without a token (e.g. failed login)', async () => {
+    const onUnauthorized = vi.fn()
+    httpClient.setUnauthorizedHandler(onUnauthorized)
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({ message: 'Invalid credentials.' }), { status: 401 }))
+
+    await expect(httpClient.post('/auth/login', { body: { email: 'x', password: 'y' } })).rejects.toBeInstanceOf(HttpClientError)
+
+    expect(onUnauthorized).not.toHaveBeenCalled()
   })
 })

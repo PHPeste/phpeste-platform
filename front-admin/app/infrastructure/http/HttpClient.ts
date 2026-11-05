@@ -1,12 +1,22 @@
 export class HttpClientError extends Error {
   statusCode: number | null
   fieldErrors: Record<string, string[]> | null
+  code: string | null
+  requestId: string | null
 
-  constructor(message: string, statusCode: number | null, fieldErrors: Record<string, string[]> | null = null) {
+  constructor(
+    message: string,
+    statusCode: number | null,
+    fieldErrors: Record<string, string[]> | null = null,
+    code: string | null = null,
+    requestId: string | null = null,
+  ) {
     super(message)
     this.name = 'HttpClientError'
     this.statusCode = statusCode
     this.fieldErrors = fieldErrors
+    this.code = code
+    this.requestId = requestId
   }
 }
 
@@ -18,15 +28,27 @@ interface HttpClientRequestOptions {
   query?: Record<string, HttpClientQueryValue>
 }
 
-interface LaravelErrorPayload {
+interface ApiErrorPayload {
   message?: string
   errors?: Record<string, string[]>
+  code?: string
+  request_id?: string
 }
 
 let authToken: string | null = null
+let onUnauthorized: (() => void) | null = null
 
 function setAuthToken(token: string | null) {
   authToken = token
+}
+
+/**
+ * Chamado quando uma requisição que levava token recebe 401 — sessão
+ * expirada ou revogada. Quem decide o que fazer (limpar o authStore,
+ * navegar pro login) é o plugin de auth, não o HttpClient.
+ */
+function setUnauthorizedHandler(handler: (() => void) | null) {
+  onUnauthorized = handler
 }
 
 // Arrays become `key[]=a&key[]=b` — the query string shape Laravel parses
@@ -57,6 +79,7 @@ function buildQueryString(query: HttpClientRequestOptions['query']): string {
 
 async function request<T>(method: string, path: string, options: HttpClientRequestOptions = {}): Promise<T> {
   const { apiBase } = useRuntimeConfig().public
+  const hadToken = authToken !== null
   let response: Response
 
   // FormData (file upload) can't be JSON.stringify'd, and Content-Type has
@@ -82,11 +105,19 @@ async function request<T>(method: string, path: string, options: HttpClientReque
   const data = response.status === 204 ? null : await response.json().catch(() => null)
 
   if (!response.ok) {
-    const payload = data as LaravelErrorPayload | null
+    const payload = data as ApiErrorPayload | null
+    const requestId = payload?.request_id ?? response.headers.get('X-Request-Id')
+
+    if (response.status === 401 && hadToken) {
+      onUnauthorized?.()
+    }
+
     throw new HttpClientError(
       payload?.message ?? 'Something went wrong.',
       response.status,
       payload?.errors ?? null,
+      payload?.code ?? null,
+      requestId,
     )
   }
 
@@ -95,6 +126,7 @@ async function request<T>(method: string, path: string, options: HttpClientReque
 
 export const httpClient = {
   setAuthToken,
+  setUnauthorizedHandler,
   get: <T>(path: string, options?: HttpClientRequestOptions) => request<T>('GET', path, options),
   post: <T>(path: string, options?: HttpClientRequestOptions) => request<T>('POST', path, options),
   put: <T>(path: string, options?: HttpClientRequestOptions) => request<T>('PUT', path, options),

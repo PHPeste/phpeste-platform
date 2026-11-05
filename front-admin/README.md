@@ -4,14 +4,15 @@ Painel da organização da [PHPeste Platform](../README.md). Nuxt 4, módulo-por
 
 > Design/protótipo das telas: [claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83) · tokens do tema em [`../docs/design/tema-sertao-tokens.png`](../docs/design/tema-sertao-tokens.png).
 
-> **Status:** `login` é o módulo de referência completo (types, service + error class, composable, component, view, testes em cada camada — unitário e e2e). 40 testes unitários e 6 e2e (Playwright) passam, typecheck passa, `npm run build` gera um build de produção funcional.
+> **Status:** `login` é o módulo de referência completo (types, service + error class, composable, component, view, testes em cada camada — unitário e e2e). Testes unitários, e2e (Playwright), typecheck e `npm run build` passam.
 
 ```bash
 npm install
 npx playwright install chromium   # uma vez — baixa o browser que o Playwright usa
 cp .env.example .env
 npm run dev
-npm run lint        # eslint (via @nuxt/eslint)
+npm run api:gen      # regenera app/infrastructure/http/api-types.d.ts (precisa do backend rodando em :8000)
+npm run lint         # eslint (via @nuxt/eslint)
 npm run typecheck    # nuxt typecheck (vue-tsc)
 npm test             # vitest — mocka a fronteira do composable/service
 npm run test:e2e     # playwright — browser real, mocka só a rede
