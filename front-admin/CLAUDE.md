@@ -6,6 +6,8 @@ Próximos módulos a construir, nesta ordem (ver `../docs/produto.md`): edição
 
 Design/protótipo das telas: [claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83).
 
+Kit de UI do tema Sertão (componentes `Ph*`, tokens, acessibilidade): [`docs/UI-KIT.md`](docs/UI-KIT.md). Use-o antes de criar markup próprio.
+
 Full layer rules live in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — read that first, it's the actual convention document, not a summary. `.claude/rules/` covers what's specific to this being a template (which module is the reference, why `HttpClient` is shaped the way it is, the two different reasons something is "shared").
 
 `app/modules/login/` is the reference module — a complete, working example of every layer, with tests for each. Imitate its shape when creating a new module.

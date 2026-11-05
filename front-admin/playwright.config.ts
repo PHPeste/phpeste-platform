@@ -4,6 +4,9 @@ import { defineConfig, devices } from '@playwright/test'
 // @nuxt/test-utils/playwright's `goto` fixture boots an ephemeral Nuxt
 // server per worker (via the `nuxt` option below) — no separate `npm run
 // dev` needed in another terminal, `npm run test:e2e` just works.
+// O servidor efêmero roda fora do modo dev; esta flag libera a página de catálogo.
+process.env.NUXT_PUBLIC_UI_CATALOG = 'true'
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
