@@ -27,6 +27,10 @@ Ver `docs/produto.md` na raiz do monorepo para a responsabilidade de cada um.
 - Toda mutação de Model com regra de negócio por trás passa por uma `Action`, nunca `->save()`/`->update()` direto de um Controller.
 - Toda entidade de edição carrega `edition_id`; usuários, perfis de palestrante e fornecedores são globais.
 - Sem Filament — o admin é o Nuxt em `../front-admin`, consumindo esta API.
+- Validação sempre por `FormRequest` ou `Data` object — nunca `$request->all()` em um controller. `tests/Arch/NoRawRequestAllTest.php` garante isso.
+- Rota sensível (login, recuperação de senha, checkout, webhook) usa `throttle:<nome>` com um dos limiters nomeados em `App\Providers\SecurityServiceProvider` (`login`, `password-reset`, `checkout`, `webhooks`), configurável via `.env` (`RATE_LIMIT_*`).
+- `Log::info/error/...` nunca precisa esconder segredo na mão — `App\Logging\RedactSensitiveDataProcessor` redige `password`/`token`/`api_key`/`secret`/`authorization`/cartão automaticamente em todo log (JSON estruturado, ver `config/logging.php`).
+- Segredo nunca vai pro repositório — ver `docs/adr/0006-politica-de-segredos.md`.
 
 ## Comandos
 

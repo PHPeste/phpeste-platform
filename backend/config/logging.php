@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Logging\JsonFormatterTap;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -65,6 +66,8 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
+            // JSON estruturado + redação de password/token/secret — ver docs/adr.
+            'tap' => [JsonFormatterTap::class],
         ],
 
         'daily' => [
@@ -113,6 +116,7 @@ return [
             ],
             'formatter' => env('LOG_STDERR_FORMATTER'),
             'processors' => [PsrLogMessageProcessor::class],
+            'tap' => [JsonFormatterTap::class],
         ],
 
         'syslog' => [
