@@ -1,5 +1,8 @@
 @import 'tailwindcss';
-@plugin 'daisyui';
+@plugin 'daisyui' {
+  themes: false;
+  logs: false;
+}
 
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap');
 
@@ -41,6 +44,52 @@
   /* Tipografia e forma */
   --ph-font-heading: 'Lexend', sans-serif;
   --ph-radius: 10px;
+}
+
+/*
+ * Tema DaisyUI "sertao": aponta as cores semânticas do DaisyUI para os
+ * tokens --ph-*. Assim `btn-primary`, `input`, `alert` etc. mudam junto
+ * com os tokens (inclusive quando uma edição sobrescreve marca/destaque).
+ */
+@plugin 'daisyui/theme' {
+  name: 'sertao';
+  default: true;
+  color-scheme: light;
+  --color-base-100: var(--ph-surface);
+  --color-base-200: var(--ph-surface-2);
+  --color-base-300: var(--ph-line);
+  --color-base-content: var(--ph-ink);
+  --color-primary: var(--ph-brand);
+  --color-primary-content: var(--ph-on-brand);
+  --color-secondary: var(--ph-terra);
+  --color-secondary-content: var(--ph-on-brand);
+  --color-accent: var(--ph-accent);
+  --color-accent-content: var(--ph-ink);
+  --color-neutral: var(--ph-ink);
+  --color-neutral-content: var(--ph-on-brand);
+  --color-info: var(--ph-info);
+  --color-info-content: var(--ph-on-brand);
+  --color-success: var(--ph-ok);
+  --color-success-content: var(--ph-on-brand);
+  --color-warning: var(--ph-warn);
+  --color-warning-content: var(--ph-on-brand);
+  --color-error: var(--ph-danger);
+  --color-error-content: var(--ph-on-brand);
+  --radius-selector: 999px;
+  --radius-field: var(--ph-radius);
+  --radius-box: 14px;
+  /* altura dos campos e botões: 44 px (11 × 0,25rem × 1rem) */
+  --size-field: 0.275rem;
+  --size-selector: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* Foco visível em tudo que recebe teclado. Marca escura sobre fundo claro. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--ph-brand);
+  outline-offset: 2px;
 }
 
 body {
