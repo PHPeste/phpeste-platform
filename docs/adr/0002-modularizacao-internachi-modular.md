@@ -23,3 +23,7 @@ A plataforma tem muitos domínios (identidade, CFP, ingressos, pagamentos, etc.)
 
 - Criar um módulo novo é `php artisan make:module <Nome>` seguido de `composer update phpeste/<nome>`.
 - Se algum módulo tentar usar `Model` de outro módulo diretamente, o CI quebra no `pest --group=arch`.
+
+## Correção (B06): `expect('PHPeste')` sozinho não pegava nada
+
+A regra original de "módulo não depende de `App\`" usava `arch('...')->expect('PHPeste')->not->toUse('App')` — e nunca funcionou de verdade: testado na prática (violação real inserida de propósito), o Pest arch não resolve o namespace raiz `PHPeste` através dos múltiplos path-repositories symlinkados. A regra de isolamento de `Models/` (que já usa `"PHPeste\\{Módulo}\\Models"`, uma subpasta real) sempre funcionou. Corrigido iterando módulo × subpasta real (`Models`, `Actions`, `Http`, etc.) — ver `tests/Arch/ModuleIsolationTest.php`. Permitido depender de `App\Http\Resources`, `App\Http\Middleware`, `App\Support` e `App\Logging` (kernel compartilhado); bloqueado `App\Models`, `App\Http\Controllers` e `App\Providers` (específicos da app raiz).

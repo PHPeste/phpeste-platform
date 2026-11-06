@@ -20,3 +20,7 @@ Todo o resto do backend (módulos, API, filas) depende de um projeto Laravel lim
 ## Consequências
 
 - Qualquer pessoa clona o repo, roda `composer install && cp .env.example .env && php artisan key:generate && php artisan migrate`, ou `infra/dev.sh up`, e tem a API rodando.
+
+## Correção (B06): Larastan rodava sem a extensão do Laravel
+
+Da B01 até a B06, `phpstan.neon` nunca incluía `vendor/larastan/larastan/extension.neon` — só o `bootstrap.php` (usado pelo Rector). Na prática isso significava PHPStan quase puro, sem a maior parte das regras específicas de Laravel/Eloquent: `Model::create()` não resolvia, `JsonResource`/`@mixin` de Eloquent não eram entendidos. Corrigido com `includes: [vendor/larastan/larastan/extension.neon, ...]`; nenhum erro novo apareceu no código já existente, mas o nível 8 agora analisa de verdade.

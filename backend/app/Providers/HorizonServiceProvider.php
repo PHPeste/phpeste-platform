@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Horizon\HorizonApplicationServiceProvider;
 
@@ -29,8 +30,12 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      */
     protected function gate(): void
     {
-        Gate::define('viewHorizon', fn (?User $user = null): bool => in_array($user?->getAttribute('email'), [
+        Gate::define('viewHorizon', function (?Authenticatable $user = null): bool {
+            $email = $user instanceof Model ? $user->getAttribute('email') : null;
 
-        ]));
+            return in_array($email, [
+
+            ]);
+        });
     }
 }
