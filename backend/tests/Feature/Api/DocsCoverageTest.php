@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use PHPeste\Identity\Models\User;
 
 it('documenta toda rota de /api/v1 no OpenAPI gerado pelo Scramble', function (): void {
-    $user = new User(['id' => 1, 'name' => 'Teste', 'email' => 'teste@phpeste.dev']);
+    $user = new User(['id' => (string) Str::uuid(), 'name' => 'Teste', 'email' => 'teste@phpeste.dev']);
 
     $response = $this->actingAs($user)->getJson('/docs/api.json');
 
