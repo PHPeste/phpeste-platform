@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\User;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\RouteInfo;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -16,19 +16,21 @@ use Illuminate\Support\Str;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * `internachi/modular` carrega as rotas de cada módulo num hook
+     * `booting()` disparado antes do `boot()` de qualquer provider — por
+     * isso a macro `apiV1` precisa existir já no `register()`, não no
+     * `boot()`, senão os módulos tentam usar uma macro que ainda não existe.
      */
-    public function register(): void {}
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function register(): void
     {
         $this->registerApiRouteMacro();
+    }
+
+    public function boot(): void
+    {
         $this->registerApiDocsGroupingByModule();
 
-        Gate::define('viewApiDocs', fn (?User $user = null): bool => $user instanceof User);
+        Gate::define('viewApiDocs', fn (?Authenticatable $user = null): bool => $user instanceof Authenticatable);
     }
 
     private function registerApiRouteMacro(): void
