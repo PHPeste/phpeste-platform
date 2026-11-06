@@ -8,6 +8,8 @@ MVP: `identity`, `community`, `branding`, `cfp`, `program`, `ticketing`, `paymen
 Fase 2/3 (scaffold vazio, sem lógica ainda): `sponsors`, `suppliers`, `finance`, `tasks`, `engagement`.
 Ver `docs/produto.md` na raiz do monorepo para a responsabilidade de cada um.
 
+`identity` é o único com implementação real até agora: `users` (UUID, ver ADR 0007), cadastro com verificação de e-mail, login/logout via Sanctum, `GET /me`. Tenant (edição, papéis) é dos módulos Community (#9/#14), ainda não implementados — `/me` devolve `roles: []` até lá.
+
 ## Estrutura de cada módulo (`app-modules/<nome>/src/`)
 
 | Pasta | O que vai lá |
@@ -31,6 +33,7 @@ Ver `docs/produto.md` na raiz do monorepo para a responsabilidade de cada um.
 - Rota sensível (login, recuperação de senha, checkout, webhook) usa `throttle:<nome>` com um dos limiters nomeados em `App\Providers\SecurityServiceProvider` (`login`, `password-reset`, `checkout`, `webhooks`), configurável via `.env` (`RATE_LIMIT_*`).
 - `Log::info/error/...` nunca precisa esconder segredo na mão — `App\Logging\RedactSensitiveDataProcessor` redige `password`/`token`/`api_key`/`secret`/`authorization`/cartão automaticamente em todo log (JSON estruturado, ver `config/logging.php`).
 - Segredo nunca vai pro repositório — ver `docs/adr/0006-politica-de-segredos.md`.
+- Macro/bind que uma rota de módulo usa (ex.: `Route::apiV1()`) tem que ser registrada no `register()` do provider, nunca no `boot()` — o `internachi/modular` carrega as rotas de cada módulo num hook `booting()` que dispara antes do `boot()` de qualquer provider (inclusive do `AppServiceProvider`).
 
 ## Comandos
 
