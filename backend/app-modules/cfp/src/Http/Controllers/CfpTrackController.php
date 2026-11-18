@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPeste\Cfp\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -11,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use PHPeste\Cfp\Actions\DeleteTrack;
 use PHPeste\Cfp\Actions\SaveTrack;
+use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Cfp\Http\Requests\SaveTrackRequest;
 use PHPeste\Cfp\Http\Resources\CfpTrackResource;
 use PHPeste\Cfp\Models\CfpTrack;
@@ -22,7 +24,7 @@ class CfpTrackController
     {
         Gate::authorize('cfp.view-settings');
 
-        return CfpTrackResource::collection(CfpTrack::query()->orderBy('position')->orderBy('name')->get());
+        return CfpTrackResource::collection(CfpTrack::query()->withCount(['proposals' => fn (Builder $query) => $query->where('status', ProposalStatus::Submitted)])->orderBy('position')->orderBy('name')->get());
     }
 
     public function store(SaveTrackRequest $request, SaveTrack $save): JsonResponse

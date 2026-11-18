@@ -26,6 +26,7 @@ class CfpTrackResource extends ApiResource
             'name' => $track->name,
             'slots' => $track->slots,
             'position' => $track->position,
+            'proposals_count' => $track->submittedProposalsCount(),
         ];
     }
 }

@@ -18,6 +18,7 @@ it('mostra a janela e as trilhas do CFP de edição publicada, sem login', funct
         ->assertJsonPath('data.status', 'open')
         ->assertJsonPath('data.closes_at', '2027-04-15T00:00:00Z')
         ->assertJsonPath('data.tracks.0.name', 'Backend')
+        ->assertJsonPath('data.form.levels.1.label', 'Intermediário')
         ->assertJsonMissingPath('data.tracks.0.slots')
         ->assertJsonMissingPath('data.nordeste_quota_percent');
 });
