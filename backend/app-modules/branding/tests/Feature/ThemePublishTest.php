@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\Sanctum;
+use PHPeste\Audit\Models\AuditLog;
 use PHPeste\Branding\Events\ThemePublished;
 use PHPeste\Community\Enums\EditionRole;
 use PHPeste\Community\Enums\EditionStatus;
@@ -66,4 +67,17 @@ it('não reverte quando não há publicação anterior', function (): void {
     $this->postJson("{$this->url}/revert")
         ->assertStatus(422)
         ->assertJsonPath('errors.theme.0', 'Não há identidade publicada anterior para restaurar.');
+});
+
+it('registra na auditoria quem publicou e quem restaurou a identidade', function (): void {
+    $this->postJson("{$this->url}/draft/preset", ['preset' => 'mare']);
+    $this->postJson("{$this->url}/publish")->assertOk();
+    $this->postJson("{$this->url}/draft/preset", ['preset' => 'brasa']);
+    $this->postJson("{$this->url}/publish")->assertOk();
+    $this->postJson("{$this->url}/revert")->assertOk();
+
+    $logs = AuditLog::query()->where('edition_id', $this->edition->id)->where('action', 'like', 'branding.%')->oldest()->get();
+
+    expect($logs->pluck('action')->all())->toBe(['branding.theme_published', 'branding.theme_published', 'branding.theme_reverted'])
+        ->and($logs->pluck('actor_id')->unique()->all())->toBe([$this->organizer->id]);
 });

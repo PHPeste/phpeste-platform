@@ -105,3 +105,11 @@ it('a resolução pelo host diz se a edição usa site próprio', function (): v
         ->assertJsonPath('data.site_mode', 'external')
         ->assertJsonPath('data.external_site_url', 'https://phpeste.php-pb.net');
 });
+
+it('registra na auditoria quem mudou a etapa da edição', function (): void {
+    $this->postJson("{$this->url}/status", ['status' => 'sales_open'])->assertOk();
+
+    $log = AuditLog::query()->where('edition_id', $this->edition->id)->where('action', 'edition.status_changed')->sole();
+    expect($log->actor_id)->toBe($this->organizer->id)
+        ->and($log->after)->toBe(['status' => 'sales_open']);
+});

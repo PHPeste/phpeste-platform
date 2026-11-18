@@ -13,7 +13,7 @@ use PHPeste\Community\Models\Edition;
 
 class TransitionEditionStatus
 {
-    public function handle(Edition $edition, EditionStatus $next): Edition
+    public function handle(Edition $edition, EditionStatus $next, ?string $actorId = null): Edition
     {
         $current = $edition->status;
 
@@ -23,10 +23,10 @@ class TransitionEditionStatus
             ]);
         }
 
-        DB::transaction(function () use ($edition, $current, $next): void {
+        DB::transaction(function () use ($edition, $current, $next, $actorId): void {
             $edition->update(['status' => $next]);
 
-            event(new EditionStatusChanged($edition->id, $current, $next));
+            event(new EditionStatusChanged($edition->id, $current, $next, $actorId));
         });
 
         AllowEditionSiteOrigins::forget();

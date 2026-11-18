@@ -12,7 +12,7 @@ use PHPeste\Branding\Theme\PublicTheme;
 
 class RevertTheme
 {
-    public function handle(EditionSetting $settings): EditionSetting
+    public function handle(EditionSetting $settings, ?string $actorId = null): EditionSetting
     {
         $previous = $settings->theme_previous;
 
@@ -22,7 +22,7 @@ class RevertTheme
             ]);
         }
 
-        DB::transaction(function () use ($settings, $previous): void {
+        DB::transaction(function () use ($settings, $previous, $actorId): void {
             $settings->update([
                 'theme_draft' => $previous,
                 'theme_published' => $previous,
@@ -30,7 +30,7 @@ class RevertTheme
                 'theme_published_at' => now(),
             ]);
 
-            event(new ThemePublished($settings->edition_id));
+            event(new ThemePublished($settings->edition_id, $actorId, ThemePublished::REVERTED));
         });
 
         PublicTheme::forget($settings->edition_id);
