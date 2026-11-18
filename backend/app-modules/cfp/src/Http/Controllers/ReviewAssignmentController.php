@@ -15,13 +15,37 @@ use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Cfp\Http\Requests\AssignReviewerRequest;
 use PHPeste\Cfp\Http\Requests\AutoAssignRequest;
 use PHPeste\Cfp\Models\Proposal;
+use PHPeste\Cfp\Models\Review;
 use PHPeste\Cfp\Models\ReviewAssignment;
 use PHPeste\Cfp\Reviews\Reviewers;
+use PHPeste\Community\Contracts\EditionMemberships;
 use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Community\Tenancy\CurrentEdition;
 
 class ReviewAssignmentController
 {
+    public function reviewers(Reviewers $reviewers, EditionMemberships $memberships, CurrentEdition $currentEdition): JsonResponse
+    {
+        Gate::authorize(EditionPermission::ManageProgram->value);
+
+        $editionId = (string) $currentEdition->id();
+        $ids = $memberships->usersWith($editionId, EditionPermission::ReviewProposals);
+        $names = $reviewers->names($ids);
+        $assigned = ReviewAssignment::query()->whereIn('reviewer_id', $ids)->toBase()->selectRaw('reviewer_id, count(*) as total')->groupBy('reviewer_id')->pluck('total', 'reviewer_id');
+        $submitted = Review::query()->whereIn('reviewer_id', $ids)->where('status', Review::SUBMITTED)->toBase()->selectRaw('reviewer_id, count(*) as total')->groupBy('reviewer_id')->pluck('total', 'reviewer_id');
+
+        $items = array_map(fn (string $id): array => [
+            'id' => $id,
+            'name' => $names[$id] ?? null,
+            'assigned' => (int) ($assigned[$id] ?? 0),
+            'submitted' => (int) ($submitted[$id] ?? 0),
+        ], $ids);
+
+        usort($items, fn (array $a, array $b): int => strcmp((string) $a['name'], (string) $b['name']));
+
+        return response()->json(['data' => $items]);
+    }
+
     public function index(Request $request, Reviewers $reviewers): JsonResponse
     {
         Gate::authorize(EditionPermission::ManageProgram->value);
