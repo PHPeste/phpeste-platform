@@ -18,7 +18,7 @@ beforeEach(async () => {
   document.cookie = 'ph_edition=; Max-Age=0; path=/'
   vi.spyOn(editionService, 'list').mockResolvedValue({ data: editions })
   await useEdition().load()
-  useAuthStore().setSession({ id: 1, name: 'Nome Sobrenome', email: 'n@s.dev', avatarUrl: null }, 't')
+  useAuthStore().setSession({ id: 'user-1', name: 'Nome Sobrenome', email: 'n@s.dev', avatarUrl: null }, 't')
 })
 
 describe('AppTopbar', () => {

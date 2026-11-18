@@ -27,7 +27,7 @@ app/
     http/HttpClient.ts             # the only place that calls fetch() — Bearer auth, API-envelope errors
     http/api-types.d.ts            # gerado por `npm run api:gen` a partir do OpenAPI do Scramble — não editar à mão
   modules/
-    login/                         # reference module
+    login/                         # reference module (login, "manter conectado", entrar com GitHub)
       types/index.ts
       services/{loginService,loginError}.ts
       composables/useLogin.ts
@@ -39,10 +39,14 @@ app/
     authStore.ts                   # session data
     editionStore.ts                # edição ativa do painel — lido em quase toda tela
   pages/
-    login.vue                      # wires the login module into Nuxt's file-based router
+    login/index.vue                # wires the login module into Nuxt's file-based router
+    login/github.vue               # volta do GitHub (módulo githubLogin)
+    esqueci-senha.vue              # módulo forgotPassword
+    redefinir-senha.vue            # módulo resetPassword (link do e-mail)
+    convite/[token].vue            # módulo invitation (link do convite da equipe)
     index.vue
   plugins/
-    auth.client.ts                 # hydrates authStore from localStorage on boot
+    auth.client.ts                 # hydrates authStore from localStorage (ou sessionStorage, sem "manter conectado") on boot
 e2e/
   login.spec.ts                    # Playwright — real browser, mocks only the network boundary
 ```
@@ -87,11 +91,12 @@ Tokens oficiais em `../docs/design/tema-sertao-tokens.png`, aplicados em `app/as
 - **Tipos gerados do contrato**: `npm run api:gen` lê `http://localhost:8000/docs/api.json` (backend rodando) e escreve `app/infrastructure/http/api-types.d.ts`, commitado — mudar o contrato da API sem rodar `api:gen` de novo quebra o typecheck do front. Ver `app/application/shared/services/pingService.ts` como referência de serviço tipado a partir de `operations['<nome>']`.
 - **401 em requisição autenticada** chama o handler registrado por `httpClient.setUnauthorizedHandler()` — hoje só `app/plugins/auth.client.ts` registra (limpa `authStore`, navega pro `/login`). Um 401 sem token (ex.: login errado) não dispara isso — `HttpClient` só decide que a sessão expirou quando *tinha* token.
 - **Token Bearer, não cookie httpOnly** — decisão registrada em `docs/adr/0005-token-bearer-no-client.md` (o app mobile também consome a mesma API com o mesmo token).
-- `useEdition()` (`app/application/shared/composables/useEdition.ts`) guarda a edição ativa (store `edition`), a lista de edições da pessoa e o papel dela (`load`, `select`, `role`). Consome `GET /editions` (ainda não existe no backend; sai do OpenAPI/`api:gen` quando o módulo Community expuser). Ver `docs/LAYOUT.md`.
+- `useEdition()` (`app/application/shared/composables/useEdition.ts`) guarda a edição ativa (store `edition`), a lista de edições da pessoa e o papel dela (`load`, `select`, `role`). Consome `GET /editions`. Ver `docs/LAYOUT.md`.
+- **Telas de entrada** (`login`, `githubLogin`, `forgotPassword`, `resetPassword`, `invitation`) usam o layout `blank` e `auth: false`. As de cartão usam `<AuthCard>` (`app/application/shared/components/layout`). Depois de entrar, todas levam para `HOME_AFTER_LOGIN` (`app/application/shared/layout/redirect.ts`), que vira o seletor de comunidades no A06.
+- **id de usuário é UUID** (`string`), como no backend.
 
 ## Roadmap (not built yet)
 
 - No generator/skill scaffolding a new module — creating one is by hand, following `login`'s shape and `docs/ARCHITECTURE.md`.
-- `register` (the natural second consumer of `useAuthSubmit`, alongside `login`) isn't built.
-- `backend`'s Sanctum-shaped `/auth/login`/`/auth/logout` endpoints don't exist yet — needed for this app to talk to a real backend instead of just having the client-side shape ready.
-- `GET /editions` não existe no backend: sem ele o menu mostra só a Visão geral (ver `docs/LAYOUT.md`).
+- Cadastro aberto (`register`) não existe por decisão: a entrada no painel é por convite da organização.
+- O id da edição ainda é tratado como número no `editionStore`/`useEdition`; no backend é UUID (ajuste no A06).

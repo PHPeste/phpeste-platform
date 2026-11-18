@@ -10,7 +10,7 @@ const editions = [
 ]
 
 const session = {
-  user: { id: 1, name: 'Nome Sobrenome', email: 'n@s.dev', avatarUrl: null },
+  user: { id: 'user-1', name: 'Nome Sobrenome', email: 'n@s.dev', avatarUrl: null },
   token: 'e2e-token',
 }
 
@@ -85,15 +85,15 @@ test.describe('Layout base do painel', () => {
     await page.route(LOGIN_API, (route) =>
       route.fulfill({
         status: 200,
-        json: { user: { id: 1, name: 'Nome Sobrenome', email: 'n@s.dev', avatar_url: null, created_at: '2026-01-01' }, token: 'e2e-token' },
+        json: { user: { id: 'user-1', name: 'Nome Sobrenome', email: 'n@s.dev', avatar_url: null, created_at: '2026-01-01' }, token: 'e2e-token' },
       }))
 
     await goto('/pedidos', { waitUntil: 'hydration' })
     await expect(page).toHaveURL(/\/login\?redirect=(%2F|\/)pedidos$/)
 
-    await page.getByLabel('Email').fill('n@s.dev')
+    await page.getByLabel('E-mail').fill('n@s.dev')
     await page.getByLabel('Senha', { exact: true }).fill('segredo123')
-    await page.getByRole('button', { name: 'Entrar' }).click()
+    await page.getByRole('button', { name: 'Entrar', exact: true }).click()
 
     await expect(page).toHaveURL(/\/pedidos$/)
   })

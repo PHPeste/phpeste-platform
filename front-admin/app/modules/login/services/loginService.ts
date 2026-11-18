@@ -1,20 +1,15 @@
 import { httpClient, HttpClientError } from '@/infrastructure/http/HttpClient'
+import type { AuthPayload } from '@/application/shared/composables/useAuthSubmit'
 import { LoginError } from './loginError'
 import type { LoginCredentials } from '../types'
 
 const LOGIN_URL = '/auth/login'
+const GITHUB_REDIRECT_URL = '/auth/github/redirect'
 
-interface LoginUserPayload {
-  id: number
-  name: string
-  email: string
-  avatar_url: string | null
-  created_at: string
-}
+export type LoginPayload = AuthPayload
 
-export interface LoginPayload {
-  user: LoginUserPayload
-  token: string
+export interface GithubRedirectPayload {
+  url: string
 }
 
 function handleError(error: unknown): never {
@@ -31,8 +26,16 @@ export default {
   async login(credentials: LoginCredentials): Promise<LoginPayload> {
     try {
       return await httpClient.post<LoginPayload>(LOGIN_URL, {
-        body: { email: credentials.email, password: credentials.password },
+        body: { email: credentials.email, password: credentials.password, device_name: 'Painel PHPeste' },
       })
+    } catch (error) {
+      handleError(error)
+    }
+  },
+
+  async githubRedirect(): Promise<GithubRedirectPayload> {
+    try {
+      return await httpClient.get<GithubRedirectPayload>(GITHUB_REDIRECT_URL)
     } catch (error) {
       handleError(error)
     }

@@ -4,6 +4,1450 @@
  */
 
 export interface paths {
+    "/v1/editions/{edition}/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["audit.logs.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/theme": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["branding.theme.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/theme/draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["branding.theme.draft.update"];
+        post?: never;
+        delete: operations["branding.theme.draft.discard"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/theme/draft/preset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["branding.theme.draft.preset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/theme/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["branding.theme.publish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/theme/revert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["branding.theme.revert"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/theme/logos/{slot}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["branding.theme.logos.store"];
+        delete: operations["branding.theme.logos.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/domains": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["branding.domains.index"];
+        put?: never;
+        post: operations["branding.domains.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/domains/{domain}/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["branding.domains.verify"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/domains/{domain}/primary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["branding.domains.primary"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/domains/{domain}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["branding.domains.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["branding.public.resolve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/tls-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["branding.public.tls-check"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/branding/presets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["branding.presets.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/editions/{edition}/theme": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["branding.public.theme"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.settings.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cfp.settings.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/tracks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.tracks.index"];
+        put?: never;
+        post: operations["cfp.tracks.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/tracks/{track}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["cfp.tracks.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["cfp.tracks.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/criteria": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.criteria.index"];
+        put?: never;
+        post: operations["cfp.criteria.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/criteria/{criterion}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["cfp.criteria.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["cfp.criteria.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.proposals.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/proposals/{proposal}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.proposals.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cfp.proposals.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/evaluation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.evaluation.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/evaluation/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.evaluation.export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/assignments/auto": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.assignments.auto"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/proposals/{proposal}/assignments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.assignments.index"];
+        put?: never;
+        post: operations["cfp.assignments.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/proposals/{proposal}/assignments/{reviewer}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["cfp.assignments.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/decision/ranking": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.decision.ranking"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/decision/simulate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.decision.simulate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/decision/apply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.decision.apply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/confirmations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.confirmations.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/confirmations/{proposal}/extend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.confirmations.extend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/promotions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.promotions.index"];
+        put?: never;
+        post: operations["cfp.promotions.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/logistics/{user}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.logistics.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cfp.logistics.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/reviews/queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.reviews.queue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/proposals/{proposal}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.reviews.show"];
+        put: operations["cfp.reviews.save"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/proposals/{proposal}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.reviews.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.speaker.proposals.index"];
+        put?: never;
+        post: operations["cfp.speaker.proposals.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals/{proposal}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.speaker.proposals.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cfp.speaker.proposals.update"];
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals/{proposal}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speaker.proposals.submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals/{proposal}/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speaker.proposals.withdraw"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals/{proposal}/coauthors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speaker.proposals.coauthors.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals/{proposal}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speaker.proposals.confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals/{proposal}/decline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speaker.proposals.decline"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals/{proposal}/give-up": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speaker.proposals.give-up"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/proposals/{proposal}/coauthors/{user}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["cfp.speaker.proposals.coauthors.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/editions/{edition}/cfp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.public.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/speaker/editions/{edition}/logistics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.speaker.logistics.show"];
+        put: operations["cfp.speaker.logistics.update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/communities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.communities.index"];
+        put?: never;
+        post: operations["community.communities.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/communities/{community}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.communities.show"];
+        put?: never;
+        post?: never;
+        delete: operations["community.communities.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["community.communities.update"];
+        trace?: never;
+    };
+    "/v1/communities/{community}/editions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.communities.editions.index"];
+        put?: never;
+        post: operations["community.communities.editions.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.editions.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.roles.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/edition-clones/{clone}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.edition-clones.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/team": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.team.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/team/members/{member}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["community.team.members.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["community.team.members.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/team/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["community.team.invitations.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/team/invitations/{invitation}/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["community.team.invitations.resend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/team/invitations/{invitation}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["community.team.invitations.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/invitations/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.invitations.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/invitations/{token}/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["community.invitations.accept"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.editions.show"];
+        put?: never;
+        post?: never;
+        delete: operations["community.editions.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["community.editions.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["community.editions.status"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/clone-options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.editions.clone-options"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/clone": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["community.editions.clone"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/communities/{community}/editions/{edition}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.public.editions.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth.register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth.login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth.logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/logout-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth.logout-all"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/email/verify/{id}/{hash}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A assinatura da URL (id + hash + expiração) já foi conferida pelo
+         *     middleware `signed` antes de chegar aqui
+         */
+        get: operations["verification.verify"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/email/verification-notification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["verification.send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/password/forgot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth.password.forgot"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/password/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth.password.reset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["auth.password.update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/github/redirect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth.github.redirect"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/github/link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth.github.link"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/github/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth.github.callback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/github": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["auth.github.unlink"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["me.update"];
+        trace?: never;
+    };
+    "/v1/me/photo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["me.photo.store"];
+        delete: operations["me.photo.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/speaker-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["me.speaker-profile.show"];
+        put: operations["me.speaker-profile.update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/people/{user}/speaker-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["identity.people.speaker-profile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/emails/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["notifications.templates.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/emails/templates/{template}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["notifications.templates.show"];
+        put: operations["notifications.templates.update"];
+        post?: never;
+        delete: operations["notifications.templates.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/emails/templates/{template}/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["notifications.templates.preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/emails/templates/{template}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["notifications.templates.test"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/emails/deliveries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["notifications.deliveries.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/emails/deliveries/{delivery}/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["notifications.deliveries.resend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/editions/{edition}/unsubscribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["notifications.unsubscribe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/ping": {
         parameters: {
             query?: never;
@@ -23,8 +1467,684 @@ export interface paths {
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: never;
-    responses: never;
+    schemas: {
+        /** AcceptInvitationRequest */
+        AcceptInvitationRequest: {
+            name?: string | null;
+            password?: string | null;
+            device_name?: string | null;
+        };
+        /** AddCoauthorRequest */
+        AddCoauthorRequest: {
+            /** Format: email */
+            email: string;
+        };
+        /** AddDomainRequest */
+        AddDomainRequest: {
+            host: string;
+        };
+        /** ApplyThemePresetRequest */
+        ApplyThemePresetRequest: {
+            preset: components["schemas"]["ThemePreset"];
+        };
+        /** AssignReviewerRequest */
+        AssignReviewerRequest: {
+            /** Format: uuid */
+            reviewer_id: string;
+        };
+        /** AutoAssignRequest */
+        AutoAssignRequest: {
+            reviewers_per_proposal: number;
+        };
+        /**
+         * BrazilianState
+         * @enum {string}
+         */
+        BrazilianState: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO";
+        /** CfpCriterionResource */
+        CfpCriterionResource: {
+            id: string;
+            name: string;
+            description: string | null;
+            weight: number;
+            position: number;
+        } | string[];
+        /** CfpSettingsResource */
+        CfpSettingsResource: {
+            status: string;
+            status_label: string;
+            days_until_close: number | null;
+            opens_at: string | null;
+            closes_at: string | null;
+            results_at: string | null;
+            anonymous_review: string;
+            require_nordeste_quota: string;
+            nordeste_quota_percent: string;
+            proposals_per_person: string;
+        } | string[];
+        /** CfpTrackResource */
+        CfpTrackResource: {
+            id: string;
+            name: string;
+            slots: number;
+            position: number;
+        } | string[];
+        /** ChangeEditionStatusRequest */
+        ChangeEditionStatusRequest: {
+            status: components["schemas"]["EditionStatus"];
+        };
+        /** ChangeMemberRoleRequest */
+        ChangeMemberRoleRequest: {
+            role: components["schemas"]["EditionRole"];
+        };
+        /** ChangePasswordRequest */
+        ChangePasswordRequest: {
+            current_password?: string | null;
+            password: string;
+            password_confirmation: string;
+        };
+        /** CloneEditionRequest */
+        CloneEditionRequest: {
+            name: string;
+            slug: string;
+            parts: ("identity" | "cfp" | "team" | "emails")[];
+        };
+        /** CommunityResource */
+        CommunityResource: {
+            id: string;
+            name: string;
+            slug: string;
+            created_at: string | null;
+        } | string[];
+        /** DecisionsRequest */
+        DecisionsRequest: {
+            decisions: {
+                /** Format: uuid */
+                proposal_id: string;
+                decision: components["schemas"]["ProposalDecision"] | null;
+            }[];
+        };
+        /**
+         * DeliveryStatus
+         * @enum {string}
+         */
+        DeliveryStatus: "queued" | "sent" | "failed" | "suppressed";
+        /** EditionCloneResource */
+        EditionCloneResource: {
+            id: string;
+            source_edition_id: string;
+            target_edition_id: string | null;
+            name: string;
+            slug: string;
+            parts: string[];
+            status: string;
+            error: string | null;
+            finished_at: string | null;
+            created_at: string | null;
+        } | string[];
+        /** EditionDomainResource */
+        EditionDomainResource: {
+            id: string;
+            host: string;
+            is_platform: boolean;
+            is_primary: boolean;
+            verified: boolean;
+            verified_at: string | null;
+            verification: {
+                txt: {
+                    name: string;
+                    value: string;
+                };
+                cname: {
+                    name: string;
+                    value: string;
+                };
+            } | null;
+            last_checked_at: string | null;
+            last_check_error: string | null;
+            url: string;
+        } | string[];
+        /** EditionResource */
+        EditionResource: {
+            id: string;
+            community_id: string;
+            name: string;
+            slug: string;
+            /** @enum {string} */
+            status: "draft" | "cfp_open" | "sales_open" | "ongoing" | "closed";
+            /** @enum {string} */
+            status_label: "Rascunho" | "CFP aberto" | "Vendas abertas" | "Em andamento" | "Encerrada";
+            allowed_transitions: unknown[];
+            starts_on: string | null;
+            ends_on: string | null;
+            year: string | null;
+            city: string | null;
+            /** @enum {string|null} */
+            state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
+            timezone: string;
+            site_url: null;
+            role: null | Record<string, never> | ("organizador" | "financeiro" | "avaliador" | "checkin" | "voluntario");
+            created_at: string | null;
+        } | string[];
+        /**
+         * EditionRole
+         * @enum {string}
+         */
+        EditionRole: "organizador" | "financeiro" | "avaliador" | "checkin" | "voluntario";
+        /**
+         * EditionStatus
+         * @enum {string}
+         */
+        EditionStatus: "draft" | "cfp_open" | "sales_open" | "ongoing" | "closed";
+        /** EmailDeliveryResource */
+        EmailDeliveryResource: {
+            id: string;
+            /** @enum {string} */
+            template: "order_confirmed" | "pix_reminder" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder";
+            to_email: string;
+            to_name: string;
+            /** @enum {string} */
+            status: "queued" | "sent" | "failed" | "suppressed";
+            attempts: number;
+            last_error: string | null;
+            is_test: boolean;
+            sent_at: string | null;
+            created_at: string | null;
+        } | string[];
+        /**
+         * EmailTemplate
+         * @enum {string}
+         */
+        EmailTemplate: "order_confirmed" | "pix_reminder" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder";
+        /** EmailTemplateResource */
+        EmailTemplateResource: {
+            /** @enum {string} */
+            id: "order_confirmed" | "pix_reminder" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder";
+            /** @enum {string} */
+            label: "Confirmação de compra" | "Lembrete de Pix" | "Resultado do CFP: aprovada" | "Resultado do CFP: lista de espera" | "Antes do evento" | "Convite para a equipe" | "Proposta recebida" | "Lembrete de confirmação do palestrante";
+            /** @enum {string} */
+            trigger: "Ao pagar o pedido" | "30 min antes de expirar" | "Manual" | "7 dias antes" | "Ao convidar alguém para a equipe" | "Ao enviar uma proposta" | "2 dias antes do prazo de confirmação";
+            transactional: boolean;
+            variables: [
+                "nome",
+                "edicao",
+                "pedido",
+                "data"
+            ] | [
+                "nome",
+                "edicao",
+                "proposta",
+                "data",
+                "prazo"
+            ] | [
+                "nome",
+                "edicao",
+                "data"
+            ] | [
+                "nome",
+                "edicao",
+                "papel"
+            ] | [
+                "nome",
+                "edicao",
+                "proposta",
+                "data"
+            ] | [
+                "nome",
+                "edicao",
+                "proposta",
+                "prazo"
+            ];
+            /** @enum {string} */
+            action_label: "Ver meu ingresso" | "Pagar com Pix" | "Confirmar participação" | "Ver minha proposta" | "Ver programação" | "Aceitar convite";
+            subject: string;
+            body: string;
+            customized: boolean;
+            last_sent_at: string | null;
+        };
+        /** ExtendDeadlineRequest */
+        ExtendDeadlineRequest: {
+            /** Format: date-time */
+            deadline_at: string;
+        };
+        /** ForgotPasswordRequest */
+        ForgotPasswordRequest: {
+            /** Format: email */
+            email: string;
+        };
+        /** GithubCallbackRequest */
+        GithubCallbackRequest: {
+            code: string;
+            state: string;
+            device_name?: string | null;
+        };
+        /** InviteTeamMemberRequest */
+        InviteTeamMemberRequest: {
+            /** Format: email */
+            email: string;
+            name?: string | null;
+            role: components["schemas"]["EditionRole"];
+        };
+        /** LoginRequest */
+        LoginRequest: {
+            /** Format: email */
+            email: string;
+            password: string;
+            device_name?: string;
+        };
+        /** OrganizationLogisticsRequest */
+        OrganizationLogisticsRequest: {
+            origin_city?: string | null;
+            origin_state?: components["schemas"]["BrazilianState"] | null;
+            needs_travel?: boolean;
+            needs_lodging?: boolean;
+            travel_paid_by_organization?: boolean;
+            lodging_paid_by_organization?: boolean;
+            organization_notes?: string | null;
+        };
+        /** PreviewEmailTemplateRequest */
+        PreviewEmailTemplateRequest: {
+            subject?: string;
+            body?: string;
+        };
+        /** PromoteRequest */
+        PromoteRequest: {
+            /** Format: uuid */
+            proposal_id: string;
+        };
+        /**
+         * ProposalDecision
+         * @enum {string}
+         */
+        ProposalDecision: "accepted" | "waitlisted" | "rejected";
+        /**
+         * ProposalFormat
+         * @enum {string}
+         */
+        ProposalFormat: "talk" | "workshop" | "panel";
+        /**
+         * ProposalLanguage
+         * @enum {string}
+         */
+        ProposalLanguage: "pt_BR" | "en" | "es";
+        /**
+         * ProposalLevel
+         * @enum {string}
+         */
+        ProposalLevel: "beginner" | "intermediate" | "advanced";
+        /** ProposalResource */
+        ProposalResource: {
+            id: string;
+            number: number;
+            title: string;
+            track: {
+                id: string;
+                name: string;
+            } | null;
+            summary: string | null;
+            audience: string | null;
+            /** @enum {string|null} */
+            format: "talk" | "workshop" | "panel" | null;
+            /** @enum {string|null} */
+            format_label: "Palestra de 30 min" | "Oficina de 2 h" | "Painel de 45 min" | null;
+            /** @enum {integer|null} */
+            duration_minutes: 30 | 120 | 45 | null;
+            /** @enum {string|null} */
+            level: "beginner" | "intermediate" | "advanced" | null;
+            /** @enum {string|null} */
+            level_label: "Iniciante" | "Intermediário" | "Avançado" | null;
+            /** @enum {string} */
+            language: "pt_BR" | "en" | "es";
+            /** @enum {string} */
+            status: "draft" | "submitted" | "withdrawn";
+            /** @enum {string} */
+            status_label: "Rascunho" | "Enviada" | "Retirada";
+            /** @enum {string|null} */
+            decision: "accepted" | "waitlisted" | "rejected" | null;
+            /** @enum {string|null} */
+            decision_label: "Aprovada" | "Lista de espera" | "Recusada" | null;
+            missing_for_submission: unknown[];
+            nordeste: string;
+            speakers_hidden: boolean;
+            speakers: string | Record<string, never>;
+            submitted_at: string | null;
+            updated_at: string | null;
+        } | string[];
+        /**
+         * ProposalStatus
+         * @enum {string}
+         */
+        ProposalStatus: "draft" | "submitted" | "withdrawn";
+        /** PublicEditionResource */
+        PublicEditionResource: {
+            id: string;
+            name: string;
+            slug: string;
+            status: string;
+            starts_on: string | null;
+            ends_on: string | null;
+            city: string;
+            state: string | null;
+            timezone: string;
+            community: {
+                name: string;
+                slug: string;
+            };
+        } | string[];
+        /** RegisterRequest */
+        RegisterRequest: {
+            name: string;
+            /** Format: email */
+            email: string;
+            password: string;
+            password_confirmation: string;
+        };
+        /** ResetPasswordRequest */
+        ResetPasswordRequest: {
+            token: string;
+            /** Format: email */
+            email: string;
+            password: string;
+            password_confirmation: string;
+        };
+        /** RespondConfirmationRequest */
+        RespondConfirmationRequest: {
+            reason?: string | null;
+        };
+        /** SaveCriterionRequest */
+        SaveCriterionRequest: {
+            name: string;
+            description?: string | null;
+            weight: number;
+            position?: number;
+            confirm?: boolean;
+        };
+        /** SaveEmailTemplateRequest */
+        SaveEmailTemplateRequest: {
+            subject: string;
+            body: string;
+        };
+        /** SaveProposalRequest */
+        SaveProposalRequest: {
+            title?: string;
+            /** Format: uuid */
+            track_id?: string | null;
+            summary?: string | null;
+            audience?: string | null;
+            format?: components["schemas"]["ProposalFormat"] | null;
+            level?: components["schemas"]["ProposalLevel"] | null;
+            language?: components["schemas"]["ProposalLanguage"];
+        };
+        /** SaveReviewRequest */
+        SaveReviewRequest: {
+            scores: number[];
+            comment?: string | null;
+            submit?: boolean;
+        };
+        /** SaveSpeakerProfileRequest */
+        SaveSpeakerProfileRequest: {
+            display_name: string;
+            job_title?: string | null;
+            company?: string | null;
+            bio?: string | null;
+            city?: string | null;
+            state?: components["schemas"]["BrazilianState"] | null;
+            links?: {
+                /** Format: uri */
+                website?: string | null;
+                /** Format: uri */
+                github?: string | null;
+                /** Format: uri */
+                linkedin?: string | null;
+            };
+            accessibility_needs?: string | null;
+            dietary_restrictions?: string | null;
+        };
+        /** SaveTrackRequest */
+        SaveTrackRequest: {
+            name: string;
+            slots: number;
+            position?: number;
+        };
+        /** SpeakerLogisticsRequest */
+        SpeakerLogisticsRequest: {
+            origin_city?: string | null;
+            origin_state?: components["schemas"]["BrazilianState"] | null;
+            needs_travel?: boolean;
+            needs_lodging?: boolean;
+        };
+        /** SpeakerProfileResource */
+        SpeakerProfileResource: {
+            public: {
+                user_id: string;
+                display_name: string;
+                job_title: string | null;
+                company: string | null;
+                bio: string | null;
+                city: string | null;
+                /** @enum {string|null} */
+                state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
+                links: unknown[];
+                photo_url: null;
+            } | null;
+            private: {
+                accessibility_needs: string | null;
+                dietary_restrictions: string | null;
+            };
+            email: string;
+            updated_at: string | null;
+        } | string[];
+        /** StoreCommunityRequest */
+        StoreCommunityRequest: {
+            name: string;
+            slug: string;
+        };
+        /** StoreEditionRequest */
+        StoreEditionRequest: {
+            name: string;
+            slug: string;
+            /** Format: date */
+            starts_on?: string | null;
+            /** Format: date */
+            ends_on?: string | null;
+            city?: string | null;
+            state?: components["schemas"]["BrazilianState"] | null;
+            timezone?: string;
+        };
+        /** TeamInvitationResource */
+        TeamInvitationResource: {
+            id: string;
+            email: string;
+            name: string;
+            role: string;
+            role_label: string;
+            expires_at: string | null;
+            created_at: string | null;
+        } | string[];
+        /**
+         * ThemeFont
+         * @enum {string}
+         */
+        ThemeFont: "Lexend" | "Poppins" | "Inter" | "Montserrat" | "Nunito" | "Open Sans" | "Roboto" | "Work Sans" | "IBM Plex Sans" | "Source Sans 3";
+        /**
+         * ThemePreset
+         * @enum {string}
+         */
+        ThemePreset: "sertao" | "mare" | "brasa";
+        /** ThemeSettingsResource */
+        ThemeSettingsResource: {
+            edition_id: string;
+            draft: {
+                logos: unknown[];
+            } & {
+                [key: string]: unknown;
+            };
+            published: ({
+                logos: unknown[];
+            } & {
+                [key: string]: unknown;
+            }) | null;
+            published_at: string | null;
+            has_unpublished_changes: string;
+            can_revert: boolean;
+            contrast: {
+                foreground: string;
+                background: string;
+                ratio: number;
+                minimum: string;
+                passes: boolean;
+            }[];
+        } | string[];
+        /** UpdateAccountRequest */
+        UpdateAccountRequest: {
+            name?: string;
+            /** @enum {string} */
+            locale?: "pt_BR" | "en" | "es";
+        };
+        /** UpdateCfpSettingsRequest */
+        UpdateCfpSettingsRequest: {
+            /** Format: date-time */
+            opens_at?: string | null;
+            /** Format: date-time */
+            closes_at?: string | null;
+            /** Format: date-time */
+            results_at?: string | null;
+            anonymous_review?: boolean;
+            require_nordeste_quota?: boolean;
+            nordeste_quota_percent?: number;
+            proposals_per_person?: number;
+        };
+        /** UpdateCommunityRequest */
+        UpdateCommunityRequest: {
+            name?: string;
+            slug?: string;
+        };
+        /** UpdateEditionRequest */
+        UpdateEditionRequest: {
+            name?: string;
+            slug?: string;
+            /** Format: date */
+            starts_on?: string | null;
+            /** Format: date */
+            ends_on?: string | null;
+            city?: string | null;
+            state?: components["schemas"]["BrazilianState"] | null;
+            timezone?: string;
+        };
+        /** UpdateThemeDraftRequest */
+        UpdateThemeDraftRequest: {
+            colors: {
+                bg: string;
+                surface: string;
+                surface_2: string;
+                line: string;
+                ink: string;
+                ink_2: string;
+                ink_3: string;
+                link: string;
+                brand: string;
+                on_brand: string;
+                accent: string;
+                on_accent: string;
+                support: string;
+                ok: string;
+                ok_bg: string;
+                warn: string;
+                warn_bg: string;
+                danger: string;
+                danger_bg: string;
+                info: string;
+                info_bg: string;
+            };
+            fonts: {
+                heading: components["schemas"]["ThemeFont"];
+                body: components["schemas"]["ThemeFont"];
+            };
+            radius: number;
+        };
+        /** UploadLogoRequest */
+        UploadLogoRequest: {
+            /**
+             * Format: binary
+             * @description Maximum file size: 1024 kilobytes. Maximum file size: 512 kilobytes.
+             */
+            file: string;
+        };
+        /** UploadPhotoRequest */
+        UploadPhotoRequest: {
+            /**
+             * Format: binary
+             * @description Maximum file size: 5120 kilobytes.
+             */
+            photo: string;
+        };
+        /** UserResource */
+        UserResource: {
+            id: string;
+            name: string;
+            email: string;
+            avatar_url: null;
+            locale: string;
+            email_verified_at: string | null;
+            has_password: boolean;
+            providers: unknown[];
+            created_at: string | null;
+        } | string[];
+    };
+    responses: {
+        /** @description Authorization error */
+        AuthorizationException: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @description Error overview. */
+                    message: string;
+                };
+            };
+        };
+        /** @description Unauthenticated */
+        AuthenticationException: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @description Error overview. */
+                    message: string;
+                };
+            };
+        };
+        /** @description Validation error */
+        ValidationException: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @description Errors overview. */
+                    message: string;
+                    /** @description A detailed description of each field that failed validation. */
+                    errors: {
+                        [key: string]: string[];
+                    };
+                };
+            };
+        };
+        /** @description Not found */
+        ModelNotFoundException: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @description Error overview. */
+                    message: string;
+                };
+            };
+        };
+    };
     parameters: never;
     requestBodies: never;
     headers: never;
@@ -32,6 +2152,3596 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    "audit.logs.index": {
+        parameters: {
+            query?: {
+                actor_id?: string;
+                action?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                        meta: {
+                            current_page: number;
+                            last_page: number;
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "branding.theme.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ThemeSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ThemeSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "branding.theme.draft.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateThemeDraftRequest"];
+            };
+        };
+        responses: {
+            /** @description `ThemeSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ThemeSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "branding.theme.draft.discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ThemeSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ThemeSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "branding.theme.draft.preset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplyThemePresetRequest"];
+            };
+        };
+        responses: {
+            /** @description `ThemeSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ThemeSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "branding.theme.publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ThemeSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ThemeSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "branding.theme.revert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ThemeSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ThemeSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "branding.theme.logos.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                slot: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadLogoRequest"];
+            };
+        };
+        responses: {
+            /** @description `ThemeSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ThemeSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "branding.theme.logos.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                slot: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ThemeSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ThemeSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "branding.domains.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `EditionDomainResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionDomainResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "branding.domains.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddDomainRequest"];
+            };
+        };
+        responses: {
+            /** @description `EditionDomainResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionDomainResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "branding.domains.verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                domain: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `EditionDomainResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionDomainResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "branding.domains.primary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                domain: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `EditionDomainResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionDomainResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "branding.domains.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                domain: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "branding.public.resolve": {
+        parameters: {
+            query?: {
+                host?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            edition_id: string;
+                            edition_name: string;
+                            host: string;
+                            primary_host: string;
+                        } | null;
+                    };
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "branding.public.tls-check": {
+        parameters: {
+            query?: {
+                domain?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "branding.presets.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "branding.public.theme": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            edition_id: string;
+                            theme: {
+                                logos: unknown[];
+                            } & {
+                                [key: string]: unknown;
+                            };
+                            published_at: string | null;
+                        };
+                    };
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "cfp.settings.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `CfpSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CfpSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.settings.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UpdateCfpSettingsRequest"];
+            };
+        };
+        responses: {
+            /** @description `CfpSettingsResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CfpSettingsResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.tracks.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `CfpTrackResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CfpTrackResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.tracks.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveTrackRequest"];
+            };
+        };
+        responses: {
+            /** @description `CfpTrackResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CfpTrackResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.tracks.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                track: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.tracks.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                track: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveTrackRequest"];
+            };
+        };
+        responses: {
+            /** @description `CfpTrackResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CfpTrackResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.criteria.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `CfpCriterionResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CfpCriterionResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.criteria.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveCriterionRequest"];
+            };
+        };
+        responses: {
+            /** @description `CfpCriterionResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CfpCriterionResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.criteria.destroy": {
+        parameters: {
+            query?: {
+                confirm?: boolean;
+            };
+            header?: never;
+            path: {
+                edition: string;
+                criterion: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.criteria.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                criterion: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveCriterionRequest"];
+            };
+        };
+        responses: {
+            /** @description `CfpCriterionResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CfpCriterionResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.proposals.index": {
+        parameters: {
+            query?: {
+                status?: components["schemas"]["ProposalStatus"];
+                track_id?: string;
+            };
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.proposals.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ProposalResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.proposals.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SaveProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description `ProposalResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.evaluation.index": {
+        parameters: {
+            query?: {
+                status?: string;
+            };
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        summary: {
+                            proposals: number;
+                            reviewed: number;
+                            without_reviewer: number;
+                            average_score: number | null;
+                            nordeste_percent: number | null;
+                            nordeste_quota_percent: number;
+                        };
+                        criteria: unknown[];
+                        data: ({
+                            final_score: string;
+                            review_status: string;
+                            reviews_assigned: string;
+                            reviews_submitted: string;
+                            criterion_averages: string;
+                        } & {
+                            [key: string]: unknown;
+                        })[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.evaluation.export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "Transfer-Encoding": "chunked";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv; charset=UTF-8": string;
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.assignments.auto": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AutoAssignRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            created: number;
+                            unfilled: string[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.assignments.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.assignments.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignReviewerRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            reviewer_id: string;
+                            proposal_id: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.assignments.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+                reviewer: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "cfp.decision.ranking": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            tracks: {
+                                track: string;
+                                proposals: unknown[];
+                            }[];
+                            outcome: {
+                                decisions: {
+                                    accepted: unknown;
+                                    waitlisted: unknown;
+                                    rejected: unknown;
+                                    undecided: unknown;
+                                };
+                                tracks: unknown[];
+                                coverage: {
+                                    people: number;
+                                    unknown_state: number;
+                                    by_state: string;
+                                    nordeste_people: number;
+                                    nordeste_percent: number | null;
+                                    nordeste_states_missing: unknown[];
+                                    nordeste_quota_percent: number;
+                                    require_nordeste_quota: boolean;
+                                };
+                                alerts: ({
+                                    /** @constant */
+                                    type: "nordeste_quota";
+                                    message: string;
+                                } | {
+                                    /** @constant */
+                                    type: "states_missing";
+                                    message: string;
+                                } | {
+                                    /** @constant */
+                                    type: "track_over_slots";
+                                    message: string;
+                                } | {
+                                    /** @constant */
+                                    type: "unknown_state";
+                                    message: string;
+                                })[];
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.decision.simulate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisionsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            decisions: {
+                                accepted: unknown;
+                                waitlisted: unknown;
+                                rejected: unknown;
+                                undecided: unknown;
+                            };
+                            tracks: unknown[];
+                            coverage: {
+                                people: number;
+                                unknown_state: number;
+                                by_state: string;
+                                nordeste_people: number;
+                                nordeste_percent: number | null;
+                                nordeste_states_missing: unknown[];
+                                nordeste_quota_percent: number;
+                                require_nordeste_quota: boolean;
+                            };
+                            alerts: ({
+                                /** @constant */
+                                type: "nordeste_quota";
+                                message: string;
+                            } | {
+                                /** @constant */
+                                type: "states_missing";
+                                message: string;
+                            } | {
+                                /** @constant */
+                                type: "track_over_slots";
+                                message: string;
+                            } | {
+                                /** @constant */
+                                type: "unknown_state";
+                                message: string;
+                            })[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.decision.apply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisionsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            changed: number;
+                            outcome: {
+                                decisions: {
+                                    accepted: unknown;
+                                    waitlisted: unknown;
+                                    rejected: unknown;
+                                    undecided: unknown;
+                                };
+                                tracks: unknown[];
+                                coverage: {
+                                    people: number;
+                                    unknown_state: number;
+                                    by_state: string;
+                                    nordeste_people: number;
+                                    nordeste_percent: number | null;
+                                    nordeste_states_missing: unknown[];
+                                    nordeste_quota_percent: number;
+                                    require_nordeste_quota: boolean;
+                                };
+                                alerts: ({
+                                    /** @constant */
+                                    type: "nordeste_quota";
+                                    message: string;
+                                } | {
+                                    /** @constant */
+                                    type: "states_missing";
+                                    message: string;
+                                } | {
+                                    /** @constant */
+                                    type: "track_over_slots";
+                                    message: string;
+                                } | {
+                                    /** @constant */
+                                    type: "unknown_state";
+                                    message: string;
+                                })[];
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.confirmations.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        summary: unknown[];
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.confirmations.extend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExtendDeadlineRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            /** @enum {string} */
+                            status: "pending" | "confirmed" | "declined" | "withdrawn" | "no_response" | "cancelled";
+                            deadline_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.promotions.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.promotions.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PromoteRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            proposal_id: string;
+                            /** @enum {string|null} */
+                            decision: "accepted" | "waitlisted" | "rejected" | null;
+                            /** @enum {string|null} */
+                            confirmation_status: "pending" | "confirmed" | "declined" | "withdrawn" | "no_response" | "cancelled" | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.logistics.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                user: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            user_id: string;
+                            origin_city: string | null;
+                            /** @enum {string|null} */
+                            origin_state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
+                            needs_travel: boolean;
+                            needs_lodging: boolean;
+                            travel_paid_by_organization: boolean;
+                            lodging_paid_by_organization: boolean;
+                            organization_notes: string | null;
+                            restrictions: {
+                                accessibility_needs: string | null;
+                                dietary_restrictions: string | null;
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.logistics.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                user: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["OrganizationLogisticsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            user_id: string;
+                            origin_city: string | null;
+                            /** @enum {string|null} */
+                            origin_state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
+                            needs_travel: boolean;
+                            needs_lodging: boolean;
+                            travel_paid_by_organization: boolean;
+                            lodging_paid_by_organization: boolean;
+                            organization_notes: string | null;
+                            restrictions: {
+                                accessibility_needs: string | null;
+                                dietary_restrictions: string | null;
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.reviews.queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.reviews.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            proposal: unknown[];
+                            criteria: unknown[];
+                            review: {
+                                status: string;
+                                scores: number[];
+                                comment: string | null;
+                                weighted_score: number | null;
+                                submitted_at: string | null;
+                            } | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.reviews.save": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveReviewRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            status: string;
+                            scores: number[];
+                            comment: string | null;
+                            weighted_score: number | null;
+                            submitted_at: string | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.reviews.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            status: string;
+                            scores: number[];
+                            comment: string | null;
+                            weighted_score: number | null;
+                            submitted_at: string | null;
+                            reviewer: unknown;
+                        }[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.speaker.proposals.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "cfp.speaker.proposals.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SaveProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description `ProposalResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.speaker.proposals.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ProposalResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "cfp.speaker.proposals.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SaveProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description `ProposalResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.speaker.proposals.submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ProposalResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "cfp.speaker.proposals.withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ProposalResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "cfp.speaker.proposals.coauthors.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddCoauthorRequest"];
+            };
+        };
+        responses: {
+            /** @description `ProposalResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.speaker.proposals.confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["RespondConfirmationRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            /** @enum {string} */
+                            status: "pending" | "confirmed" | "declined" | "withdrawn" | "no_response" | "cancelled";
+                            /** @enum {string} */
+                            status_label: "Aguardando resposta" | "Confirmada" | "Recusou" | "Desistiu" | "Sem resposta" | "Cancelada";
+                            deadline_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.speaker.proposals.decline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["RespondConfirmationRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            /** @enum {string} */
+                            status: "pending" | "confirmed" | "declined" | "withdrawn" | "no_response" | "cancelled";
+                            /** @enum {string} */
+                            status_label: "Aguardando resposta" | "Confirmada" | "Recusou" | "Desistiu" | "Sem resposta" | "Cancelada";
+                            deadline_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.speaker.proposals.give-up": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["RespondConfirmationRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            /** @enum {string} */
+                            status: "pending" | "confirmed" | "declined" | "withdrawn" | "no_response" | "cancelled";
+                            /** @enum {string} */
+                            status_label: "Aguardando resposta" | "Confirmada" | "Recusou" | "Desistiu" | "Sem resposta" | "Cancelada";
+                            deadline_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.speaker.proposals.coauthors.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                proposal: string;
+                user: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `ProposalResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ProposalResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "cfp.public.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            edition_id: string;
+                            /** @enum {string} */
+                            status: "open" | "draft" | "closed" | "scheduled";
+                            /** @enum {string} */
+                            status_label: "CFP aberto" | "Em preparação" | "CFP encerrado" | "Agendado";
+                            opens_at: string | null;
+                            closes_at: string | null;
+                            results_at: string | null;
+                            anonymous_review: boolean;
+                            proposals_per_person: number;
+                            tracks: {
+                                id: string;
+                                name: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "cfp.speaker.logistics.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            user_id: string;
+                            origin_city: string | null;
+                            /** @enum {string|null} */
+                            origin_state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
+                            needs_travel: boolean;
+                            needs_lodging: boolean;
+                            travel_paid_by_organization: boolean;
+                            lodging_paid_by_organization: boolean;
+                            organization_notes: string | null;
+                            restrictions: {
+                                accessibility_needs: string | null;
+                                dietary_restrictions: string | null;
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "cfp.speaker.logistics.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SpeakerLogisticsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            user_id: string;
+                            origin_city: string | null;
+                            /** @enum {string|null} */
+                            origin_state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
+                            needs_travel: boolean;
+                            needs_lodging: boolean;
+                            travel_paid_by_organization: boolean;
+                            lodging_paid_by_organization: boolean;
+                            organization_notes: string | null;
+                            restrictions: {
+                                accessibility_needs: string | null;
+                                dietary_restrictions: string | null;
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.communities.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `CommunityResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CommunityResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "community.communities.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StoreCommunityRequest"];
+            };
+        };
+        responses: {
+            /** @description `CommunityResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CommunityResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.communities.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The community ID */
+                community: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `CommunityResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CommunityResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "community.communities.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The community ID */
+                community: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "community.communities.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The community ID */
+                community: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UpdateCommunityRequest"];
+            };
+        };
+        responses: {
+            /** @description `CommunityResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CommunityResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.communities.editions.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The community ID */
+                community: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `EditionResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "community.communities.editions.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The community ID */
+                community: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StoreEditionRequest"];
+            };
+        };
+        responses: {
+            /** @description `EditionResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.editions.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `EditionResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "community.roles.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            roles: unknown[];
+                            permissions: unknown[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "community.edition-clones.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                clone: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `EditionCloneResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionCloneResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "community.team.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            members: {
+                                id: string;
+                                user_id: string;
+                                name: string | null;
+                                email: string | null;
+                                /** @enum {string} */
+                                role: "organizador" | "financeiro" | "avaliador" | "checkin" | "voluntario";
+                                /** @enum {string} */
+                                role_label: "Organizador" | "Financeiro" | "Revisor do CFP" | "Credenciamento" | "Voluntário";
+                                /** @enum {string} */
+                                access: "Tudo na edição" | "Pedidos, pagamentos e finanças" | "CFP e palestrantes" | "Check-in" | "Visão geral da edição";
+                                last_seen_at: null;
+                                joined_at: string;
+                            }[];
+                            invitations: unknown[];
+                            summary: {
+                                people: number;
+                                pending_invitations: number;
+                                by_role: unknown[];
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "community.team.members.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                member: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "community.team.members.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                member: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeMemberRoleRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            user_id: string;
+                            name: string | null;
+                            email: string | null;
+                            /** @enum {string} */
+                            role: "organizador" | "financeiro" | "avaliador" | "checkin" | "voluntario";
+                            /** @enum {string} */
+                            role_label: "Organizador" | "Financeiro" | "Revisor do CFP" | "Credenciamento" | "Voluntário";
+                            /** @enum {string} */
+                            access: "Tudo na edição" | "Pedidos, pagamentos e finanças" | "CFP e palestrantes" | "Check-in" | "Visão geral da edição";
+                            last_seen_at: null;
+                            joined_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.team.invitations.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteTeamMemberRequest"];
+            };
+        };
+        responses: {
+            /** @description `TeamInvitationResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TeamInvitationResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.team.invitations.resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                invitation: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TeamInvitationResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TeamInvitationResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "community.team.invitations.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                invitation: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "community.invitations.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            edition: {
+                                id: string;
+                                name: string;
+                            };
+                            email: string;
+                            name: string | null;
+                            /** @enum {string} */
+                            role: "organizador" | "financeiro" | "avaliador" | "checkin" | "voluntario";
+                            /** @enum {string} */
+                            role_label: "Organizador" | "Financeiro" | "Revisor do CFP" | "Credenciamento" | "Voluntário";
+                            invited_by: string | null;
+                            account_exists: boolean;
+                            expires_at: string;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    "community.invitations.accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AcceptInvitationRequest"] & {
+                    name: string;
+                    password: string;
+                    password_confirmation: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: {
+                            id: string;
+                            name: string;
+                            email: string;
+                        };
+                        edition_id: string;
+                        token: string;
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.editions.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `EditionResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "community.editions.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "community.editions.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UpdateEditionRequest"];
+            };
+        };
+        responses: {
+            /** @description `EditionResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.editions.status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeEditionStatusRequest"];
+            };
+        };
+        responses: {
+            /** @description `EditionResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.editions.clone-options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            parts: unknown[];
+                            never_copied: [
+                                "Propostas",
+                                "Pedidos e ingressos vendidos",
+                                "Participantes",
+                                "Grade",
+                                "Dinheiro e chaves do gateway",
+                                "Domínios",
+                                "Datas"
+                            ];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "community.editions.clone": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CloneEditionRequest"];
+            };
+        };
+        responses: {
+            /** @description `EditionCloneResource` */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EditionCloneResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "community.public.editions.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The community slug */
+                community: string;
+                /** @description The edition slug */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `PublicEditionResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["PublicEditionResource"];
+                    };
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "auth.register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterRequest"];
+            };
+        };
+        responses: {
+            /** @description `UserResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["UserResource"];
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "auth.login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: unknown[];
+                        token: string;
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "auth.logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        loggedOut: boolean;
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "auth.logout-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        loggedOut: boolean;
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "verification.verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                hash: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        verified: boolean;
+                    };
+                };
+            };
+        };
+    };
+    "verification.send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        sent: boolean;
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "auth.password.forgot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotPasswordRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        sent: boolean;
+                        /** @constant */
+                        message: "Se existir uma conta com este e-mail, enviamos um link para redefinir a senha.";
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "auth.password.reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        reset: boolean;
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "auth.password.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangePasswordRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        updated: boolean;
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "auth.github.redirect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        url: string;
+                    };
+                };
+            };
+        };
+    };
+    "auth.github.link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        url: string;
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "auth.github.callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GithubCallbackRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: unknown[];
+                        token: string;
+                    } | {
+                        user: unknown[];
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "auth.github.unlink": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: unknown[];
+                        roles: {
+                            edition_id: string;
+                            role: string;
+                        }[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "me.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UpdateAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description `UserResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["UserResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "me.photo.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadPhotoRequest"];
+            };
+        };
+        responses: {
+            /** @description `UserResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["UserResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "me.photo.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `UserResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["UserResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "me.speaker-profile.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `SpeakerProfileResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SpeakerProfileResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "me.speaker-profile.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSpeakerProfileRequest"];
+            };
+        };
+        responses: {
+            /** @description `SpeakerProfileResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SpeakerProfileResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "identity.people.speaker-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                user: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `SpeakerProfileResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SpeakerProfileResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "notifications.templates.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "notifications.templates.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                template: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `EmailTemplateResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EmailTemplateResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "notifications.templates.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                template: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveEmailTemplateRequest"];
+            };
+        };
+        responses: {
+            /** @description `EmailTemplateResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EmailTemplateResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "notifications.templates.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                template: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `EmailTemplateResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EmailTemplateResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "notifications.templates.preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                template: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PreviewEmailTemplateRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            subject: string;
+                            html: string;
+                            text: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "notifications.templates.test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                template: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PreviewEmailTemplateRequest"];
+            };
+        };
+        responses: {
+            /** @description `EmailDeliveryResource` */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EmailDeliveryResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "notifications.deliveries.index": {
+        parameters: {
+            query?: {
+                status?: components["schemas"]["DeliveryStatus"];
+                template?: components["schemas"]["EmailTemplate"];
+            };
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated set of `EmailDeliveryResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EmailDeliveryResource"][];
+                        links: {
+                            first: string | null;
+                            last: string | null;
+                            prev: string | null;
+                            next: string | null;
+                        };
+                        meta: {
+                            current_page: number;
+                            from: number | null;
+                            last_page: number;
+                            /** @description Generated paginator links. */
+                            links: {
+                                url: string | null;
+                                label: string;
+                                active: boolean;
+                            }[];
+                            /** @description Base path for paginator generated URLs. */
+                            path: string | null;
+                            /** @description Number of items shown per page. */
+                            per_page: number;
+                            /** @description Number of the last item in the slice. */
+                            to: number | null;
+                            /** @description Total number of items being paginated. */
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "notifications.deliveries.resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                delivery: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `EmailDeliveryResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["EmailDeliveryResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "notifications.unsubscribe": {
+        parameters: {
+            query?: {
+                email?: string;
+            };
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never> | {
+                        unsubscribed: boolean;
+                    };
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
     ping: {
         parameters: {
             query?: never;

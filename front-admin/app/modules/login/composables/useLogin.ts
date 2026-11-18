@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import { useAuthSubmit } from '@/application/shared/composables/useAuthSubmit'
 import loginService from '../services/loginService'
 import { LoginError } from '../services/loginError'
@@ -28,5 +29,27 @@ export function useLogin() {
   return useAuthSubmit<LoginCredentials>({
     request: (credentials) => loginService.login(credentials),
     mapError,
+    remember: (credentials) => credentials.remember,
   })
+}
+
+/** Leva para a tela de autorização do GitHub; a volta cai em /login/github. */
+export function useGithubLogin() {
+  const isRedirecting = ref(false)
+  const githubError = ref<string | null>(null)
+
+  async function start(): Promise<void> {
+    isRedirecting.value = true
+    githubError.value = null
+
+    try {
+      const { url } = await loginService.githubRedirect()
+      window.location.assign(url)
+    } catch (error) {
+      githubError.value = error instanceof LoginError && error.statusCode === 429 ? locale.tooManyAttempts : locale.githubUnavailable
+      isRedirecting.value = false
+    }
+  }
+
+  return { isRedirecting, githubError, start }
 }

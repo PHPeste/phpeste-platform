@@ -1,4 +1,8 @@
 import login from '../../../modules/login/locales/pt-br'
+import githubLogin from '../../../modules/githubLogin/locales/pt-br'
+import forgotPassword from '../../../modules/forgotPassword/locales/pt-br'
+import resetPassword from '../../../modules/resetPassword/locales/pt-br'
+import invitation from '../../../modules/invitation/locales/pt-br'
 import ui from './ui'
 import shell from '../../../modules/shell/locales/pt-br'
 
@@ -6,6 +10,10 @@ import shell from '../../../modules/shell/locales/pt-br'
 // "Registro obrigatório". Add one import + one key per new module.
 export default {
   login,
+  githubLogin,
+  forgotPassword,
+  resetPassword,
+  invitation,
   shell,
   ui,
 }
