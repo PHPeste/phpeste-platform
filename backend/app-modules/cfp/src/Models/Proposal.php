@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use PHPeste\Cfp\Enums\ProposalDecision;
 use PHPeste\Cfp\Enums\ProposalFormat;
 use PHPeste\Cfp\Enums\ProposalLanguage;
 use PHPeste\Cfp\Enums\ProposalLevel;
@@ -31,6 +32,9 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property ProposalStatus $status
  * @property Carbon|null $submitted_at
  * @property Carbon|null $withdrawn_at
+ * @property ProposalDecision|null $decision
+ * @property Carbon|null $decided_at
+ * @property string|null $decided_by
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read CfpTrack|null $track
@@ -38,7 +42,7 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property-read Collection<int, ReviewAssignment> $assignments
  * @property-read Collection<int, Review> $reviews
  */
-#[Fillable(['edition_id', 'number', 'track_id', 'title', 'summary', 'audience', 'format', 'level', 'language', 'status', 'submitted_at', 'withdrawn_at'])]
+#[Fillable(['edition_id', 'number', 'track_id', 'title', 'summary', 'audience', 'format', 'level', 'language', 'status', 'submitted_at', 'withdrawn_at', 'decision', 'decided_at', 'decided_by'])]
 class Proposal extends Model
 {
     use BelongsToEdition;
@@ -118,6 +122,8 @@ class Proposal extends Model
             'status' => ProposalStatus::class,
             'submitted_at' => 'datetime',
             'withdrawn_at' => 'datetime',
+            'decision' => ProposalDecision::class,
+            'decided_at' => 'datetime',
         ];
     }
 }
