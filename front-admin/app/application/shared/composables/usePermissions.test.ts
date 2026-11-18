@@ -5,7 +5,7 @@ import { usePermissions } from './usePermissions'
 
 async function asRole(role: string) {
   vi.spyOn(editionService, 'list').mockResolvedValue({
-    data: [{ id: 1, slug: 'ed-1', name: 'E', city: 'C', state: 'PB', year: 2027, site_url: null, role }],
+    data: [{ id: 'ed-1', community_id: 'c1', status: 'cfp_open', status_label: 'CFP aberto', starts_on: null, ends_on: null, slug: 'ed-1', name: 'E', city: 'C', state: 'PB', year: 2027, site_url: null, role }],
   })
   await useEdition().load()
 }

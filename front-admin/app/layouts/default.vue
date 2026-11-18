@@ -17,6 +17,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false })
       <div class="flex min-w-0 flex-1 flex-col">
         <AppTopbar @open-menu="menuOpen = true" />
         <main id="conteudo" tabindex="-1" class="flex-1 px-4 py-6 focus:outline-none lg:px-10">
+          <EditionReadOnlyBanner />
           <slot />
         </main>
       </div>

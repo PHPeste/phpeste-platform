@@ -8,8 +8,8 @@ import EditionSwitcher from './EditionSwitcher.vue'
 import UserMenu from './UserMenu.vue'
 
 const editions = [
-  { id: 1, slug: 'ed-1', name: 'PHPeste 2027', city: 'João Pessoa', state: 'PB', year: 2027, site_url: 'https://phpeste.dev', role: 'organizador' },
-  { id: 2, slug: 'ed-2', name: 'PHPeste 2026', city: 'Recife', state: 'PE', year: 2026, site_url: null, role: 'financeiro' },
+  { id: 'ed-1', community_id: 'c1', status: 'cfp_open', status_label: 'CFP aberto', starts_on: null, ends_on: null, slug: 'ed-1', name: 'PHPeste 2027', city: 'João Pessoa', state: 'PB', year: 2027, site_url: 'https://phpeste.dev', role: 'organizador' },
+  { id: 'ed-2', community_id: 'c1', status: 'cfp_open', status_label: 'CFP aberto', starts_on: null, ends_on: null, slug: 'ed-2', name: 'PHPeste 2026', city: 'Recife', state: 'PE', year: 2026, site_url: null, role: 'financeiro' },
 ]
 
 beforeEach(async () => {
@@ -41,7 +41,7 @@ describe('AppTopbar', () => {
   })
 
   it('esconde "Ver site" quando a edição não tem site', async () => {
-    await useEdition().select(2)
+    await useEdition().select('ed-2')
     const wrapper = await mountSuspended(AppTopbar)
     expect(wrapper.text()).not.toContain('Ver site da edição')
   })
@@ -63,7 +63,13 @@ describe('EditionSwitcher', () => {
     const wrapper = await mountSuspended(EditionSwitcher)
     await wrapper.find('button[aria-label="Trocar de edição"]').trigger('click')
     await wrapper.findAll('ul button')[1]!.trigger('click')
-    await vi.waitFor(() => expect(useEdition().current.value?.id).toBe(2))
+    await vi.waitFor(() => expect(useEdition().current.value?.id).toBe('ed-2'))
+  })
+
+  it('leva para a lista de todas as edições', async () => {
+    const wrapper = await mountSuspended(EditionSwitcher)
+    await wrapper.find('button[aria-label="Trocar de edição"]').trigger('click')
+    expect(wrapper.find('a[href="/comunidades"]').text()).toBe('Ver todas as edições')
   })
 
   it('Esc fecha o menu', async () => {
