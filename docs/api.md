@@ -42,7 +42,7 @@ Toda resposta de erro da API (`app/Support/Api/ApiError.php`) segue o mesmo form
 }
 ```
 
-`code` por tipo de erro: `validation_error` (422), `unauthenticated` (401), `forbidden` (403), `not_found` (404), `method_not_allowed` (405), `too_many_requests` (429), `server_error` (500). `errors` só é preenchido em erro de validação; fora isso é `null`.
+`code` por tipo de erro: `validation_error` (422), `unauthenticated` (401), `forbidden` (403), `not_found` (404), `method_not_allowed` (405), `gone` (410, recurso que existiu e não vale mais, como convite usado ou expirado; a `message` explica o motivo), `too_many_requests` (429), `server_error` (500). `errors` só é preenchido em erro de validação; fora isso é `null`.
 
 ## `X-Request-Id`
 

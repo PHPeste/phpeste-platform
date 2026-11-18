@@ -54,6 +54,9 @@ final class ApiError
             $status === 404 => [
                 404, 'not_found', 'Recurso não encontrado.',
             ],
+            $status === 410 => [
+                410, 'gone', $e->getMessage() ?: 'Este recurso não está mais disponível.',
+            ],
             $status === 405 => [
                 405, 'method_not_allowed', 'Método HTTP não permitido para esta rota.',
             ],

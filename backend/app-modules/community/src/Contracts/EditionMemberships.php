@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPeste\Community\Contracts;
 
+use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Community\Enums\EditionRole;
 
 interface EditionMemberships
@@ -14,4 +15,6 @@ interface EditionMemberships
     public function rolesOf(string $userId): array;
 
     public function roleIn(string $editionId, string $userId): ?EditionRole;
+
+    public function can(string $editionId, string $userId, EditionPermission $permission): bool;
 }
