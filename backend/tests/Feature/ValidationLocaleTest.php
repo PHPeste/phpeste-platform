@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\App;
 use PHPeste\Identity\Models\User;
 
@@ -28,4 +29,13 @@ it('traduz a mensagem de valor já em uso', function (): void {
     ])
         ->assertUnprocessable()
         ->assertJsonPath('errors.email.0', 'Esse e-mail já está em uso.');
+});
+
+it('traduz o e-mail de confirmação de cadastro do Laravel', function (): void {
+    $user = User::factory()->unverified()->create();
+    $mail = (new VerifyEmail)->toMail($user);
+
+    expect($mail->subject)->toBe('Confirme seu e-mail')
+        ->and($mail->actionText)->toBe('Confirmar e-mail')
+        ->and($mail->introLines)->toBe(['Clique no botão abaixo para confirmar seu e-mail.']);
 });

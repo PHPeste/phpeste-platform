@@ -28,7 +28,7 @@ it('cadastra um usuário e envia e-mail de verificação', function (): void {
 
     expect($user->hasVerifiedEmail())->toBeFalse();
 
-    Notification::assertSentTo($user, VerifyEmail::class);
+    Notification::assertSentToTimes($user, VerifyEmail::class, 1);
 });
 
 it('rejeita senha fraca', function (): void {
