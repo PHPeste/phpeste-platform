@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use PHPeste\Cfp\Http\Controllers\AdminProposalController;
 use PHPeste\Cfp\Http\Controllers\CfpCriterionController;
 use PHPeste\Cfp\Http\Controllers\CfpSettingsController;
 use PHPeste\Cfp\Http\Controllers\CfpTrackController;
 use PHPeste\Cfp\Http\Controllers\PublicCfpController;
+use PHPeste\Cfp\Http\Controllers\SpeakerProposalController;
 
 Route::apiV1Edition('cfp')->group(function (): void {
     Route::get('/settings', [CfpSettingsController::class, 'show'])->name('cfp.settings.show');
@@ -21,6 +23,24 @@ Route::apiV1Edition('cfp')->group(function (): void {
     Route::post('/criteria', [CfpCriterionController::class, 'store'])->name('cfp.criteria.store');
     Route::patch('/criteria/{criterion}', [CfpCriterionController::class, 'update'])->whereUuid('criterion')->name('cfp.criteria.update');
     Route::delete('/criteria/{criterion}', [CfpCriterionController::class, 'destroy'])->whereUuid('criterion')->name('cfp.criteria.destroy');
+
+    Route::get('/proposals', [AdminProposalController::class, 'index'])->name('cfp.proposals.index');
+    Route::get('/proposals/{proposal}', [AdminProposalController::class, 'show'])->whereUuid('proposal')->name('cfp.proposals.show');
+    Route::patch('/proposals/{proposal}', [AdminProposalController::class, 'update'])->whereUuid('proposal')->name('cfp.proposals.update');
+});
+
+Route::apiV1PublishedEdition('speaker', 'proposals', ['auth:sanctum'])->group(function (): void {
+    Route::get('/', [SpeakerProposalController::class, 'index'])->name('cfp.speaker.proposals.index');
+    Route::post('/', [SpeakerProposalController::class, 'store'])->name('cfp.speaker.proposals.store');
+    Route::get('/{proposal}', [SpeakerProposalController::class, 'show'])->whereUuid('proposal')->name('cfp.speaker.proposals.show');
+    Route::patch('/{proposal}', [SpeakerProposalController::class, 'update'])->whereUuid('proposal')->name('cfp.speaker.proposals.update');
+    Route::post('/{proposal}/submit', [SpeakerProposalController::class, 'submit'])->whereUuid('proposal')->name('cfp.speaker.proposals.submit');
+    Route::post('/{proposal}/withdraw', [SpeakerProposalController::class, 'withdraw'])->whereUuid('proposal')->name('cfp.speaker.proposals.withdraw');
+    Route::post('/{proposal}/coauthors', [SpeakerProposalController::class, 'addCoauthor'])->whereUuid('proposal')->name('cfp.speaker.proposals.coauthors.store');
+    Route::delete('/{proposal}/coauthors/{user}', [SpeakerProposalController::class, 'removeCoauthor'])
+        ->whereUuid('proposal')
+        ->whereUuid('user')
+        ->name('cfp.speaker.proposals.coauthors.destroy');
 });
 
 Route::apiV1('public')->get('/editions/{edition}/cfp', PublicCfpController::class)
