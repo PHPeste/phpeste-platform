@@ -1,0 +1,18 @@
+export default {
+  title: 'Escolha uma nova senha',
+  subtitle: 'Depois de trocar, todas as sessões abertas são encerradas e você entra de novo com a senha nova.',
+  passwordLabel: 'Nova senha',
+  passwordPlaceholder: 'Mínimo de 10 caracteres',
+  confirmationLabel: 'Repita a nova senha',
+  passwordTooShort: 'A senha precisa ter pelo menos 10 caracteres.',
+  passwordMismatch: 'As senhas não são iguais.',
+  submit: 'Salvar nova senha',
+  doneTitle: 'Senha alterada',
+  done: 'Pronto. Entre com a nova senha.',
+  goToLogin: 'Ir para a entrada',
+  invalidLinkTitle: 'Link inválido',
+  invalidLink: 'Este link de redefinição é inválido ou expirou. Peça um novo.',
+  requestNew: 'Pedir um novo link',
+  tooManyAttempts: 'Muitas tentativas seguidas. Espere um pouco e tente de novo.',
+  genericError: 'Não deu para trocar a senha agora. Tente de novo.',
+}
