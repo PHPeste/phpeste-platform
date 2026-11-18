@@ -10,10 +10,15 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use PHPeste\Community\Contracts\EditionCloner;
 use PHPeste\Community\Contracts\EditionOverviewContributor;
+use PHPeste\Community\Contracts\EditionTransitionGuard;
 use PHPeste\Community\Enums\EditionPermission;
+use PHPeste\Payments\Contracts\AccountUsage;
 use PHPeste\Ticketing\Cloning\TicketingCloner;
 use PHPeste\Ticketing\Console\ExpireOrdersCommand;
+use PHPeste\Ticketing\Console\ReencryptOrders;
 use PHPeste\Ticketing\Console\RotateTicketBatches;
+use PHPeste\Ticketing\Orders\OrderLedger;
+use PHPeste\Ticketing\Orders\SalesReadinessGuard;
 use PHPeste\Ticketing\Overview\TicketingOverviewContributor;
 
 class TicketingServiceProvider extends ServiceProvider
@@ -22,6 +27,8 @@ class TicketingServiceProvider extends ServiceProvider
     {
         $this->app->tag([TicketingCloner::class], EditionCloner::TAG);
         $this->app->tag([TicketingOverviewContributor::class], EditionOverviewContributor::TAG);
+        $this->app->tag([SalesReadinessGuard::class], EditionTransitionGuard::TAG);
+        $this->app->bind(AccountUsage::class, OrderLedger::class);
     }
 
     public function boot(): void
@@ -29,7 +36,7 @@ class TicketingServiceProvider extends ServiceProvider
         Gate::define('ticketing.view', fn (Authenticatable $user): bool => Gate::forUser($user)->any([EditionPermission::ManageEdition->value, EditionPermission::ViewOrders->value]));
 
         if ($this->app->runningInConsole()) {
-            $this->commands([RotateTicketBatches::class, ExpireOrdersCommand::class]);
+            $this->commands([RotateTicketBatches::class, ExpireOrdersCommand::class, ReencryptOrders::class]);
         }
 
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {

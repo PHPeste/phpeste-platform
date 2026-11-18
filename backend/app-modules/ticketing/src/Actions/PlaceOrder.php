@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use PHPeste\Community\Contracts\EditionDirectory;
 use PHPeste\Community\Tenancy\CurrentEdition;
+use PHPeste\Payments\Contracts\PaymentAccounts;
 use PHPeste\Ticketing\Data\Allocation;
 use PHPeste\Ticketing\Data\OrderAttendee;
 use PHPeste\Ticketing\Data\OrderRequest;
@@ -40,6 +41,7 @@ class PlaceOrder
         private readonly CouponPricing $pricing,
         private readonly RedeemCoupon $redeem,
         private readonly AnswerValidator $answers,
+        private readonly PaymentAccounts $accounts,
     ) {}
 
     /**
@@ -143,6 +145,12 @@ class PlaceOrder
 
         $total = $quote->totalCents() + array_sum($fees);
 
+        $account = $total > 0 ? $this->accounts->active($editionId) : null;
+
+        if ($total > 0 && $account?->ready !== true) {
+            throw ValidationException::withMessages(['items' => 'Vendas pausadas até o teste do gateway.']);
+        }
+
         if ($total > 0 && $request->buyerDocument === null) {
             throw ValidationException::withMessages(['buyer_document' => 'Informe o CPF de quem paga.']);
         }
@@ -166,6 +174,7 @@ class PlaceOrder
             'total_cents' => $total,
             'coupon_id' => $quote->couponId,
             'coupon_code' => $quote->couponCode,
+            'payment_account_id' => $account?->id,
             'access_token' => Str::random(48),
             'idempotency_key' => $idempotencyKey,
             'request_hash' => $request->hash(),
