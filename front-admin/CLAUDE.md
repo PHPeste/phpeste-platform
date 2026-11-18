@@ -49,6 +49,8 @@ app/
     equipe.vue                     # módulo team: equipe, convites e papéis da edição
     cfp/index.vue                  # módulo cfpSettings: janela, regras, trilhas, critérios e prévia do formulário
     cfp/avaliacao.vue              # módulo cfpReview: fila do revisor com atalhos, quadro e atribuição da organização
+    palestrantes/index.vue         # módulo speakers: confirmações, cobertura dos nove estados e lista de espera
+    palestrantes/[id].vue          # módulo speakers: perfil, palestras, viagem e hospedagem e confirmação
     index.vue
   plugins/
     auth.client.ts                 # hydrates authStore from localStorage (ou sessionStorage, sem "manter conectado") on boot

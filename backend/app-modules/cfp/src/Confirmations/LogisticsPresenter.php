@@ -14,7 +14,7 @@ class LogisticsPresenter
     /**
      * @return array<string, mixed>
      */
-    public function present(SpeakerLogistics $logistics, bool $forOrganization): array
+    public function present(SpeakerLogistics $logistics, bool $forOrganization, bool $withPrivateData = false): array
     {
         $data = [
             'user_id' => $logistics->user_id,
@@ -28,7 +28,7 @@ class LogisticsPresenter
 
         if ($forOrganization) {
             $data['organization_notes'] = $logistics->organization_notes;
-            $data['restrictions'] = $this->profiles->privateDetails($logistics->user_id);
+            $data['restrictions'] = $withPrivateData ? $this->profiles->privateDetails($logistics->user_id) : null;
         }
 
         return $data;

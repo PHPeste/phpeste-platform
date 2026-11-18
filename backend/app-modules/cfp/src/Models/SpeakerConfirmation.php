@@ -20,12 +20,13 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property Carbon $deadline_at
  * @property Carbon|null $responded_at
  * @property Carbon|null $reminded_at
+ * @property Carbon|null $attended_at
  * @property string|null $reason
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Proposal $proposal
  */
-#[Fillable(['edition_id', 'proposal_id', 'status', 'deadline_at', 'responded_at', 'reminded_at', 'reason'])]
+#[Fillable(['edition_id', 'proposal_id', 'status', 'deadline_at', 'responded_at', 'reminded_at', 'attended_at', 'reason'])]
 class SpeakerConfirmation extends Model
 {
     use BelongsToEdition;
@@ -48,6 +49,7 @@ class SpeakerConfirmation extends Model
             'status' => ConfirmationStatus::class,
             'deadline_at' => 'datetime',
             'responded_at' => 'datetime',
+            'attended_at' => 'datetime',
             'reminded_at' => 'datetime',
         ];
     }

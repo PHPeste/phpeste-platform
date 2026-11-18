@@ -125,7 +125,7 @@ class ConfirmationAdminController
     {
         Gate::authorize(EditionPermission::ManageProgram->value);
 
-        return response()->json(['data' => $this->logistics->present($this->logisticsFor($request), true)]);
+        return response()->json(['data' => $this->logistics->present($this->logisticsFor($request), true, Gate::allows(EditionPermission::ViewSpeakerPrivateData->value))]);
     }
 
     public function updateLogistics(OrganizationLogisticsRequest $request): JsonResponse
@@ -135,7 +135,7 @@ class ConfirmationAdminController
         $logistics = $this->logisticsFor($request);
         $logistics->fill($request->validated())->save();
 
-        return response()->json(['data' => $this->logistics->present($logistics, true)]);
+        return response()->json(['data' => $this->logistics->present($logistics, true, Gate::allows(EditionPermission::ViewSpeakerPrivateData->value))]);
     }
 
     private function logisticsFor(Request $request): SpeakerLogistics
