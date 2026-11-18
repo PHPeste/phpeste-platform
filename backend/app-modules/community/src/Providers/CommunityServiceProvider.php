@@ -9,6 +9,8 @@ use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use PHPeste\Community\Cloning\TeamCloner;
+use PHPeste\Community\Contracts\EditionCloner;
 use PHPeste\Community\Contracts\EditionDirectory;
 use PHPeste\Community\Contracts\EditionMemberships;
 use PHPeste\Community\Enums\EditionPermission;
@@ -32,6 +34,7 @@ class CommunityServiceProvider extends ServiceProvider
         $this->app->bind(EditionMemberships::class, EloquentEditionMemberships::class);
         $this->app->bind(EditionDirectory::class, EloquentEditionDirectory::class);
         $this->app->tag([TeamParticipation::class], EditionParticipation::TAG);
+        $this->app->tag([TeamCloner::class], EditionCloner::TAG);
 
         Route::macro('apiV1Edition', function (?string $prefix = null): RouteRegistrar {
             $path = 'editions/{edition}'.($prefix ? "/{$prefix}" : '');
