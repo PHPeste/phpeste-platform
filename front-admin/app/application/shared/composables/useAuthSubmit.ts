@@ -1,20 +1,20 @@
 import { ref } from 'vue'
 import { useAuthStore, type AuthenticatedUser } from '@/stores/authStore'
 
-interface AuthUserPayload {
-  id: number
+export interface AuthUserPayload {
+  id: string
   name: string
   email: string
   avatar_url: string | null
   created_at: string
 }
 
-interface AuthPayload {
+export interface AuthPayload {
   user: AuthUserPayload
   token: string
 }
 
-interface MappedError {
+export interface MappedError {
   message: string
   fieldErrors: Record<string, string[]> | null
 }
@@ -22,9 +22,10 @@ interface MappedError {
 interface UseAuthSubmitOptions<TCredentials> {
   request: (credentials: TCredentials) => Promise<AuthPayload>
   mapError: (error: unknown) => MappedError
+  remember?: (credentials: TCredentials) => boolean
 }
 
-function translateAuthUser(payload: AuthUserPayload): AuthenticatedUser {
+export function translateAuthUser(payload: AuthUserPayload): AuthenticatedUser {
   return {
     id: payload.id,
     name: payload.name,
@@ -34,10 +35,10 @@ function translateAuthUser(payload: AuthUserPayload): AuthenticatedUser {
 }
 
 /**
- * Shared between login and register (or any other flow hitting an endpoint
- * that returns { user, token }): on success it saves the session in
- * authStore. Error message/field mapping stays with each module, since only
- * it knows its own API's error shape.
+ * Shared by every flow hitting an endpoint that returns { user, token }
+ * (login, GitHub callback, invitation acceptance): on success it saves the
+ * session in authStore. Error message/field mapping stays with each module,
+ * since only it knows its own API's error shape.
  */
 export function useAuthSubmit<TCredentials>(options: UseAuthSubmitOptions<TCredentials>) {
   const authStore = useAuthStore()
@@ -53,7 +54,7 @@ export function useAuthSubmit<TCredentials>(options: UseAuthSubmitOptions<TCrede
 
     try {
       const payload = await options.request(credentials)
-      authStore.setSession(translateAuthUser(payload.user), payload.token)
+      authStore.setSession(translateAuthUser(payload.user), payload.token, options.remember?.(credentials) ?? true)
       return true
     } catch (error) {
       const mapped = options.mapError(error)

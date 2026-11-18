@@ -20,3 +20,4 @@ function createMemoryStorage(): Storage {
 }
 
 vi.stubGlobal('localStorage', createMemoryStorage())
+vi.stubGlobal('sessionStorage', createMemoryStorage())

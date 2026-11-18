@@ -4,7 +4,7 @@ import { httpClient } from '@/infrastructure/http/HttpClient'
 const STORAGE_KEY = 'app.auth'
 
 export interface AuthenticatedUser {
-  id: number
+  id: string
   name: string
   email: string
   avatarUrl: string | null
@@ -36,13 +36,16 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    setSession(user: AuthenticatedUser, token: string) {
+    setSession(user: AuthenticatedUser, token: string, remember = true) {
       this.user = user
       this.token = token
       httpClient.setAuthToken(token)
 
       if (import.meta.client) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ user, token } satisfies StoredSession))
+        const session = JSON.stringify({ user, token } satisfies StoredSession)
+        localStorage.removeItem(STORAGE_KEY)
+        sessionStorage.removeItem(STORAGE_KEY)
+        ;(remember ? localStorage : sessionStorage).setItem(STORAGE_KEY, session)
       }
     },
 
@@ -53,6 +56,7 @@ export const useAuthStore = defineStore('auth', {
 
       if (import.meta.client) {
         localStorage.removeItem(STORAGE_KEY)
+        sessionStorage.removeItem(STORAGE_KEY)
       }
     },
 
@@ -61,7 +65,7 @@ export const useAuthStore = defineStore('auth', {
         return
       }
 
-      const raw = localStorage.getItem(STORAGE_KEY)
+      const raw = localStorage.getItem(STORAGE_KEY) ?? sessionStorage.getItem(STORAGE_KEY)
 
       if (!raw) {
         return
@@ -74,6 +78,7 @@ export const useAuthStore = defineStore('auth', {
         httpClient.setAuthToken(stored.token)
       } catch {
         localStorage.removeItem(STORAGE_KEY)
+        sessionStorage.removeItem(STORAGE_KEY)
       }
     },
   },
