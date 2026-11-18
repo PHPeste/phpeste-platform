@@ -25,6 +25,11 @@ class EditionResource extends ApiResource
         return [
             'id' => $edition->id,
             'community_id' => $edition->community_id,
+            'community' => $this->whenLoaded('community', fn (): array => [
+                'id' => $edition->community->id,
+                'name' => $edition->community->name,
+                'slug' => $edition->community->slug,
+            ]),
             'name' => $edition->name,
             'slug' => $edition->slug,
             'status' => $edition->status->value,

@@ -30,7 +30,7 @@ class EditionController
 
         $editions = Edition::query()
             ->whereHas('members', fn (Builder $query) => $query->where('user_id', $userId))
-            ->with(['members' => $this->membershipOf($userId)])
+            ->with(['community', 'members' => $this->membershipOf($userId)])
             ->latest('starts_on')
             ->orderBy('name')
             ->get();

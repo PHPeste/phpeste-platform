@@ -104,7 +104,9 @@ it('lista as edições em que a pessoa tem papel, no formato do seletor do paine
         ->assertJsonPath('data.0.year', 2_027)
         ->assertJsonPath('data.0.city', 'João Pessoa')
         ->assertJsonPath('data.0.state', 'PB')
-        ->assertJsonPath('data.0.site_url', null);
+        ->assertJsonPath('data.0.site_url', null)
+        ->assertJsonPath('data.0.community.id', $edition->community_id)
+        ->assertJsonPath('data.0.community.name', $edition->community->name);
 });
 
 it('mostra a edição para qualquer membro, com o papel dele', function (EditionRole $role): void {
