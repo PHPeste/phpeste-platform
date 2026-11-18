@@ -45,6 +45,7 @@ Vive em `PHPeste\Community\Tenancy` e é o que todo módulo com dado de edição
 - **Rota admin de edição** usa `Route::apiV1Edition('<prefixo>')`, que monta `/api/v1/editions/{edition}/<prefixo>`, exige `auth:sanctum`, confere se a pessoa tem papel na edição (403 se não) e liga a edição no contexto (`CurrentEdition`) só durante a requisição. O papel específico de cada ação é conferido na Policy.
 - **Rota de quem não é da equipe** (palestrante, participante) usa `Route::apiV1PublishedEdition('<area>', '<prefixo>', ['auth:sanctum'])`, que monta `/api/v1/<area>/editions/{edition}/<prefixo>`, só aceita edição publicada (404 em rascunho) e liga a edição no contexto sem exigir papel.
 - **Job e listener** recebem `edition_id` explícito no construtor e rodam o trabalho dentro de `resolve(CurrentEdition::class)->run($editionId, fn () => ...)`, nunca resolvem a edição do contexto de quem disparou.
+- **Dado de edição que deve ir para a próxima edição** ("criar edição a partir da anterior") é copiado por um `EditionCloner` do próprio módulo, registrado com `$app->tag([...], EditionCloner::TAG)`. O job `CloneEdition` cria a edição nova e roda os clonadores escolhidos numa única transação; clonador usa `edition_id` explícito (`forEdition`), copia arquivos em vez de reaproveitar o caminho e nunca copia dado de pessoa (propostas, pedidos, participantes).
 - **Evento de domínio** carrega ids e enums, não Models, porque outro módulo não pode usar Model do Community (ex.: `EditionStatusChanged(editionId, from, to)`).
 
 ## Papéis e permissões
