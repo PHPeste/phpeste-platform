@@ -13,6 +13,7 @@ use PHPeste\Cfp\Http\Controllers\EvaluationController;
 use PHPeste\Cfp\Http\Controllers\PublicCfpController;
 use PHPeste\Cfp\Http\Controllers\ReviewAssignmentController;
 use PHPeste\Cfp\Http\Controllers\ReviewController;
+use PHPeste\Cfp\Http\Controllers\SpeakerAdminController;
 use PHPeste\Cfp\Http\Controllers\SpeakerConfirmationController;
 use PHPeste\Cfp\Http\Controllers\SpeakerProposalController;
 
@@ -49,6 +50,11 @@ Route::apiV1Edition('cfp')->group(function (): void {
     Route::get('/decision/ranking', [DecisionController::class, 'ranking'])->name('cfp.decision.ranking');
     Route::post('/decision/simulate', [DecisionController::class, 'simulate'])->name('cfp.decision.simulate');
     Route::post('/decision/apply', [DecisionController::class, 'apply'])->name('cfp.decision.apply');
+
+    Route::get('/speakers', [SpeakerAdminController::class, 'index'])->name('cfp.speakers.index');
+    Route::post('/speakers/remind', [SpeakerAdminController::class, 'remind'])->name('cfp.speakers.remind');
+    Route::get('/speakers/{user}', [SpeakerAdminController::class, 'show'])->whereUuid('user')->name('cfp.speakers.show');
+    Route::post('/speakers/{user}/attendance', [SpeakerAdminController::class, 'attendance'])->whereUuid('user')->name('cfp.speakers.attendance');
 
     Route::get('/confirmations', [ConfirmationAdminController::class, 'index'])->name('cfp.confirmations.index');
     Route::post('/confirmations/{proposal}/extend', [ConfirmationAdminController::class, 'extend'])->whereUuid('proposal')->name('cfp.confirmations.extend');

@@ -10,6 +10,7 @@ enum EditionPermission: string
     case ManageTeam = 'edition.team';
     case ReviewProposals = 'cfp.review';
     case ManageProgram = 'program.manage';
+    case ViewSpeakerPrivateData = 'speakers.private';
     case ViewOrders = 'orders.view';
     case ManageGateway = 'payments.gateway';
     case CheckIn = 'checkin.scan';
@@ -21,6 +22,7 @@ enum EditionPermission: string
             self::ManageTeam => 'Gerenciar equipe e convites',
             self::ReviewProposals => 'Avaliar propostas',
             self::ManageProgram => 'Gerenciar palestrantes e grade',
+            self::ViewSpeakerPrivateData => 'Ver acessibilidade e alimentação dos palestrantes',
             self::ViewOrders => 'Ver pedidos e pagamentos',
             self::ManageGateway => 'Editar chaves do gateway',
             self::CheckIn => 'Fazer check-in',

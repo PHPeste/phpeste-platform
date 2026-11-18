@@ -39,7 +39,7 @@ flowchart LR
    - o site passa a poder chamar a API pública pelo navegador (CORS liberado para esse endereço).
 5. **Pôr os links no site**:
    - "Enviar proposta" → `https://cfp.phpeste.php-pb.net/cfp`
-   - "Minhas propostas" → `https://cfp.phpeste.php-pb.net/cfp/minhas`
+   - "Minhas propostas" → `https://cfp.phpeste.php-pb.net/palestrante/propostas`
    - no Marco 2, "Comprar ingresso" → `https://cfp.phpeste.php-pb.net/ingressos` (ou um subdomínio próprio, como `ingressos.`)
 6. **Opcional: mostrar dados ao vivo** com a API pública (abaixo).
 
@@ -81,8 +81,9 @@ Se a API estiver fora do ar, o link continua funcionando: a área da plataforma 
 | Caminho | O quê |
 | --- | --- |
 | `/cfp` | Formulário de proposta em 3 passos, com conta, rascunho e aviso de anonimato (P03, #78) |
-| `/cfp/minhas` | Propostas da pessoa, edição enquanto o CFP está aberto |
-| `/confirmacao`, `/logistica` | Confirmação de presença e viagem/hospedagem de quem foi aprovado |
+| `/palestrante/propostas` | Propostas da pessoa, edição enquanto o CFP está aberto |
+| `/palestrante/propostas/{id}` | Uma proposta, com a confirmação de presença de quem foi aprovado (é o link dos e-mails de aprovação e lembrete) |
+| `/palestrante/logistica` | Viagem e hospedagem de quem confirmou |
 | `/entrar`, `/conta` | Login, cadastro e conta |
 | `/ingressos`, `/pedidos` | Checkout e pedidos (Marco 2) |
 | `/` e qualquer outra página | Redireciona para o site da comunidade |
