@@ -45,6 +45,7 @@ app/
     redefinir-senha.vue            # módulo resetPassword (link do e-mail)
     convite/[token].vue            # módulo invitation (link do convite da equipe)
     comunidades.vue                # módulo communities: seletor de edição, nova comunidade, nova edição
+    identidade.vue                 # módulo identity: editor de tema com prévia ao vivo
     index.vue
   plugins/
     auth.client.ts                 # hydrates authStore from localStorage (ou sessionStorage, sem "manter conectado") on boot
