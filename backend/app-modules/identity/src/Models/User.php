@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use PHPeste\Identity\Database\Factories\UserFactory;
+use PHPeste\Identity\Enums\NotificationTopic;
 use PHPeste\Identity\Notifications\ResetPasswordNotification;
 
 /**
@@ -28,13 +29,14 @@ use PHPeste\Identity\Notifications\ResetPasswordNotification;
  * @property Carbon|null $email_verified_at
  * @property string|null $password
  * @property string $locale
+ * @property array<string, bool>|null $notification_preferences
  * @property string|null $photo_path
  * @property string|null $remember_token
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Collection<int, SocialAccount> $socialAccounts
  */
-#[Fillable(['name', 'email', 'password', 'locale', 'photo_path'])]
+#[Fillable(['name', 'email', 'password', 'locale', 'photo_path', 'notification_preferences'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmailContract
 {
@@ -89,6 +91,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
         $this->notify(new ResetPasswordNotification($token));
     }
 
+    public function wantsNotification(NotificationTopic $topic): bool
+    {
+        return $this->notification_preferences[$topic->value] ?? $topic->enabledByDefault();
+    }
+
     /**
      * @return array<string, string>
      */
@@ -97,6 +104,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'notification_preferences' => 'array',
         ];
     }
 }

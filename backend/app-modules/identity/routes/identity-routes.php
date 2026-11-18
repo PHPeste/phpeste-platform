@@ -8,6 +8,7 @@ use PHPeste\Identity\Http\Controllers\GithubController;
 use PHPeste\Identity\Http\Controllers\MeController;
 use PHPeste\Identity\Http\Controllers\PasswordController;
 use PHPeste\Identity\Http\Controllers\ProfileController;
+use PHPeste\Identity\Http\Controllers\SessionController;
 use PHPeste\Identity\Http\Controllers\SpeakerProfileController;
 
 Route::apiV1('auth')->group(function (): void {
@@ -71,6 +72,8 @@ Route::apiV1('me', ['auth:sanctum'])->group(function (): void {
     Route::delete('/photo', [ProfileController::class, 'deletePhoto'])->name('me.photo.destroy');
     Route::get('/speaker-profile', [SpeakerProfileController::class, 'show'])->name('me.speaker-profile.show');
     Route::put('/speaker-profile', [SpeakerProfileController::class, 'update'])->name('me.speaker-profile.update');
+    Route::get('/sessions', [SessionController::class, 'index'])->name('me.sessions.index');
+    Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('me.sessions.destroy');
 });
 
 Route::apiV1Edition('people')->get('/{user}/speaker-profile', [SpeakerProfileController::class, 'showForEdition'])
