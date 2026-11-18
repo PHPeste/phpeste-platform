@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PHPeste\Branding\Http\Resources;
 
 use App\Http\Resources\ApiResource;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use PHPeste\Branding\Models\EditionSetting;
 use PHPeste\Branding\Theme\ContrastChecker;
@@ -33,13 +32,5 @@ class ThemeSettingsResource extends ApiResource
             'can_revert' => $settings->theme_previous !== null,
             'contrast' => ContrastChecker::report($settings->theme_draft['colors']),
         ];
-    }
-
-    /**
-     * @param  Request  $request
-     */
-    public function toResponse($request): JsonResponse
-    {
-        return parent::toResponse($request)->setStatusCode(200);
     }
 }
