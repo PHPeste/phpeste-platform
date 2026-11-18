@@ -74,6 +74,14 @@ test.describe('Layout base do painel', () => {
     await expect(page.getByRole('heading', { name: 'Visão geral' })).toBeVisible()
   })
 
+  test('carrega a fonte Lexend do tema em qualquer tela, não só na identidade', async ({ page, goto }) => {
+    await signIn(page)
+    await goto('/', { waitUntil: 'hydration' })
+
+    await expect(page.locator('head link[rel="stylesheet"][href*="fonts.googleapis.com"][href*="family=Lexend"]')).toHaveCount(1)
+    expect(await page.locator('body').evaluate((el) => getComputedStyle(el).fontFamily)).toContain('Lexend')
+  })
+
   test('rota inexistente mostra 404', async ({ page, goto }) => {
     await signIn(page)
     await goto('/nao-existe', { waitUntil: 'hydration' })
