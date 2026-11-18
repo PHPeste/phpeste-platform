@@ -71,7 +71,7 @@ test.describe('Layout base do painel', () => {
     await expect(page.getByRole('heading', { name: 'Sem permissão' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Voltar' })).toBeVisible()
     await page.getByRole('button', { name: 'Ir para a visão geral' }).click()
-    await expect(page.getByRole('heading', { name: 'Visão geral' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Visão geral', level: 1 })).toBeVisible()
   })
 
   test('carrega a fonte Lexend do tema em qualquer tela, não só na identidade', async ({ page, goto }) => {
