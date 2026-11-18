@@ -20,7 +20,7 @@ beforeEach(function (): void {
 it('lista os modelos da edição com o padrão de cada um', function (): void {
     $this->getJson($this->url)
         ->assertOk()
-        ->assertJsonCount(7, 'data')
+        ->assertJsonCount(8, 'data')
         ->assertJsonPath('data.0.id', 'order_confirmed')
         ->assertJsonPath('data.0.label', 'Confirmação de compra')
         ->assertJsonPath('data.0.trigger', 'Ao pagar o pedido')

@@ -22,11 +22,12 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property bool $require_nordeste_quota
  * @property int $nordeste_quota_percent
  * @property int $proposals_per_person
+ * @property int $confirmation_days
  * @property CfpStatus $announced_status
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-#[Fillable(['edition_id', 'opens_at', 'closes_at', 'results_at', 'anonymous_review', 'require_nordeste_quota', 'nordeste_quota_percent', 'proposals_per_person', 'announced_status'])]
+#[Fillable(['edition_id', 'opens_at', 'closes_at', 'results_at', 'anonymous_review', 'require_nordeste_quota', 'nordeste_quota_percent', 'proposals_per_person', 'announced_status', 'confirmation_days'])]
 #[Table(name: 'cfp_settings')]
 class CfpSetting extends Model
 {
@@ -39,6 +40,7 @@ class CfpSetting extends Model
         'nordeste_quota_percent' => 50,
         'proposals_per_person' => 3,
         'announced_status' => 'draft',
+        'confirmation_days' => 7,
     ];
 
     public function statusFor(bool $editionInCfp, ?Carbon $now = null): CfpStatus
@@ -73,6 +75,7 @@ class CfpSetting extends Model
             'require_nordeste_quota' => 'boolean',
             'nordeste_quota_percent' => 'integer',
             'proposals_per_person' => 'integer',
+            'confirmation_days' => 'integer',
             'announced_status' => CfpStatus::class,
         ];
     }

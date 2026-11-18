@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use PHPeste\Cfp\Enums\ProposalDecision;
 use PHPeste\Cfp\Enums\ProposalFormat;
@@ -41,6 +42,7 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property-read Collection<int, ProposalSpeaker> $speakers
  * @property-read Collection<int, ReviewAssignment> $assignments
  * @property-read Collection<int, Review> $reviews
+ * @property-read SpeakerConfirmation|null $confirmation
  */
 #[Fillable(['edition_id', 'number', 'track_id', 'title', 'summary', 'audience', 'format', 'level', 'language', 'status', 'submitted_at', 'withdrawn_at', 'decision', 'decided_at', 'decided_by'])]
 class Proposal extends Model
@@ -83,6 +85,14 @@ class Proposal extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * @return HasOne<SpeakerConfirmation, $this>
+     */
+    public function confirmation(): HasOne
+    {
+        return $this->hasOne(SpeakerConfirmation::class);
     }
 
     public function ownerId(): ?string

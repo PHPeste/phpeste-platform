@@ -7,11 +7,13 @@ use PHPeste\Cfp\Http\Controllers\AdminProposalController;
 use PHPeste\Cfp\Http\Controllers\CfpCriterionController;
 use PHPeste\Cfp\Http\Controllers\CfpSettingsController;
 use PHPeste\Cfp\Http\Controllers\CfpTrackController;
+use PHPeste\Cfp\Http\Controllers\ConfirmationAdminController;
 use PHPeste\Cfp\Http\Controllers\DecisionController;
 use PHPeste\Cfp\Http\Controllers\EvaluationController;
 use PHPeste\Cfp\Http\Controllers\PublicCfpController;
 use PHPeste\Cfp\Http\Controllers\ReviewAssignmentController;
 use PHPeste\Cfp\Http\Controllers\ReviewController;
+use PHPeste\Cfp\Http\Controllers\SpeakerConfirmationController;
 use PHPeste\Cfp\Http\Controllers\SpeakerProposalController;
 
 Route::apiV1Edition('cfp')->group(function (): void {
@@ -47,6 +49,13 @@ Route::apiV1Edition('cfp')->group(function (): void {
     Route::post('/decision/simulate', [DecisionController::class, 'simulate'])->name('cfp.decision.simulate');
     Route::post('/decision/apply', [DecisionController::class, 'apply'])->name('cfp.decision.apply');
 
+    Route::get('/confirmations', [ConfirmationAdminController::class, 'index'])->name('cfp.confirmations.index');
+    Route::post('/confirmations/{proposal}/extend', [ConfirmationAdminController::class, 'extend'])->whereUuid('proposal')->name('cfp.confirmations.extend');
+    Route::get('/promotions', [ConfirmationAdminController::class, 'promotions'])->name('cfp.promotions.index');
+    Route::post('/promotions', [ConfirmationAdminController::class, 'promote'])->name('cfp.promotions.store');
+    Route::get('/logistics/{user}', [ConfirmationAdminController::class, 'showLogistics'])->whereUuid('user')->name('cfp.logistics.show');
+    Route::patch('/logistics/{user}', [ConfirmationAdminController::class, 'updateLogistics'])->whereUuid('user')->name('cfp.logistics.update');
+
     Route::get('/reviews/queue', [ReviewController::class, 'queue'])->name('cfp.reviews.queue');
     Route::get('/proposals/{proposal}/review', [ReviewController::class, 'show'])->whereUuid('proposal')->name('cfp.reviews.show');
     Route::put('/proposals/{proposal}/review', [ReviewController::class, 'save'])->whereUuid('proposal')->name('cfp.reviews.save');
@@ -61,6 +70,9 @@ Route::apiV1PublishedEdition('speaker', 'proposals', ['auth:sanctum'])->group(fu
     Route::post('/{proposal}/submit', [SpeakerProposalController::class, 'submit'])->whereUuid('proposal')->name('cfp.speaker.proposals.submit');
     Route::post('/{proposal}/withdraw', [SpeakerProposalController::class, 'withdraw'])->whereUuid('proposal')->name('cfp.speaker.proposals.withdraw');
     Route::post('/{proposal}/coauthors', [SpeakerProposalController::class, 'addCoauthor'])->whereUuid('proposal')->name('cfp.speaker.proposals.coauthors.store');
+    Route::post('/{proposal}/confirm', [SpeakerConfirmationController::class, 'confirm'])->whereUuid('proposal')->name('cfp.speaker.proposals.confirm');
+    Route::post('/{proposal}/decline', [SpeakerConfirmationController::class, 'decline'])->whereUuid('proposal')->name('cfp.speaker.proposals.decline');
+    Route::post('/{proposal}/give-up', [SpeakerConfirmationController::class, 'withdraw'])->whereUuid('proposal')->name('cfp.speaker.proposals.give-up');
     Route::delete('/{proposal}/coauthors/{user}', [SpeakerProposalController::class, 'removeCoauthor'])
         ->whereUuid('proposal')
         ->whereUuid('user')
@@ -70,3 +82,8 @@ Route::apiV1PublishedEdition('speaker', 'proposals', ['auth:sanctum'])->group(fu
 Route::apiV1('public')->get('/editions/{edition}/cfp', PublicCfpController::class)
     ->whereUuid('edition')
     ->name('cfp.public.show');
+
+Route::apiV1PublishedEdition('speaker', 'logistics', ['auth:sanctum'])->group(function (): void {
+    Route::get('/', [SpeakerConfirmationController::class, 'showLogistics'])->name('cfp.speaker.logistics.show');
+    Route::put('/', [SpeakerConfirmationController::class, 'updateLogistics'])->name('cfp.speaker.logistics.update');
+});
