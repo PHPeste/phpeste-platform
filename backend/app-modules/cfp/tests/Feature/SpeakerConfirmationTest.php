@@ -215,3 +215,19 @@ it('acessibilidade e logística só para a organização, e só de quem foi apro
     Sanctum::actingAs($this->organizer);
     $this->getJson("{$this->admin}/logistics/{$this->joao->id}")->assertNotFound();
 });
+
+it('mostra ao palestrante o estado da confirmação junto com a proposta aprovada', function (): void {
+    decideAs($this, [$this->first->id => 'accepted', $this->second->id => 'waitlisted']);
+
+    Sanctum::actingAs($this->ana);
+    $this->getJson("{$this->speaker}/proposals/{$this->first->id}")
+        ->assertOk()
+        ->assertJsonPath('data.decision', 'accepted')
+        ->assertJsonPath('data.confirmation.status', 'pending')
+        ->assertJsonPath('data.confirmation.status_label', 'Aguardando resposta')
+        ->assertJsonPath('data.confirmation.deadline_at', '2027-05-08T23:59:59Z');
+    $this->getJson("{$this->speaker}/proposals")->assertJsonPath('data.0.confirmation.status', 'pending');
+
+    Sanctum::actingAs($this->joao);
+    $this->getJson("{$this->speaker}/proposals/{$this->second->id}")->assertJsonPath('data.confirmation', null);
+});

@@ -13,6 +13,7 @@ use PHPeste\Cfp\Actions\RemoveCoauthor;
 use PHPeste\Cfp\Actions\SubmitProposal;
 use PHPeste\Cfp\Actions\UpdateProposal;
 use PHPeste\Cfp\Actions\WithdrawProposal;
+use PHPeste\Cfp\Enums\ProposalDecision;
 use PHPeste\Cfp\Http\Requests\AddCoauthorRequest;
 use PHPeste\Cfp\Http\Requests\SaveProposalRequest;
 use PHPeste\Cfp\Http\Resources\ProposalResource;
@@ -34,11 +35,13 @@ class SpeakerProposalController
 
         $proposals = Proposal::query()
             ->whereHas('speakers', fn (Builder $query) => $query->where('user_id', $userId))
-            ->with(['speakers', 'track'])
+            ->with(['speakers', 'track', 'confirmation'])
             ->orderBy('number')
             ->get();
 
-        return response()->json(['data' => array_map(fn (ProposalResource $resource): array => $resource->resolve($request), $this->presenter->present($proposals, true))]);
+        $presented = $this->presenter->present($proposals, true);
+
+        return response()->json(['data' => array_map(fn (ProposalResource $resource, Proposal $proposal): array => [...$resource->resolve($request), 'confirmation' => $this->confirmation($proposal)], $presented, $proposals->all())]);
     }
 
     public function store(SaveProposalRequest $request, CreateProposal $create): JsonResponse
@@ -48,9 +51,11 @@ class SpeakerProposalController
         return $this->presenter->one($proposal->load('track'), true)->response()->setStatusCode(201);
     }
 
-    public function show(Request $request): ProposalResource
+    public function show(Request $request): JsonResponse
     {
-        return $this->presenter->one($this->proposal($request, ownerOnly: false), true);
+        $proposal = $this->proposal($request, ownerOnly: false);
+
+        return response()->json(['data' => [...$this->presenter->one($proposal, true)->resolve($request), 'confirmation' => $this->confirmation($proposal)]]);
     }
 
     public function update(SaveProposalRequest $request, UpdateProposal $update): ProposalResource
@@ -88,7 +93,7 @@ class SpeakerProposalController
 
         abort_unless(is_string($id), 404);
 
-        $proposal = Proposal::query()->with(['speakers', 'track'])->whereKey($id)->firstOrFail();
+        $proposal = Proposal::query()->with(['speakers', 'track', 'confirmation'])->whereKey($id)->firstOrFail();
         $userId = $this->userId($request);
 
         abort_unless($proposal->hasSpeaker($userId), 404);
@@ -96,6 +101,25 @@ class SpeakerProposalController
         throw_if($ownerOnly && $proposal->ownerId() !== $userId, AccessDeniedHttpException::class, 'Só quem criou a proposta pode fazer isso.');
 
         return $proposal;
+    }
+
+    /**
+     * @return array{status: string, status_label: string, deadline_at: string, responded_at: string|null}|null
+     */
+    private function confirmation(Proposal $proposal): ?array
+    {
+        $confirmation = $proposal->confirmation;
+
+        if ($proposal->decision !== ProposalDecision::Accepted || $confirmation === null) {
+            return null;
+        }
+
+        return [
+            'status' => $confirmation->status->value,
+            'status_label' => $confirmation->status->label(),
+            'deadline_at' => $confirmation->deadline_at->clone()->utc()->toIso8601ZuluString(),
+            'responded_at' => $confirmation->responded_at?->clone()->utc()->toIso8601ZuluString(),
+        ];
     }
 
     private function userId(Request $request): string
