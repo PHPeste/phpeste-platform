@@ -4,7 +4,7 @@ Plataforma única para organizar o [PHPeste](https://phpeste.dev), o evento anua
 
 A primeira edição a usar a plataforma é o PHPeste 2027, em João Pessoa (PB), organizado pela comunidade PHP-PB.
 
-> **Status:** Marco 0. Backend (Laravel + `internachi/modular`, 10 módulos do MVP já scaffolded) e front-admin (Nuxt, a partir do `base_nuxt_modular`) já rodam localmente. `front-public` e `app` ainda não foram iniciados.
+> **Status:** Marco 0. Backend (Laravel + `internachi/modular`, 10 módulos do MVP já scaffolded) e front-admin (Nuxt, a partir do `base_nuxt_modular`) já rodam localmente. `front-public` (Nuxt SSR, edição resolvida pelo host) já tem a base; `app` ainda não foi iniciado.
 
 ## Por que esta plataforma existe
 
@@ -63,7 +63,7 @@ phpeste-platform/
 ├── docs/           # planejamento, ADRs e guia para comunidades anfitriãs
 ├── backend/        # Laravel: API, filas, webhooks (módulos em app-modules/)
 ├── front-admin/    # Nuxt: painel da organização
-├── front-public/   # (planejado) Nuxt: checkout, CFP, conta do participante, site template (ou só a área do palestrante e participante, quando a comunidade tem site próprio)
+├── front-public/   # Nuxt SSR: área do palestrante e participante, checkout e site da edição, por host (ou só a área, quando a comunidade tem site próprio)
 └── app/            # (planejado, Marco 3) Flutter: app do participante
 ```
 
@@ -120,7 +120,7 @@ composer update modules/<nome>
   npm run dev
   ```
 
-- **Site público e checkout** (`front-public/`): ainda não iniciado.
+- **Site público e checkout** (`front-public/`): base pronta, com a edição e o tema resolvidos pelo host (`docs/adr/0008-front-public-por-host.md`); CFP público e checkout em construção.
 - **App** (`app/`): a definir no Marco 3.
 
 ## Documentação

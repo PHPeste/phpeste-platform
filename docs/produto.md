@@ -37,7 +37,7 @@ Nuxt a partir do [`base_nuxt_modular`](https://github.com/tecrodrigocastro/base_
 3. ingressos (tipos, lotes, cupons), pedidos (busca, reembolso, reenvio) e gateway (conectar credenciais e testar)
 4. participantes e check-in (lista, exportação CSV, estatísticas de venda)
 
-`front-public` (checkout, CFP público, site da edição) e `app` (Flutter) ainda não foram iniciados — ver decisões em aberto abaixo.
+`front-public` (área do palestrante e participante, checkout, site da edição) tem a base pronta, com a edição e o tema resolvidos pelo host (ADR 0008); `app` (Flutter) ainda não foi iniciado.
 
 ## Decisões de arquitetura — ver histórico da conversa de planejamento (3 nov 2026)
 
@@ -49,7 +49,7 @@ Nuxt a partir do [`base_nuxt_modular`](https://github.com/tecrodrigocastro/base_
 ## Decisões em aberto
 
 1. Controlador dos dados (LGPD) — comunidade controladora, PHPeste operador (a validar com advogado antes das vendas).
-2. Um Nuxt ou dois — decidido: dois (`front-admin` SPA, `front-public` SSR), `front-public` ainda não criado.
+2. Um Nuxt ou dois — decidido: dois (`front-admin` SPA, `front-public` SSR).
 3. Gateway inicial — Asaas primeiro.
 4. Domínio e subdomínios das edições — subdomínio padrão com opção de domínio próprio. A comunidade também pode manter o próprio site e usar a plataforma só para a área de palestrante e participante, num subdomínio dela — ver [`site-proprio.md`](site-proprio.md).
 5. Migração da suite da Rapadura (despesas e kanban) — conversar com a comunidade.

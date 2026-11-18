@@ -96,5 +96,5 @@ Se a API estiver fora do ar, o link continua funcionando: a área da plataforma 
 | Tema publicado e CFP públicos pela API | Pronto |
 | E-mails do palestrante com links para o domínio verificado | Pronto |
 | Modo site próprio na edição, `site_url` real e CORS por edição | Pronto (B48): `site_mode` e `external_site_url` na edição, CORS liberado só nas rotas `/api/v1/public/*` para a origem do site de edição publicada, e `GET /public/resolve` com `site_mode` e `external_site_url` |
-| Área da plataforma no subdomínio (front-public) | #76 (P01) e #78 (P03) |
+| Área da plataforma no subdomínio (front-public) | Base pronta (P01): resolve a edição pelo host, aplica o tema sem flash e manda a raiz para o site da comunidade. Formulário de proposta no #78 (P03) |
 | Tela de domínio e de site próprio no painel | Pronto (A24): Configurações → Domínio e site |
