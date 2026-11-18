@@ -29,6 +29,14 @@ Route::apiV1Edition('cfp')->group(function (): void {
 });
 ```
 
+Rota de uma edição para quem não é da equipe (palestrante, participante) usa `Route::apiV1PublishedEdition()`, que monta `/api/v1/<area>/editions/{edition}/...`, só aceita edição publicada e liga a edição no contexto sem exigir papel:
+
+```php
+Route::apiV1PublishedEdition('speaker', 'proposals', ['auth:sanctum'])->group(function (): void {
+    Route::get('/', [SpeakerProposalController::class, 'index'])->name('cfp.speaker.proposals.index');
+});
+```
+
 ## Envelope de erro
 
 Toda resposta de erro da API (`app/Support/Api/ApiError.php`) segue o mesmo formato, incluindo 404 e 500:
