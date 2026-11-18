@@ -48,6 +48,7 @@ app/
     identidade.vue                 # módulo identity: editor de tema com prévia ao vivo
     equipe.vue                     # módulo team: equipe, convites e papéis da edição
     cfp/index.vue                  # módulo cfpSettings: janela, regras, trilhas, critérios e prévia do formulário
+    cfp/avaliacao.vue              # módulo cfpReview: fila do revisor com atalhos, quadro e atribuição da organização
     index.vue
   plugins/
     auth.client.ts                 # hydrates authStore from localStorage (ou sessionStorage, sem "manter conectado") on boot

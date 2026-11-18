@@ -37,6 +37,7 @@ Route::apiV1Edition('cfp')->group(function (): void {
     Route::get('/evaluation', [EvaluationController::class, 'index'])->name('cfp.evaluation.index');
     Route::get('/evaluation/export', [EvaluationController::class, 'export'])->name('cfp.evaluation.export');
 
+    Route::get('/reviewers', [ReviewAssignmentController::class, 'reviewers'])->name('cfp.reviewers.index');
     Route::post('/assignments/auto', [ReviewAssignmentController::class, 'auto'])->name('cfp.assignments.auto');
     Route::get('/proposals/{proposal}/assignments', [ReviewAssignmentController::class, 'index'])->whereUuid('proposal')->name('cfp.assignments.index');
     Route::post('/proposals/{proposal}/assignments', [ReviewAssignmentController::class, 'store'])->whereUuid('proposal')->name('cfp.assignments.store');

@@ -260,3 +260,20 @@ it('só a organização vê o quadro, exporta e atribui', function (): void {
     $this->get("{$this->base}/evaluation/export")->assertForbidden();
     $this->postJson("{$this->base}/assignments/auto", ['reviewers_per_proposal' => 2])->assertForbidden();
 });
+
+it('lista quem pode revisar com a carga de cada pessoa, só para a organização', function (): void {
+    assign($this, $this->proposals[0], $this->reviewers[0])->assertCreated();
+    assign($this, $this->proposals[1], $this->reviewers[0])->assertCreated();
+
+    reviewAs($this, $this->reviewers[0], $this->proposals[0], 4, 5)->assertOk();
+
+    Sanctum::actingAs($this->organizer);
+    $this->getJson("{$this->base}/reviewers")
+        ->assertOk()
+        ->assertJsonCount(4, 'data')
+        ->assertJsonPath('data.0', ['id' => $this->reviewers[0]->id, 'name' => 'Revisor A', 'assigned' => 2, 'submitted' => 1])
+        ->assertJsonPath('data.3.name', 'Rita Organizadora');
+
+    Sanctum::actingAs($this->reviewers[1]);
+    $this->getJson("{$this->base}/reviewers")->assertForbidden();
+});
