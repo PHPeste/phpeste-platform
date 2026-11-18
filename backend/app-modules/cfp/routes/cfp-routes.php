@@ -7,7 +7,10 @@ use PHPeste\Cfp\Http\Controllers\AdminProposalController;
 use PHPeste\Cfp\Http\Controllers\CfpCriterionController;
 use PHPeste\Cfp\Http\Controllers\CfpSettingsController;
 use PHPeste\Cfp\Http\Controllers\CfpTrackController;
+use PHPeste\Cfp\Http\Controllers\EvaluationController;
 use PHPeste\Cfp\Http\Controllers\PublicCfpController;
+use PHPeste\Cfp\Http\Controllers\ReviewAssignmentController;
+use PHPeste\Cfp\Http\Controllers\ReviewController;
 use PHPeste\Cfp\Http\Controllers\SpeakerProposalController;
 
 Route::apiV1Edition('cfp')->group(function (): void {
@@ -27,6 +30,22 @@ Route::apiV1Edition('cfp')->group(function (): void {
     Route::get('/proposals', [AdminProposalController::class, 'index'])->name('cfp.proposals.index');
     Route::get('/proposals/{proposal}', [AdminProposalController::class, 'show'])->whereUuid('proposal')->name('cfp.proposals.show');
     Route::patch('/proposals/{proposal}', [AdminProposalController::class, 'update'])->whereUuid('proposal')->name('cfp.proposals.update');
+
+    Route::get('/evaluation', [EvaluationController::class, 'index'])->name('cfp.evaluation.index');
+    Route::get('/evaluation/export', [EvaluationController::class, 'export'])->name('cfp.evaluation.export');
+
+    Route::post('/assignments/auto', [ReviewAssignmentController::class, 'auto'])->name('cfp.assignments.auto');
+    Route::get('/proposals/{proposal}/assignments', [ReviewAssignmentController::class, 'index'])->whereUuid('proposal')->name('cfp.assignments.index');
+    Route::post('/proposals/{proposal}/assignments', [ReviewAssignmentController::class, 'store'])->whereUuid('proposal')->name('cfp.assignments.store');
+    Route::delete('/proposals/{proposal}/assignments/{reviewer}', [ReviewAssignmentController::class, 'destroy'])
+        ->whereUuid('proposal')
+        ->whereUuid('reviewer')
+        ->name('cfp.assignments.destroy');
+
+    Route::get('/reviews/queue', [ReviewController::class, 'queue'])->name('cfp.reviews.queue');
+    Route::get('/proposals/{proposal}/review', [ReviewController::class, 'show'])->whereUuid('proposal')->name('cfp.reviews.show');
+    Route::put('/proposals/{proposal}/review', [ReviewController::class, 'save'])->whereUuid('proposal')->name('cfp.reviews.save');
+    Route::get('/proposals/{proposal}/reviews', [ReviewController::class, 'others'])->whereUuid('proposal')->name('cfp.reviews.index');
 });
 
 Route::apiV1PublishedEdition('speaker', 'proposals', ['auth:sanctum'])->group(function (): void {

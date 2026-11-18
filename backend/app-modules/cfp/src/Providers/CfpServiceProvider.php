@@ -12,7 +12,7 @@ use PHPeste\Cfp\Console\SyncCfpStatusCommand;
 use PHPeste\Cfp\Contracts\ReviewLedger;
 use PHPeste\Cfp\Proposals\CfpCloner;
 use PHPeste\Cfp\Proposals\ProposalParticipation;
-use PHPeste\Cfp\Reviews\EmptyReviewLedger;
+use PHPeste\Cfp\Reviews\EloquentReviewLedger;
 use PHPeste\Community\Contracts\EditionCloner;
 use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Identity\Contracts\EditionParticipation;
@@ -21,7 +21,7 @@ class CfpServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind(ReviewLedger::class, EmptyReviewLedger::class);
+        $this->app->bind(ReviewLedger::class, EloquentReviewLedger::class);
         $this->app->tag([ProposalParticipation::class], EditionParticipation::TAG);
         $this->app->tag([CfpCloner::class], EditionCloner::TAG);
     }
