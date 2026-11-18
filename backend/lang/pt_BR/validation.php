@@ -167,6 +167,7 @@ return [
     ],
 
     'attributes' => [
+        'notifications' => 'notificações',
         'site_mode' => 'modo do site',
         'external_site_url' => 'endereço do site da comunidade',
         'privacy_contact_email' => 'e-mail do encarregado de dados',

@@ -19,6 +19,7 @@ export default {
   notifications: 'Notificações',
   userMenu: 'Menu do usuário',
   logout: 'Sair',
+  myProfile: 'Meu perfil',
   editionsError: 'Não foi possível carregar as edições.',
   retry: 'Tentar de novo',
   groups: {
