@@ -17,4 +17,9 @@ interface EditionMemberships
     public function roleIn(string $editionId, string $userId): ?EditionRole;
 
     public function can(string $editionId, string $userId, EditionPermission $permission): bool;
+
+    /**
+     * @return list<string>
+     */
+    public function usersWith(string $editionId, EditionPermission $permission): array;
 }

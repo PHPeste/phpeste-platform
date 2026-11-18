@@ -35,6 +35,8 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property Carbon $updated_at
  * @property-read CfpTrack|null $track
  * @property-read Collection<int, ProposalSpeaker> $speakers
+ * @property-read Collection<int, ReviewAssignment> $assignments
+ * @property-read Collection<int, Review> $reviews
  */
 #[Fillable(['edition_id', 'number', 'track_id', 'title', 'summary', 'audience', 'format', 'level', 'language', 'status', 'submitted_at', 'withdrawn_at'])]
 class Proposal extends Model
@@ -61,6 +63,22 @@ class Proposal extends Model
     public function speakers(): HasMany
     {
         return $this->hasMany(ProposalSpeaker::class);
+    }
+
+    /**
+     * @return HasMany<ReviewAssignment, $this>
+     */
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(ReviewAssignment::class);
+    }
+
+    /**
+     * @return HasMany<Review, $this>
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
     }
 
     public function ownerId(): ?string

@@ -37,4 +37,15 @@ class EloquentEditionMemberships implements EditionMemberships
     {
         return $this->roleIn($editionId, $userId)?->can($permission) ?? false;
     }
+
+    public function usersWith(string $editionId, EditionPermission $permission): array
+    {
+        return array_values(EditionMember::query()
+            ->where('edition_id', $editionId)
+            ->orderBy('user_id')
+            ->get()
+            ->filter(fn (EditionMember $member): bool => $member->role->can($permission))
+            ->map(fn (EditionMember $member): string => $member->user_id)
+            ->all());
+    }
 }

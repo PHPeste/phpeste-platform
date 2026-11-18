@@ -16,4 +16,10 @@ interface SpeakerProfiles
      * @return array<string, string|null>
      */
     public function states(array $userIds): array;
+
+    /**
+     * @param  list<string>  $userIds
+     * @return array<string, string|null>
+     */
+    public function companies(array $userIds): array;
 }

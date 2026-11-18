@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace PHPeste\Cfp\Reviews;
 
 use PHPeste\Cfp\Contracts\ReviewLedger;
+use PHPeste\Cfp\Models\Review;
 
-class EmptyReviewLedger implements ReviewLedger
+class EloquentReviewLedger implements ReviewLedger
 {
     public function submittedReviewsCount(string $editionId): int
     {
-        return 0;
+        return Review::query()->forEdition($editionId)->where('status', Review::SUBMITTED)->count();
     }
 }
