@@ -12,6 +12,7 @@ Com implementação real até agora:
 
 - `identity`: `users` (UUID, ver ADR 0007), cadastro com verificação de e-mail, login/logout via Sanctum, `GET /me` (com os papéis da pessoa em cada edição, lidos pelo contrato `EditionMemberships` do Community).
 - `community`: comunidades, edições com máquina de estados (`EditionStatus`), `edition_members` (papel da pessoa na edição, `EditionRole`) e a infraestrutura de tenancy usada pelos outros módulos (ver abaixo).
+- `branding`: tema por edição em `edition_settings` (rascunho, publicado e anterior, para reverter), presets Sertão/Maré/Brasa, checagem de contraste AA em `Theme/ContrastChecker`, upload de logos (SVG sanitizado com `enshrined/svg-sanitize`, disco `public`, exige `php artisan storage:link`) e `GET /api/v1/public/editions/{id}/theme` com cache e `ETag`. Os tokens de cor seguem os `--ph-*` do front-admin (`support` = `--ph-terra`, `on_accent` = texto sobre destaque).
 
 ## Estrutura de cada módulo (`app-modules/<nome>/src/`)
 
@@ -21,6 +22,8 @@ Com implementação real até agora:
 | `Enums/` | Enums de domínio (status, papéis) |
 | `Policies/` | Policies do Laravel, registradas no service provider do módulo |
 | `Tenancy/` | Só no Community: contexto da edição atual, global scope e trait `BelongsToEdition` |
+| `Rules/` | Regras de validação customizadas (`ValidationRule`) |
+| `Theme/` | Só no Branding: tokens, contraste e montagem do tema público |
 | `Actions/` | Único lugar que pode mutar (`save`/`update`/`delete`) um Model com regra de negócio por trás — nunca direto de um Controller ou de outro módulo |
 | `Data/` | DTOs / objetos de dados (ex.: Spatie Laravel Data) trocados entre camadas e módulos |
 | `Events/` | Eventos de domínio disparados pelo módulo (ex.: `OrderPaid`) |
