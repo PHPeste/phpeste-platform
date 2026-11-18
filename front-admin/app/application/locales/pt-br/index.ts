@@ -9,6 +9,7 @@ import identity from '../../../modules/identity/locales/pt-br'
 import team from '../../../modules/team/locales/pt-br'
 import cfpSettings from '../../../modules/cfpSettings/locales/pt-br'
 import cfpReview from '../../../modules/cfpReview/locales/pt-br'
+import speakers from '../../../modules/speakers/locales/pt-br'
 import ui from './ui'
 import shell from '../../../modules/shell/locales/pt-br'
 
@@ -26,6 +27,7 @@ export default {
   team,
   cfpSettings,
   cfpReview,
+  speakers,
   shell,
   ui,
 }
