@@ -35,10 +35,10 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerApiRouteMacro(): void
     {
-        Route::macro('apiV1', function (?string $prefix = null): RouteRegistrar {
+        Route::macro('apiV1', function (?string $prefix = null, array $middleware = []): RouteRegistrar {
             $path = 'api/v1'.($prefix ? "/{$prefix}" : '');
 
-            return Route::middleware('api')->prefix($path);
+            return Route::middleware(['api', ...$middleware])->prefix($path);
         });
     }
 
