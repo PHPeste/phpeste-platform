@@ -41,6 +41,7 @@ class AutoAssignReviewers
             $proposals = Proposal::query()
                 ->forEdition($editionId)
                 ->where('status', ProposalStatus::Submitted)
+                ->fromCfp()
                 ->with(['speakers', 'assignments'])
                 ->orderBy('number')
                 ->get();

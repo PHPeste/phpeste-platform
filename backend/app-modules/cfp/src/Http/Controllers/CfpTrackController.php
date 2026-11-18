@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use PHPeste\Cfp\Actions\DeleteTrack;
 use PHPeste\Cfp\Actions\SaveTrack;
+use PHPeste\Cfp\Enums\ProposalOrigin;
 use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Cfp\Http\Requests\SaveTrackRequest;
 use PHPeste\Cfp\Http\Resources\CfpTrackResource;
@@ -24,7 +25,7 @@ class CfpTrackController
     {
         Gate::authorize('cfp.view-settings');
 
-        return CfpTrackResource::collection(CfpTrack::query()->withCount(['proposals' => fn (Builder $query) => $query->where('status', ProposalStatus::Submitted)])->orderBy('position')->orderBy('name')->get());
+        return CfpTrackResource::collection(CfpTrack::query()->withCount(['proposals' => fn (Builder $query) => $query->where('status', ProposalStatus::Submitted)->where('origin', ProposalOrigin::Cfp)])->orderBy('position')->orderBy('name')->get());
     }
 
     public function store(SaveTrackRequest $request, SaveTrack $save): JsonResponse

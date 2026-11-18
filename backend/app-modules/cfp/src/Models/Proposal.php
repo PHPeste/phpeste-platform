@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace PHPeste\Cfp\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -12,10 +14,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use PHPeste\Cfp\Enums\ConfirmationStatus;
 use PHPeste\Cfp\Enums\ProposalDecision;
 use PHPeste\Cfp\Enums\ProposalFormat;
 use PHPeste\Cfp\Enums\ProposalLanguage;
 use PHPeste\Cfp\Enums\ProposalLevel;
+use PHPeste\Cfp\Enums\ProposalOrigin;
 use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Community\Tenancy\BelongsToEdition;
 
@@ -31,6 +35,7 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property ProposalLevel|null $level
  * @property ProposalLanguage $language
  * @property ProposalStatus $status
+ * @property ProposalOrigin $origin
  * @property Carbon|null $submitted_at
  * @property Carbon|null $withdrawn_at
  * @property ProposalDecision|null $decision
@@ -44,7 +49,7 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property-read Collection<int, Review> $reviews
  * @property-read SpeakerConfirmation|null $confirmation
  */
-#[Fillable(['edition_id', 'number', 'track_id', 'title', 'summary', 'audience', 'format', 'level', 'language', 'status', 'submitted_at', 'withdrawn_at', 'decision', 'decided_at', 'decided_by'])]
+#[Fillable(['edition_id', 'number', 'track_id', 'title', 'summary', 'audience', 'format', 'level', 'language', 'status', 'origin', 'submitted_at', 'withdrawn_at', 'decision', 'decided_at', 'decided_by'])]
 class Proposal extends Model
 {
     use BelongsToEdition;
@@ -54,6 +59,28 @@ class Proposal extends Model
         'status' => 'draft',
         'language' => 'pt_BR',
     ];
+
+    /**
+     * @return array<string, int>
+     */
+    public static function invitedHoldingSlots(string $editionId): array
+    {
+        $trackIds = self::query()
+            ->forEdition($editionId)
+            ->where('origin', ProposalOrigin::Invited)
+            ->where('decision', ProposalDecision::Accepted)
+            ->whereDoesntHave('confirmation', fn (Builder $query) => $query->whereIn('status', array_map(fn (ConfirmationStatus $status): string => $status->value, array_filter(ConfirmationStatus::cases(), fn (ConfirmationStatus $status): bool => !$status->holdsSlot()))))
+            ->whereNotNull('track_id')
+            ->pluck('track_id');
+
+        $reserved = [];
+
+        foreach ($trackIds as $trackId) {
+            $reserved[(string) $trackId] = ($reserved[(string) $trackId] ?? 0) + 1;
+        }
+
+        return $reserved;
+    }
 
     /**
      * @return BelongsTo<CfpTrack, $this>
@@ -122,6 +149,15 @@ class Proposal extends Model
     /**
      * @return array<string, string>
      */
+    /**
+     * @param  Builder<static>  $query
+     */
+    #[Scope]
+    protected function fromCfp(Builder $query): void
+    {
+        $query->where('origin', ProposalOrigin::Cfp);
+    }
+
     protected function casts(): array
     {
         return [
@@ -130,6 +166,7 @@ class Proposal extends Model
             'level' => ProposalLevel::class,
             'language' => ProposalLanguage::class,
             'status' => ProposalStatus::class,
+            'origin' => ProposalOrigin::class,
             'submitted_at' => 'datetime',
             'withdrawn_at' => 'datetime',
             'decision' => ProposalDecision::class,

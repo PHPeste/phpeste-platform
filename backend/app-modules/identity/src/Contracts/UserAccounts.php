@@ -24,6 +24,11 @@ interface UserAccounts
      */
     public function registerVerified(string $name, string $email, string $password): array;
 
+    /**
+     * @return array{id: string, name: string, email: string, created: bool}
+     */
+    public function findOrCreateInvited(string $name, string $email): array;
+
     public function checkPassword(string $userId, string $password): bool;
 
     public function issueToken(string $userId, string $deviceName): NewAccessToken;

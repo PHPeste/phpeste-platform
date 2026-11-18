@@ -7,6 +7,7 @@ namespace PHPeste\Cfp\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use PHPeste\Cfp\Enums\ProposalDecision;
+use PHPeste\Cfp\Enums\ProposalOrigin;
 use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Community\Tenancy\CurrentEdition;
 
@@ -21,7 +22,8 @@ class DecisionsRequest extends FormRequest
             'decisions' => ['present', 'array', 'max:1000'],
             'decisions.*.proposal_id' => ['required', 'uuid', 'distinct', Rule::exists('proposals', 'id')
                 ->where('edition_id', resolve(CurrentEdition::class)->id())
-                ->where('status', ProposalStatus::Submitted->value)],
+                ->where('status', ProposalStatus::Submitted->value)
+                ->where('origin', ProposalOrigin::Cfp->value)],
             'decisions.*.decision' => ['present', 'nullable', Rule::enum(ProposalDecision::class)],
         ];
     }

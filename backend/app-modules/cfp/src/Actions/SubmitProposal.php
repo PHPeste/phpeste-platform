@@ -7,6 +7,7 @@ namespace PHPeste\Cfp\Actions;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use PHPeste\Cfp\Enums\ProposalOrigin;
 use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Cfp\Events\ProposalSubmitted;
 use PHPeste\Cfp\Models\Proposal;
@@ -53,7 +54,7 @@ class SubmitProposal
             $submitted = ProposalSpeaker::query()
                 ->where('user_id', $ownerId)
                 ->where('is_owner', true)
-                ->whereHas('proposal', fn (Builder $query) => $query->where('status', ProposalStatus::Submitted))
+                ->whereHas('proposal', fn (Builder $query) => $query->where('status', ProposalStatus::Submitted)->where('origin', ProposalOrigin::Cfp))
                 ->lockForUpdate()
                 ->count();
 

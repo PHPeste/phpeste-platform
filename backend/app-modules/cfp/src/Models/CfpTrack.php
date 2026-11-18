@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use PHPeste\Cfp\Enums\ProposalOrigin;
 use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Community\Tenancy\BelongsToEdition;
 
@@ -40,7 +41,7 @@ class CfpTrack extends Model
 
     public function submittedProposalsCount(): int
     {
-        return $this->proposals_count ?? $this->proposals()->where('status', ProposalStatus::Submitted)->count();
+        return $this->proposals_count ?? $this->proposals()->where('status', ProposalStatus::Submitted)->where('origin', ProposalOrigin::Cfp)->count();
     }
 
     /**

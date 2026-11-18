@@ -81,7 +81,7 @@ final readonly class SpeakerBoard
                     'email' => $accounts[$speaker->user_id]['email'] ?? null,
                     'state' => $state,
                     'nordeste' => BrazilianState::tryFrom((string) $state)?->isNordeste() ?? false,
-                    'proposal' => ['id' => $proposal->id, 'number' => $proposal->number, 'title' => $proposal->title, 'track' => $proposal->track?->name],
+                    'proposal' => ['id' => $proposal->id, 'number' => $proposal->number, 'title' => $proposal->title, 'track' => $proposal->track?->name, 'origin' => $proposal->origin->value],
                     'status' => $status,
                     'status_label' => self::statusLabel($proposal),
                     'deadline_at' => $proposal->confirmation?->deadline_at->clone()->utc()->toIso8601ZuluString(),

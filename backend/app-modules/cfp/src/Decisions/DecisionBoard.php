@@ -26,6 +26,7 @@ class DecisionBoard
     {
         $rows = $this->evaluation->build($editionId)['rows'];
         $tracks = CfpTrack::query()->forEdition($editionId)->orderBy('position')->get()->keyBy('id');
+        $reserved = Proposal::invitedHoldingSlots($editionId);
         $groups = [];
 
         foreach ($rows as $row) {
@@ -38,7 +39,7 @@ class DecisionBoard
             usort($trackRows, fn (array $a, array $b): int => [$b['final_score'] ?? -1, $a['proposal']->number] <=> [$a['final_score'] ?? -1, $b['proposal']->number]);
 
             $track = $tracks->get($trackId);
-            $slots = $track instanceof CfpTrack ? $track->slots : 0;
+            $slots = $track instanceof CfpTrack ? max(0, $track->slots - ($reserved[$track->id] ?? 0)) : 0;
             $cutoffScore = isset($trackRows[$slots - 1], $trackRows[$slots]) ? $trackRows[$slots - 1]['final_score'] : null;
 
             $proposals = [];
@@ -56,7 +57,7 @@ class DecisionBoard
             }
 
             $result[] = [
-                'track' => ['id' => $track?->id, 'name' => $track->name ?? 'Sem trilha', 'slots' => $slots],
+                'track' => ['id' => $track?->id, 'name' => $track->name ?? 'Sem trilha', 'slots' => $slots, 'reserved' => $track instanceof CfpTrack ? ($reserved[$track->id] ?? 0) : 0],
                 'proposals' => $proposals,
             ];
         }

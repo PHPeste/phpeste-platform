@@ -52,6 +52,7 @@ Route::apiV1Edition('cfp')->group(function (): void {
     Route::post('/decision/apply', [DecisionController::class, 'apply'])->name('cfp.decision.apply');
 
     Route::get('/speakers', [SpeakerAdminController::class, 'index'])->name('cfp.speakers.index');
+    Route::post('/speakers/invite', [SpeakerAdminController::class, 'invite'])->name('cfp.speakers.invite');
     Route::post('/speakers/remind', [SpeakerAdminController::class, 'remind'])->name('cfp.speakers.remind');
     Route::get('/speakers/{user}', [SpeakerAdminController::class, 'show'])->whereUuid('user')->name('cfp.speakers.show');
     Route::post('/speakers/{user}/attendance', [SpeakerAdminController::class, 'attendance'])->whereUuid('user')->name('cfp.speakers.attendance');

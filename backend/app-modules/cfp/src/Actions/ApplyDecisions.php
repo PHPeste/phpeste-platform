@@ -21,6 +21,7 @@ class ApplyDecisions
             $proposals = Proposal::query()
                 ->forEdition($editionId)
                 ->where('status', ProposalStatus::Submitted)
+                ->fromCfp()
                 ->whereIn('id', array_keys($decisions))
                 ->lockForUpdate()
                 ->get();
