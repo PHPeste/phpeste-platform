@@ -9,6 +9,15 @@ export default defineNuxtConfig({
   ssr: false,
   modules: ['@pinia/nuxt', '@nuxt/eslint'],
   css: ['~/assets/css/main.css'],
+  app: {
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap' },
+      ],
+    },
+  },
   // Kit de UI do tema Sertão: <PhButton>, <PhInput>, <PhCard>… (ver app/application/shared/components/ui)
   components: [
     { path: '~/application/shared/components/ui', pathPrefix: false, prefix: 'Ph' },
