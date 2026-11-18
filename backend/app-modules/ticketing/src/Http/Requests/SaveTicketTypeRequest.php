@@ -32,6 +32,7 @@ class SaveTicketTypeRequest extends FormRequest
             'min_per_order' => ['sometimes', 'integer', 'between:1,50'],
             'max_per_order' => ['sometimes', 'integer', 'between:1,50', ...($this->has('min_per_order') ? ['gte:min_per_order'] : [])],
             'show_remaining' => ['sometimes', 'boolean'],
+            'pass_fee_to_buyer' => ['sometimes', 'boolean'],
             'questions' => ['sometimes', 'nullable', 'array', 'max:10'],
             'questions.*.label' => ['required', 'string', 'max:120'],
             'questions.*.type' => ['required', Rule::in(self::QUESTION_TYPES)],

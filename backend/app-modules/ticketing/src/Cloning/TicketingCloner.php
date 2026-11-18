@@ -30,7 +30,13 @@ class TicketingCloner implements EditionCloner
         $settings = TicketingSetting::query()->forEdition($sourceEditionId)->first();
 
         if ($settings !== null) {
-            TicketingSetting::create(['edition_id' => $targetEditionId, 'capacity' => $settings->capacity]);
+            TicketingSetting::create([
+                'edition_id' => $targetEditionId,
+                'capacity' => $settings->capacity,
+                'reservation_minutes' => $settings->reservation_minutes,
+                'max_tickets_per_buyer' => $settings->max_tickets_per_buyer,
+                'gateway_fee_basis_points' => $settings->gateway_fee_basis_points,
+            ]);
         }
 
         $types->each(function (TicketType $type) use ($targetEditionId): void {
@@ -43,6 +49,7 @@ class TicketingCloner implements EditionCloner
                 'min_per_order' => $type->min_per_order,
                 'max_per_order' => $type->max_per_order,
                 'show_remaining' => $type->show_remaining,
+                'pass_fee_to_buyer' => $type->pass_fee_to_buyer,
                 'questions' => $type->questions,
                 'position' => $type->position,
             ]);

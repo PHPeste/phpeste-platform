@@ -33,6 +33,7 @@ class TicketTypeResource extends ApiResource
             'min_per_order' => $type->min_per_order,
             'max_per_order' => $type->max_per_order,
             'show_remaining' => $type->show_remaining,
+            'pass_fee_to_buyer' => $type->pass_fee_to_buyer,
             'questions' => $type->questions ?? [],
             'position' => $type->position,
             'allocated' => $type->allocated(),

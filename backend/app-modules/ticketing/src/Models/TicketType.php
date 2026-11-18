@@ -24,20 +24,21 @@ use PHPeste\Ticketing\Enums\TicketVisibility;
  * @property int $min_per_order
  * @property int $max_per_order
  * @property bool $show_remaining
+ * @property bool $pass_fee_to_buyer
  * @property list<array{id: string, label: string, type: string, required: bool, options: list<string>}>|null $questions
  * @property int $position
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Collection<int, TicketBatch> $batches
  */
-#[Fillable(['edition_id', 'name', 'description', 'visibility', 'access_code', 'min_per_order', 'max_per_order', 'show_remaining', 'questions', 'position'])]
+#[Fillable(['edition_id', 'name', 'description', 'visibility', 'access_code', 'min_per_order', 'max_per_order', 'show_remaining', 'pass_fee_to_buyer', 'questions', 'position'])]
 #[Table(name: 'ticket_types')]
 class TicketType extends Model
 {
     use BelongsToEdition;
     use HasUuids;
 
-    protected $attributes = ['visibility' => 'public', 'min_per_order' => 1, 'max_per_order' => 10, 'show_remaining' => false, 'position' => 0];
+    protected $attributes = ['visibility' => 'public', 'min_per_order' => 1, 'max_per_order' => 10, 'show_remaining' => false, 'pass_fee_to_buyer' => false, 'position' => 0];
 
     /**
      * @return HasMany<TicketBatch, $this>
@@ -69,6 +70,7 @@ class TicketType extends Model
             'min_per_order' => 'integer',
             'max_per_order' => 'integer',
             'show_remaining' => 'boolean',
+            'pass_fee_to_buyer' => 'boolean',
             'questions' => 'array',
             'position' => 'integer',
         ];
