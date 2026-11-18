@@ -20,6 +20,18 @@ auto-importados com o prefixo `Ph` (`Button.vue` → `<PhButton>`), sem `import`
 Avisos: `const toast = useToast(); toast.success('Salvo.')` (também `info`, `warning`, `error`, e uma ação
 opcional `{ label, run }`). Estado em `stores/toastStore.ts`.
 
+## Estados das telas (prancha "Estados" do design)
+
+Toda tela que carrega dado segue os mesmos padrões:
+
+| Estado | Componente | Regra |
+| --- | --- | --- |
+| Carregando | `PhPageSkeleton` (`kpis`, `cards`, `columns`, `lines`) para a página; `PhSkeleton` (`lines`) dentro de um cartão | Esqueleto no lugar do conteúdo, **nunca rodinha**. A rodinha só aparece dentro de botão (`PhButton loading`). Tarefa em andamento (ex.: copiar edição) usa `<progress>` |
+| Erro ao carregar | `PhLoadError` (`title`, `@retry`) | Diz o que não carregou, que nada foi perdido, e tem "Tentar de novo" |
+| Lista vazia | `PhEmptyState` (`title`, `description`, ação no slot) | **Sempre com a próxima ação sugerida** (criar o primeiro item, ir para a tela que alimenta a lista). Vazio por filtro oferece "Limpar filtros" |
+| Erro de formulário | erro no campo (`error` do `PhInput`/`PhSelect`) + `PhFormErrors` (`errors`, `labels`, `fieldIds`) no topo | O resumo diz quantos campos precisam de ajuste, recebe o foco e cada item leva ao campo |
+| Aviso rápido | `useToast()` | Sucesso que dá para desfazer leva `{ label: 'Desfazer', run }` (ex.: publicar a identidade); atenção leva a ação que resolve; falha diz o que falhou |
+
 ## Acessibilidade (regras do kit)
 
 - Rótulo real (`<label for>`), erro com `aria-invalid` + `role="alert"`, dica ligada por `aria-describedby`.

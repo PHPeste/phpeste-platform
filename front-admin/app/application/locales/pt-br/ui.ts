@@ -1,6 +1,11 @@
 // Textos do kit de UI compartilhado (app/application/shared/components/ui).
 export default {
   loading: 'Carregando…',
+  loadErrorHint: 'Sua conexão pode ter caído. Nada foi perdido.',
+  retry: 'Tentar de novo',
+  formErrorsOne: '1 campo precisa de ajuste',
+  formErrorsMany: (n: number) => `${n} campos precisam de ajuste`,
+  formErrorsHint: 'Corrija os campos marcados antes de salvar.',
   required: 'obrigatório',
   close: 'Fechar',
   dismiss: 'Dispensar aviso',
