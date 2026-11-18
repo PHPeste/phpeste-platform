@@ -60,6 +60,7 @@ class PublicTicketController
             'description' => $type->description,
             'min_per_order' => $type->min_per_order,
             'max_per_order' => $type->max_per_order,
+            'pass_fee_to_buyer' => $type->pass_fee_to_buyer,
             'questions' => $type->questions ?? [],
             'status' => $status->value,
             'status_label' => $status->label(),

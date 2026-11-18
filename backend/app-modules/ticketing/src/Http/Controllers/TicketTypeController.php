@@ -39,11 +39,7 @@ class TicketTypeController
 
         return response()->json([
             'data' => TicketTypeResource::collection($types)->resolve($request),
-            'meta' => [
-                'capacity' => $settings->capacity,
-                'allocated' => $settings->allocated,
-                'remaining' => $settings->capacity === null ? null : max(0, $settings->capacity - $settings->allocated),
-            ],
+            'meta' => $this->settings($settings),
         ]);
     }
 
@@ -51,10 +47,10 @@ class TicketTypeController
     {
         Gate::authorize(EditionPermission::ManageEdition->value);
 
-        $capacity = $request->input('capacity');
-        $settings = $update->handle($this->editionId(), is_numeric($capacity) ? (int) $capacity : null);
+        /** @var array<string, mixed> $attributes */
+        $attributes = $request->validated();
 
-        return response()->json(['data' => ['capacity' => $settings->capacity, 'allocated' => $settings->allocated]]);
+        return response()->json(['data' => $this->settings($update->handle($this->editionId(), $attributes))]);
     }
 
     public function store(SaveTicketTypeRequest $request, SaveTicketType $save): JsonResponse
@@ -120,6 +116,21 @@ class TicketTypeController
         $delete->handle($this->batch($request, $this->type($request)));
 
         return response()->noContent();
+    }
+
+    /**
+     * @return array<string, int|null>
+     */
+    private function settings(TicketingSetting $settings): array
+    {
+        return [
+            'capacity' => $settings->capacity,
+            'allocated' => $settings->allocated,
+            'remaining' => $settings->capacity === null ? null : max(0, $settings->capacity - $settings->allocated),
+            'reservation_minutes' => $settings->reservation_minutes,
+            'max_tickets_per_buyer' => $settings->max_tickets_per_buyer,
+            'gateway_fee_basis_points' => $settings->gateway_fee_basis_points,
+        ];
     }
 
     private function editionId(): string
