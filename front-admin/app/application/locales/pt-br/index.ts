@@ -4,6 +4,7 @@ import forgotPassword from '../../../modules/forgotPassword/locales/pt-br'
 import resetPassword from '../../../modules/resetPassword/locales/pt-br'
 import invitation from '../../../modules/invitation/locales/pt-br'
 import communities from '../../../modules/communities/locales/pt-br'
+import overview from '../../../modules/overview/locales/pt-br'
 import ui from './ui'
 import shell from '../../../modules/shell/locales/pt-br'
 
@@ -16,6 +17,7 @@ export default {
   resetPassword,
   invitation,
   communities,
+  overview,
   shell,
   ui,
 }
