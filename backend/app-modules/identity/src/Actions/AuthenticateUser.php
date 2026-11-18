@@ -14,8 +14,9 @@ class AuthenticateUser
     public function handle(string $email, string $password, string $deviceName): NewAccessToken
     {
         $user = User::where('email', $email)->first();
+        $hash = $user?->password;
 
-        throw_if(!$user || !Hash::check($password, $user->password), AuthenticationException::class, 'Credenciais inválidas.');
+        throw_if(!$user instanceof User || $hash === null || !Hash::check($password, $hash), AuthenticationException::class, 'Credenciais inválidas.');
 
         return $user->createToken($deviceName);
     }

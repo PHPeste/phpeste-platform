@@ -25,7 +25,7 @@ class EditionMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            text: 'notifications::email-text',
+            text: 'notifications::edition-email-text',
             with: ['body' => $this->email->text],
             htmlString: $this->email->html,
         );

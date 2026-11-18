@@ -45,7 +45,7 @@ class EmailComposer
         $theme = $this->themes->published($editionId);
         $logo = $theme['logos']['primary'] ?? null;
 
-        $html = view('notifications::email', [
+        $html = view('notifications::edition-email', [
             'subject' => $subject,
             'paragraphs' => TemplateRenderer::htmlParagraphs($content['body'], $variables),
             'colors' => $theme['colors'],

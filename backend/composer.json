@@ -17,6 +17,7 @@
         "laravel/framework": "^13.17",
         "laravel/horizon": "^5.30",
         "laravel/sanctum": "^4.3",
+        "laravel/socialite": "^5.33",
         "laravel/tinker": "^3.0",
         "phpeste/audit": "^1.0.0",
         "phpeste/branding": "^1.0.0",

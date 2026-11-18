@@ -28,6 +28,8 @@ class UserResource extends ApiResource
             'avatar_url' => $user->photo_path ? asset('storage/'.$user->photo_path) : null,
             'locale' => $user->locale,
             'email_verified_at' => $this->isoDate($user->email_verified_at),
+            'has_password' => $user->hasPassword(),
+            'providers' => $user->socialAccounts()->pluck('provider')->values()->all(),
             'created_at' => $this->isoDate($user->created_at),
         ];
     }
