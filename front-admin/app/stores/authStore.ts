@@ -49,6 +49,15 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    updateUser(user: AuthenticatedUser) {
+      this.user = user
+
+      if (import.meta.client && this.token) {
+        const storage = localStorage.getItem(STORAGE_KEY) !== null ? localStorage : sessionStorage
+        storage.setItem(STORAGE_KEY, JSON.stringify({ user, token: this.token } satisfies StoredSession))
+      }
+    },
+
     clearSession() {
       this.user = null
       this.token = null
