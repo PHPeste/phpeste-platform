@@ -9,6 +9,8 @@ use Illuminate\Support\ServiceProvider;
 use PHPeste\Payments\Console\ReencryptCredentials;
 use PHPeste\Payments\Contracts\PaymentAccounts;
 use PHPeste\Payments\Contracts\PaymentGateway;
+use PHPeste\Payments\Contracts\PaymentProcessor;
+use PHPeste\Payments\Gateway\ChargeService;
 use PHPeste\Payments\Gateway\GatewayRegistry;
 use PHPeste\Payments\Gateway\PaymentAccountDirectory;
 
@@ -26,6 +28,7 @@ class PaymentsServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(PaymentAccounts::class, PaymentAccountDirectory::class);
+        $this->app->bind(PaymentProcessor::class, ChargeService::class);
     }
 
     public function boot(): void
