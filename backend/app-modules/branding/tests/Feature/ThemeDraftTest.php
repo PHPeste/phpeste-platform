@@ -145,5 +145,9 @@ it('lista os presets com o relatório de contraste', function (): void {
         ->assertJsonCount(3, 'data')
         ->assertJsonPath('data.0.id', 'sertao')
         ->assertJsonPath('data.1.label', 'Maré')
-        ->assertJsonPath('data.2.theme.colors.brand', '#FF7A1A');
+        ->assertJsonPath('data.2.theme.colors.brand', '#FF7A1A')
+        ->assertJsonPath('meta.tokens.0', ['id' => 'bg', 'label' => 'Fundo'])
+        ->assertJsonPath('meta.contrast_pairs.0', ['foreground' => 'ink', 'background' => 'bg', 'minimum' => 4.5])
+        ->assertJsonCount(23, 'meta.contrast_pairs')
+        ->assertJsonPath('meta.fonts.0', 'Lexend');
 });
