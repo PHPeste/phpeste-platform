@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPeste\Community\Tenancy;
 
 use PHPeste\Community\Contracts\EditionMemberships;
+use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Community\Enums\EditionRole;
 use PHPeste\Community\Models\EditionMember;
 
@@ -30,5 +31,10 @@ class EloquentEditionMemberships implements EditionMemberships
             ->where('user_id', $userId)
             ->first()
             ?->role;
+    }
+
+    public function can(string $editionId, string $userId, EditionPermission $permission): bool
+    {
+        return $this->roleIn($editionId, $userId)?->can($permission) ?? false;
     }
 }

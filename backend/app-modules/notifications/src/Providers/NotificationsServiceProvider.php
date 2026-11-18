@@ -7,9 +7,7 @@ namespace PHPeste\Notifications\Providers;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use PHPeste\Community\Contracts\EditionMemberships;
-use PHPeste\Community\Enums\EditionRole;
-use PHPeste\Community\Tenancy\CurrentEdition;
+use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Notifications\Actions\QueueEmail;
 use PHPeste\Notifications\Contracts\EditionMailer;
 
@@ -22,11 +20,6 @@ class NotificationsServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Gate::define('manage-edition-emails', function (Authenticatable $user): bool {
-            $editionId = resolve(CurrentEdition::class)->id();
-
-            return $editionId !== null
-                && resolve(EditionMemberships::class)->roleIn($editionId, (string) $user->getAuthIdentifier()) === EditionRole::Organizer;
-        });
+        Gate::define('manage-edition-emails', fn (Authenticatable $user): bool => Gate::forUser($user)->allows(EditionPermission::ManageEdition->value));
     }
 }
