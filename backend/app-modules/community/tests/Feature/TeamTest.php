@@ -48,7 +48,7 @@ it('troca o papel e registra na auditoria', function (): void {
         ->assertJsonPath('data.role', 'financeiro')
         ->assertJsonPath('data.access', 'Pedidos, pagamentos e finanças');
 
-    $this->assertDatabaseHas('audit_entries', [
+    $this->assertDatabaseHas('audit_logs', [
         'edition_id' => $this->edition->id,
         'actor_id' => $this->organizer->id,
         'action' => 'team.role_changed',
@@ -60,7 +60,7 @@ it('revoga o acesso e registra na auditoria', function (): void {
     $this->deleteJson("{$this->url}/members/{$this->reviewerMember->id}")->assertNoContent();
 
     $this->assertDatabaseMissing('edition_members', ['id' => $this->reviewerMember->id]);
-    $this->assertDatabaseHas('audit_entries', ['action' => 'team.removed', 'subject_id' => $this->reviewerMember->id, 'actor_id' => $this->organizer->id]);
+    $this->assertDatabaseHas('audit_logs', ['action' => 'team.removed', 'subject_id' => $this->reviewerMember->id, 'actor_id' => $this->organizer->id]);
 
     Sanctum::actingAs($this->reviewer);
     $this->getJson("/api/v1/editions/{$this->edition->id}")->assertForbidden();
@@ -74,7 +74,7 @@ it('bloqueia rebaixar ou remover o último organizador', function (): void {
     $this->deleteJson("{$this->url}/members/{$this->organizerMember->id}")->assertStatus(422);
 
     $this->assertDatabaseHas('edition_members', ['id' => $this->organizerMember->id, 'role' => 'organizador']);
-    $this->assertDatabaseMissing('audit_entries', ['subject_id' => $this->organizerMember->id]);
+    $this->assertDatabaseMissing('audit_logs', ['subject_id' => $this->organizerMember->id]);
 });
 
 it('permite sair da organização quando há outra pessoa organizadora', function (): void {

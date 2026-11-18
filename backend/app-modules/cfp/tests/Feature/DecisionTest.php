@@ -94,7 +94,7 @@ it('simula a cobertura e os alertas sem alterar nada', function (): void {
         ->assertJsonPath('data.alerts.1.type', 'states_missing');
 
     expect(Proposal::query()->forEdition($this->edition->id)->whereNotNull('decision')->count())->toBe(0);
-    $this->assertDatabaseCount('audit_entries', 0);
+    $this->assertDatabaseCount('audit_logs', 0);
     Event::assertNotDispatched(ProposalDecided::class);
 });
 
@@ -123,8 +123,8 @@ it('grava a trilha de auditoria de cada decisão', function (): void {
     $this->postJson("{$this->base}/apply", ['decisions' => decide($this, [1 => 'waitlisted'])])->assertOk();
     $this->postJson("{$this->base}/apply", ['decisions' => decide($this, [1 => 'waitlisted'])])->assertJsonPath('data.changed', 0);
 
-    $this->assertDatabaseCount('audit_entries', 2);
-    $this->assertDatabaseHas('audit_entries', ['action' => 'cfp.proposal_decided', 'subject_id' => $this->p[1]->id, 'actor_id' => $this->organizer->id]);
+    $this->assertDatabaseCount('audit_logs', 2);
+    $this->assertDatabaseHas('audit_logs', ['action' => 'cfp.proposal_decided', 'subject_id' => $this->p[1]->id, 'actor_id' => $this->organizer->id]);
 });
 
 it('não aplica nada se alguma proposta for inválida ou sem decisão', function (): void {
