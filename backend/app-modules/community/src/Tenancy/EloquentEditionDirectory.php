@@ -34,6 +34,7 @@ class EloquentEditionDirectory implements EditionDirectory
             'city' => $edition->city,
             'state' => $edition->state?->value,
             'timezone' => $edition->timezone,
+            'status' => $edition->status->value,
         ];
     }
 }
