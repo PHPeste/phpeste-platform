@@ -4,7 +4,7 @@ import { httpClient } from '@/infrastructure/http/HttpClient'
 const STORAGE_KEY = 'app.auth'
 
 export interface AuthenticatedUser {
-  id: number
+  id: string
   name: string
   email: string
   avatarUrl: string | null

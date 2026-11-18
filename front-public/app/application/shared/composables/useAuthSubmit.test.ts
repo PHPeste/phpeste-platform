@@ -21,7 +21,7 @@ describe('useAuthSubmit', () => {
 
   it('on success, calls request with the credentials, saves the session and resolves true', async () => {
     const request = vi.fn().mockResolvedValue({
-      user: { id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
+      user: { id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
       token: 'abc123',
     })
     const { submit } = useAuthSubmit({ request, mapError: vi.fn() })
@@ -33,7 +33,7 @@ describe('useAuthSubmit', () => {
 
     const authStore = useAuthStore()
     expect(authStore.token).toBe('abc123')
-    expect(authStore.user).toEqual({ id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null })
+    expect(authStore.user).toEqual({ id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null })
   })
 
   it('on error, delegates to mapError and resolves false', async () => {
@@ -51,7 +51,7 @@ describe('useAuthSubmit', () => {
   })
 
   it('sets isSubmitting while the request is pending', async () => {
-    let resolveRequest!: (value: { user: { id: number, name: string, email: string, avatar_url: string | null, created_at: string }, token: string }) => void
+    let resolveRequest!: (value: { user: { id: string, name: string, email: string, avatar_url: string | null, created_at: string }, token: string }) => void
     const request = vi.fn().mockReturnValue(new Promise((resolve) => { resolveRequest = resolve }))
 
     const { submit, isSubmitting } = useAuthSubmit({ request, mapError: vi.fn() })
@@ -60,7 +60,7 @@ describe('useAuthSubmit', () => {
     expect(isSubmitting.value).toBe(true)
 
     resolveRequest({
-      user: { id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
+      user: { id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
       token: 'abc123',
     })
     await pending

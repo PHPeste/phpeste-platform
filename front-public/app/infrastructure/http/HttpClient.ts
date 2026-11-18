@@ -56,7 +56,7 @@ function buildQueryString(query: HttpClientRequestOptions['query']): string {
 }
 
 async function request<T>(method: string, path: string, options: HttpClientRequestOptions = {}): Promise<T> {
-  const { apiBase } = useRuntimeConfig().public
+  const { apiUrl } = useRuntimeConfig().public
   let response: Response
 
   // FormData (file upload) can't be JSON.stringify'd, and Content-Type has
@@ -65,7 +65,7 @@ async function request<T>(method: string, path: string, options: HttpClientReque
   const isFormData = options.body instanceof FormData
 
   try {
-    response = await fetch(`${apiBase}${path}${buildQueryString(options.query)}`, {
+    response = await fetch(`${apiUrl}${path}${buildQueryString(options.query)}`, {
       method,
       headers: {
         Accept: 'application/json',
