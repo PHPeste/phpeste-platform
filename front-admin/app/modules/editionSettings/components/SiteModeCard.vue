@@ -40,7 +40,7 @@ async function copy(value: string) {
       </fieldset>
 
       <template v-if="form.siteMode === 'external'">
-        <PhInput v-model="form.externalSiteUrl" type="url" :label="locale.externalUrl" :hint="locale.externalUrlHint" placeholder="https://" :error="errors.externalSiteUrl" :disabled="disabled" />
+        <PhInput id="settings-externalSiteUrl" v-model="form.externalSiteUrl" type="url" :label="locale.externalUrl" :hint="locale.externalUrlHint" placeholder="https://" :error="errors.externalSiteUrl" :disabled="disabled" />
         <section class="flex flex-col gap-3 rounded-(--ph-radius) bg-(--ph-surface-2) p-4 text-sm" data-testid="site-guide">
           <h3 class="font-semibold">{{ locale.guideTitle }}</h3>
           <ol class="flex list-decimal flex-col gap-3 pl-5">

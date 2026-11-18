@@ -1,7 +1,6 @@
 export default {
   title: 'Identidade',
   subtitle: 'Cores, logo e fontes que o site, o checkout e o app usam nesta edição.',
-  loading: 'Carregando a identidade…',
   loadError: 'Não foi possível carregar a identidade da edição.',
   retry: 'Tentar de novo',
   discard: 'Descartar',
@@ -11,6 +10,7 @@ export default {
   saved: 'Rascunho salvo.',
   published: 'Identidade publicada. O site da edição já usa as novas cores.',
   reverted: 'Publicação anterior restaurada.',
+  undo: 'Desfazer',
   discarded: 'Alterações descartadas.',
   publishedAt: 'Publicada em {data}',
   neverPublished: 'Ainda não publicada: o site usa o tema padrão.',

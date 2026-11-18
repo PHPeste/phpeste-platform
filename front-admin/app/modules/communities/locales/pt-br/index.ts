@@ -4,7 +4,6 @@ export default {
   title: 'Escolha uma edição',
   communitiesCount: 'Você participa de {n} comunidades.',
   oneCommunity: 'Você participa de 1 comunidade.',
-  loading: 'Carregando suas edições…',
   loadError: 'Não foi possível carregar suas comunidades e edições.',
   retry: 'Tentar de novo',
   newCommunity: 'Nova comunidade',

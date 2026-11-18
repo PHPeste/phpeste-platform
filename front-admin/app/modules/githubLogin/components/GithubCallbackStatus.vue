@@ -35,10 +35,8 @@ onMounted(async () => {
     </template>
     <template v-else>
       <h1 class="text-2xl font-semibold">{{ locale.title }}</h1>
-      <p role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-        <span class="loading loading-spinner loading-sm" aria-hidden="true" />
-        {{ locale.checking }}
-      </p>
+      <p role="status" aria-live="polite" class="text-(--ph-ink-2)">{{ locale.checking }}</p>
+      <progress class="progress progress-primary w-full" :aria-label="locale.checking" />
     </template>
   </div>
 </template>

@@ -2,7 +2,6 @@ export default {
   title: 'Visão geral',
   adjustEdition: 'Ajustar edição',
   createTicket: 'Criar ingresso',
-  loading: 'Carregando a visão geral…',
   loadError: 'Não foi possível carregar a visão geral.',
   retry: 'Tentar de novo',
   noEdition: 'Escolha uma edição para ver a visão geral.',
@@ -48,4 +47,6 @@ export default {
   nordesteMet: 'meta atingida',
   milestonesTitle: 'Próximos marcos',
   milestonesEmpty: 'Nenhum marco com data definida.',
+  milestonesEmptyHint: 'Defina as datas do CFP para os marcos aparecerem aqui.',
+  milestonesAction: 'Configurar o CFP',
 }

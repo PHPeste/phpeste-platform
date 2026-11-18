@@ -32,6 +32,11 @@ const tabs = computed(() => (['general', 'site', 'privacy', 'audit'] as const).m
   id,
   label: id !== 'audit' && dirty.value[id] ? `${locale.tabs[id]} •` : locale.tabs[id],
 })))
+const fieldLabels: Record<string, string> = {
+  name: locale.name, slug: locale.slug, startsOn: locale.startsOn, endsOn: locale.endsOn, city: locale.city, state: locale.state, timezone: locale.timezone,
+  siteMode: locale.siteTitle, externalSiteUrl: locale.externalUrl, privacyContactEmail: locale.privacyEmail, privacyPolicyUrl: locale.privacyPolicy, anonymizeAfterEvent: locale.anonymize,
+}
+const fieldIds = Object.fromEntries(Object.keys(fieldLabels).map((key) => [key, `settings-${key}`]))
 const slugLocked = computed(() => !!edition.value && edition.value.status !== 'draft')
 
 async function save() {
@@ -90,14 +95,10 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
     </header>
 
     <p v-if="readOnly" role="status" class="alert alert-info alert-soft text-sm">{{ locale.readOnly }}</p>
+    <PhFormErrors :errors="errors" :labels="fieldLabels" :field-ids="fieldIds" />
 
-    <p v-if="state === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-      <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-    </p>
-    <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-      <span>{{ locale.loadError }}</span>
-      <PhButton variant="ghost" @click="settings.load">{{ locale.retry }}</PhButton>
-    </div>
+    <PhPageSkeleton v-if="state === 'loading'" :cards="2" :lines="5" />
+    <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="settings.load" />
 
     <PhTabs v-else-if="edition" v-model="tab" :items="tabs" :label="locale.tabsLabel">
       <template #default="{ active }">

@@ -153,13 +153,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       </div>
     </header>
 
-    <p v-if="state === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-      <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-    </p>
-    <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-      <span>{{ locale.loadError }}</span>
-      <PhButton variant="ghost" @click="review.load">{{ locale.retry }}</PhButton>
-    </div>
+    <PhPageSkeleton v-if="state === 'loading'" :kpis="organizer ? 4 : 0" :cards="2" :columns="2" :lines="6" />
+    <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="review.load" />
 
     <template v-else>
       <ReviewKpis v-if="organizer && summary" :summary="summary" />
@@ -183,13 +178,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
         <PhCard>
           <div ref="detail" tabindex="-1" class="flex flex-col gap-6 outline-none" aria-live="polite">
             <p v-if="!selectedId" class="text-(--ph-ink-2)">{{ items.length ? locale.chooseProposal : organizer ? locale.emptyOrg : locale.emptyQueue }}</p>
-            <p v-else-if="detailState === 'loading' && !proposal" role="status" class="flex items-center gap-2 text-(--ph-ink-2)">
-              <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-            </p>
-            <div v-else-if="detailState === 'error'" role="alert" class="alert alert-error alert-soft">
-              <span>{{ locale.loadError }}</span>
-              <PhButton variant="ghost" @click="selectedId && review.select(selectedId)">{{ locale.retry }}</PhButton>
-            </div>
+            <PhSkeleton v-else-if="detailState === 'loading' && !proposal" :lines="8" />
+            <PhLoadError v-else-if="detailState === 'error'" :title="locale.loadError" @retry="selectedId && review.select(selectedId)" />
             <template v-else-if="proposal">
               <ProposalView :proposal="proposal" />
 

@@ -35,14 +35,9 @@ watch(() => current.value?.id, (id) => {
       <PhButton to="/comunidades">{{ locale.chooseEdition }}</PhButton>
     </PhEmptyState>
 
-    <p v-else-if="state === 'loading' && !overview" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-      <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-    </p>
+    <PhPageSkeleton v-else-if="state === 'loading' && !overview" :kpis="4" :cards="2" :columns="2" :lines="5" />
 
-    <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-      <span>{{ locale.loadError }}</span>
-      <PhButton variant="ghost" @click="load(current.id)">{{ locale.retry }}</PhButton>
-    </div>
+    <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="load(current.id)" />
 
     <template v-else-if="overview">
       <StageTimeline :steps="overview.steps" :days-until-event="overview.daysUntilEvent" />

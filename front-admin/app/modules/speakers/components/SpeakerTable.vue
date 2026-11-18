@@ -32,7 +32,12 @@ const FILTERS: SpeakerFilter[] = ['all', 'confirmed', 'pending', 'waitlisted']
           <input v-model="search" type="search" :placeholder="locale.search">
         </label>
       </div>
-      <p v-if="!rows.length" class="py-4 text-sm text-(--ph-ink-2)">{{ total ? locale.emptyFilter : locale.empty }}</p>
+      <PhEmptyState v-if="!rows.length && total" :title="locale.emptyFilter">
+        <PhButton variant="secondary" @click="filter = 'all'; search = ''">{{ locale.clearFilters }}</PhButton>
+      </PhEmptyState>
+      <PhEmptyState v-else-if="!rows.length" :title="locale.empty" :description="locale.emptyHint">
+        <PhButton variant="secondary" to="/cfp/avaliacao">{{ locale.emptyAction }}</PhButton>
+      </PhEmptyState>
       <PhTable v-else :caption="locale.tableCaption">
         <thead>
           <tr>

@@ -38,6 +38,12 @@ async function act(action: () => Promise<boolean>, message: string) {
   if (await action()) toast.success(message)
 }
 
+async function publish() {
+  if (!(await editor.publish())) return
+  const canUndo = !!state.value?.canRevert
+  toast.success(locale.published, canUndo ? { label: locale.undo, run: () => act(editor.revert, locale.reverted) } : undefined)
+}
+
 const onUpload = (slot: LogoSlot, file: File) => editor.uploadLogo(slot, file)
 const onRemove = (slot: LogoSlot) => editor.removeLogo(slot)
 
@@ -79,7 +85,7 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
       <div v-if="state && !readOnly" class="flex flex-wrap gap-3">
         <PhButton variant="ghost" :loading="busy === 'discard'" :disabled="!hasPendingWork || !!busy" @click="act(editor.discard, locale.discarded)">{{ locale.discard }}</PhButton>
         <PhButton variant="ghost" :loading="busy === 'save'" :disabled="!isDirty || !!busy || failing.length > 0" @click="act(editor.saveDraft, locale.saved)">{{ locale.saveDraft }}</PhButton>
-        <PhButton :loading="busy === 'publish'" :disabled="!canPublish || !!busy" aria-describedby="publish-blocked" @click="act(editor.publish, locale.published)">{{ locale.publish }}</PhButton>
+        <PhButton :loading="busy === 'publish'" :disabled="!canPublish || !!busy" aria-describedby="publish-blocked" @click="publish">{{ locale.publish }}</PhButton>
       </div>
     </header>
 
@@ -87,13 +93,8 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
     <p v-if="blockedReason && !readOnly" id="publish-blocked" role="alert" class="alert alert-error alert-soft text-sm">{{ blockedReason }}</p>
     <p v-if="errorMessage" role="alert" class="alert alert-error alert-soft text-sm">{{ errorMessage }}</p>
 
-    <p v-if="loadState === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-      <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-    </p>
-    <div v-else-if="loadState === 'error'" role="alert" class="alert alert-error alert-soft">
-      <span>{{ locale.loadError }}</span>
-      <PhButton variant="ghost" @click="editor.load">{{ locale.retry }}</PhButton>
-    </div>
+    <PhPageSkeleton v-if="loadState === 'loading'" :cards="2" :columns="2" :lines="8" />
+    <PhLoadError v-else-if="loadState === 'error'" :title="locale.loadError" @retry="editor.load" />
 
     <div v-else-if="state" class="grid items-start gap-6 lg:grid-cols-2">
       <div class="flex flex-col gap-5">

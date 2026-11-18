@@ -1,7 +1,6 @@
 export default {
   title: 'Meu perfil',
   subtitle: 'Conta, senha e avisos que você recebe.',
-  loading: 'Carregando seu perfil…',
   loadError: 'Não foi possível carregar seu perfil.',
   retry: 'Tentar de novo',
   tabsLabel: 'Seções do perfil',

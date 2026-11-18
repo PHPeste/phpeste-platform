@@ -48,6 +48,10 @@ async function primary(domain: Domain) {
   else toast.error(result.message)
 }
 
+function focusNewDomain() {
+  document.getElementById('new-domain')?.focus()
+}
+
 async function confirmRemove() {
   const domain = removing.value
   if (!domain) return
@@ -65,7 +69,9 @@ async function confirmRemove() {
         <h2 class="text-lg font-semibold">{{ locale.domainsTitle }}</h2>
         <p class="text-sm text-(--ph-ink-2)">{{ locale.domainsHint }}</p>
       </div>
-      <p v-if="!domains.length" class="text-sm text-(--ph-ink-2)">{{ locale.noDomains }}</p>
+      <PhEmptyState v-if="!domains.length" :title="locale.noDomains" :description="locale.noDomainsHint">
+        <PhButton v-if="!disabled" variant="secondary" @click="focusNewDomain">{{ locale.addDomain }}</PhButton>
+      </PhEmptyState>
       <ul v-else class="flex flex-col gap-3">
         <li v-for="domain in domains" :key="domain.id" class="flex flex-col gap-3 rounded-(--ph-radius) border border-(--ph-line) p-4" :data-host="domain.host">
           <div class="flex flex-wrap items-center justify-between gap-3">
@@ -98,7 +104,7 @@ async function confirmRemove() {
       </ul>
       <form v-if="!disabled" class="flex flex-wrap items-end gap-3" @submit.prevent="submit">
         <div class="min-w-64 flex-1">
-          <PhInput v-model="host" :label="locale.newDomain" :hint="locale.newDomainHint" :error="error" />
+          <PhInput id="new-domain" v-model="host" :label="locale.newDomain" :hint="locale.newDomainHint" :error="error" />
         </div>
         <PhButton type="submit" variant="secondary" :loading="busy === 'add'" :disabled="!host.trim()">{{ locale.add }}</PhButton>
       </form>

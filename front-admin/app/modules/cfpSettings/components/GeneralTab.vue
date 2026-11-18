@@ -20,9 +20,9 @@ const daysLeft = computed(() => {
     <PhCard>
       <div class="flex flex-col gap-4">
         <h2 class="text-lg font-semibold">{{ locale.windowTitle }}</h2>
-        <PhInput v-model="general.opensOn" type="date" :label="locale.opensOn" :error="errors.opensOn" :disabled="disabled" />
-        <PhInput v-model="general.closesOn" type="date" :label="locale.closesOn" :error="errors.closesOn" :disabled="disabled" />
-        <PhInput v-model="general.resultsOn" type="date" :label="locale.resultsOn" :error="errors.resultsOn" :disabled="disabled" />
+        <PhInput id="cfp-opensOn" v-model="general.opensOn" type="date" :label="locale.opensOn" :error="errors.opensOn" :disabled="disabled" />
+        <PhInput id="cfp-closesOn" v-model="general.closesOn" type="date" :label="locale.closesOn" :error="errors.closesOn" :disabled="disabled" />
+        <PhInput id="cfp-resultsOn" v-model="general.resultsOn" type="date" :label="locale.resultsOn" :error="errors.resultsOn" :disabled="disabled" />
         <p class="text-xs text-(--ph-ink-3)">{{ locale.windowHint }}</p>
         <div class="flex flex-wrap items-center gap-3">
           <PhBadge :status="TONE[settings.status] ?? 'neutral'">{{ settings.statusLabel }}</PhBadge>
@@ -37,14 +37,14 @@ const daysLeft = computed(() => {
         <PhCheckbox v-model="general.anonymousReview" :label="locale.anonymous" :disabled="disabled" />
         <PhCheckbox v-model="general.requireNordesteQuota" :label="locale.requireQuota" :disabled="disabled" />
         <PhInput
-          v-model.number="general.nordesteQuotaPercent"
+          id="cfp-nordesteQuotaPercent" v-model.number="general.nordesteQuotaPercent"
           type="number"
           :label="locale.quota"
           :hint="locale.quotaHint"
           :error="errors.nordesteQuotaPercent"
           :disabled="disabled || !general.requireNordesteQuota"
         />
-        <PhInput v-model.number="general.proposalsPerPerson" type="number" :label="locale.perPerson" :hint="locale.perPersonHint" :error="errors.proposalsPerPerson" :disabled="disabled" />
+        <PhInput id="cfp-proposalsPerPerson" v-model.number="general.proposalsPerPerson" type="number" :label="locale.perPerson" :hint="locale.perPersonHint" :error="errors.proposalsPerPerson" :disabled="disabled" />
       </div>
     </PhCard>
   </div>

@@ -48,13 +48,8 @@ async function remind(talk: SpeakerTalk) {
   <section class="flex flex-col gap-6">
     <NuxtLink to="/palestrantes" class="link link-hover self-start text-sm">{{ locale.back }}</NuxtLink>
 
-    <p v-if="state === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-      <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-    </p>
-    <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-      <span>{{ locale.detailLoadError }}</span>
-      <PhButton variant="ghost" @click="detail.load">{{ locale.retry }}</PhButton>
-    </div>
+    <PhPageSkeleton v-if="state === 'loading'" :cards="1" :lines="7" />
+    <PhLoadError v-else-if="state === 'error'" :title="locale.detailLoadError" @retry="detail.load" />
     <p v-else-if="state === 'not-found'" role="alert" class="alert alert-warning alert-soft">{{ locale.notFound }}</p>
 
     <template v-else-if="speaker">
