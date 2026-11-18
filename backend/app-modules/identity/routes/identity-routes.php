@@ -7,6 +7,8 @@ use PHPeste\Identity\Http\Controllers\AuthController;
 use PHPeste\Identity\Http\Controllers\GithubController;
 use PHPeste\Identity\Http\Controllers\MeController;
 use PHPeste\Identity\Http\Controllers\PasswordController;
+use PHPeste\Identity\Http\Controllers\ProfileController;
+use PHPeste\Identity\Http\Controllers\SpeakerProfileController;
 
 Route::apiV1('auth')->group(function (): void {
     Route::post('/register', [AuthController::class, 'register'])
@@ -62,4 +64,15 @@ Route::apiV1('auth')->group(function (): void {
         ->name('auth.github.unlink');
 });
 
-Route::apiV1(middleware: ['auth:sanctum'])->get('/me', MeController::class)->name('me');
+Route::apiV1('me', ['auth:sanctum'])->group(function (): void {
+    Route::get('/', MeController::class)->name('me');
+    Route::patch('/', [ProfileController::class, 'update'])->name('me.update');
+    Route::post('/photo', [ProfileController::class, 'uploadPhoto'])->name('me.photo.store');
+    Route::delete('/photo', [ProfileController::class, 'deletePhoto'])->name('me.photo.destroy');
+    Route::get('/speaker-profile', [SpeakerProfileController::class, 'show'])->name('me.speaker-profile.show');
+    Route::put('/speaker-profile', [SpeakerProfileController::class, 'update'])->name('me.speaker-profile.update');
+});
+
+Route::apiV1Edition('people')->get('/{user}/speaker-profile', [SpeakerProfileController::class, 'showForEdition'])
+    ->whereUuid('user')
+    ->name('identity.people.speaker-profile');

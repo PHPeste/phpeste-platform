@@ -12,9 +12,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use PHPeste\Identity\Database\Factories\UserFactory;
 use PHPeste\Identity\Notifications\ResetPasswordNotification;
@@ -32,7 +34,7 @@ use PHPeste\Identity\Notifications\ResetPasswordNotification;
  * @property Carbon $updated_at
  * @property-read Collection<int, SocialAccount> $socialAccounts
  */
-#[Fillable(['name', 'email', 'password', 'locale'])]
+#[Fillable(['name', 'email', 'password', 'locale', 'photo_path'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmailContract
 {
@@ -51,6 +53,27 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function socialAccounts(): HasMany
     {
         return $this->hasMany(SocialAccount::class);
+    }
+
+    /**
+     * @return HasOne<SpeakerProfile, $this>
+     */
+    public function speakerProfile(): HasOne
+    {
+        return $this->hasOne(SpeakerProfile::class);
+    }
+
+    /**
+     * @return HasOne<SpeakerPrivateDetails, $this>
+     */
+    public function speakerPrivateDetails(): HasOne
+    {
+        return $this->hasOne(SpeakerPrivateDetails::class);
+    }
+
+    public function photoUrl(): ?string
+    {
+        return $this->photo_path === null ? null : Storage::disk((string) config('filesystems.media'))->url($this->photo_path);
     }
 
     public function hasPassword(): bool

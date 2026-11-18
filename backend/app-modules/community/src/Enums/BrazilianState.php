@@ -33,4 +33,9 @@ enum BrazilianState: string
     case SP = 'SP';
     case SE = 'SE';
     case TO = 'TO';
+
+    public function isNordeste(): bool
+    {
+        return in_array($this, [self::AL, self::BA, self::CE, self::MA, self::PB, self::PE, self::PI, self::RN, self::SE], true);
+    }
 }
