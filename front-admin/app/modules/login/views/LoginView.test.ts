@@ -31,14 +31,14 @@ describe('LoginView', () => {
     expect(wrapper.findComponent(LoginForm).exists()).toBe(true)
   })
 
-  it('redirects to / when the form emits success', async () => {
+  it('redirects to the communities page when the form emits success', async () => {
     const wrapper = await mountSuspended(LoginView, {
       global: { stubs: { LoginForm: true } },
     })
 
     await wrapper.findComponent(LoginForm).vm.$emit('success')
 
-    expect(navigateToMock).toHaveBeenCalledWith('/')
+    expect(navigateToMock).toHaveBeenCalledWith('/comunidades')
   })
 
   it('goes back to the internal page passed in ?redirect=', async () => {
@@ -47,10 +47,10 @@ describe('LoginView', () => {
   })
 
   it.each(['https://evil.com', '//evil.com', 'javascript:alert(1)', '/\\evil.com', '/\t/evil.com', '/ /evil.com'])(
-    'ignores an external redirect (%s) and falls back to /',
+    'ignores an external redirect (%s) and falls back to the communities page',
     async (redirect) => {
       await submitWith({ redirect })
-      expect(navigateToMock).toHaveBeenCalledWith('/')
+      expect(navigateToMock).toHaveBeenCalledWith('/comunidades')
     },
   )
 })

@@ -44,6 +44,7 @@ app/
     esqueci-senha.vue              # módulo forgotPassword
     redefinir-senha.vue            # módulo resetPassword (link do e-mail)
     convite/[token].vue            # módulo invitation (link do convite da equipe)
+    comunidades.vue                # módulo communities: seletor de edição, nova comunidade, nova edição
     index.vue
   plugins/
     auth.client.ts                 # hydrates authStore from localStorage (ou sessionStorage, sem "manter conectado") on boot
@@ -92,11 +93,11 @@ Tokens oficiais em `../docs/design/tema-sertao-tokens.png`, aplicados em `app/as
 - **401 em requisição autenticada** chama o handler registrado por `httpClient.setUnauthorizedHandler()` — hoje só `app/plugins/auth.client.ts` registra (limpa `authStore`, navega pro `/login`). Um 401 sem token (ex.: login errado) não dispara isso — `HttpClient` só decide que a sessão expirou quando *tinha* token.
 - **Token Bearer, não cookie httpOnly** — decisão registrada em `docs/adr/0005-token-bearer-no-client.md` (o app mobile também consome a mesma API com o mesmo token).
 - `useEdition()` (`app/application/shared/composables/useEdition.ts`) guarda a edição ativa (store `edition`), a lista de edições da pessoa e o papel dela (`load`, `select`, `role`). Consome `GET /editions`. Ver `docs/LAYOUT.md`.
-- **Telas de entrada** (`login`, `githubLogin`, `forgotPassword`, `resetPassword`, `invitation`) usam o layout `blank` e `auth: false`. As de cartão usam `<AuthCard>` (`app/application/shared/components/layout`). Depois de entrar, todas levam para `HOME_AFTER_LOGIN` (`app/application/shared/layout/redirect.ts`), que vira o seletor de comunidades no A06.
-- **id de usuário é UUID** (`string`), como no backend.
+- **Telas de entrada** (`login`, `githubLogin`, `forgotPassword`, `resetPassword`, `invitation`) usam o layout `blank` e `auth: false`. As de cartão usam `<AuthCard>` (`app/application/shared/components/layout`). Depois de entrar, todas levam para `HOME_AFTER_LOGIN` (`app/application/shared/layout/redirect.ts`), o seletor de edições em `/comunidades`.
+- **ids de usuário e de edição são UUID** (`string`), como no backend.
+- **Edição encerrada é só leitura**: `useEdition().isReadOnly` fica verdadeiro com a edição ativa em `closed`, e o layout mostra o aviso (`EditionReadOnlyBanner`). Tela que altera dado esconde ou desabilita a ação quando `isReadOnly`.
 
 ## Roadmap (not built yet)
 
 - No generator/skill scaffolding a new module — creating one is by hand, following `login`'s shape and `docs/ARCHITECTURE.md`.
 - Cadastro aberto (`register`) não existe por decisão: a entrada no painel é por convite da organização.
-- O id da edição ainda é tratado como número no `editionStore`/`useEdition`; no backend é UUID (ajuste no A06).
