@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPeste\Community\Tenancy;
 
 use PHPeste\Community\Contracts\EditionMemberships;
+use PHPeste\Community\Enums\EditionRole;
 use PHPeste\Community\Models\EditionMember;
 
 class EloquentEditionMemberships implements EditionMemberships
@@ -20,5 +21,14 @@ class EloquentEditionMemberships implements EditionMemberships
                 'role' => $member->role->value,
             ])
             ->all());
+    }
+
+    public function roleIn(string $editionId, string $userId): ?EditionRole
+    {
+        return EditionMember::query()
+            ->where('edition_id', $editionId)
+            ->where('user_id', $userId)
+            ->first()
+            ?->role;
     }
 }
