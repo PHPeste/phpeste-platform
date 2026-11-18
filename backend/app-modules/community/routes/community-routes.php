@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Route;
 use PHPeste\Community\Http\Controllers\CommunityController;
 use PHPeste\Community\Http\Controllers\EditionController;
 use PHPeste\Community\Http\Controllers\EditionStatusController;
+use PHPeste\Community\Http\Controllers\InvitationController;
 use PHPeste\Community\Http\Controllers\PublicEditionController;
+use PHPeste\Community\Http\Controllers\RoleController;
+use PHPeste\Community\Http\Controllers\TeamController;
 
 Route::apiV1(middleware: ['auth:sanctum'])->group(function (): void {
     Route::get('/communities', [CommunityController::class, 'index'])->name('community.communities.index');
@@ -23,6 +26,29 @@ Route::apiV1(middleware: ['auth:sanctum'])->group(function (): void {
         ->name('community.communities.editions.store');
 
     Route::get('/editions', [EditionController::class, 'index'])->name('community.editions.index');
+    Route::get('/roles', RoleController::class)->name('community.roles.index');
+});
+
+Route::apiV1Edition('team')->group(function (): void {
+    Route::get('/', [TeamController::class, 'index'])->name('community.team.index');
+    Route::patch('/members/{member}', [TeamController::class, 'changeRole'])->whereUuid('member')->name('community.team.members.update');
+    Route::delete('/members/{member}', [TeamController::class, 'removeMember'])->whereUuid('member')->name('community.team.members.destroy');
+    Route::post('/invitations', [TeamController::class, 'invite'])->name('community.team.invitations.store');
+    Route::post('/invitations/{invitation}/resend', [TeamController::class, 'resendInvitation'])
+        ->whereUuid('invitation')
+        ->name('community.team.invitations.resend');
+    Route::delete('/invitations/{invitation}', [TeamController::class, 'revokeInvitation'])
+        ->whereUuid('invitation')
+        ->name('community.team.invitations.destroy');
+});
+
+Route::apiV1('invitations')->group(function (): void {
+    Route::get('/{token}', [InvitationController::class, 'show'])
+        ->middleware('throttle:password-reset')
+        ->name('community.invitations.show');
+    Route::post('/{token}/accept', [InvitationController::class, 'accept'])
+        ->middleware('throttle:login')
+        ->name('community.invitations.accept');
 });
 
 Route::apiV1Edition()->group(function (): void {
