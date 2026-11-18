@@ -20,6 +20,8 @@ use PHPeste\Community\Policies\EditionPolicy;
 use PHPeste\Community\Tenancy\CurrentEdition;
 use PHPeste\Community\Tenancy\EloquentEditionDirectory;
 use PHPeste\Community\Tenancy\EloquentEditionMemberships;
+use PHPeste\Community\Tenancy\TeamParticipation;
+use PHPeste\Identity\Contracts\EditionParticipation;
 
 class CommunityServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,7 @@ class CommunityServiceProvider extends ServiceProvider
         $this->app->scoped(CurrentEdition::class);
         $this->app->bind(EditionMemberships::class, EloquentEditionMemberships::class);
         $this->app->bind(EditionDirectory::class, EloquentEditionDirectory::class);
+        $this->app->tag([TeamParticipation::class], EditionParticipation::TAG);
 
         Route::macro('apiV1Edition', function (?string $prefix = null): RouteRegistrar {
             $path = 'editions/{edition}'.($prefix ? "/{$prefix}" : '');

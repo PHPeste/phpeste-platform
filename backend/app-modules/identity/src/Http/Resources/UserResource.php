@@ -25,7 +25,7 @@ class UserResource extends ApiResource
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'avatar_url' => $user->photo_path ? asset('storage/'.$user->photo_path) : null,
+            'avatar_url' => $user->photoUrl(),
             'locale' => $user->locale,
             'email_verified_at' => $this->isoDate($user->email_verified_at),
             'has_password' => $user->hasPassword(),
