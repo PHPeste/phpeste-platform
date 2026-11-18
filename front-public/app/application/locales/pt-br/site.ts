@@ -4,6 +4,7 @@ export default {
   account: 'Conta',
   login: 'Entrar',
   logout: 'Sair',
+  myProposals: 'Minhas propostas',
   skipToContent: 'Ir para o conteúdo',
   unknownTitle: 'Este endereço não tem uma edição publicada',
   unknownText: 'Confira o endereço digitado. Se você organiza um evento, cadastre e verifique este domínio no painel da edição.',
