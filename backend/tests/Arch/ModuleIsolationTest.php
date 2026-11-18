@@ -8,7 +8,7 @@ declare(strict_types=1);
 // `not->toUse()` no namespace raiz do módulo não pega violação em Models/,
 // mas pega normalmente quando aplicado a uma subpasta específica. Por isso
 // iteramos módulo × subpasta real (as mesmas de backend/CLAUDE.md) abaixo.
-$moduleSubfolders = ['Models', 'Actions', 'Data', 'Enums', 'Events', 'Listeners', 'Contracts', 'Http', 'Policies', 'Providers', 'Tenancy'];
+$moduleSubfolders = ['Models', 'Actions', 'Data', 'Enums', 'Events', 'Listeners', 'Contracts', 'Http', 'Policies', 'Providers', 'Rules', 'Tenancy', 'Theme'];
 
 foreach (glob(__DIR__.'/../../app-modules/*', GLOB_ONLYDIR) as $modulePath) {
     $module = str(basename($modulePath))->studly();
