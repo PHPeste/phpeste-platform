@@ -60,3 +60,15 @@ api.phpeste.dev {
 `GET /api/v1/public/tls-check?domain=<host>` responde 200 para host verificado de edição publicada e 404 para qualquer outro, que é o contrato do `ask` do Caddy.
 
 Para o wildcard `*.phpeste.dev`, um certificado wildcard (desafio DNS no provedor do domínio) evita uma emissão por edição; com on-demand ele também funciona, só emite um certificado por subdomínio.
+
+## Variáveis do front-public
+
+```dotenv
+NUXT_PUBLIC_API_URL=https://api.phpeste.dev/api/v1
+NUXT_API_INTERNAL_URL=http://backend:8000/api/v1
+NUXT_TRUST_FORWARDED_HOST=true
+NUXT_EDITION_CACHE_SECONDS=60
+```
+
+`NUXT_TRUST_FORWARDED_HOST=true` só porque o Caddy fica na frente e repassa o host original; com o front-public exposto direto, deixe `false`. Ver `../adr/0008-front-public-por-host.md`.
+
