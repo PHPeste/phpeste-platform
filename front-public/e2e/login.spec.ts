@@ -64,7 +64,7 @@ test.describe('Login', () => {
       route.fulfill({
         status: 200,
         json: {
-          user: { id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
+          user: { id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
           token: 'e2e-test-token',
         },
       }))

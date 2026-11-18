@@ -25,7 +25,7 @@ describe('useLogin', () => {
 
   it('on success, saves the session in authStore and resolves true', async () => {
     vi.mocked(loginService.login).mockResolvedValueOnce({
-      user: { id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
+      user: { id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
       token: 'abc123',
     })
 
@@ -38,7 +38,7 @@ describe('useLogin', () => {
 
     const authStore = useAuthStore()
     expect(authStore.token).toBe('abc123')
-    expect(authStore.user).toEqual({ id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null })
+    expect(authStore.user).toEqual({ id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null })
   })
 
   it('maps a 401 to the invalid credentials message', async () => {
@@ -91,7 +91,7 @@ describe('useLogin', () => {
     expect(isSubmitting.value).toBe(true)
 
     resolveLogin({
-      user: { id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
+      user: { id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
       token: 'abc123',
     })
     await pending

@@ -22,7 +22,7 @@ describe('useLogout', () => {
     vi.mocked(authService.logout).mockResolvedValue(undefined)
 
     const authStore = useAuthStore()
-    authStore.setSession({ id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null }, 'abc123')
+    authStore.setSession({ id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null }, 'abc123')
 
     const { logout } = useLogout()
     await logout()
@@ -37,7 +37,7 @@ describe('useLogout', () => {
     vi.mocked(authService.logout).mockRejectedValue(new Error('network down'))
 
     const authStore = useAuthStore()
-    authStore.setSession({ id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null }, 'abc123')
+    authStore.setSession({ id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null }, 'abc123')
 
     const { logout } = useLogout()
     await logout()

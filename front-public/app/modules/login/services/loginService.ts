@@ -5,7 +5,7 @@ import type { LoginCredentials } from '../types'
 const LOGIN_URL = '/auth/login'
 
 interface LoginUserPayload {
-  id: number
+  id: string
   name: string
   email: string
   avatar_url: string | null

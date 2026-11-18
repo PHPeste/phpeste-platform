@@ -19,7 +19,6 @@ class RegisterUser
         ]);
 
         event(new Registered($user));
-        $user->sendEmailVerificationNotification();
 
         return $user;
     }

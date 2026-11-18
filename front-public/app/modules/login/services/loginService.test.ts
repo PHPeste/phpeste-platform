@@ -20,7 +20,7 @@ vi.mock('@/infrastructure/http/HttpClient', () => ({
 describe('loginService.login', () => {
   it('posts to /auth/login with the given credentials', async () => {
     const payload = {
-      user: { id: 1, name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
+      user: { id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatar_url: null, created_at: '2026-01-01' },
       token: 'abc123',
     }
     vi.mocked(httpClient.post).mockResolvedValueOnce(payload)

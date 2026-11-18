@@ -15,14 +15,24 @@ Regras de camadas em [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). `app/module
 | `app/plugins/edition.ts` + `useCurrentEdition()` | A edição no app: do contexto no servidor, do `#edition-data` no navegador |
 | `app/app.vue` | Sem edição, mostra `UnknownSite` (página neutra, sem citar edições) |
 
-HTML nunca fica em cache (o mesmo caminho serve edições diferentes por host). Páginas de conta, palestrante e checkout rodam só no navegador (`routeRules`).
+HTML nunca fica em cache (o mesmo caminho serve edições diferentes por host).
+
+## Área do palestrante (`app/modules/proposals/`)
+
+| Página | O quê |
+| --- | --- |
+| `/cfp` | Formulário em 3 passos (sobre você, sobre a palestra, revisão e envio). Entrar ou criar conta no passo 1 (`useSpeakerAuth`, sobre o `useAuthSubmit` do template). Rascunho guardado no navegador (`phpeste.cfp.draft.{edição}`) e salvo na plataforma 1,2 s depois de parar de digitar. `?proposta={id}` edita uma proposta enquanto o CFP está aberto. Fora da janela, mostra o CFP encerrado |
+| `/palestrante/propostas` | Propostas da pessoa na edição, com status, decisão e confirmação |
+| `/palestrante/propostas/{id}` | Detalhe (link dos e-mails de aprovação, lembrete e convite): confirmar ou recusar a participação, editar ou retirar enquanto o CFP está aberto |
+
+Componente que depende da sessão observa `isAuthenticated` em vez de esperar um evento do `AuthPanel`: o painel some assim que a sessão existe, e um evento emitido depois disso se perde. Páginas de conta, palestrante e checkout rodam só no navegador (`routeRules`).
 
 ## Comandos
 
 ```bash
 npm install
 npx playwright install chromium
-cp .env.example .env
+cp .env.example .env    # NUXT_PUBLIC_ADMIN_URL aponta o "Esqueci minha senha" para o painel
 npm run dev          # http://localhost:3000, resolve a edição pelo host (cadastre o domínio no painel)
 npm test
 npm run test:e2e     # sobe uma API simulada (e2e/support/mockApi.ts) e testa vários hosts pelo X-Forwarded-Host

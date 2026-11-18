@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { useAuthStore, type AuthenticatedUser } from '@/stores/authStore'
 
 interface AuthUserPayload {
-  id: number
+  id: string
   name: string
   email: string
   avatar_url: string | null

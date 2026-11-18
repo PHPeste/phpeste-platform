@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    '/cfp': { ssr: false },
     '/palestrante/**': { ssr: false },
     '/conta/**': { ssr: false },
     '/ingressos/**': { ssr: false },
@@ -28,7 +29,8 @@ export default defineNuxtConfig({
     apiInternalUrl: process.env.NUXT_API_INTERNAL_URL || process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1',
     trustForwardedHost: process.env.NUXT_TRUST_FORWARDED_HOST === 'true',
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1',
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1',
+      adminUrl: process.env.NUXT_PUBLIC_ADMIN_URL || 'http://localhost:3000',
     },
   },
 })

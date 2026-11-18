@@ -20,6 +20,7 @@ const { logout } = useLogout()
         <a v-if="siteUrl" :href="siteUrl" class="font-medium" data-testid="back-to-site">{{ locale.backToSite }}</a>
         <ClientOnly>
           <template v-if="auth.isAuthenticated">
+            <NuxtLink to="/palestrante/propostas" class="font-medium">{{ locale.myProposals }}</NuxtLink>
             <span class="text-(--ph-ink-2)">{{ auth.user?.name }}</span>
             <button type="button" class="btn btn-ghost btn-sm" @click="logout">{{ locale.logout }}</button>
           </template>
