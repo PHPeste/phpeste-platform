@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use Laravel\Sanctum\Sanctum;
 use PHPeste\Cfp\Contracts\ReviewLedger;
+use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Cfp\Models\CfpCriterion;
+use PHPeste\Cfp\Models\Proposal;
 use PHPeste\Community\Enums\EditionRole;
 use PHPeste\Community\Models\Edition;
 use PHPeste\Community\Models\EditionMember;
@@ -90,4 +92,23 @@ it('remove critério sem apagar a linha, para preservar as notas já dadas', fun
 
     $this->getJson("{$this->base}/criteria")->assertJsonCount(0, 'data');
     expect(CfpCriterion::query()->withTrashed()->forEdition($this->edition->id)->find($id)?->trashed())->toBeTrue();
+});
+
+it('conta as propostas enviadas por trilha, sem rascunho nem retirada', function (): void {
+    $track = $this->postJson("{$this->base}/tracks", ['name' => 'Backend', 'slots' => 6])->assertJsonPath('data.proposals_count', 0)->json('data.id');
+
+    foreach ([ProposalStatus::Submitted, ProposalStatus::Submitted, ProposalStatus::Draft, ProposalStatus::Withdrawn] as $number => $status) {
+        Proposal::create(['edition_id' => $this->edition->id, 'number' => $number + 1, 'title' => "Proposta {$number}", 'track_id' => $track, 'status' => $status]);
+    }
+
+    $this->getJson("{$this->base}/tracks")->assertJsonPath('data.0.proposals_count', 2);
+    $this->patchJson("{$this->base}/tracks/{$track}", ['slots' => 7])->assertJsonPath('data.proposals_count', 2);
+});
+
+it('diz quantas avaliações já existem junto com os critérios', function (): void {
+    $this->getJson("{$this->base}/criteria")->assertJsonPath('meta.submitted_reviews', 0);
+
+    withSubmittedReviews(12);
+
+    $this->getJson("{$this->base}/criteria")->assertJsonPath('meta.submitted_reviews', 12);
 });

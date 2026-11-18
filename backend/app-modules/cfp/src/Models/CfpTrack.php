@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use PHPeste\Cfp\Enums\ProposalStatus;
 use PHPeste\Community\Tenancy\BelongsToEdition;
 
 /**
@@ -17,6 +19,7 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property string $name
  * @property int $slots
  * @property int $position
+ * @property int|null $proposals_count
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -26,6 +29,19 @@ class CfpTrack extends Model
 {
     use BelongsToEdition;
     use HasUuids;
+
+    /**
+     * @return HasMany<Proposal, $this>
+     */
+    public function proposals(): HasMany
+    {
+        return $this->hasMany(Proposal::class, 'track_id');
+    }
+
+    public function submittedProposalsCount(): int
+    {
+        return $this->proposals_count ?? $this->proposals()->where('status', ProposalStatus::Submitted)->count();
+    }
 
     /**
      * @return array<string, string>

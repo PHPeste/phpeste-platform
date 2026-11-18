@@ -6,6 +6,7 @@ namespace PHPeste\Cfp\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use PHPeste\Cfp\Actions\SyncCfpStatus;
+use PHPeste\Cfp\Data\ProposalForm;
 use PHPeste\Cfp\Models\CfpSetting;
 use PHPeste\Cfp\Models\CfpTrack;
 use PHPeste\Community\Contracts\EditionDirectory;
@@ -36,6 +37,7 @@ class PublicCfpController
                     ->map(fn (CfpTrack $track): array => ['id' => $track->id, 'name' => $track->name])
                     ->values()
                     ->all(),
+                'form' => ProposalForm::options(),
             ],
         ]);
     }

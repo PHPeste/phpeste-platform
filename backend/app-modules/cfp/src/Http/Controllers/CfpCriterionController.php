@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use PHPeste\Cfp\Actions\DeleteCriterion;
 use PHPeste\Cfp\Actions\SaveCriterion;
+use PHPeste\Cfp\Contracts\ReviewLedger;
 use PHPeste\Cfp\Http\Requests\SaveCriterionRequest;
 use PHPeste\Cfp\Http\Resources\CfpCriterionResource;
 use PHPeste\Cfp\Models\CfpCriterion;
@@ -21,11 +22,12 @@ class CfpCriterionController
 {
     public function __construct(private readonly CurrentEdition $currentEdition) {}
 
-    public function index(): AnonymousResourceCollection
+    public function index(ReviewLedger $reviews): AnonymousResourceCollection
     {
         Gate::authorize('cfp.view-settings');
 
-        return CfpCriterionResource::collection(CfpCriterion::query()->orderBy('position')->get());
+        return CfpCriterionResource::collection(CfpCriterion::query()->orderBy('position')->get())
+            ->additional(['meta' => ['submitted_reviews' => $reviews->submittedReviewsCount((string) $this->currentEdition->id())]]);
     }
 
     public function store(SaveCriterionRequest $request, SaveCriterion $save): JsonResponse

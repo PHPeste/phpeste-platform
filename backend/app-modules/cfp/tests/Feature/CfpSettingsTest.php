@@ -25,7 +25,10 @@ it('começa em preparação com as regras padrão', function (): void {
         ->assertJsonPath('data.anonymous_review', true)
         ->assertJsonPath('data.require_nordeste_quota', true)
         ->assertJsonPath('data.nordeste_quota_percent', 50)
-        ->assertJsonPath('data.proposals_per_person', 3);
+        ->assertJsonPath('data.proposals_per_person', 3)
+        ->assertJsonPath('meta.form.formats.0', ['id' => 'talk', 'label' => 'Palestra de 30 min', 'minutes' => 30])
+        ->assertJsonPath('meta.form.languages.0.label', 'Português')
+        ->assertJsonPath('meta.form.limits', ['title' => 90, 'summary' => 3_000, 'audience' => 1_000]);
 });
 
 it('salva a janela e as regras e calcula o status', function (): void {

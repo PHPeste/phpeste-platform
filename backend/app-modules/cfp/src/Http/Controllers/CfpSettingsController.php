@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 use PHPeste\Cfp\Actions\ResolveCfpSettings;
 use PHPeste\Cfp\Actions\UpdateCfpSettings;
+use PHPeste\Cfp\Data\ProposalForm;
 use PHPeste\Cfp\Http\Requests\UpdateCfpSettingsRequest;
 use PHPeste\Cfp\Http\Resources\CfpSettingsResource;
 use PHPeste\Community\Enums\EditionPermission;
@@ -18,7 +19,7 @@ class CfpSettingsController
     {
         Gate::authorize('cfp.view-settings');
 
-        return new CfpSettingsResource($resolve->handle());
+        return new CfpSettingsResource($resolve->handle())->additional(['meta' => ['form' => ProposalForm::options()]]);
     }
 
     public function update(UpdateCfpSettingsRequest $request, ResolveCfpSettings $resolve, UpdateCfpSettings $update): CfpSettingsResource
@@ -30,6 +31,6 @@ class CfpSettingsController
 
         throw_if($errors !== [], ValidationException::withMessages($errors));
 
-        return new CfpSettingsResource($update->handle($settings, $request->settings()));
+        return new CfpSettingsResource($update->handle($settings, $request->settings()))->additional(['meta' => ['form' => ProposalForm::options()]]);
     }
 }
