@@ -1,0 +1,17 @@
+export default {
+  platform: 'Plataforma PHPeste',
+  backToSite: 'Site da edição',
+  account: 'Conta',
+  login: 'Entrar',
+  logout: 'Sair',
+  skipToContent: 'Ir para o conteúdo',
+  unknownTitle: 'Este endereço não tem uma edição publicada',
+  unknownText: 'Confira o endereço digitado. Se você organiza um evento, cadastre e verifique este domínio no painel da edição.',
+  unavailableTitle: 'O site está fora do ar por um instante',
+  unavailableText: 'Não conseguimos falar com a plataforma agora. Tente de novo em alguns minutos.',
+  retry: 'Tentar de novo',
+  homeLead: 'Área de palestrantes e participantes',
+  homeText: 'Envie e acompanhe suas propostas, confirme sua palestra e cuide da sua viagem.',
+  homeCfp: 'Enviar proposta',
+  homeMine: 'Minhas propostas',
+}
