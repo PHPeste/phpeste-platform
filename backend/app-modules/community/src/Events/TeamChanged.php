@@ -6,8 +6,10 @@ namespace PHPeste\Community\Events;
 
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
+use PHPeste\Audit\Contracts\Auditable;
+use PHPeste\Audit\Data\AuditRecord;
 
-class TeamChanged implements ShouldDispatchAfterCommit
+class TeamChanged implements Auditable, ShouldDispatchAfterCommit
 {
     use Dispatchable;
 
@@ -32,4 +34,9 @@ class TeamChanged implements ShouldDispatchAfterCommit
         public readonly string $subjectId,
         public readonly array $details = [],
     ) {}
+
+    public function auditRecord(): AuditRecord
+    {
+        return new AuditRecord($this->editionId, $this->action, $this->subjectType, $this->subjectId, $this->actorId, null, $this->details);
+    }
 }
