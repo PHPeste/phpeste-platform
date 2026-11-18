@@ -12,6 +12,7 @@ enum EmailTemplate: string
     case CfpWaitlisted = 'cfp_waitlisted';
     case EventReminder = 'event_reminder';
     case TeamInvite = 'team_invite';
+    case ProposalReceived = 'proposal_received';
 
     public function label(): string
     {
@@ -22,6 +23,7 @@ enum EmailTemplate: string
             self::CfpWaitlisted => 'Resultado do CFP: lista de espera',
             self::EventReminder => 'Antes do evento',
             self::TeamInvite => 'Convite para a equipe',
+            self::ProposalReceived => 'Proposta recebida',
         };
     }
 
@@ -33,6 +35,7 @@ enum EmailTemplate: string
             self::CfpAccepted, self::CfpWaitlisted => 'Manual',
             self::EventReminder => '7 dias antes',
             self::TeamInvite => 'Ao convidar alguém para a equipe',
+            self::ProposalReceived => 'Ao enviar uma proposta',
         };
     }
 
@@ -51,6 +54,7 @@ enum EmailTemplate: string
             self::CfpAccepted, self::CfpWaitlisted => ['nome', 'edicao', 'proposta', 'data'],
             self::EventReminder => ['nome', 'edicao', 'data'],
             self::TeamInvite => ['nome', 'edicao', 'papel'],
+            self::ProposalReceived => ['nome', 'edicao', 'proposta', 'data'],
         };
     }
 
@@ -63,6 +67,7 @@ enum EmailTemplate: string
             self::CfpWaitlisted => 'Sua proposta está na lista de espera do {edicao}',
             self::EventReminder => 'Falta uma semana para o {edicao}',
             self::TeamInvite => 'Convite para a equipe do {edicao}',
+            self::ProposalReceived => 'Recebemos sua proposta para o {edicao}',
         };
     }
 
@@ -75,6 +80,7 @@ enum EmailTemplate: string
             self::CfpWaitlisted => "Oi, {nome}!\n\nA proposta \"{proposta}\" ficou na lista de espera do {edicao}. Se abrir uma vaga na grade, avisamos por aqui.",
             self::EventReminder => "Oi, {nome}!\n\nO {edicao} acontece em {data}. Confira a programação e monte sua agenda.",
             self::TeamInvite => "Oi, {nome}!\n\nVocê recebeu um convite para a equipe do {edicao} com o papel de {papel}. Aceite pelo link abaixo.",
+            self::ProposalReceived => "Oi, {nome}!\n\nRecebemos a proposta \"{proposta}\" para o {edicao}. Você pode editar ou retirar a proposta até o fechamento do CFP.",
         };
     }
 
@@ -87,6 +93,7 @@ enum EmailTemplate: string
             self::CfpWaitlisted => 'Ver minha proposta',
             self::EventReminder => 'Ver programação',
             self::TeamInvite => 'Aceitar convite',
+            self::ProposalReceived => 'Ver minha proposta',
         };
     }
 

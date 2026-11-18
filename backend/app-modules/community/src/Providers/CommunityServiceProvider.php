@@ -13,6 +13,7 @@ use PHPeste\Community\Contracts\EditionDirectory;
 use PHPeste\Community\Contracts\EditionMemberships;
 use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Community\Http\Middleware\ResolveEdition;
+use PHPeste\Community\Http\Middleware\ResolvePublishedEdition;
 use PHPeste\Community\Models\Community;
 use PHPeste\Community\Models\Edition;
 use PHPeste\Community\Policies\CommunityPolicy;
@@ -36,6 +37,13 @@ class CommunityServiceProvider extends ServiceProvider
             $path = 'editions/{edition}'.($prefix ? "/{$prefix}" : '');
 
             return Route::apiV1($path, ['auth:sanctum', ResolveEdition::class])
+                ->where(['edition' => '[0-9a-fA-F-]{36}']);
+        });
+
+        Route::macro('apiV1PublishedEdition', function (string $area, ?string $prefix = null, array $middleware = []): RouteRegistrar {
+            $path = "{$area}/editions/{edition}".($prefix ? "/{$prefix}" : '');
+
+            return Route::apiV1($path, [...$middleware, ResolvePublishedEdition::class])
                 ->where(['edition' => '[0-9a-fA-F-]{36}']);
         });
     }
