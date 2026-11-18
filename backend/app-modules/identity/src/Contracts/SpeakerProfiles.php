@@ -22,4 +22,9 @@ interface SpeakerProfiles
      * @return array<string, string|null>
      */
     public function companies(array $userIds): array;
+
+    /**
+     * @return array{accessibility_needs: string|null, dietary_restrictions: string|null}
+     */
+    public function privateDetails(string $userId): array;
 }

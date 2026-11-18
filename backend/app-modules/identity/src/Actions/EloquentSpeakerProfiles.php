@@ -6,6 +6,7 @@ namespace PHPeste\Identity\Actions;
 
 use PHPeste\Identity\Contracts\SpeakerProfiles;
 use PHPeste\Identity\Http\Resources\PublicSpeakerProfileResource;
+use PHPeste\Identity\Models\SpeakerPrivateDetails;
 use PHPeste\Identity\Models\SpeakerProfile;
 
 class EloquentSpeakerProfiles implements SpeakerProfiles
@@ -38,5 +39,15 @@ class EloquentSpeakerProfiles implements SpeakerProfiles
         }
 
         return $companies;
+    }
+
+    public function privateDetails(string $userId): array
+    {
+        $details = SpeakerPrivateDetails::query()->where('user_id', $userId)->first();
+
+        return [
+            'accessibility_needs' => $details?->accessibility_needs,
+            'dietary_restrictions' => $details?->dietary_restrictions,
+        ];
     }
 }
