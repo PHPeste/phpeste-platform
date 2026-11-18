@@ -51,6 +51,7 @@ app/
     cfp/avaliacao.vue              # módulo cfpReview: fila do revisor com atalhos, quadro e atribuição da organização
     palestrantes/index.vue         # módulo speakers: confirmações, cobertura dos nove estados e lista de espera
     palestrantes/[id].vue          # módulo speakers: perfil, palestras, viagem e hospedagem e confirmação
+    configuracoes.vue              # módulo editionSettings: dados e etapa da edição, domínio e site próprio, privacidade e auditoria
     index.vue
   plugins/
     auth.client.ts                 # hydrates authStore from localStorage (ou sessionStorage, sem "manter conectado") on boot
