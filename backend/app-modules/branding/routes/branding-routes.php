@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use PHPeste\Branding\Enums\LogoSlot;
+use PHPeste\Branding\Http\Controllers\EditionDomainController;
+use PHPeste\Branding\Http\Controllers\PublicDomainController;
 use PHPeste\Branding\Http\Controllers\PublicThemeController;
 use PHPeste\Branding\Http\Controllers\ThemeController;
 use PHPeste\Branding\Http\Controllers\ThemeLogoController;
@@ -23,6 +25,22 @@ Route::apiV1Edition('theme')->group(function (): void {
     Route::delete('/logos/{slot}', [ThemeLogoController::class, 'destroy'])
         ->whereIn('slot', array_column(LogoSlot::cases(), 'value'))
         ->name('branding.theme.logos.destroy');
+});
+
+Route::apiV1Edition('domains')->group(function (): void {
+    Route::get('/', [EditionDomainController::class, 'index'])->name('branding.domains.index');
+    Route::post('/', [EditionDomainController::class, 'store'])->name('branding.domains.store');
+    Route::post('/{domain}/verify', [EditionDomainController::class, 'verify'])
+        ->whereUuid('domain')
+        ->middleware('throttle:password-reset')
+        ->name('branding.domains.verify');
+    Route::post('/{domain}/primary', [EditionDomainController::class, 'makePrimary'])->whereUuid('domain')->name('branding.domains.primary');
+    Route::delete('/{domain}', [EditionDomainController::class, 'destroy'])->whereUuid('domain')->name('branding.domains.destroy');
+});
+
+Route::apiV1('public')->group(function (): void {
+    Route::get('/resolve', [PublicDomainController::class, 'resolve'])->name('branding.public.resolve');
+    Route::get('/tls-check', [PublicDomainController::class, 'tlsCheck'])->name('branding.public.tls-check');
 });
 
 Route::apiV1('branding', ['auth:sanctum'])->get('/presets', ThemePresetController::class)->name('branding.presets.index');
