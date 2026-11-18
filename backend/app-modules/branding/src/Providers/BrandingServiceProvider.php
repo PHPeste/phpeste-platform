@@ -12,6 +12,8 @@ use PHPeste\Branding\Domains\SystemDnsResolver;
 use PHPeste\Branding\Models\EditionSetting;
 use PHPeste\Branding\Policies\EditionSettingPolicy;
 use PHPeste\Branding\Theme\CachedEditionThemes;
+use PHPeste\Branding\Theme\ThemeCloner;
+use PHPeste\Community\Contracts\EditionCloner;
 
 class BrandingServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,7 @@ class BrandingServiceProvider extends ServiceProvider
     {
         $this->app->bind(EditionThemes::class, CachedEditionThemes::class);
         $this->app->bind(DnsResolver::class, SystemDnsResolver::class);
+        $this->app->tag([ThemeCloner::class], EditionCloner::TAG);
     }
 
     public function boot(): void

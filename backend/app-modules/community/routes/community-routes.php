@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use PHPeste\Community\Http\Controllers\CommunityController;
+use PHPeste\Community\Http\Controllers\EditionCloneController;
 use PHPeste\Community\Http\Controllers\EditionController;
 use PHPeste\Community\Http\Controllers\EditionStatusController;
 use PHPeste\Community\Http\Controllers\InvitationController;
@@ -27,6 +28,7 @@ Route::apiV1(middleware: ['auth:sanctum'])->group(function (): void {
 
     Route::get('/editions', [EditionController::class, 'index'])->name('community.editions.index');
     Route::get('/roles', RoleController::class)->name('community.roles.index');
+    Route::get('/edition-clones/{clone}', [EditionCloneController::class, 'show'])->whereUuid('clone')->name('community.edition-clones.show');
 });
 
 Route::apiV1Edition('team')->group(function (): void {
@@ -56,6 +58,8 @@ Route::apiV1Edition()->group(function (): void {
     Route::patch('/', [EditionController::class, 'update'])->name('community.editions.update');
     Route::delete('/', [EditionController::class, 'destroy'])->name('community.editions.destroy');
     Route::post('/status', EditionStatusController::class)->name('community.editions.status');
+    Route::get('/clone-options', [EditionCloneController::class, 'options'])->name('community.editions.clone-options');
+    Route::post('/clone', [EditionCloneController::class, 'store'])->name('community.editions.clone');
 });
 
 Route::apiV1('public')->group(function (): void {

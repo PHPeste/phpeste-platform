@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use PHPeste\Cfp\Console\SyncCfpStatusCommand;
 use PHPeste\Cfp\Contracts\ReviewLedger;
+use PHPeste\Cfp\Proposals\CfpCloner;
 use PHPeste\Cfp\Proposals\ProposalParticipation;
 use PHPeste\Cfp\Reviews\EmptyReviewLedger;
+use PHPeste\Community\Contracts\EditionCloner;
 use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Identity\Contracts\EditionParticipation;
 
@@ -21,6 +23,7 @@ class CfpServiceProvider extends ServiceProvider
     {
         $this->app->bind(ReviewLedger::class, EmptyReviewLedger::class);
         $this->app->tag([ProposalParticipation::class], EditionParticipation::TAG);
+        $this->app->tag([CfpCloner::class], EditionCloner::TAG);
     }
 
     public function boot(): void
