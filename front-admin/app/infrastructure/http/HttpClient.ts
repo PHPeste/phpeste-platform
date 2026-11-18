@@ -26,6 +26,7 @@ interface HttpClientRequestOptions {
   body?: unknown
   headers?: Record<string, string>
   query?: Record<string, HttpClientQueryValue>
+  as?: 'json' | 'blob'
 }
 
 interface ApiErrorPayload {
@@ -100,6 +101,10 @@ async function request<T>(method: string, path: string, options: HttpClientReque
     })
   } catch {
     throw new HttpClientError('Could not connect to the server. Check your connection.', null)
+  }
+
+  if (response.ok && options.as === 'blob') {
+    return (await response.blob()) as T
   }
 
   const data = response.status === 204 ? null : await response.json().catch(() => null)

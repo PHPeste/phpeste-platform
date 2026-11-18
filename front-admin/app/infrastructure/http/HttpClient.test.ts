@@ -71,6 +71,16 @@ describe('httpClient', () => {
     expect(options.body).toBe(JSON.stringify({ status: 'confirmed' }))
   })
 
+  it('returns the raw file when asked for a blob, and still reads the error envelope on failure', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(new Response('Número;Título', { status: 200, headers: { 'Content-Type': 'text/csv' } }))
+
+    const file = await httpClient.get<Blob>('/export', { as: 'blob' })
+    expect(await file.text()).toBe('Número;Título')
+
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({ message: 'Forbidden.' }), { status: 403 }))
+    await expect(httpClient.get('/export', { as: 'blob' })).rejects.toMatchObject({ statusCode: 403, message: 'Forbidden.' })
+  })
+
   it('throws HttpClientError with the status and message from a non-2xx response', async () => {
     vi.mocked(fetch).mockResolvedValue(
       new Response(JSON.stringify({ message: 'Unauthenticated.' }), { status: 401 }),
