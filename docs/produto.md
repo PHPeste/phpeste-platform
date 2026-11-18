@@ -51,6 +51,6 @@ Nuxt a partir do [`base_nuxt_modular`](https://github.com/tecrodrigocastro/base_
 1. Controlador dos dados (LGPD) — comunidade controladora, PHPeste operador (a validar com advogado antes das vendas).
 2. Um Nuxt ou dois — decidido: dois (`front-admin` SPA, `front-public` SSR), `front-public` ainda não criado.
 3. Gateway inicial — Asaas primeiro.
-4. Domínio e subdomínios das edições — subdomínio padrão com opção de domínio próprio.
+4. Domínio e subdomínios das edições — subdomínio padrão com opção de domínio próprio. A comunidade também pode manter o próprio site e usar a plataforma só para a área de palestrante e participante, num subdomínio dela — ver [`site-proprio.md`](site-proprio.md).
 5. Migração da suite da Rapadura (despesas e kanban) — conversar com a comunidade.
 6. Dados históricos de edições anteriores — começar do zero.

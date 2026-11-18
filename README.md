@@ -63,7 +63,7 @@ phpeste-platform/
 ├── docs/           # planejamento, ADRs e guia para comunidades anfitriãs
 ├── backend/        # Laravel: API, filas, webhooks (módulos em app-modules/)
 ├── front-admin/    # Nuxt: painel da organização
-├── front-public/   # (planejado) Nuxt: checkout, CFP, conta do participante, site template
+├── front-public/   # (planejado) Nuxt: checkout, CFP, conta do participante, site template (ou só a área do palestrante e participante, quando a comunidade tem site próprio)
 └── app/            # (planejado, Marco 3) Flutter: app do participante
 ```
 

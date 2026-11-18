@@ -2,6 +2,8 @@
 
 Cada edição publica o site em um ou mais domínios (`edition_domains`, módulo Branding). O front-public descobre a edição pelo host da requisição chamando a API, e o proxy reverso emite o certificado de cada domínio sob demanda.
 
+Quando a comunidade mantém o próprio site, o domínio cadastrado aqui é o subdomínio da área de palestrante e participante (ex.: `cfp.phpeste.php-pb.net`). Ver [`../site-proprio.md`](../site-proprio.md).
+
 ## Tipos de domínio
 
 | Tipo | Exemplo | Verificação |
