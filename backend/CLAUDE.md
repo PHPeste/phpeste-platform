@@ -13,6 +13,7 @@ Com implementação real até agora:
 - `identity`: `users` (UUID, ver ADR 0007), cadastro com verificação de e-mail, login/logout via Sanctum, `GET /me` (com os papéis da pessoa em cada edição, lidos pelo contrato `EditionMemberships` do Community).
 - `community`: comunidades, edições com máquina de estados (`EditionStatus`), `edition_members` (papel da pessoa na edição, `EditionRole`) e a infraestrutura de tenancy usada pelos outros módulos (ver abaixo).
 - `branding`: tema por edição em `edition_settings` (rascunho, publicado e anterior, para reverter), presets Sertão/Maré/Brasa, checagem de contraste AA em `Theme/ContrastChecker`, upload de logos (SVG sanitizado com `enshrined/svg-sanitize`, disco `public`, exige `php artisan storage:link`) e `GET /api/v1/public/editions/{id}/theme` com cache e `ETag`. Os tokens de cor seguem os `--ph-*` do front-admin (`support` = `--ph-terra`, `on_accent` = texto sobre destaque).
+- `notifications`: e-mail transacional por edição. Outro módulo envia pelo contrato `EditionMailer::send(editionId, EmailTemplate, email, nome, variáveis, url)`, que registra o envio em `email_deliveries` e enfileira `SendEmailDelivery` (5 tentativas, backoff 30s → 30min). Os tipos de e-mail ficam em `EmailTemplate` (assunto/corpo padrão, variáveis permitidas, transacional ou não), e a edição só sobrescreve assunto e corpo (`email_templates`). O corpo é texto com `{variavel}`, substituído sem Blade e com todo HTML escapado. O layout usa o tema publicado (Branding). Não transacional leva link assinado e `List-Unsubscribe` (one-click), e quem se descadastra fica em `email_unsubscribes`. Produção usa Resend (`MAIL_MAILER=resend`, `RESEND_API_KEY`) e dev usa o Mailpit.
 
 ## Estrutura de cada módulo (`app-modules/<nome>/src/`)
 
@@ -30,6 +31,8 @@ Com implementação real até agora:
 | `Listeners/` | Reage a eventos — do próprio módulo ou de outro |
 | `Contracts/` | Interfaces que outro módulo pode depender, em vez de Eloquent direto |
 | `Http/` | Controllers, FormRequests e API Resources |
+| `Jobs/` | Jobs de fila; recebem `edition_id` explícito no construtor |
+| `Mail/` | Só no Notifications: Mailable, composição e renderização dos modelos |
 | `Providers/` | Service provider do módulo (gerado pelo `make:module`) |
 
 ## Tenancy (a edição é o tenant, ADR 0007)

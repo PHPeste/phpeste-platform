@@ -17,4 +17,23 @@ class EloquentEditionDirectory implements EditionDirectory
             ->where('status', '!=', EditionStatus::Draft)
             ->exists();
     }
+
+    public function summary(string $editionId): ?array
+    {
+        $edition = Edition::query()->find($editionId);
+
+        if (!$edition instanceof Edition) {
+            return null;
+        }
+
+        return [
+            'id' => $edition->id,
+            'name' => $edition->name,
+            'starts_on' => $edition->starts_on?->toDateString(),
+            'ends_on' => $edition->ends_on?->toDateString(),
+            'city' => $edition->city,
+            'state' => $edition->state?->value,
+            'timezone' => $edition->timezone,
+        ];
+    }
 }
