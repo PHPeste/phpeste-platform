@@ -9,13 +9,13 @@ const edition = {
 const NE = ['AL', 'BA', 'CE', 'MA', 'PB', 'PE', 'PI', 'RN', 'SE']
 const row = (number: number, name: string, state: string, status: string, label: string) => ({
   user_id: `u-${number}`, name, email: `${name.split(' ')[0]!.toLowerCase()}@comunidade.dev`, state, nordeste: NE.includes(state),
-  proposal: { id: `p-${number}`, number, title: ['Octane em produção', 'PHP no celular', 'Filas e idempotência'][number - 1], track: 'Backend e arquitetura' },
+  proposal: { id: `p-${number}`, number, title: ['Octane em produção', 'PHP no celular', 'Filas e idempotência'][number - 1], track: 'Backend e arquitetura', origin: 'cfp' },
   status, status_label: label, deadline_at: '2027-05-08T02:59:59Z', reminded_at: null, attended_at: null,
 })
 const detail = (canViewPrivate: boolean, attended: string | null = null) => ({ data: {
   user_id: 'u-1', name: 'Ana Martins', email: 'ana@comunidade.dev', can_view_private_data: canViewPrivate,
   profile: { display_name: 'Ana Martins', job_title: 'Engenheira de software', company: null, bio: 'Trabalha com PHP há dez anos.', city: 'João Pessoa', state: 'PB', links: { website: null, github: 'https://github.com/ana', linkedin: null }, photo_url: null },
-  proposals: [{ id: 'p-1', number: 1, title: 'Octane em produção', track: 'Backend e arquitetura', format_label: 'Palestra de 30 min', duration_minutes: 30, decision: 'accepted', decision_label: 'Aprovada', status: 'confirmed', status_label: 'Confirmada', deadline_at: '2027-05-08T02:59:59Z', responded_at: '2027-05-02T13:00:00Z', reminded_at: null, attended_at: attended, reason: null }],
+  proposals: [{ id: 'p-1', number: 1, title: 'Octane em produção', track: 'Backend e arquitetura', origin: 'cfp', origin_label: 'Pelo CFP', format_label: 'Palestra de 30 min', duration_minutes: 30, decision: 'accepted', decision_label: 'Aprovada', status: 'confirmed', status_label: 'Confirmada', deadline_at: '2027-05-08T02:59:59Z', responded_at: '2027-05-02T13:00:00Z', reminded_at: null, attended_at: attended, reason: null }],
   logistics: { user_id: 'u-1', origin_city: 'João Pessoa', origin_state: 'PB', needs_travel: false, needs_lodging: true, travel_paid_by_organization: false, lodging_paid_by_organization: false, organization_notes: null, restrictions: canViewPrivate ? { accessibility_needs: 'Rampa no palco', dietary_restrictions: 'Vegetariana' } : null },
 } })
 
@@ -128,5 +128,42 @@ test.describe('Palestrantes', () => {
     await expect(page.getByLabel('Hotel pago pela organização')).toBeVisible()
     await expect(page.getByTestId('private-data')).toHaveCount(0)
     await expect(page.getByRole('main')).not.toContainText('Rampa')
+  })
+
+  test('convida palestrante direto e a palestra aparece como convidada', async ({ page, goto }) => {
+    let invited: Record<string, unknown> | null = null
+    await open(page, goto, '/palestrantes', async (route, method, path) => {
+      if (path === '/speakers') {
+        const rows = invited ? [{ ...row(9, 'Keynote Convidada', 'PE', 'pending', 'Aguardando resposta'), proposal: { id: 'p-9', number: 9, title: 'O futuro do PHP', track: 'Backend e arquitetura', origin: 'invited' } }] : []
+        return route.fulfill({ status: 200, json: { summary: { confirmed: 0, awaiting: rows.length, waitlisted: 0, slots: 6, nordeste_percent: null, nordeste_quota_percent: 50 }, coverage: NE.map((state) => ({ state, confirmed: 0 })), data: rows } })
+      }
+      if (path === '/promotions') return route.fulfill({ status: 200, json: { data: [] } })
+      if (path === '/tracks') return route.fulfill({ status: 200, json: { data: [{ id: 't-1', name: 'Backend e arquitetura' }, { id: 't-2', name: 'Carreira e comunidade' }] } })
+      if (path === '/settings') return route.fulfill({ status: 200, json: { data: {}, meta: { form: { formats: [{ id: 'talk', label: 'Palestra de 30 min' }, { id: 'workshop', label: 'Oficina de 2 h' }] } } } })
+      if (path === '/speakers/invite' && method === 'POST') {
+        invited = route.request().postDataJSON()
+        if ((invited as { email: string }).email === 'ja@comunidade.dev') {
+          invited = null
+          return route.fulfill({ status: 422, json: { code: 'validation_error', message: 'x', errors: { email: ['Essa pessoa já tem palestra aprovada nesta edição.'] }, request_id: 'r' } })
+        }
+        return route.fulfill({ status: 201, json: { data: { proposal_id: 'p-9', number: 9, user_id: 'u-9', deadline_at: '2027-05-11T23:59:59Z' } } })
+      }
+      return route.fulfill({ status: 404, json: {} })
+    })
+
+    await page.getByRole('button', { name: 'Convidar palestrante' }).click()
+    const dialog = page.getByRole('dialog', { name: 'Convidar palestrante' })
+    await dialog.getByRole('textbox', { name: /^Nome/ }).fill('Keynote Convidada')
+    await dialog.getByRole('textbox', { name: /^E-mail/ }).fill('ja@comunidade.dev')
+    await dialog.getByRole('textbox', { name: /^Título da palestra/ }).fill('O futuro do PHP')
+    await dialog.getByLabel('Trilha').selectOption({ label: 'Carreira e comunidade' })
+    await dialog.getByRole('button', { name: 'Enviar convite' }).click()
+    await expect(dialog.getByText('Essa pessoa já tem palestra aprovada nesta edição.')).toBeVisible()
+
+    await dialog.getByRole('textbox', { name: /^E-mail/ }).fill('keynote@comunidade.dev')
+    await dialog.getByRole('button', { name: 'Enviar convite' }).click()
+    await expect(page.getByText('Convite enviado. A palestra #9 aguarda a confirmação.')).toBeVisible()
+    expect(invited).toEqual({ name: 'Keynote Convidada', email: 'keynote@comunidade.dev', title: 'O futuro do PHP', track_id: 't-2', format: 'talk', summary: null })
+    await expect(page.getByRole('row', { name: /Keynote Convidada.*O futuro do PHP.*Convidada.*Aguardando resposta/ })).toBeVisible()
   })
 })
