@@ -26,4 +26,15 @@ class SaveTrackRequest extends FormRequest
             'position' => ['sometimes', 'integer', 'between:0,1000'],
         ];
     }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.unique' => 'Já existe uma trilha com esse nome nesta edição.',
+            'slots.between' => 'As vagas na grade vão de 0 a 500.',
+        ];
+    }
 }

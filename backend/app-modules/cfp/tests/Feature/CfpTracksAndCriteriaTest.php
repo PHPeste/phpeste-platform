@@ -42,7 +42,7 @@ it('cria, lista em ordem, edita e remove trilhas', function (): void {
 
     $this->postJson("{$this->base}/tracks", ['name' => 'Backend e arquitetura', 'slots' => 1])
         ->assertStatus(422)
-        ->assertJsonValidationErrors(['name']);
+        ->assertJsonPath('errors.name.0', 'Já existe uma trilha com esse nome nesta edição.');
 
     $this->patchJson("{$this->base}/tracks/{$backend}", ['slots' => 8])->assertOk()->assertJsonPath('data.slots', 8);
     $this->getJson("{$this->base}/tracks")->assertJsonPath('data.0.name', 'Backend e arquitetura')->assertJsonCount(2, 'data');
