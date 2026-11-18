@@ -11,6 +11,7 @@ use PHPeste\Community\Enums\EditionStatus;
 use PHPeste\Community\Models\Edition;
 use PHPeste\Community\Models\EditionMember;
 use PHPeste\Identity\Models\User;
+use PHPeste\Payments\Models\PaymentAccount;
 use PHPeste\Ticketing\Actions\TransitionOrder;
 use PHPeste\Ticketing\Enums\OrderStatus;
 use PHPeste\Ticketing\Models\Coupon;
@@ -18,6 +19,7 @@ use PHPeste\Ticketing\Models\Order;
 use PHPeste\Ticketing\Models\TicketBatch;
 use PHPeste\Ticketing\Models\TicketingSetting;
 use PHPeste\Ticketing\Models\TicketType;
+use PHPeste\Ticketing\Orders\SalesReadinessGuard;
 
 const CPF = '529.982.247-25';
 const OTHER_CPF = '111.444.777-35';
@@ -33,6 +35,7 @@ beforeEach(function (): void {
     $this->student = TicketType::create(['edition_id' => $this->edition->id, 'name' => 'Estudante', 'pass_fee_to_buyer' => true]);
     $this->generalBatch = TicketBatch::create(['edition_id' => $this->edition->id, 'ticket_type_id' => $this->general->id, 'name' => '1º lote', 'price_cents' => 15_000, 'quantity' => 100]);
     $this->studentBatch = TicketBatch::create(['edition_id' => $this->edition->id, 'ticket_type_id' => $this->student->id, 'name' => 'Único', 'price_cents' => 7_500, 'quantity' => 2]);
+    PaymentAccount::create(['edition_id' => $this->edition->id, 'driver' => 'fake', 'environment' => 'sandbox', 'credentials' => ['api_key' => 'fake_key_1234', 'webhook_secret' => 'segredo-webhook'], 'credentials_hint' => '1234', 'holder_type' => 'individual', 'holder_name' => 'Fulana, financeiro da PHPeste', 'holder_document_masked' => '***.***.247-**', 'methods' => ['pix', 'card'], 'webhook_token' => str_repeat('a', 48), 'verified_at' => now(), 'webhook_verified_at' => now()]);
     $this->checkout = "/api/v1/checkout/editions/{$this->edition->id}/orders";
 });
 
@@ -288,4 +291,38 @@ it('a visão geral mostra ingressos vendidos, receita e pedidos aguardando pagam
         ->assertJsonPath('data.indicators.tickets', ['sold' => 2, 'available' => 50])
         ->assertJsonPath('data.indicators.revenue', ['gross' => 15_000, 'net' => 14_460])
         ->assertJsonPath('data.sections.tickets_per_week.7', 2);
+});
+
+it('pedido pago guarda a conta que recebe e fica pausado enquanto o gateway não foi testado', function (): void {
+    $account = PaymentAccount::query()->forEdition($this->edition->id)->sole();
+    $id = placeOrder($this, orderPayload($this))->assertCreated()->assertJsonPath('data.payment_account_id', $account->id)->json('data.id');
+    expect(Order::query()->forEdition($this->edition->id)->find($id)->payment_account_id)->toBe($account->id);
+
+    PaymentAccount::query()->forEdition($this->edition->id)->update(['webhook_verified_at' => null]);
+    placeOrder($this, orderPayload($this), 'chave-2')->assertStatus(422)->assertJsonPath('errors.items.0', 'Vendas pausadas até o teste do gateway.');
+
+    Coupon::create(['edition_id' => $this->edition->id, 'code' => 'CORTESIA', 'kind' => 'percent', 'value' => 100]);
+    placeOrder($this, orderPayload($this, ['coupon' => 'cortesia']), 'chave-3')->assertCreated()->assertJsonPath('data.payment_account_id', null);
+});
+
+it('só abre vendas com lote pago quando a conta do gateway está validada e o webhook testado', function (): void {
+    $organizer = User::factory()->create();
+    $draft = Edition::factory()->status(EditionStatus::CfpOpen)->create();
+    EditionMember::factory()->for($draft)->create(['user_id' => $organizer->id, 'role' => EditionRole::Organizer]);
+    Sanctum::actingAs($organizer);
+    $status = "/api/v1/editions/{$draft->id}/status";
+
+    $this->postJson($status, ['status' => 'sales_open'])->assertOk();
+    Edition::query()->whereKey($draft->id)->update(['status' => EditionStatus::CfpOpen->value]);
+
+    $type = TicketType::create(['edition_id' => $draft->id, 'name' => 'Geral']);
+    TicketBatch::create(['edition_id' => $draft->id, 'ticket_type_id' => $type->id, 'name' => '1º lote', 'price_cents' => 15_000, 'quantity' => 10]);
+    $this->postJson($status, ['status' => 'sales_open'])
+        ->assertStatus(422)->assertJsonPath('errors.status.0', SalesReadinessGuard::MESSAGE);
+
+    PaymentAccount::create(['edition_id' => $draft->id, 'driver' => 'fake', 'environment' => 'sandbox', 'credentials' => ['api_key' => 'fake_key_9999', 'webhook_secret' => 'segredo-webhook'], 'credentials_hint' => '9999', 'holder_type' => 'company', 'holder_name' => 'Associação PHP PB', 'holder_document_masked' => '**.***.678/0001-**', 'methods' => ['pix'], 'webhook_token' => str_repeat('b', 48), 'verified_at' => now()]);
+    $this->postJson($status, ['status' => 'sales_open'])->assertStatus(422);
+
+    PaymentAccount::query()->forEdition($draft->id)->update(['webhook_verified_at' => now()]);
+    $this->postJson($status, ['status' => 'sales_open'])->assertOk()->assertJsonPath('data.status', 'sales_open');
 });

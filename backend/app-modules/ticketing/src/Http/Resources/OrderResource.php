@@ -36,6 +36,7 @@ class OrderResource extends ApiResource
             'total' => $this->money($order->total_cents),
             'requires_payment' => $order->total_cents > 0,
             'coupon_code' => $order->coupon_code,
+            'payment_account_id' => $order->payment_account_id,
             'expires_at' => $this->isoDate($order->expires_at),
             'paid_at' => $this->isoDate($order->paid_at),
             'created_at' => $this->isoDate($order->created_at),

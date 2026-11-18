@@ -32,6 +32,7 @@ use PHPeste\Ticketing\Enums\OrderStatus;
  * @property string|null $coupon_id
  * @property string|null $coupon_code
  * @property string|null $coupon_redemption_id
+ * @property string|null $payment_account_id
  * @property string $access_token
  * @property string $idempotency_key
  * @property string $request_hash
@@ -44,7 +45,7 @@ use PHPeste\Ticketing\Enums\OrderStatus;
  * @property Carbon $updated_at
  * @property-read Collection<int, OrderItem> $items
  */
-#[Fillable(['edition_id', 'number', 'status', 'user_id', 'buyer_name', 'buyer_email', 'buyer_document', 'buyer_document_hash', 'subtotal_cents', 'discount_cents', 'fee_cents', 'total_cents', 'coupon_id', 'coupon_code', 'coupon_redemption_id', 'access_token', 'idempotency_key', 'request_hash', 'expires_at', 'paid_at', 'expired_at', 'cancelled_at', 'refunded_at'])]
+#[Fillable(['edition_id', 'number', 'status', 'user_id', 'buyer_name', 'buyer_email', 'buyer_document', 'buyer_document_hash', 'subtotal_cents', 'discount_cents', 'fee_cents', 'total_cents', 'coupon_id', 'coupon_code', 'coupon_redemption_id', 'payment_account_id', 'access_token', 'idempotency_key', 'request_hash', 'expires_at', 'paid_at', 'expired_at', 'cancelled_at', 'refunded_at'])]
 #[Hidden(['buyer_document', 'buyer_document_hash', 'access_token', 'request_hash'])]
 #[Table(name: 'orders')]
 class Order extends Model
