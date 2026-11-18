@@ -13,10 +13,18 @@ class ThemePublished implements Auditable, ShouldDispatchAfterCommit
 {
     use Dispatchable;
 
-    public function __construct(public readonly string $editionId) {}
+    public const string PUBLISHED = 'branding.theme_published';
+
+    public const string REVERTED = 'branding.theme_reverted';
+
+    public function __construct(
+        public readonly string $editionId,
+        public readonly ?string $actorId = null,
+        public readonly string $action = self::PUBLISHED,
+    ) {}
 
     public function auditRecord(): AuditRecord
     {
-        return new AuditRecord($this->editionId, 'branding.theme_published', 'edition', $this->editionId);
+        return new AuditRecord($this->editionId, $this->action, 'edition', $this->editionId, $this->actorId);
     }
 }

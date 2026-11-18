@@ -74,10 +74,10 @@ class EditionController
     {
         Gate::authorize('update', $edition);
 
-        /** @var array{name?: string, slug?: string, starts_on?: string|null, ends_on?: string|null, city?: string|null, state?: string|null, timezone?: string} $attributes */
+        /** @var array<string, mixed> $attributes */
         $attributes = $request->validated();
 
-        return $this->resource($updateEdition->handle($edition, $attributes), $request);
+        return $this->resource($updateEdition->handle($edition, $attributes, (string) $request->user()?->getAuthIdentifier()), $request);
     }
 
     public function destroy(Edition $edition, DeleteEdition $deleteEdition): Response

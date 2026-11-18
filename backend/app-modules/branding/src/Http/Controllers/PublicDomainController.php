@@ -9,16 +9,19 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use PHPeste\Branding\Domains\DomainResolver;
 use PHPeste\Branding\Domains\Hostname;
+use PHPeste\Community\Contracts\EditionDirectory;
 
 class PublicDomainController
 {
-    public function resolve(Request $request, DomainResolver $resolver): JsonResponse
+    public function resolve(Request $request, DomainResolver $resolver, EditionDirectory $editions): JsonResponse
     {
         $match = $this->match($request->query('host'), $resolver);
 
         abort_if($match === null, 404, 'Nenhuma edição publicada neste domínio.');
 
-        return response()->json(['data' => $match])
+        $site = $editions->site($match['edition_id']);
+
+        return response()->json(['data' => [...$match, 'site_mode' => $site['mode'], 'external_site_url' => $site['external_url']]])
             ->setPublic()
             ->setMaxAge(DomainResolver::CACHE_SECONDS);
     }

@@ -18,6 +18,7 @@ use PHPeste\Branding\Theme\CachedEditionThemes;
 use PHPeste\Branding\Theme\ThemeCloner;
 use PHPeste\Community\Contracts\EditionCloner;
 use PHPeste\Community\Contracts\EditionOverviewContributor;
+use PHPeste\Community\Contracts\EditionPrimaryHosts;
 
 class BrandingServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,7 @@ class BrandingServiceProvider extends ServiceProvider
         $this->app->bind(EditionThemes::class, CachedEditionThemes::class);
         $this->app->bind(DnsResolver::class, SystemDnsResolver::class);
         $this->app->bind(EditionSites::class, PrimaryDomainSites::class);
+        $this->app->bind(EditionPrimaryHosts::class, PrimaryDomainSites::class);
         $this->app->tag([ThemeCloner::class], EditionCloner::TAG);
         $this->app->tag([BrandingOverviewContributor::class], EditionOverviewContributor::TAG);
     }

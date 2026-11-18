@@ -21,6 +21,6 @@ class EditionStatusController
 
         abort_if($next === null, 422);
 
-        return new EditionResource($transition->handle($edition, $next));
+        return new EditionResource($transition->handle($edition, $next, (string) $request->user()?->getAuthIdentifier()));
     }
 }

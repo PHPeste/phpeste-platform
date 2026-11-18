@@ -18,10 +18,11 @@ class EditionStatusChanged implements Auditable, ShouldDispatchAfterCommit
         public readonly string $editionId,
         public readonly EditionStatus $from,
         public readonly EditionStatus $to,
+        public readonly ?string $actorId = null,
     ) {}
 
     public function auditRecord(): AuditRecord
     {
-        return new AuditRecord($this->editionId, 'edition.status_changed', 'edition', $this->editionId, null, ['status' => $this->from->value], ['status' => $this->to->value]);
+        return new AuditRecord($this->editionId, 'edition.status_changed', 'edition', $this->editionId, $this->actorId, ['status' => $this->from->value], ['status' => $this->to->value]);
     }
 }

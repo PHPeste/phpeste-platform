@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPeste\Community\Providers;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -13,7 +14,9 @@ use PHPeste\Community\Cloning\TeamCloner;
 use PHPeste\Community\Contracts\EditionCloner;
 use PHPeste\Community\Contracts\EditionDirectory;
 use PHPeste\Community\Contracts\EditionMemberships;
+use PHPeste\Community\Contracts\EditionPrimaryHosts;
 use PHPeste\Community\Enums\EditionPermission;
+use PHPeste\Community\Http\Middleware\AllowEditionSiteOrigins;
 use PHPeste\Community\Http\Middleware\ResolveEdition;
 use PHPeste\Community\Http\Middleware\ResolvePublishedEdition;
 use PHPeste\Community\Models\Community;
@@ -23,6 +26,7 @@ use PHPeste\Community\Policies\EditionPolicy;
 use PHPeste\Community\Tenancy\CurrentEdition;
 use PHPeste\Community\Tenancy\EloquentEditionDirectory;
 use PHPeste\Community\Tenancy\EloquentEditionMemberships;
+use PHPeste\Community\Tenancy\NoPrimaryHosts;
 use PHPeste\Community\Tenancy\TeamParticipation;
 use PHPeste\Identity\Contracts\EditionParticipation;
 
@@ -33,6 +37,7 @@ class CommunityServiceProvider extends ServiceProvider
         $this->app->scoped(CurrentEdition::class);
         $this->app->bind(EditionMemberships::class, EloquentEditionMemberships::class);
         $this->app->bind(EditionDirectory::class, EloquentEditionDirectory::class);
+        $this->app->bindIf(EditionPrimaryHosts::class, NoPrimaryHosts::class);
         $this->app->tag([TeamParticipation::class], EditionParticipation::TAG);
         $this->app->tag([TeamCloner::class], EditionCloner::TAG);
 
@@ -53,6 +58,7 @@ class CommunityServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->app->make(Kernel::class)->prependMiddleware(AllowEditionSiteOrigins::class);
         Gate::policy(Community::class, CommunityPolicy::class);
         Gate::policy(Edition::class, EditionPolicy::class);
 

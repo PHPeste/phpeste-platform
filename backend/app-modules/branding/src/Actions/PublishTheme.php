@@ -11,16 +11,16 @@ use PHPeste\Branding\Theme\PublicTheme;
 
 class PublishTheme
 {
-    public function handle(EditionSetting $settings): EditionSetting
+    public function handle(EditionSetting $settings, ?string $actorId = null): EditionSetting
     {
-        DB::transaction(function () use ($settings): void {
+        DB::transaction(function () use ($settings, $actorId): void {
             $settings->update([
                 'theme_previous' => $settings->theme_published,
                 'theme_published' => $settings->theme_draft,
                 'theme_published_at' => now(),
             ]);
 
-            event(new ThemePublished($settings->edition_id));
+            event(new ThemePublished($settings->edition_id, $actorId));
         });
 
         PublicTheme::forget($settings->edition_id);

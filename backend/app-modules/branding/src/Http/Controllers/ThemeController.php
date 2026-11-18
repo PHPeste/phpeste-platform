@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPeste\Branding\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use PHPeste\Branding\Actions\ApplyThemePreset;
 use PHPeste\Branding\Actions\DiscardThemeDraft;
@@ -61,21 +62,21 @@ class ThemeController
         return new ThemeSettingsResource($discardDraft->handle($settings));
     }
 
-    public function publish(PublishTheme $publishTheme): ThemeSettingsResource
+    public function publish(Request $request, PublishTheme $publishTheme): ThemeSettingsResource
     {
         $settings = $this->resolveSettings->handle();
 
         Gate::authorize('update', $settings);
 
-        return new ThemeSettingsResource($publishTheme->handle($settings));
+        return new ThemeSettingsResource($publishTheme->handle($settings, (string) $request->user()?->getAuthIdentifier()));
     }
 
-    public function revert(RevertTheme $revertTheme): ThemeSettingsResource
+    public function revert(Request $request, RevertTheme $revertTheme): ThemeSettingsResource
     {
         $settings = $this->resolveSettings->handle();
 
         Gate::authorize('update', $settings);
 
-        return new ThemeSettingsResource($revertTheme->handle($settings));
+        return new ThemeSettingsResource($revertTheme->handle($settings, (string) $request->user()?->getAuthIdentifier()));
     }
 }
