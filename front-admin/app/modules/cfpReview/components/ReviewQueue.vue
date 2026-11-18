@@ -47,7 +47,12 @@ defineExpose({ focusSearch: () => searchInput.value?.focus() })
           {{ locale.filter[id] }} <span class="tabular-nums opacity-70">{{ counts[id] }}</span>
         </button>
       </div>
-      <p v-if="!items.length" class="py-4 text-sm text-(--ph-ink-2)">{{ total ? locale.emptyFilter : organizer ? locale.emptyOrg : locale.emptyQueue }}</p>
+      <PhEmptyState v-if="!items.length && total" :title="locale.emptyFilter">
+        <PhButton variant="secondary" @click="filter = 'all'; search = ''">{{ locale.clearFilters }}</PhButton>
+      </PhEmptyState>
+      <PhEmptyState v-else-if="!items.length" :title="organizer ? locale.emptyOrg : locale.emptyQueue" :description="organizer ? locale.emptyOrgHint : locale.emptyQueueHint">
+        <PhButton variant="secondary" :to="organizer ? '/cfp' : '/'">{{ organizer ? locale.emptyOrgAction : locale.emptyQueueAction }}</PhButton>
+      </PhEmptyState>
       <ul v-else :aria-label="locale.queue" class="-mx-2 flex max-h-[70vh] flex-col overflow-y-auto">
         <li v-for="item in items" :key="item.id">
           <button

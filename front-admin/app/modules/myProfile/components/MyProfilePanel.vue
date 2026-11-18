@@ -43,13 +43,8 @@ async function photo(action: () => Promise<{ ok: boolean, message?: string, fiel
       <PhButton v-if="state === 'ready' && tab === 'account'" :loading="busy === 'account'" :disabled="!dirty" @click="save">{{ locale.save }}</PhButton>
     </header>
 
-    <p v-if="state === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-      <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-    </p>
-    <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-      <span>{{ locale.loadError }}</span>
-      <PhButton variant="ghost" @click="profile.load">{{ locale.retry }}</PhButton>
-    </div>
+    <PhPageSkeleton v-if="state === 'loading'" :cards="1" :lines="6" />
+    <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="profile.load" />
 
     <PhTabs v-else-if="account" v-model="tab" :items="tabs" :label="locale.tabsLabel">
       <template #default="{ active }">

@@ -64,10 +64,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <p v-if="state === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-    <span class="loading loading-spinner loading-sm" aria-hidden="true" />
-    {{ locale.loading }}
-  </p>
+  <PhSkeleton v-if="state === 'loading'" :lines="4" />
 
   <div v-else-if="state === 'not_found' || state === 'gone' || state === 'error'" class="flex flex-col gap-4">
     <h1 class="text-2xl font-semibold">{{ state === 'not_found' ? locale.notFoundTitle : locale.goneTitle }}</h1>

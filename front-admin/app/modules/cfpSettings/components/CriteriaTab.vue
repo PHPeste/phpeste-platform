@@ -32,10 +32,12 @@ function edit(criterion: Criterion | null) {
     <div class="flex flex-col gap-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h2 class="text-lg font-semibold">{{ locale.criteriaTitle }}</h2>
-        <PhButton v-if="!disabled" @click="edit(null)">{{ locale.newCriterion }}</PhButton>
+        <PhButton v-if="!disabled && criteria.length" @click="edit(null)">{{ locale.newCriterion }}</PhButton>
       </div>
       <p v-if="submittedReviews > 0" class="alert alert-warning alert-soft text-sm">{{ reviewsText }} {{ locale.impactText }}</p>
-      <p v-if="!criteria.length" class="text-sm text-(--ph-ink-2)">{{ locale.noCriteria }}</p>
+      <PhEmptyState v-if="!criteria.length" :title="locale.noCriteria" :description="locale.noCriteriaHint">
+        <PhButton v-if="!disabled" @click="edit(null)">{{ locale.newCriterion }}</PhButton>
+      </PhEmptyState>
       <ul v-else class="flex flex-col">
         <li v-for="criterion in criteria" :key="criterion.id" class="flex items-center justify-between gap-4 border-t border-(--ph-line) py-3.5 first:border-t-0">
           <div class="flex min-w-0 flex-col gap-0.5">

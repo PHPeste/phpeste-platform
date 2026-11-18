@@ -98,7 +98,12 @@ test.describe('Identidade da edição', () => {
       },
       'POST /publish': async (route) => {
         calls.push('POST /publish')
-        await route.fulfill({ status: 200, json: settings({ ...sertao, accent: '#F0C060' }, { ...sertao, accent: '#F0C060' }, false) })
+        const published = settings({ ...sertao, accent: '#F0C060' }, { ...sertao, accent: '#F0C060' }, false)
+        await route.fulfill({ status: 200, json: { data: { ...published.data, can_revert: true } } })
+      },
+      'POST /revert': async (route) => {
+        calls.push('POST /revert')
+        await route.fulfill({ status: 200, json: settings(sertao, sertao, false) })
       },
     })
 
@@ -107,6 +112,9 @@ test.describe('Identidade da edição', () => {
 
     await expect(page.getByText('Identidade publicada.')).toBeVisible()
     expect(calls).toEqual(['PUT /draft', 'POST /publish'])
+    await page.getByRole('button', { name: 'Desfazer' }).click()
+    await expect(page.getByText('Publicação anterior restaurada.')).toBeVisible()
+    expect(calls).toEqual(['PUT /draft', 'POST /publish', 'POST /revert'])
     await expect(page.getByText('Há alterações não publicadas.')).toHaveCount(0)
   })
 

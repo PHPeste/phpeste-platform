@@ -1,5 +1,4 @@
 export default {
-  loading: 'Carregando o convite…',
   title: 'Você recebeu um convite para a equipe',
   invitedBy: '{nome} convidou você como',
   invitedAnonymous: 'Você foi convidado como',

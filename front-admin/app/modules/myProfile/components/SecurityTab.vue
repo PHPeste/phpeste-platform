@@ -61,9 +61,10 @@ function lastUsed(session: Session) {
       <form class="flex flex-col gap-4" novalidate @submit.prevent="submit">
         <h2 class="text-lg font-semibold">{{ locale.passwordTitle }}</h2>
         <p v-if="!hasPassword" class="text-sm text-(--ph-ink-2)">{{ locale.noPassword }}</p>
-        <PhInput v-if="hasPassword" v-model="password.currentPassword" type="password" :label="locale.currentPassword" autocomplete="current-password" :error="errors.currentPassword" />
-        <PhInput v-model="password.password" type="password" :label="locale.newPassword" :hint="locale.newPasswordHint" autocomplete="new-password" :error="errors.password" />
-        <PhInput v-model="password.passwordConfirmation" type="password" :label="locale.repeatPassword" autocomplete="new-password" :error="errors.passwordConfirmation" />
+        <PhFormErrors :errors="errors" :labels="{ currentPassword: locale.currentPassword, password: locale.newPassword, passwordConfirmation: locale.repeatPassword }" :field-ids="{ currentPassword: 'profile-currentPassword', password: 'profile-password', passwordConfirmation: 'profile-passwordConfirmation' }" />
+        <PhInput v-if="hasPassword" id="profile-currentPassword" v-model="password.currentPassword" type="password" :label="locale.currentPassword" autocomplete="current-password" :error="errors.currentPassword" />
+        <PhInput id="profile-password" v-model="password.password" type="password" :label="locale.newPassword" :hint="locale.newPasswordHint" autocomplete="new-password" :error="errors.password" />
+        <PhInput id="profile-passwordConfirmation" v-model="password.passwordConfirmation" type="password" :label="locale.repeatPassword" autocomplete="new-password" :error="errors.passwordConfirmation" />
         <PhButton type="submit" class="self-start" :loading="busy === 'password'">{{ hasPassword ? locale.changePassword : locale.setPassword }}</PhButton>
       </form>
     </PhCard>

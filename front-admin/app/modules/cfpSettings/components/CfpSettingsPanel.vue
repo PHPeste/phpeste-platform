@@ -24,6 +24,8 @@ const tabs = computed(() => [
   { id: 'form', label: locale.tabs.form },
 ])
 const errors = computed(() => ({ ...windowErrors.value, ...generalErrors.value }))
+const fieldLabels: Record<string, string> = { opensOn: locale.opensOn, closesOn: locale.closesOn, resultsOn: locale.resultsOn, nordesteQuotaPercent: locale.quota, proposalsPerPerson: locale.perPerson }
+const fieldIds = Object.fromEntries(Object.keys(fieldLabels).map((key) => [key, `cfp-${key}`]))
 
 async function save() {
   const result = await cfp.saveGeneral()
@@ -75,14 +77,10 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
     </header>
 
     <p v-if="readOnly" role="status" class="alert alert-info alert-soft text-sm">{{ locale.readOnly }}</p>
+    <PhFormErrors :errors="generalErrors" :labels="fieldLabels" :field-ids="fieldIds" />
 
-    <p v-if="state === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-      <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-    </p>
-    <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-      <span>{{ locale.loadError }}</span>
-      <PhButton variant="ghost" @click="cfp.load">{{ locale.retry }}</PhButton>
-    </div>
+    <PhPageSkeleton v-if="state === 'loading'" :cards="2" :columns="2" :lines="5" />
+    <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="cfp.load" />
 
     <PhTabs v-else-if="settings && form" v-model="tab" :items="tabs" :label="locale.tabsLabel">
       <template #default="{ active }">

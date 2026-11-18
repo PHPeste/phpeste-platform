@@ -10,7 +10,9 @@ defineProps<{ milestones: Milestone[] }>()
   <PhCard>
     <div class="flex flex-col gap-2">
       <h2 class="text-lg font-semibold">{{ locale.milestonesTitle }}</h2>
-      <p v-if="milestones.length === 0" class="py-4 text-sm text-(--ph-ink-2)">{{ locale.milestonesEmpty }}</p>
+      <PhEmptyState v-if="milestones.length === 0" :title="locale.milestonesEmpty" :description="locale.milestonesEmptyHint">
+        <PhButton variant="secondary" to="/cfp">{{ locale.milestonesAction }}</PhButton>
+      </PhEmptyState>
       <ol v-else class="flex flex-col">
         <li v-for="milestone in milestones" :key="milestone.key" class="flex items-center justify-between gap-3 border-t border-(--ph-line) py-3 first:border-t-0">
           <div class="flex flex-col">

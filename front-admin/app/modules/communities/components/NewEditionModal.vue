@@ -143,9 +143,10 @@ async function onSubmit() {
             <ul class="list-disc pl-4 text-sm text-(--ph-ink-2)"><li v-for="item in neverCopied" :key="item">{{ item }}</li></ul>
           </div>
         </div>
-        <p v-if="isCloning" role="status" class="flex items-center gap-2 text-sm text-(--ph-ink-2)">
-          <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.cloning }}
-        </p>
+        <div v-if="isCloning" class="flex flex-col gap-2">
+          <p role="status" class="text-sm text-(--ph-ink-2)">{{ locale.cloning }}</p>
+          <progress class="progress progress-primary w-full" :aria-label="locale.cloning" />
+        </div>
       </fieldset>
 
       <div v-if="errorMessage" role="alert" class="alert alert-error alert-soft text-sm">{{ errorMessage }}</div>

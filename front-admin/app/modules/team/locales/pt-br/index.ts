@@ -1,7 +1,6 @@
 export default {
   title: 'Equipe e papéis',
   subtitle: 'Quem tem acesso a esta edição e o que cada pessoa pode fazer.',
-  loading: 'Carregando a equipe…',
   loadError: 'Não foi possível carregar a equipe.',
   retry: 'Tentar de novo',
   summary: 'Resumo da equipe',

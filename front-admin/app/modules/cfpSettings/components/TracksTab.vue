@@ -33,9 +33,11 @@ async function reorder(track: Track, direction: -1 | 1) {
     <div class="flex flex-col gap-3">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h2 class="text-lg font-semibold">{{ locale.tracksTitle }}</h2>
-        <PhButton v-if="!disabled" @click="edit(null)">{{ locale.newTrack }}</PhButton>
+        <PhButton v-if="!disabled && tracks.length" @click="edit(null)">{{ locale.newTrack }}</PhButton>
       </div>
-      <p v-if="!tracks.length" class="text-sm text-(--ph-ink-2)">{{ locale.noTracks }}</p>
+      <PhEmptyState v-if="!tracks.length" :title="locale.noTracks" :description="locale.noTracksHint">
+        <PhButton v-if="!disabled" @click="edit(null)">{{ locale.newTrack }}</PhButton>
+      </PhEmptyState>
       <PhTable v-else :caption="locale.tracksTitle">
         <thead>
           <tr>

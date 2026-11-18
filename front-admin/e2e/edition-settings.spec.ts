@@ -102,7 +102,7 @@ test.describe('Configurações da edição', () => {
 
     await page.getByRole('tab', { name: 'Domínio e site' }).click()
     await page.getByLabel('Novo domínio').fill('CFP.phpeste.php-pb.net')
-    await page.getByRole('button', { name: 'Adicionar' }).click()
+    await page.getByRole('button', { name: 'Adicionar', exact: true }).click()
     const domain = page.locator('[data-host="cfp.phpeste.php-pb.net"]')
     await expect(domain).toContainText('Aguardando DNS')
     await expect(domain).toContainText('edicoes.phpeste.dev')

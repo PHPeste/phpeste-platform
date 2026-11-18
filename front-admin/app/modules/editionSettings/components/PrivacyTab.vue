@@ -12,8 +12,8 @@ const form = defineModel<PrivacyInput>({ required: true })
       <h2 class="text-lg font-semibold">{{ locale.privacyTitle }}</h2>
       <p class="text-sm text-(--ph-ink-2)">{{ locale.privacyIntro }}</p>
       <div class="grid gap-4 md:grid-cols-2">
-        <PhInput v-model="form.privacyContactEmail" type="email" :label="locale.privacyEmail" :hint="locale.privacyEmailHint" :error="errors.privacyContactEmail" :disabled="disabled" />
-        <PhInput v-model="form.privacyPolicyUrl" type="url" :label="locale.privacyPolicy" placeholder="https://" :error="errors.privacyPolicyUrl" :disabled="disabled" />
+        <PhInput id="settings-privacyContactEmail" v-model="form.privacyContactEmail" type="email" :label="locale.privacyEmail" :hint="locale.privacyEmailHint" :error="errors.privacyContactEmail" :disabled="disabled" />
+        <PhInput id="settings-privacyPolicyUrl" v-model="form.privacyPolicyUrl" type="url" :label="locale.privacyPolicy" placeholder="https://" :error="errors.privacyPolicyUrl" :disabled="disabled" />
       </div>
       <PhCheckbox v-model="form.anonymizeAfterEvent" :label="locale.anonymize" :hint="locale.anonymizeHint" :disabled="disabled" />
       <p class="text-sm text-(--ph-ink-2)">{{ locale.privacySoon }}</p>

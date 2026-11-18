@@ -72,7 +72,7 @@ test.describe('Meu perfil', () => {
     await page.getByLabel('Nova senha', { exact: true }).fill('uma-senha-nova-forte')
     await page.getByLabel('Repetir nova senha').fill('uma-senha-nova-forte')
     await page.getByRole('button', { name: 'Alterar senha' }).click()
-    await expect(page.getByText('A senha atual está incorreta.')).toBeVisible()
+    await expect(page.getByTestId('form-errors')).toContainText('Senha atual: A senha atual está incorreta.')
 
     await page.getByLabel('Senha atual').fill('senha-atual')
     await page.getByRole('button', { name: 'Alterar senha' }).click()

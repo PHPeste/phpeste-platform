@@ -44,14 +44,9 @@ async function onEditionCreated(editionId: string) {
         <PhButton @click="isCommunityModalOpen = true">{{ locale.newCommunity }}</PhButton>
       </div>
 
-      <p v-if="state === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-        <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-      </p>
+      <PhPageSkeleton v-if="state === 'loading'" :cards="2" :lines="3" />
 
-      <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-        <span>{{ locale.loadError }}</span>
-        <PhButton variant="ghost" @click="load">{{ locale.retry }}</PhButton>
-      </div>
+      <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="load" />
 
       <PhCard v-else-if="isEmpty">
         <PhEmptyState :title="locale.emptyTitle" :description="locale.emptyDescription">

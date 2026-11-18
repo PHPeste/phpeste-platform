@@ -1,7 +1,6 @@
 export default {
   title: 'Configurações',
   subtitle: 'Dados da edição, domínio, privacidade e histórico de alterações.',
-  loading: 'Carregando as configurações…',
   loadError: 'Não foi possível carregar as configurações da edição.',
   retry: 'Tentar de novo',
   readOnly: 'Edição encerrada: as configurações ficam só para consulta.',
@@ -40,7 +39,8 @@ export default {
   cancel: 'Cancelar',
   domainsTitle: 'Domínios',
   domainsHint: 'Onde o site da edição (ou a área do palestrante e participante, no site próprio) fica no ar. O certificado HTTPS é emitido sozinho no primeiro acesso.',
-  noDomains: 'Nenhum domínio cadastrado.',
+  noDomains: 'Nenhum domínio cadastrado',
+  noDomainsHint: 'Cadastre um subdomínio da plataforma ou um domínio da comunidade para publicar a edição.',
   addDomain: 'Adicionar domínio',
   newDomain: 'Novo domínio',
   newDomainHint: 'Ex.: cfp.phpeste.php-pb.net ou um subdomínio da plataforma.',
@@ -107,7 +107,9 @@ export default {
   who: 'Quem',
   what: 'O que',
   system: 'Sistema',
-  auditEmpty: 'Nenhuma ação registrada ainda.',
+  auditEmpty: 'Nenhuma ação registrada ainda',
+  auditEmptyHint: 'Publicar a identidade, mudar a etapa e mexer na equipe ficam registrados aqui.',
+  auditEmptyAction: 'Ir para a equipe',
   auditEmptyFilter: 'Nenhuma ação com esses filtros.',
   auditCaption: 'Histórico de alterações',
   actions: {

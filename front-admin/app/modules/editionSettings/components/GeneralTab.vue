@@ -18,13 +18,13 @@ const zoneOptions = computed(() => [...new Set([form.value.timezone, ...ZONES])]
     <div class="flex flex-col gap-4">
       <h2 class="text-lg font-semibold">{{ locale.generalTitle }}</h2>
       <div class="grid gap-4 md:grid-cols-2">
-        <PhInput v-model="form.name" :label="locale.name" :error="errors.name" :disabled="disabled" required />
-        <PhInput v-model="form.slug" :label="locale.slug" :hint="props.slugLocked ? locale.slugLocked : undefined" :error="errors.slug" :disabled="disabled || slugLocked" />
-        <PhInput v-model="form.startsOn" type="date" :label="locale.startsOn" :error="errors.startsOn" :disabled="disabled" />
-        <PhInput v-model="form.endsOn" type="date" :label="locale.endsOn" :error="errors.endsOn" :disabled="disabled" />
-        <PhInput v-model="form.city" :label="locale.city" :error="errors.city" :disabled="disabled" />
-        <PhSelect v-model="form.state" :label="locale.state" :options="stateOptions" :error="errors.state" :disabled="disabled" />
-        <PhSelect v-model="form.timezone" :label="locale.timezone" :options="zoneOptions" :error="errors.timezone" :disabled="disabled" />
+        <PhInput id="settings-name" v-model="form.name" :label="locale.name" :error="errors.name" :disabled="disabled" required />
+        <PhInput id="settings-slug" v-model="form.slug" :label="locale.slug" :hint="props.slugLocked ? locale.slugLocked : undefined" :error="errors.slug" :disabled="disabled || slugLocked" />
+        <PhInput id="settings-startsOn" v-model="form.startsOn" type="date" :label="locale.startsOn" :error="errors.startsOn" :disabled="disabled" />
+        <PhInput id="settings-endsOn" v-model="form.endsOn" type="date" :label="locale.endsOn" :error="errors.endsOn" :disabled="disabled" />
+        <PhInput id="settings-city" v-model="form.city" :label="locale.city" :error="errors.city" :disabled="disabled" />
+        <PhSelect id="settings-state" v-model="form.state" :label="locale.state" :options="stateOptions" :error="errors.state" :disabled="disabled" />
+        <PhSelect id="settings-timezone" v-model="form.timezone" :label="locale.timezone" :options="zoneOptions" :error="errors.timezone" :disabled="disabled" />
       </div>
     </div>
   </PhCard>

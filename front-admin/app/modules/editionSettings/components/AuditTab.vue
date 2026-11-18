@@ -29,14 +29,14 @@ const when = (iso: string) => new Date(iso).toLocaleString('pt-BR', { dateStyle:
         <PhButton v-if="hasFilters" variant="ghost" @click="audit.clear">{{ locale.clear }}</PhButton>
       </form>
 
-      <p v-if="state === 'loading' && !entries.length" role="status" class="flex items-center gap-2 text-(--ph-ink-2)">
-        <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-      </p>
-      <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-        <span>{{ locale.loadError }}</span>
-        <PhButton variant="ghost" @click="audit.load(page)">{{ locale.retry }}</PhButton>
-      </div>
-      <p v-else-if="!entries.length" class="text-sm text-(--ph-ink-2)">{{ hasFilters ? locale.auditEmptyFilter : locale.auditEmpty }}</p>
+      <PhPageSkeleton v-if="state === 'loading' && !entries.length" :cards="1" :lines="6" />
+      <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="audit.load(page)" />
+      <PhEmptyState v-else-if="!entries.length && hasFilters" :title="locale.auditEmptyFilter">
+        <PhButton variant="secondary" @click="audit.clear">{{ locale.clear }}</PhButton>
+      </PhEmptyState>
+      <PhEmptyState v-else-if="!entries.length" :title="locale.auditEmpty" :description="locale.auditEmptyHint">
+        <PhButton variant="secondary" to="/equipe">{{ locale.auditEmptyAction }}</PhButton>
+      </PhEmptyState>
       <template v-else>
         <PhTable :caption="locale.auditCaption">
           <thead>

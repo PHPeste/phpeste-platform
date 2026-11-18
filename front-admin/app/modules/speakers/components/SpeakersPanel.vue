@@ -41,13 +41,8 @@ async function remindAll() {
       <PhButton v-if="state === 'ready' && !readOnly" variant="ghost" :disabled="!summary?.awaiting" @click="remindOpen = true">{{ locale.remindAll }}</PhButton>
     </header>
 
-    <p v-if="state === 'loading'" role="status" aria-live="polite" class="flex items-center gap-2 text-(--ph-ink-2)">
-      <span class="loading loading-spinner loading-sm" aria-hidden="true" />{{ locale.loading }}
-    </p>
-    <div v-else-if="state === 'error'" role="alert" class="alert alert-error alert-soft">
-      <span>{{ locale.loadError }}</span>
-      <PhButton variant="ghost" @click="speakers.load">{{ locale.retry }}</PhButton>
-    </div>
+    <PhPageSkeleton v-if="state === 'loading'" :kpis="4" :cards="2" :lines="5" />
+    <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="speakers.load" />
 
     <template v-else-if="summary">
       <SpeakerKpis :summary="summary" />

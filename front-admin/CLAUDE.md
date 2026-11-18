@@ -87,6 +87,7 @@ Tokens oficiais em `../docs/design/tema-sertao-tokens.png`, aplicados em `app/as
 - A module's `views/` never calls a service directly — that's a component/composable's job.
 - No per-module Pinia store. Global state (`app/stores/`) is only for things genuinely read across unrelated parts of the app — `authStore` is the reference example. See `.claude/rules/architecture.md`, "Two different reasons a piece of code is 'shared'".
 - Every module with a view is registered in Nuxt's file-based routing (`app/pages/`) and in `app/application/locales/pt-br/index.ts` — both, every time.
+- **Estados de tela seguem o kit** (`docs/UI-KIT.md`, "Estados das telas"): esqueleto no lugar da rodinha, `PhLoadError` com "Tentar de novo", `PhEmptyState` com a próxima ação em toda lista e `PhFormErrors` nos formulários com mais de um campo. O checklist do PR (`.github/pull_request_template.md`) cobra isso.
 - **A screen/form-flow change is not verified by `npm test` alone.** Run `npm run test:e2e` (or extend `e2e/*.spec.ts` for the flow you touched) before considering it done — Vitest's component tests mock `useLogin()`/the composable entirely, so they can't catch a broken hydration, a missing `aria-label`, or a redirect that silently stopped firing. See `.claude/rules/architecture.md`, "Testing".
 
 ## UI kit
