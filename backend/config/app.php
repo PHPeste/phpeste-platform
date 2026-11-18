@@ -58,6 +58,8 @@ return [
 
     'admin_url' => env('ADMIN_URL', 'http://localhost:3000'),
 
+    'audit_retention_days' => (int) env('AUDIT_RETENTION_DAYS', 730),
+
     'public_base_domain' => env('PUBLIC_BASE_DOMAIN', 'phpeste.dev'),
 
     'public_cname_target' => env('PUBLIC_CNAME_TARGET', 'edicoes.phpeste.dev'),

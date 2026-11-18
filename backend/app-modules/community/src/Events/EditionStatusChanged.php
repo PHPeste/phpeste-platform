@@ -6,9 +6,11 @@ namespace PHPeste\Community\Events;
 
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
+use PHPeste\Audit\Contracts\Auditable;
+use PHPeste\Audit\Data\AuditRecord;
 use PHPeste\Community\Enums\EditionStatus;
 
-class EditionStatusChanged implements ShouldDispatchAfterCommit
+class EditionStatusChanged implements Auditable, ShouldDispatchAfterCommit
 {
     use Dispatchable;
 
@@ -17,4 +19,9 @@ class EditionStatusChanged implements ShouldDispatchAfterCommit
         public readonly EditionStatus $from,
         public readonly EditionStatus $to,
     ) {}
+
+    public function auditRecord(): AuditRecord
+    {
+        return new AuditRecord($this->editionId, 'edition.status_changed', 'edition', $this->editionId, null, ['status' => $this->from->value], ['status' => $this->to->value]);
+    }
 }

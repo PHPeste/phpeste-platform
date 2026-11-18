@@ -84,7 +84,7 @@ it('vai de aprovada a confirmada: convite com prazo e link para a área do pales
 
     Sanctum::actingAs($this->organizer);
     $this->getJson("{$this->admin}/confirmations")->assertJsonPath('summary.confirmed', 1)->assertJsonPath('summary.pending', 0);
-    $this->assertDatabaseHas('audit_entries', ['action' => 'cfp.proposal_decided', 'subject_id' => $this->first->id]);
+    $this->assertDatabaseHas('audit_logs', ['action' => 'cfp.proposal_decided', 'subject_id' => $this->first->id]);
 });
 
 it('recusa libera a vaga e sugere a próxima da lista de espera, que só sobe com confirmação humana', function (): void {

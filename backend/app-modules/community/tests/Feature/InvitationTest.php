@@ -56,7 +56,7 @@ it('convida por e-mail com link para o painel e registra na auditoria', function
         && str_contains($mail->email->html, 'com o papel de financeiro')
         && str_contains($mail->email->html, 'https://admin.phpeste.dev/convite/'));
 
-    $this->assertDatabaseHas('audit_entries', ['action' => 'team.invited', 'actor_id' => $this->organizer->id]);
+    $this->assertDatabaseHas('audit_logs', ['action' => 'team.invited', 'actor_id' => $this->organizer->id]);
 });
 
 it('não convida quem já está na equipe', function (): void {
@@ -97,7 +97,7 @@ it('aceita criando a conta já verificada, entra na equipe e recebe token', func
 
     expect($user->hasVerifiedEmail())->toBeTrue();
     $this->assertDatabaseHas('edition_members', ['edition_id' => $this->edition->id, 'user_id' => $user->id, 'role' => 'financeiro']);
-    $this->assertDatabaseHas('audit_entries', ['action' => 'team.joined', 'actor_id' => $user->id]);
+    $this->assertDatabaseHas('audit_logs', ['action' => 'team.joined', 'actor_id' => $user->id]);
 
     $this->withToken($response->json('token'))->getJson('/api/v1/me')->assertJsonPath('roles.0.role', 'financeiro');
 });
@@ -172,7 +172,7 @@ it('cancela o convite e o link deixa de valer', function (): void {
     $this->deleteJson("{$this->url}/{$invitation->id}")->assertNoContent();
 
     $this->getJson("/api/v1/invitations/{$token}")->assertStatus(410)->assertJsonPath('message', 'Este convite foi cancelado.');
-    $this->assertDatabaseHas('audit_entries', ['action' => 'team.invitation_revoked', 'subject_id' => $invitation->id]);
+    $this->assertDatabaseHas('audit_logs', ['action' => 'team.invitation_revoked', 'subject_id' => $invitation->id]);
 });
 
 it('reenviar gera link novo e invalida o antigo; convidar de novo cancela o pendente', function (): void {

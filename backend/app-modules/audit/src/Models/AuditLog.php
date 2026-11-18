@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use LogicException;
 
 /**
  * @property string $id
@@ -17,16 +18,25 @@ use Illuminate\Support\Carbon;
  * @property string $action
  * @property string $subject_type
  * @property string $subject_id
- * @property array<string, string|null> $details
+ * @property array<string, mixed>|null $before
+ * @property array<string, mixed>|null $after
+ * @property string|null $ip
+ * @property string|null $request_id
  * @property Carbon $created_at
  */
-#[Fillable(['edition_id', 'actor_id', 'action', 'subject_type', 'subject_id', 'details', 'created_at'])]
-#[Table(name: 'audit_entries')]
-class AuditEntry extends Model
+#[Fillable(['edition_id', 'actor_id', 'action', 'subject_type', 'subject_id', 'before', 'after', 'ip', 'request_id', 'created_at'])]
+#[Table(name: 'audit_logs')]
+class AuditLog extends Model
 {
     use HasUuids;
 
     public const UPDATED_AT = null;
+
+    protected static function booted(): void
+    {
+        static::updating(fn (): never => throw new LogicException('Registros de auditoria não podem ser alterados.'));
+        static::deleting(fn (): never => throw new LogicException('Registros de auditoria não podem ser apagados.'));
+    }
 
     /**
      * @return array<string, string>
@@ -34,7 +44,8 @@ class AuditEntry extends Model
     protected function casts(): array
     {
         return [
-            'details' => 'array',
+            'before' => 'array',
+            'after' => 'array',
             'created_at' => 'datetime',
         ];
     }
