@@ -8,13 +8,19 @@ MVP: `identity`, `community`, `branding`, `cfp`, `program`, `ticketing`, `paymen
 Fase 2/3 (scaffold vazio, sem lógica ainda): `sponsors`, `suppliers`, `finance`, `tasks`, `engagement`.
 Ver `docs/produto.md` na raiz do monorepo para a responsabilidade de cada um.
 
-`identity` é o único com implementação real até agora: `users` (UUID, ver ADR 0007), cadastro com verificação de e-mail, login/logout via Sanctum, `GET /me`. Tenant (edição, papéis) é dos módulos Community (#9/#14), ainda não implementados — `/me` devolve `roles: []` até lá.
+Com implementação real até agora:
+
+- `identity`: `users` (UUID, ver ADR 0007), cadastro com verificação de e-mail, login/logout via Sanctum, `GET /me` (com os papéis da pessoa em cada edição, lidos pelo contrato `EditionMemberships` do Community).
+- `community`: comunidades, edições com máquina de estados (`EditionStatus`), `edition_members` (papel da pessoa na edição, `EditionRole`) e a infraestrutura de tenancy usada pelos outros módulos (ver abaixo).
 
 ## Estrutura de cada módulo (`app-modules/<nome>/src/`)
 
 | Pasta | O que vai lá |
 | --- | --- |
 | `Models/` | Eloquent models do módulo |
+| `Enums/` | Enums de domínio (status, papéis) |
+| `Policies/` | Policies do Laravel, registradas no service provider do módulo |
+| `Tenancy/` | Só no Community: contexto da edição atual, global scope e trait `BelongsToEdition` |
 | `Actions/` | Único lugar que pode mutar (`save`/`update`/`delete`) um Model com regra de negócio por trás — nunca direto de um Controller ou de outro módulo |
 | `Data/` | DTOs / objetos de dados (ex.: Spatie Laravel Data) trocados entre camadas e módulos |
 | `Events/` | Eventos de domínio disparados pelo módulo (ex.: `OrderPaid`) |
@@ -22,6 +28,15 @@ Ver `docs/produto.md` na raiz do monorepo para a responsabilidade de cada um.
 | `Contracts/` | Interfaces que outro módulo pode depender, em vez de Eloquent direto |
 | `Http/` | Controllers, FormRequests e API Resources |
 | `Providers/` | Service provider do módulo (gerado pelo `make:module`) |
+
+## Tenancy (a edição é o tenant, ADR 0007)
+
+Vive em `PHPeste\Community\Tenancy` e é o que todo módulo com dado de edição usa:
+
+- **Model de edição** usa o trait `BelongsToEdition`: liga o `EditionScope` e preenche `edition_id` a partir da edição no contexto ao criar. Sem edição no contexto a consulta não devolve nada e criar sem `edition_id` lança `LogicException`. Para consultar outra edição de propósito: `Model::query()->forEdition($editionId)`.
+- **Rota admin de edição** usa `Route::apiV1Edition('<prefixo>')`, que monta `/api/v1/editions/{edition}/<prefixo>`, exige `auth:sanctum`, confere se a pessoa tem papel na edição (403 se não) e liga a edição no contexto (`CurrentEdition`) só durante a requisição. O papel específico de cada ação é conferido na Policy.
+- **Job e listener** recebem `edition_id` explícito no construtor e rodam o trabalho dentro de `resolve(CurrentEdition::class)->run($editionId, fn () => ...)`, nunca resolvem a edição do contexto de quem disparou.
+- **Evento de domínio** carrega ids e enums, não Models, porque outro módulo não pode usar Model do Community (ex.: `EditionStatusChanged(editionId, from, to)`).
 
 ## Regras
 

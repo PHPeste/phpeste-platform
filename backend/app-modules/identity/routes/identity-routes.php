@@ -32,4 +32,4 @@ Route::apiV1('auth')->group(function (): void {
         ->name('verification.send');
 });
 
-Route::apiV1()->middleware('auth:sanctum')->get('/me', MeController::class)->name('me');
+Route::apiV1(middleware: ['auth:sanctum'])->get('/me', MeController::class)->name('me');

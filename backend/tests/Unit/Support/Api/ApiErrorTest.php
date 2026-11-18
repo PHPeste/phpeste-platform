@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -23,6 +24,9 @@ dataset('api errors', [
     'não encontrado' => fn (): array => [new NotFoundHttpException, 404, 'not_found'],
     'método não permitido' => fn (): array => [new MethodNotAllowedHttpException([]), 405, 'method_not_allowed'],
     'muitas tentativas' => fn (): array => [new TooManyRequestsHttpException, 429, 'too_many_requests'],
+    'abort(403)' => fn (): array => [new HttpException(403), 403, 'forbidden'],
+    'abort(404)' => fn (): array => [new HttpException(404), 404, 'not_found'],
+    'outro status HTTP' => fn (): array => [new HttpException(409), 409, 'http_error'],
     'erro genérico' => fn (): array => [new RuntimeException('boom'), 500, 'server_error'],
 ]);
 

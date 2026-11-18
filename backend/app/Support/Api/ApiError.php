@@ -8,11 +8,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
 
 final class ApiError
@@ -46,20 +42,22 @@ final class ApiError
      */
     private static function resolve(Throwable $e): array
     {
+        $status = $e instanceof HttpExceptionInterface ? $e->getStatusCode() : null;
+
         return match (true) {
             $e instanceof AuthenticationException => [
                 401, 'unauthenticated', 'É preciso autenticar para acessar este recurso.',
             ],
-            $e instanceof AccessDeniedHttpException => [
+            $status === 403 => [
                 403, 'forbidden', 'Você não tem permissão para esta ação.',
             ],
-            $e instanceof NotFoundHttpException => [
+            $status === 404 => [
                 404, 'not_found', 'Recurso não encontrado.',
             ],
-            $e instanceof MethodNotAllowedHttpException => [
+            $status === 405 => [
                 405, 'method_not_allowed', 'Método HTTP não permitido para esta rota.',
             ],
-            $e instanceof TooManyRequestsHttpException => [
+            $status === 429 => [
                 429, 'too_many_requests', 'Muitas tentativas. Tente novamente mais tarde.',
             ],
             $e instanceof HttpExceptionInterface => [

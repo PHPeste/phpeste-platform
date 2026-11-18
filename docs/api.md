@@ -15,6 +15,20 @@ Route::apiV1('community')->group(function (): void {
 
 Isso garante o mesmo middleware group (`api`) e o mesmo prefixo em todo módulo. Ver `routes/api.php` (`GET /api/v1/ping`) como referência mínima.
 
+Middleware extra vai no segundo argumento, nunca encadeado com `->middleware()`: no `RouteRegistrar` isso substitui o `api` em vez de somar (`tests/Feature/Api/ApiMiddlewareGroupTest.php` garante que toda rota de `/api/v1` passa pelo grupo `api`).
+
+```php
+Route::apiV1(middleware: ['auth:sanctum'])->get('/me', MeController::class)->name('me');
+```
+
+Rota admin de uma edição usa `Route::apiV1Edition()` (registrada pelo módulo Community), que monta `/api/v1/editions/{edition}/...`, exige login e papel na edição e liga a edição no contexto:
+
+```php
+Route::apiV1Edition('cfp')->group(function (): void {
+    Route::get('/proposals', ProposalsController::class)->name('cfp.proposals.index');
+});
+```
+
 ## Envelope de erro
 
 Toda resposta de erro da API (`app/Support/Api/ApiError.php`) segue o mesmo formato, incluindo 404 e 500:
