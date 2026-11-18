@@ -10,8 +10,9 @@ Ver `docs/produto.md` na raiz do monorepo para a responsabilidade de cada um.
 
 Com implementação real até agora:
 
-- `identity`: `users` (UUID, ver ADR 0007), cadastro com verificação de e-mail, login/logout via Sanctum, `GET /me` (com os papéis da pessoa em cada edição, lidos pelo contrato `EditionMemberships` do Community).
-- `community`: comunidades, edições com máquina de estados (`EditionStatus`), `edition_members` (papel da pessoa na edição, `EditionRole`) e a infraestrutura de tenancy usada pelos outros módulos (ver abaixo).
+- `identity`: `users` (UUID, ver ADR 0007), cadastro com verificação de e-mail, login/logout via Sanctum, `GET /me` (com os papéis da pessoa em cada edição, lidos pelo contrato `EditionMemberships` do Community). Outro módulo consulta e cria conta pelo contrato `UserAccounts`.
+- `community`: comunidades, edições com máquina de estados (`EditionStatus`), equipe (`edition_members`) com convites por e-mail (`edition_invitations`, token guardado só como hash, 7 dias) e a infraestrutura de tenancy usada pelos outros módulos (ver abaixo).
+- `audit`: trilha mínima em `audit_entries`, alimentada por eventos de outros módulos (hoje `TeamChanged`). O listener é descoberto automaticamente em `Listeners/`, sem `Event::listen` manual.
 - `branding`: tema por edição em `edition_settings` (rascunho, publicado e anterior, para reverter), presets Sertão/Maré/Brasa, checagem de contraste AA em `Theme/ContrastChecker`, upload de logos (SVG sanitizado com `enshrined/svg-sanitize`, disco `public`, exige `php artisan storage:link`) e `GET /api/v1/public/editions/{id}/theme` com cache e `ETag`. Os tokens de cor seguem os `--ph-*` do front-admin (`support` = `--ph-terra`, `on_accent` = texto sobre destaque).
 - `notifications`: e-mail transacional por edição. Outro módulo envia pelo contrato `EditionMailer::send(editionId, EmailTemplate, email, nome, variáveis, url)`, que registra o envio em `email_deliveries` e enfileira `SendEmailDelivery` (5 tentativas, backoff 30s → 30min). Os tipos de e-mail ficam em `EmailTemplate` (assunto/corpo padrão, variáveis permitidas, transacional ou não), e a edição só sobrescreve assunto e corpo (`email_templates`). O corpo é texto com `{variavel}`, substituído sem Blade e com todo HTML escapado. O layout usa o tema publicado (Branding). Não transacional leva link assinado e `List-Unsubscribe` (one-click), e quem se descadastra fica em `email_unsubscribes`. Produção usa Resend (`MAIL_MAILER=resend`, `RESEND_API_KEY`) e dev usa o Mailpit.
 
@@ -43,6 +44,17 @@ Vive em `PHPeste\Community\Tenancy` e é o que todo módulo com dado de edição
 - **Rota admin de edição** usa `Route::apiV1Edition('<prefixo>')`, que monta `/api/v1/editions/{edition}/<prefixo>`, exige `auth:sanctum`, confere se a pessoa tem papel na edição (403 se não) e liga a edição no contexto (`CurrentEdition`) só durante a requisição. O papel específico de cada ação é conferido na Policy.
 - **Job e listener** recebem `edition_id` explícito no construtor e rodam o trabalho dentro de `resolve(CurrentEdition::class)->run($editionId, fn () => ...)`, nunca resolvem a edição do contexto de quem disparou.
 - **Evento de domínio** carrega ids e enums, não Models, porque outro módulo não pode usar Model do Community (ex.: `EditionStatusChanged(editionId, from, to)`).
+
+## Papéis e permissões
+
+Os papéis da edição (`EditionRole`) e o que cada um pode fazer (`EditionPermission`) vivem em código, em `EditionRole::permissions()`. Cada permissão vira um Gate com o próprio nome (`edition.manage`, `cfp.review`, `orders.view`...), que usa a edição do contexto ou uma passada como argumento:
+
+```php
+Gate::authorize(EditionPermission::ReviewProposals->value);
+Gate::forUser($user)->allows(EditionPermission::CheckIn->value, $editionId);
+```
+
+Policy ou Gate de outro módulo confere permissão, nunca papel: `EditionMemberships::can($editionId, $userId, EditionPermission::...)`. A edição nunca fica sem organizador (trocar papel ou remover o último é bloqueado).
 
 ## Regras
 
