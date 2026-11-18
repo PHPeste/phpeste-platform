@@ -65,9 +65,9 @@ class EloquentUserAccounts implements UserAccounts
 
     public function checkPassword(string $userId, string $password): bool
     {
-        $user = User::query()->find($userId);
+        $hash = User::query()->find($userId)?->password;
 
-        return $user instanceof User && Hash::check($password, $user->password);
+        return $hash !== null && Hash::check($password, $hash);
     }
 
     public function issueToken(string $userId, string $deviceName): NewAccessToken
