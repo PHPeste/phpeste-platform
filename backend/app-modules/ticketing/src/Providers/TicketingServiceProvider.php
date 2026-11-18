@@ -4,11 +4,32 @@ declare(strict_types=1);
 
 namespace PHPeste\Ticketing\Providers;
 
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use PHPeste\Community\Contracts\EditionCloner;
+use PHPeste\Community\Enums\EditionPermission;
+use PHPeste\Ticketing\Cloning\TicketingCloner;
+use PHPeste\Ticketing\Console\RotateTicketBatches;
 
 class TicketingServiceProvider extends ServiceProvider
 {
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->app->tag([TicketingCloner::class], EditionCloner::TAG);
+    }
 
-    public function boot(): void {}
+    public function boot(): void
+    {
+        Gate::define('ticketing.view', fn (Authenticatable $user): bool => Gate::forUser($user)->any([EditionPermission::ManageEdition->value, EditionPermission::ViewOrders->value]));
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([RotateTicketBatches::class]);
+        }
+
+        $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
+            $schedule->command('ticketing:rotate-batches')->everyMinute()->withoutOverlapping();
+        });
+    }
 }
