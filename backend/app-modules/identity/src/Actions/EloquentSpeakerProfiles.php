@@ -27,4 +27,16 @@ class EloquentSpeakerProfiles implements SpeakerProfiles
 
         return $states;
     }
+
+    public function companies(array $userIds): array
+    {
+        $companies = array_fill_keys($userIds, null);
+
+        foreach (SpeakerProfile::query()->whereIn('user_id', $userIds)->get() as $profile) {
+            $company = $profile->company === null ? '' : mb_strtolower(mb_trim($profile->company));
+            $companies[$profile->user_id] = $company === '' ? null : $company;
+        }
+
+        return $companies;
+    }
 }
