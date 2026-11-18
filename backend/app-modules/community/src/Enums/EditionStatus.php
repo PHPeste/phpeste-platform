@@ -37,6 +37,57 @@ enum EditionStatus: string
         };
     }
 
+    /**
+     * @return array{unlocks: list<string>, blocks: list<string>}
+     */
+    public function effects(): array
+    {
+        return match ($this) {
+            self::Draft => ['unlocks' => [], 'blocks' => []],
+            self::CfpOpen => [
+                'unlocks' => [
+                    'Site e domínios da edição ficam públicos',
+                    'Palestrantes podem enviar propostas dentro da janela do CFP',
+                    'Tema publicado passa a valer no site e no app',
+                ],
+                'blocks' => [
+                    'O identificador na URL não pode mais mudar',
+                    'Não dá para voltar para rascunho',
+                ],
+            ],
+            self::SalesOpen => [
+                'unlocks' => [
+                    'Site e domínios da edição ficam públicos',
+                    'Venda de ingressos, quando houver lotes configurados',
+                    'O CFP continua seguindo a própria janela de datas',
+                ],
+                'blocks' => [
+                    'O identificador na URL não pode mais mudar',
+                    'Não dá para voltar para CFP aberto nem para rascunho',
+                ],
+            ],
+            self::Ongoing => [
+                'unlocks' => [
+                    'Check-in dos participantes no evento',
+                    'Marcação de presença dos palestrantes',
+                ],
+                'blocks' => [
+                    'Não dá para voltar para vendas abertas',
+                ],
+            ],
+            self::Closed => [
+                'unlocks' => [
+                    'Relatórios finais da edição',
+                ],
+                'blocks' => [
+                    'A edição fica só para consulta: nenhuma alteração no painel',
+                    'Envio de propostas, vendas e check-in encerrados',
+                    'Não dá para reabrir a edição',
+                ],
+            ],
+        };
+    }
+
     public function canTransitionTo(self $next): bool
     {
         return in_array($next, $this->allowedTransitions(), true);

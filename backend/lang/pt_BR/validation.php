@@ -167,6 +167,11 @@ return [
     ],
 
     'attributes' => [
+        'site_mode' => 'modo do site',
+        'external_site_url' => 'endereço do site da comunidade',
+        'privacy_contact_email' => 'e-mail do encarregado de dados',
+        'privacy_policy_url' => 'endereço da política de privacidade',
+        'anonymize_after_event' => 'anonimizar após o evento',
         'accessibility_needs' => 'necessidades de acessibilidade',
         'action' => 'ação',
         'actor_id' => 'autor',

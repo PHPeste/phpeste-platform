@@ -15,6 +15,7 @@ use PHPeste\Community\Database\Factories\EditionFactory;
 use PHPeste\Community\Enums\BrazilianState;
 use PHPeste\Community\Enums\EditionRole;
 use PHPeste\Community\Enums\EditionStatus;
+use PHPeste\Community\Enums\SiteMode;
 
 /**
  * @property string $id
@@ -26,12 +27,17 @@ use PHPeste\Community\Enums\EditionStatus;
  * @property string|null $city
  * @property BrazilianState|null $state
  * @property string $timezone
+ * @property SiteMode $site_mode
+ * @property string|null $external_site_url
+ * @property string|null $privacy_contact_email
+ * @property string|null $privacy_policy_url
+ * @property bool $anonymize_after_event
  * @property EditionStatus $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Community $community
  */
-#[Fillable(['community_id', 'name', 'slug', 'starts_on', 'ends_on', 'city', 'state', 'timezone', 'status'])]
+#[Fillable(['community_id', 'name', 'slug', 'starts_on', 'ends_on', 'city', 'state', 'timezone', 'status', 'site_mode', 'external_site_url', 'privacy_contact_email', 'privacy_policy_url', 'anonymize_after_event'])]
 class Edition extends Model
 {
     /** @use HasFactory<EditionFactory> */
@@ -42,6 +48,8 @@ class Edition extends Model
     protected $attributes = [
         'status' => 'draft',
         'timezone' => 'America/Fortaleza',
+        'site_mode' => 'platform',
+        'anonymize_after_event' => false,
     ];
 
     /**
@@ -75,6 +83,8 @@ class Edition extends Model
             'ends_on' => 'date',
             'state' => BrazilianState::class,
             'status' => EditionStatus::class,
+            'site_mode' => SiteMode::class,
+            'anonymize_after_event' => 'boolean',
         ];
     }
 }

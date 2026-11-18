@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use PHPeste\Community\Enums\EditionStatus;
 use PHPeste\Community\Events\EditionStatusChanged;
+use PHPeste\Community\Http\Middleware\AllowEditionSiteOrigins;
 use PHPeste\Community\Models\Edition;
 
 class TransitionEditionStatus
@@ -27,6 +28,8 @@ class TransitionEditionStatus
 
             event(new EditionStatusChanged($edition->id, $current, $next));
         });
+
+        AllowEditionSiteOrigins::forget();
 
         return $edition;
     }

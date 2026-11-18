@@ -12,4 +12,9 @@ interface EditionDirectory
      * @return array{id: string, name: string, starts_on: string|null, ends_on: string|null, city: string|null, state: string|null, timezone: string, status: string}|null
      */
     public function summary(string $editionId): ?array;
+
+    /**
+     * @return array{mode: string, external_url: string|null}
+     */
+    public function site(string $editionId): array;
 }

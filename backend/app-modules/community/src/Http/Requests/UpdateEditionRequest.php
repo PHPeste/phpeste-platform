@@ -7,6 +7,7 @@ namespace PHPeste\Community\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use PHPeste\Community\Enums\BrazilianState;
+use PHPeste\Community\Enums\SiteMode;
 use PHPeste\Community\Models\Edition;
 
 class UpdateEditionRequest extends FormRequest
@@ -43,6 +44,11 @@ class UpdateEditionRequest extends FormRequest
             'city' => ['sometimes', 'nullable', 'string', 'max:120'],
             'state' => ['sometimes', 'nullable', Rule::enum(BrazilianState::class)],
             'timezone' => ['sometimes', 'required', 'timezone:all'],
+            'site_mode' => ['sometimes', 'required', Rule::enum(SiteMode::class)],
+            'external_site_url' => ['sometimes', 'nullable', 'string', 'max:255', 'url:https'],
+            'privacy_contact_email' => ['sometimes', 'nullable', 'email', 'max:255'],
+            'privacy_policy_url' => ['sometimes', 'nullable', 'string', 'max:255', 'url:https'],
+            'anonymize_after_event' => ['sometimes', 'boolean'],
         ];
     }
 }
