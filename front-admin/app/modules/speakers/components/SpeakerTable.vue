@@ -65,7 +65,7 @@ const FILTERS: SpeakerFilter[] = ['all', 'confirmed', 'pending', 'waitlisted']
             </td>
             <td>
               <span class="flex flex-col">
-                <span>{{ row.proposal.title }}</span>
+                <span>{{ row.proposal.title }} <PhBadge v-if="row.proposal.invited" status="info" :dot="false">{{ locale.invitedBadge }}</PhBadge></span>
                 <span class="text-xs text-(--ph-ink-3)">#{{ row.proposal.number }}<template v-if="row.proposal.track"> · {{ row.proposal.track }}</template></span>
               </span>
             </td>

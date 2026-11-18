@@ -7,7 +7,7 @@ export interface SpeakerRowPayload {
   email: string | null
   state: string | null
   nordeste: boolean
-  proposal: { id: string, number: number, title: string, track: string | null }
+  proposal: { id: string, number: number, title: string, track: string | null, origin: string }
   status: string
   status_label: string
   deadline_at: string | null
@@ -45,7 +45,7 @@ export interface SpeakerDetailPayload {
     can_view_private_data: boolean
     profile: { display_name: string, job_title: string | null, company: string | null, bio: string | null, city: string | null, state: string | null, links: Record<string, string | null>, photo_url: string | null } | null
     proposals: Array<{
-      id: string, number: number, title: string, track: string | null, format_label: string | null, duration_minutes: number | null,
+      id: string, number: number, title: string, track: string | null, origin: string, origin_label: string, format_label: string | null, duration_minutes: number | null,
       decision: string | null, decision_label: string | null, status: string, status_label: string,
       deadline_at: string | null, responded_at: string | null, reminded_at: string | null, attended_at: string | null, reason: string | null
     }>
@@ -67,6 +67,10 @@ async function call<T>(request: () => Promise<T>): Promise<T> {
 }
 
 export default {
+  invite: (editionId: string, body: { name: string, email: string, title: string, track_id: string, format: string, summary: string | null }) =>
+    call(() => httpClient.post<{ data: { proposal_id: string, number: number, user_id: string, deadline_at: string } }>(`${base(editionId)}/speakers/invite`, { body })),
+  tracks: (editionId: string) => call(() => httpClient.get<{ data: Array<{ id: string, name: string }> }>(`${base(editionId)}/tracks`)),
+  formOptions: (editionId: string) => call(() => httpClient.get<{ meta: { form: { formats: Array<{ id: string, label: string }> } } }>(`${base(editionId)}/settings`)),
   list: (editionId: string) => call(() => httpClient.get<SpeakersPayload>(`${base(editionId)}/speakers`)),
   show: (editionId: string, userId: string) => call(() => httpClient.get<SpeakerDetailPayload>(`${base(editionId)}/speakers/${userId}`)),
   remind: (editionId: string, proposalId: string | null) =>

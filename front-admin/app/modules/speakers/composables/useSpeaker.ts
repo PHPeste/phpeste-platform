@@ -41,7 +41,7 @@ function translate(payload: SpeakerDetailPayload['data']): SpeakerDetail {
     photoUrl: profile?.photo_url ?? null,
     canViewPrivateData: payload.can_view_private_data,
     talks: payload.proposals.map((talk) => ({
-      id: talk.id, number: talk.number, title: talk.title, track: talk.track, format: talk.format_label, durationMinutes: talk.duration_minutes,
+      id: talk.id, number: talk.number, title: talk.title, track: talk.track, invited: talk.origin === 'invited', format: talk.format_label, durationMinutes: talk.duration_minutes,
       decisionLabel: talk.decision_label, status: talk.status as SpeakerStatus, statusLabel: talk.status_label,
       deadlineAt: talk.deadline_at, respondedAt: talk.responded_at, remindedAt: talk.reminded_at, attendedAt: talk.attended_at, reason: talk.reason,
     })),

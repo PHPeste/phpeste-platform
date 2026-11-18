@@ -13,7 +13,7 @@ defineProps<{ talks: SpeakerTalk[] }>()
       <ul class="flex flex-col">
         <li v-for="talk in talks" :key="talk.id" class="flex flex-wrap items-center justify-between gap-3 border-t border-(--ph-line) py-3 first:border-t-0">
           <div class="flex flex-col">
-            <b class="font-medium">{{ talk.title }}</b>
+            <b class="font-medium">{{ talk.title }} <PhBadge v-if="talk.invited" status="info" :dot="false">{{ locale.invitedBadge }}</PhBadge></b>
             <span class="text-sm text-(--ph-ink-2)">
               {{ [`#${talk.number}`, talk.track, talk.durationMinutes ? locale.minutes.replace('{n}', String(talk.durationMinutes)) : talk.format].filter(Boolean).join(' · ') }}
             </span>
