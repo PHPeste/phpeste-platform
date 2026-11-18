@@ -49,6 +49,26 @@ class EloquentUserAccounts implements UserAccounts
         return $profiles;
     }
 
+    public function findOrCreateInvited(string $name, string $email): array
+    {
+        $existing = $this->findByEmail($email);
+
+        if ($existing !== null) {
+            return [...$existing, 'created' => false];
+        }
+
+        $user = User::create([
+            'name' => $name,
+            'email' => mb_strtolower(mb_trim($email)),
+            'password' => null,
+            'locale' => app()->getLocale(),
+        ]);
+
+        $user->markEmailAsVerified();
+
+        return ['id' => $user->id, 'name' => $user->name, 'email' => $user->email, 'created' => true];
+    }
+
     public function registerVerified(string $name, string $email, string $password): array
     {
         $user = User::create([

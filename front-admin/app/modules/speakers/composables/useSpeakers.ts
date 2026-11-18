@@ -3,7 +3,7 @@ import speakersService, { type PromotionsPayload, type SpeakersPayload } from '.
 import { SpeakersError } from '../services/speakersError'
 import locale from '../locales/pt-br'
 import { initials } from './format'
-import type { CoverageCell, PromotionGroup, SpeakerFilter, SpeakerRow, SpeakersSummary, SpeakerStatus } from '../types'
+import type { CoverageCell, InviteInput, InviteOptions, PromotionGroup, SpeakerFilter, SpeakerRow, SpeakersSummary, SpeakerStatus } from '../types'
 
 const STATUSES: SpeakerStatus[] = ['pending', 'confirmed', 'declined', 'withdrawn', 'no_response', 'cancelled', 'waitlisted']
 const asStatus = (value: string): SpeakerStatus => STATUSES.find((status) => status === value) ?? 'pending'
@@ -13,7 +13,7 @@ export function translateRows(payload: SpeakersPayload['data']): SpeakerRow[] {
     const name = row.name ?? row.email ?? ''
     return {
       userId: row.user_id, name, email: row.email ?? '', initials: initials(name), state: row.state, nordeste: row.nordeste,
-      proposal: row.proposal, status: asStatus(row.status), statusLabel: row.status_label, deadlineAt: row.deadline_at, remindedAt: row.reminded_at, attended: row.attended_at !== null,
+      proposal: { id: row.proposal.id, number: row.proposal.number, title: row.proposal.title, track: row.proposal.track, invited: row.proposal.origin === 'invited' }, status: asStatus(row.status), statusLabel: row.status_label, deadlineAt: row.deadline_at, remindedAt: row.reminded_at, attended: row.attended_at !== null,
     }
   })
 }
@@ -107,5 +107,30 @@ export function useSpeakers(editionId: string) {
     }
   }
 
-  return { rows, summary, coverage, promotions, state, filter, search, filtered, counts, missingStates, load, remindAll, promote }
+  async function inviteOptions(): Promise<InviteOptions> {
+    const [tracks, settings] = await Promise.all([speakersService.tracks(editionId), speakersService.formOptions(editionId)])
+    return {
+      tracks: tracks.data.map((track) => ({ value: track.id, label: track.name })),
+      formats: settings.meta.form.formats.map((format) => ({ value: format.id, label: format.label })),
+    }
+  }
+
+  async function invite(input: InviteInput): Promise<{ ok: true, number: number } | { ok: false, message: string, fieldErrors: Record<string, string> }> {
+    try {
+      const { data } = await speakersService.invite(editionId, {
+        name: input.name.trim(), email: input.email.trim(), title: input.title.trim(), track_id: input.trackId, format: input.format, summary: input.summary.trim() || null,
+      })
+      await refresh()
+      return { ok: true, number: data.number }
+    } catch (error) {
+      if (error instanceof SpeakersError && error.statusCode === 422 && error.fieldErrors) {
+        const keys: Record<string, string> = { track_id: 'trackId' }
+        const fieldErrors = Object.fromEntries(Object.entries(error.fieldErrors).map(([key, messages]) => [keys[key] ?? key, messages[0] ?? '']))
+        return { ok: false, message: Object.values(fieldErrors)[0] ?? locale.genericError, fieldErrors }
+      }
+      return { ok: false, message: locale.genericError, fieldErrors: {} }
+    }
+  }
+
+  return { rows, summary, coverage, promotions, state, filter, search, filtered, counts, missingStates, load, remindAll, promote, inviteOptions, invite }
 }

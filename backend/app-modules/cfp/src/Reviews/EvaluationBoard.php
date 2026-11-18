@@ -28,6 +28,7 @@ class EvaluationBoard
         $proposals = Proposal::query()
             ->forEdition($editionId)
             ->where('status', ProposalStatus::Submitted)
+            ->fromCfp()
             ->with(['speakers', 'track', 'assignments', 'reviews.scores'])
             ->orderBy('number')
             ->get();

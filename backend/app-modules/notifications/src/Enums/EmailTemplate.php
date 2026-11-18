@@ -14,6 +14,7 @@ enum EmailTemplate: string
     case TeamInvite = 'team_invite';
     case ProposalReceived = 'proposal_received';
     case SpeakerConfirmationReminder = 'speaker_confirmation_reminder';
+    case SpeakerInvited = 'speaker_invited';
 
     public function label(): string
     {
@@ -26,6 +27,7 @@ enum EmailTemplate: string
             self::TeamInvite => 'Convite para a equipe',
             self::ProposalReceived => 'Proposta recebida',
             self::SpeakerConfirmationReminder => 'Lembrete de confirmação do palestrante',
+            self::SpeakerInvited => 'Convite para palestrar',
         };
     }
 
@@ -39,6 +41,7 @@ enum EmailTemplate: string
             self::TeamInvite => 'Ao convidar alguém para a equipe',
             self::ProposalReceived => 'Ao enviar uma proposta',
             self::SpeakerConfirmationReminder => '2 dias antes do prazo de confirmação',
+            self::SpeakerInvited => 'Ao convidar alguém direto para palestrar',
         };
     }
 
@@ -58,7 +61,7 @@ enum EmailTemplate: string
             self::EventReminder => ['nome', 'edicao', 'data'],
             self::TeamInvite => ['nome', 'edicao', 'papel'],
             self::ProposalReceived => ['nome', 'edicao', 'proposta', 'data'],
-            self::SpeakerConfirmationReminder => ['nome', 'edicao', 'proposta', 'prazo'],
+            self::SpeakerConfirmationReminder, self::SpeakerInvited => ['nome', 'edicao', 'proposta', 'prazo'],
         };
     }
 
@@ -73,6 +76,7 @@ enum EmailTemplate: string
             self::TeamInvite => 'Convite para a equipe do {edicao}',
             self::ProposalReceived => 'Recebemos sua proposta para o {edicao}',
             self::SpeakerConfirmationReminder => 'Confirme sua palestra no {edicao} até {prazo}',
+            self::SpeakerInvited => 'Convite para palestrar no {edicao}',
         };
     }
 
@@ -87,6 +91,7 @@ enum EmailTemplate: string
             self::TeamInvite => "Oi, {nome}!\n\nVocê recebeu um convite para a equipe do {edicao} com o papel de {papel}. Aceite pelo link abaixo.",
             self::ProposalReceived => "Oi, {nome}!\n\nRecebemos a proposta \"{proposta}\" para o {edicao}. Você pode editar ou retirar a proposta até o fechamento do CFP.",
             self::SpeakerConfirmationReminder => "Oi, {nome}!\n\nAinda não recebemos sua confirmação para a palestra \"{proposta}\" no {edicao}. O prazo vai até {prazo}; depois disso a vaga pode ir para a lista de espera.",
+            self::SpeakerInvited => "Oi, {nome}!\n\nA organização do {edicao} convidou você para apresentar \"{proposta}\". Confirme sua participação pelo link abaixo até {prazo}.\n\nPara entrar, use este e-mail: se ainda não tem senha na plataforma, entre pelo GitHub ou peça uma senha em \"Esqueci minha senha\".",
         };
     }
 
@@ -100,7 +105,7 @@ enum EmailTemplate: string
             self::EventReminder => 'Ver programação',
             self::TeamInvite => 'Aceitar convite',
             self::ProposalReceived => 'Ver minha proposta',
-            self::SpeakerConfirmationReminder => 'Confirmar participação',
+            self::SpeakerConfirmationReminder, self::SpeakerInvited => 'Confirmar participação',
         };
     }
 

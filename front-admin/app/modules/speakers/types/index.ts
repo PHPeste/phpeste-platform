@@ -8,7 +8,7 @@ export interface SpeakerRow {
   initials: string
   state: string | null
   nordeste: boolean
-  proposal: { id: string, number: number, title: string, track: string | null }
+  proposal: { id: string, number: number, title: string, track: string | null, invited: boolean }
   status: SpeakerStatus
   statusLabel: string
   deadlineAt: string | null
@@ -48,6 +48,7 @@ export interface SpeakerTalk {
   number: number
   title: string
   track: string | null
+  invited: boolean
   format: string | null
   durationMinutes: number | null
   decisionLabel: string | null
@@ -58,6 +59,20 @@ export interface SpeakerTalk {
   remindedAt: string | null
   attendedAt: string | null
   reason: string | null
+}
+
+export interface InviteInput {
+  name: string
+  email: string
+  title: string
+  trackId: string
+  format: string
+  summary: string
+}
+
+export interface InviteOptions {
+  tracks: Array<{ value: string, label: string }>
+  formats: Array<{ value: string, label: string }>
 }
 
 export interface SpeakerLogistics {

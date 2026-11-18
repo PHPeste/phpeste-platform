@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useToast } from '@/application/shared/composables/useToast'
 import CoverageGrid from './CoverageGrid.vue'
+import InviteSpeakerModal from './InviteSpeakerModal.vue'
 import PromotionsCard from './PromotionsCard.vue'
 import SpeakerKpis from './SpeakerKpis.vue'
 import SpeakerTable from './SpeakerTable.vue'
@@ -15,6 +16,7 @@ const { rows, summary, coverage, promotions, state, filter, search, filtered, co
 const toast = useToast()
 
 const remindOpen = ref(false)
+const inviteOpen = ref(false)
 const reminding = ref(false)
 
 onMounted(speakers.load)
@@ -38,7 +40,10 @@ async function remindAll() {
         <h1 class="text-3xl leading-tight font-semibold">{{ locale.title }}</h1>
         <p class="text-(--ph-ink-2)">{{ locale.subtitle }}</p>
       </div>
-      <PhButton v-if="state === 'ready' && !readOnly" variant="ghost" :disabled="!summary?.awaiting" @click="remindOpen = true">{{ locale.remindAll }}</PhButton>
+      <div v-if="state === 'ready' && !readOnly" class="flex flex-wrap gap-3">
+        <PhButton variant="ghost" :disabled="!summary?.awaiting" @click="remindOpen = true">{{ locale.remindAll }}</PhButton>
+        <PhButton @click="inviteOpen = true">{{ locale.invite }}</PhButton>
+      </div>
     </header>
 
     <PhPageSkeleton v-if="state === 'loading'" :kpis="4" :cards="2" :lines="5" />
@@ -56,6 +61,8 @@ async function remindAll() {
       />
       <SpeakerTable v-model:filter="filter" v-model:search="search" :rows="filtered" :total="rows.length" :counts="counts" />
     </template>
+
+    <InviteSpeakerModal v-model="inviteOpen" :load-options="speakers.inviteOptions" :send="speakers.invite" @invited="toast.success(locale.invited.replace('{n}', String($event)))" />
 
     <PhModal v-model="remindOpen" :title="locale.remindAllTitle">
       <p>{{ summary?.awaiting === 1 ? locale.remindAllTextOne : locale.remindAllText.replace('{n}', String(summary?.awaiting ?? 0)) }}</p>

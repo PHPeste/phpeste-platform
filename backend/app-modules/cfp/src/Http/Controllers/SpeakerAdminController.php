@@ -7,10 +7,12 @@ namespace PHPeste\Cfp\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use PHPeste\Cfp\Actions\InviteSpeaker;
 use PHPeste\Cfp\Actions\MarkSpeakerAttendance;
 use PHPeste\Cfp\Actions\RemindSpeakers;
 use PHPeste\Cfp\Confirmations\LogisticsPresenter;
 use PHPeste\Cfp\Enums\ProposalDecision;
+use PHPeste\Cfp\Http\Requests\InviteSpeakerRequest;
 use PHPeste\Cfp\Http\Requests\RemindSpeakersRequest;
 use PHPeste\Cfp\Http\Requests\SpeakerAttendanceRequest;
 use PHPeste\Cfp\Models\Proposal;
@@ -61,6 +63,8 @@ class SpeakerAdminController
                 'number' => $proposal->number,
                 'title' => $proposal->title,
                 'track' => $proposal->track?->name,
+                'origin' => $proposal->origin->value,
+                'origin_label' => $proposal->origin->label(),
                 'format_label' => $proposal->format?->label(),
                 'duration_minutes' => $proposal->format?->minutes(),
                 'decision' => $proposal->decision?->value,
@@ -75,6 +79,20 @@ class SpeakerAdminController
             ])->all()),
             'logistics' => $record === null ? null : $logistics->present($record, true, $canViewPrivate),
         ]]);
+    }
+
+    public function invite(InviteSpeakerRequest $request, InviteSpeaker $invite): JsonResponse
+    {
+        Gate::authorize(EditionPermission::ManageProgram->value);
+
+        $proposal = $invite->handle($this->editionId(), $request->invitation(), (string) $request->user()?->getAuthIdentifier());
+
+        return response()->json(['data' => [
+            'proposal_id' => $proposal->id,
+            'number' => $proposal->number,
+            'user_id' => $proposal->speakers->first()?->user_id,
+            'deadline_at' => $proposal->confirmation?->deadline_at->clone()->utc()->toIso8601ZuluString(),
+        ]], 201);
     }
 
     public function remind(RemindSpeakersRequest $request, RemindSpeakers $remind): JsonResponse

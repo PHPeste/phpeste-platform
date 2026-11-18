@@ -96,7 +96,7 @@ class ReviewAssignmentController
 
         abort_unless(is_string($id), 404);
 
-        return Proposal::query()->with('speakers')->where('status', ProposalStatus::Submitted)->whereKey($id)->firstOrFail();
+        return Proposal::query()->with('speakers')->where('status', ProposalStatus::Submitted)->fromCfp()->whereKey($id)->firstOrFail();
     }
 
     private function userId(Request $request): string
