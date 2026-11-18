@@ -18,7 +18,7 @@ class ProfileController
 {
     public function update(UpdateAccountRequest $request, UpdateAccount $updateAccount): UserResource
     {
-        /** @var array{name?: string, locale?: string} $attributes */
+        /** @var array{name?: string, locale?: string, notifications?: array<string, bool>} $attributes */
         $attributes = $request->validated();
 
         return new UserResource($updateAccount->handle($this->user($request), $attributes));
