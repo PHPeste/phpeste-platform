@@ -1,4 +1,4 @@
-export const HOME_AFTER_LOGIN = '/'
+export const HOME_AFTER_LOGIN = '/comunidades'
 
 /**
  * Só aceita caminho interno absoluto; URL completa, "//evil.com" e truques

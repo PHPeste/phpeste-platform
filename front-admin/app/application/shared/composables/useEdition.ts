@@ -13,9 +13,15 @@ function translate(payload: EditionPayload): CurrentEdition | null {
     id: payload.id,
     slug: payload.slug,
     name: payload.name,
-    city: payload.city,
-    state: payload.state,
-    yearBadge: String(payload.year).slice(-2),
+    communityId: payload.community_id,
+    communityName: payload.community?.name,
+    status: payload.status,
+    statusLabel: payload.status_label,
+    startsOn: payload.starts_on,
+    endsOn: payload.ends_on,
+    city: payload.city ?? '',
+    state: payload.state ?? '',
+    yearBadge: payload.year === null ? '–' : String(payload.year).slice(-2),
     siteUrl: payload.site_url,
     role,
   }
@@ -28,9 +34,10 @@ function translate(payload: EditionPayload): CurrentEdition | null {
 export function useEdition() {
   const store = useEditionStore()
   const { current, editions, status } = storeToRefs(store)
-  const cookie = useCookie<number | null>('ph_edition', { default: () => null, sameSite: 'lax' })
+  const cookie = useCookie<string | null>('ph_edition', { default: () => null, sameSite: 'lax' })
 
   const role = computed<EditionRole | null>(() => current.value?.role ?? null)
+  const isReadOnly = computed(() => current.value?.status === 'closed')
 
   async function load(): Promise<void> {
     store.setStatus('loading')
@@ -52,7 +59,7 @@ export function useEdition() {
   }
 
   /** Troca a edição, descarta os dados em cache e recarrega a rota atual. */
-  async function select(id: number): Promise<void> {
+  async function select(id: string): Promise<void> {
     const next = editions.value.find((e) => e.id === id)
     if (!next || current.value?.id === id) return
     cookie.value = id
@@ -71,6 +78,7 @@ export function useEdition() {
     editions,
     status,
     role,
+    isReadOnly,
     setCurrent: store.setCurrent,
     clear,
     reset: clear,

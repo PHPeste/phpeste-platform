@@ -59,7 +59,7 @@ test.describe('Login', () => {
     await expect(page).toHaveURL(/\/login$/)
   })
 
-  test('logs in and redirects to the home page', async ({ page, goto }) => {
+  test('logs in and lands on the edition picker', async ({ page, goto }) => {
     await page.route(LOGIN_API, (route) =>
       route.fulfill({
         status: 200,
@@ -75,8 +75,9 @@ test.describe('Login', () => {
     await page.getByLabel('Senha', { exact: true }).fill('correct-password')
     await page.getByRole('button', { name: 'Entrar', exact: true }).click()
 
-    await expect(page).toHaveURL(/\/$/)
-    await expect(page.getByRole('button', { name: 'Menu do usuário' })).toContainText('Ada Lovelace')
+    await expect(page).toHaveURL(/\/comunidades$/)
+    await expect(page.getByRole('heading', { name: 'Escolha uma edição' })).toBeVisible()
+    await expect(page.getByRole('banner')).toContainText('Ada Lovelace')
   })
 
   test('links to password recovery and keeps the session only for this tab when "manter conectado" is off', async ({ page, goto }) => {
@@ -94,7 +95,7 @@ test.describe('Login', () => {
     await page.getByLabel('Manter conectado neste dispositivo').uncheck()
     await page.getByRole('button', { name: 'Entrar', exact: true }).click()
 
-    await expect(page).toHaveURL(/\/$/)
+    await expect(page).toHaveURL(/\/comunidades$/)
     expect(await page.evaluate(() => [localStorage.getItem('app.auth'), sessionStorage.getItem('app.auth')])).toEqual([null, expect.stringContaining('tab-token')])
   })
 
@@ -112,8 +113,8 @@ test.describe('Login', () => {
     await goto('/login', { waitUntil: 'hydration' })
     await page.getByRole('button', { name: 'Entrar com GitHub' }).click()
 
-    await expect(page).toHaveURL(/\/$/)
-    await expect(page.getByRole('button', { name: 'Menu do usuário' })).toContainText('Grace Hopper')
+    await expect(page).toHaveURL(/\/comunidades$/)
+    await expect(page.getByRole('banner')).toContainText('Grace Hopper')
   })
 
   test('explains why the GitHub login was refused', async ({ page, goto }) => {

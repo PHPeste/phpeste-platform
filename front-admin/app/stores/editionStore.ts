@@ -2,10 +2,15 @@ import { defineStore } from 'pinia'
 import type { EditionRole } from '@/modules/shell/types'
 
 export interface CurrentEdition {
-  id: number
+  id: string
   slug: string
   name: string
-  // Detalhes vindos de GET /editions; opcionais porque `setCurrent` também aceita só o essencial.
+  communityId?: string
+  communityName?: string
+  status?: string
+  statusLabel?: string
+  startsOn?: string | null
+  endsOn?: string | null
   city?: string
   state?: string
   /** Últimos dois dígitos do ano, mostrados no selo ("27"). */

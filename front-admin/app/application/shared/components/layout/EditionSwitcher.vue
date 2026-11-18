@@ -5,7 +5,7 @@ import locale from '@/modules/shell/locales/pt-br'
 
 const { editions, current, status, select, load } = useEdition()
 
-async function choose(id: number, close: () => void) {
+async function choose(id: string, close: () => void) {
   close()
   await select(id)
 }
@@ -43,6 +43,9 @@ async function choose(id: number, close: () => void) {
           </button>
         </li>
       </ul>
+      <NuxtLink to="/comunidades" class="mt-1 flex min-h-11 items-center rounded-lg border-t border-(--ph-line) px-3 text-sm text-(--ph-link) hover:bg-base-200" @click="close()">
+        {{ locale.allEditions }}
+      </NuxtLink>
     </template>
   </MenuPopover>
 </template>

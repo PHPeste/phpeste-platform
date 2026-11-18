@@ -5,8 +5,8 @@ const EDITIONS_API = '**/api/v1/editions'
 const LOGIN_API = '**/api/v1/auth/login'
 
 const editions = [
-  { id: 1, slug: 'ed-1', name: 'PHPeste 2027', city: 'João Pessoa', state: 'PB', year: 2027, site_url: 'https://phpeste.dev', role: 'organizador' },
-  { id: 2, slug: 'ed-2', name: 'PHPeste 2026', city: 'Recife', state: 'PE', year: 2026, site_url: null, role: 'financeiro' },
+  { id: 'ed-1', community_id: 'c1', community: { id: 'c1', name: 'PHPeste', slug: 'phpeste' }, status: 'cfp_open', status_label: 'CFP aberto', starts_on: null, ends_on: null, slug: 'ed-1', name: 'PHPeste 2027', city: 'João Pessoa', state: 'PB', year: 2027, site_url: 'https://phpeste.dev', role: 'organizador' },
+  { id: 'ed-2', community_id: 'c1', community: { id: 'c1', name: 'PHPeste', slug: 'phpeste' }, status: 'cfp_open', status_label: 'CFP aberto', starts_on: null, ends_on: null, slug: 'ed-2', name: 'PHPeste 2026', city: 'Recife', state: 'PE', year: 2026, site_url: null, role: 'financeiro' },
 ]
 
 const session = {

@@ -9,7 +9,7 @@ mockNuxtImport('useRoute', () => () => ({ path: path.value }))
 
 async function asRole(role: string) {
   vi.spyOn(editionService, 'list').mockResolvedValue({
-    data: [{ id: 1, slug: 'ed-1', name: 'PHPeste 2027', city: 'João Pessoa', state: 'PB', year: 2027, site_url: null, role }],
+    data: [{ id: 'ed-1', community_id: 'c1', status: 'cfp_open', status_label: 'CFP aberto', starts_on: null, ends_on: null, slug: 'ed-1', name: 'PHPeste 2027', city: 'João Pessoa', state: 'PB', year: 2027, site_url: null, role }],
   })
   await useEdition().load()
 }

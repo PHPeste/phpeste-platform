@@ -33,8 +33,8 @@ test.describe('Aceite de convite', () => {
     await page.getByLabel('Repita a senha').fill('senha123456')
     await page.getByRole('button', { name: 'Aceitar convite e entrar' }).click()
 
-    await expect(page).toHaveURL(/\/$/)
-    await expect(page.getByRole('button', { name: 'Menu do usuário' })).toContainText('Lívia Ferraz')
+    await expect(page).toHaveURL(/\/comunidades$/)
+    await expect(page.getByRole('banner')).toContainText('Lívia Ferraz')
   })
 
   test('com conta existente pede a senha e mostra o erro de senha errada', async ({ page, goto }) => {

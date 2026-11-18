@@ -3,9 +3,9 @@ import editionService from '@/modules/shell/services/editionService'
 import { useEdition } from './useEdition'
 
 const payload = [
-  { id: 1, slug: 'phpeste-2027', name: 'PHPeste 2027', city: 'João Pessoa', state: 'PB', year: 2027, site_url: 'https://phpeste.dev', role: 'organizador' },
-  { id: 2, slug: 'phpeste-2026', name: 'PHPeste 2026', city: 'Recife', state: 'PE', year: 2026, site_url: null, role: 'financeiro' },
-  { id: 3, slug: 'x', name: 'Papel inválido', city: 'X', state: 'XX', year: 2025, site_url: null, role: 'hacker' },
+  { id: 'ed-27', slug: '2027', name: 'PHPeste 2027', community_id: 'c1', community: { id: 'c1', name: 'PHPeste', slug: 'phpeste' }, status: 'cfp_open', status_label: 'CFP aberto', starts_on: '2027-10-08', ends_on: '2027-10-09', city: 'João Pessoa', state: 'PB', year: 2027, site_url: 'https://phpeste.dev', role: 'organizador' },
+  { id: 'ed-26', slug: '2026', name: 'PHPeste 2026', community_id: 'c1', status: 'closed', status_label: 'Encerrada', starts_on: null, ends_on: null, city: 'Recife', state: 'PE', year: 2026, site_url: null, role: 'financeiro' },
+  { id: 'ed-x', slug: 'x', name: 'Papel inválido', community_id: 'c1', status: 'draft', status_label: 'Rascunho', starts_on: null, ends_on: null, city: 'X', state: 'XX', year: 2025, site_url: null, role: 'hacker' },
 ]
 
 beforeEach(() => {
@@ -21,8 +21,8 @@ describe('useEdition', () => {
   it('guarda e limpa a edição atual', () => {
     const { current, setCurrent, clear } = useEdition()
 
-    setCurrent({ id: 1, slug: 'phpeste-2027', name: 'PHPeste 2027' })
-    expect(current.value).toEqual({ id: 1, slug: 'phpeste-2027', name: 'PHPeste 2027' })
+    setCurrent({ id: 'ed-27', slug: 'phpeste-2027', name: 'PHPeste 2027' })
+    expect(current.value).toEqual({ id: 'ed-27', slug: 'phpeste-2027', name: 'PHPeste 2027' })
 
     clear()
     expect(current.value).toBeNull()
@@ -33,7 +33,7 @@ describe('useEdition', () => {
     const edition = useEdition()
     await edition.load()
     expect(edition.status.value).toBe('ready')
-    expect(edition.editions.value.map((e) => e.id)).toEqual([1, 2])
+    expect(edition.editions.value.map((e) => e.id)).toEqual(['ed-27', 'ed-26'])
     expect(edition.current.value?.yearBadge).toBe('27')
     expect(edition.role.value).toBe('organizador')
   })
@@ -42,17 +42,18 @@ describe('useEdition', () => {
     vi.spyOn(editionService, 'list').mockResolvedValue({ data: payload })
     const edition = useEdition()
     await edition.load()
-    await edition.select(2)
-    expect(edition.current.value?.id).toBe(2)
+    await edition.select('ed-26')
+    expect(edition.current.value?.id).toBe('ed-26')
     expect(edition.role.value).toBe('financeiro')
+    expect(edition.isReadOnly.value).toBe(true)
   })
 
   it('ignora troca para edição inexistente', async () => {
     vi.spyOn(editionService, 'list').mockResolvedValue({ data: payload })
     const edition = useEdition()
     await edition.load()
-    await edition.select(99)
-    expect(edition.current.value?.id).toBe(1)
+    await edition.select('nada')
+    expect(edition.current.value?.id).toBe('ed-27')
   })
 
   it('marca erro quando a API falha e não fica com papel', async () => {
