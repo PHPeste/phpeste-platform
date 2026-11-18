@@ -7,6 +7,7 @@ use PHPeste\Cfp\Http\Controllers\AdminProposalController;
 use PHPeste\Cfp\Http\Controllers\CfpCriterionController;
 use PHPeste\Cfp\Http\Controllers\CfpSettingsController;
 use PHPeste\Cfp\Http\Controllers\CfpTrackController;
+use PHPeste\Cfp\Http\Controllers\DecisionController;
 use PHPeste\Cfp\Http\Controllers\EvaluationController;
 use PHPeste\Cfp\Http\Controllers\PublicCfpController;
 use PHPeste\Cfp\Http\Controllers\ReviewAssignmentController;
@@ -41,6 +42,10 @@ Route::apiV1Edition('cfp')->group(function (): void {
         ->whereUuid('proposal')
         ->whereUuid('reviewer')
         ->name('cfp.assignments.destroy');
+
+    Route::get('/decision/ranking', [DecisionController::class, 'ranking'])->name('cfp.decision.ranking');
+    Route::post('/decision/simulate', [DecisionController::class, 'simulate'])->name('cfp.decision.simulate');
+    Route::post('/decision/apply', [DecisionController::class, 'apply'])->name('cfp.decision.apply');
 
     Route::get('/reviews/queue', [ReviewController::class, 'queue'])->name('cfp.reviews.queue');
     Route::get('/proposals/{proposal}/review', [ReviewController::class, 'show'])->whereUuid('proposal')->name('cfp.reviews.show');

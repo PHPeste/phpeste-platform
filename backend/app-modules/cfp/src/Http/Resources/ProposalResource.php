@@ -44,6 +44,8 @@ class ProposalResource extends ApiResource
             'language' => $proposal->language->value,
             'status' => $proposal->status->value,
             'status_label' => $proposal->status->label(),
+            'decision' => $proposal->decision?->value,
+            'decision_label' => $proposal->decision?->label(),
             'missing_for_submission' => $proposal->missingForSubmission(),
             'nordeste' => $this->nordeste,
             'speakers_hidden' => $this->speakers === null,
