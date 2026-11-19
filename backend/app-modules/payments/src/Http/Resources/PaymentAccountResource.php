@@ -6,8 +6,10 @@ namespace PHPeste\Payments\Http\Resources;
 
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use PHPeste\Payments\Enums\PaymentMethod;
 use PHPeste\Payments\Models\PaymentAccount;
+use PHPeste\Payments\Models\WebhookEventRecord;
 
 class PaymentAccountResource extends ApiResource
 {
@@ -45,6 +47,16 @@ class PaymentAccountResource extends ApiResource
             'retired_at' => $this->isoDate($account->retired_at),
             'created_at' => $this->isoDate($account->created_at),
             'webhook_url' => $account->isActive() ? url("/api/v1/webhooks/payments/{$account->webhook_token}") : null,
+            // Último evento assinado que o gateway mandou para esta conta: mostra
+            // no painel se o webhook continua chegando depois do primeiro teste.
+            'last_event_at' => $account->isActive() ? $this->isoDate($this->lastEventAt($account)) : null,
         ];
+    }
+
+    private function lastEventAt(PaymentAccount $account): ?Carbon
+    {
+        $latest = WebhookEventRecord::query()->forEdition($account->edition_id)->where('payment_account_id', $account->id)->latest()->first(['created_at']);
+
+        return $latest?->created_at;
     }
 }
