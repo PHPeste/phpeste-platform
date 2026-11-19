@@ -388,6 +388,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/editions/{edition}/cfp/reviewers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.reviewers.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/editions/{edition}/cfp/assignments/auto": {
         parameters: {
             query?: never;
@@ -478,6 +494,86 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["cfp.decision.apply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/speakers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.speakers.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/speakers/invite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speakers.invite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/speakers/remind": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speakers.remind"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/speakers/{user}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["cfp.speakers.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/cfp/speakers/{user}/attendance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cfp.speakers.attendance"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1012,6 +1108,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/editions/{edition}/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["community.editions.overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/editions/{edition}/clone-options": {
         parameters: {
             query?: never;
@@ -1052,6 +1164,174 @@ export interface paths {
             cookie?: never;
         };
         get: operations["community.public.editions.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["finance.summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * `format=xlsx` (padrão): resumo, receita por conta, orçamento e
+         *     despesas em abas. `format=csv`: só as despesas, separadas por ponto e
+         *     vírgula, que é o que o Excel em português abre direto
+         */
+        get: operations["finance.export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/suppliers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fornecedores da edição para escolher na despesa */
+        get: operations["finance.suppliers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["finance.categories.index"];
+        put?: never;
+        post: operations["finance.categories.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/categories/{category}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["finance.categories.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["finance.categories.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/expenses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Filtros: `status`, `finance_category_id`, `edition_supplier_id`, `overdue=1` */
+        get: operations["finance.expenses.index"];
+        put?: never;
+        post: operations["finance.expenses.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/expenses/{expense}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["finance.expenses.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["finance.expenses.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/expenses/{expense}/receipt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["finance.expenses.receipt"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/finance/expenses/{expense}/receipt/url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["finance.expenses.receipt.url"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/finance/receipts/{expense}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Sem login: a assinatura com expiração é a autorização */
+        get: operations["finance.receipts.download"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1320,6 +1600,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["me.sessions.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions/{session}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["me.sessions.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/editions/{edition}/people/{user}/speaker-profile": {
         parameters: {
             query?: never;
@@ -1432,6 +1744,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/editions/{edition}/emails/suppressions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["notifications.suppressions.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/emails/suppressions/{suppression}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["notifications.suppressions.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/webhooks/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["notifications.webhooks.resend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/public/editions/{edition}/unsubscribe": {
         parameters: {
             query?: never;
@@ -1448,6 +1808,118 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/editions/{edition}/payments/accounts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["payments.accounts.index"];
+        put?: never;
+        post: operations["payments.accounts.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/payments/accounts/{account}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["payments.accounts.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/payments/accounts/{account}/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["payments.accounts.verify"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/payments/webhook-events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["payments.webhook-events.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/payments/webhook-events/{event}/reprocess": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["payments.webhook-events.reprocess"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/editions/{edition}/payments/receiver": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["payments.public.receiver"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/webhooks/payments/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["payments.webhooks.receive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/ping": {
         parameters: {
             query?: never;
@@ -1458,6 +1930,1429 @@ export interface paths {
         get: operations["ping"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["sponsors.board"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["sponsors.settings"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/tiers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["sponsors.tiers.index"];
+        put?: never;
+        post: operations["sponsors.tiers.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/tiers/{tier}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["sponsors.tiers.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["sponsors.tiers.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/companies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["sponsors.companies.index"];
+        put?: never;
+        post: operations["sponsors.companies.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/companies/{sponsor}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["sponsors.companies.show"];
+        put?: never;
+        post?: never;
+        delete: operations["sponsors.companies.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["sponsors.companies.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/companies/{sponsor}/contacts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["sponsors.contacts.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/companies/{sponsor}/contacts/{contact}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["sponsors.contacts.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/companies/{sponsor}/attachments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["sponsors.attachments.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/companies/{sponsor}/sponsorships": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["sponsors.sponsorships.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/attachments/{attachment}/url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** URL assinada, válida por poucos minutos, para quem tem permissão agora */
+        get: operations["sponsors.attachments.url"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/attachments/{attachment}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["sponsors.attachments.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/sponsorships/{sponsorship}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["sponsors.sponsorships.show"];
+        put?: never;
+        post?: never;
+        delete: operations["sponsors.sponsorships.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["sponsors.sponsorships.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/sponsorships/{sponsorship}/move": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["sponsors.sponsorships.move"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/sponsorships/{sponsorship}/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["sponsors.payments.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/sponsorships/{sponsorship}/payments/{payment}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["sponsors.payments.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/sponsorships/{sponsorship}/deliverables": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["sponsors.deliverables.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/deliverables": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Todas as entregas da edição, para a lista "o que falta entregar".
+         *     Filtros: `status`, `owner_id`, `overdue=1`
+         */
+        get: operations["sponsors.deliverables.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/sponsors/deliverables/{deliverable}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["sponsors.deliverables.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["sponsors.deliverables.update"];
+        trace?: never;
+    };
+    "/v1/sponsors/attachments/{attachment}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Rota sem login: a assinatura com expiração (middleware `signed`) é a
+         *     autorização. Sempre como download, nunca exibido no navegador, para um
+         *     SVG ou PDF não rodar nada no domínio da API
+         */
+        get: operations["sponsors.attachments.download"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["suppliers.index"];
+        put?: never;
+        post: operations["suppliers.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/directory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["suppliers.directory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/directory/{supplier}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["suppliers.directory.link"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/attachments/{attachment}/url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["suppliers.attachments.url"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/attachments/{attachment}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["suppliers.attachments.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["suppliers.show"];
+        put?: never;
+        post?: never;
+        delete: operations["suppliers.destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * Edita os dados globais do fornecedor (valem para as outras edições da
+         *     comunidade) e o responsável nesta edição
+         */
+        patch: operations["suppliers.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Contratar (com orçamento aceito ou valor) e recusar (com motivo) */
+        post: operations["suppliers.status"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}/activities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["suppliers.activities.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}/contacts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["suppliers.contacts.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}/contacts/{contact}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["suppliers.contacts.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["suppliers.contacts.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}/quotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["suppliers.quotes.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}/quotes/{quote}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["suppliers.quotes.reject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}/quotes/{quote}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["suppliers.quotes.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/suppliers/{link}/attachments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["suppliers.attachments.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/suppliers/attachments/{attachment}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Sem login: a assinatura com expiração é a autorização. Sempre como
+         *     download, com `nosniff` e CSP `sandbox`
+         */
+        get: operations["suppliers.attachments.download"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/tasks/board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * `filter=mine|overdue` (padrão: todas). As contagens das colunas
+         *     seguem o filtro
+         */
+        get: operations["tasks.board"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/tasks/link-options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** O que dá para ligar a uma tarefa, por tipo (fornecedores, patrocinadores...) */
+        get: operations["tasks.link-options"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["tasks.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/tasks/{task}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["tasks.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["tasks.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/tasks/{task}/move": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Devolve a coluna de destino (e a de origem) já renumeradas, para o
+         *     painel confirmar o movimento otimista ou desfazer
+         */
+        post: operations["tasks.move"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/tasks/columns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["tasks.columns.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/tasks/columns/reorder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["tasks.columns.reorder"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/tasks/columns/{column}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["tasks.columns.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["tasks.columns.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/ticket-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.types.index"];
+        put?: never;
+        post: operations["ticketing.types.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ticketing.settings.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/ticket-types/{ticketType}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ticketing.types.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["ticketing.types.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/ticket-types/{ticketType}/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.batches.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/ticket-types/{ticketType}/batches/{batch}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ticketing.batches.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["ticketing.batches.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/ticket-types/{ticketType}/batches/{batch}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.batches.close"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/coupons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.coupons.index"];
+        put?: never;
+        post: operations["ticketing.coupons.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/coupons/{coupon}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ticketing.coupons.destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["ticketing.coupons.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/coupons/{coupon}/redemptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.coupons.redemptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Pedidos da edição, do mais novo para o mais antigo. `status` filtra pela
+         *     situação; `q` procura no nome, no e-mail ou no número (com ou sem #)
+         */
+        get: operations["ticketing.orders.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Os mesmos filtros da lista, em CSV separado por ponto e vírgula */
+        get: operations["ticketing.orders.export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders/{order}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** O pedido com a cobrança em andamento no gateway, quando houver */
+        get: operations["ticketing.orders.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders/{order}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.orders.cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders/{order}/mark-paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirma um pagamento recebido fora do gateway. A justificativa é
+         *     obrigatória e fica na auditoria; os ingressos são emitidos na hora
+         */
+        post: operations["ticketing.orders.mark-paid"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders/{order}/payment-reminder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Manda de novo para quem comprou o link de pagamento do pedido */
+        post: operations["ticketing.orders.payment-reminder"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders/{order}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Linha do tempo: criação, pagamento, reembolsos, cobranças reenviadas e
+         *     quem fez cada coisa
+         */
+        get: operations["ticketing.orders.history"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders/{order}/refunds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.orders.refunds.index"];
+        put?: never;
+        post: operations["ticketing.orders.refunds.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/orders/{order}/refunds/{refund}/settle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.orders.refunds.settle"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.tickets.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/tickets/{ticket}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.tickets.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ticketing.tickets.update"];
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/tickets/{ticket}/transfer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.tickets.transfer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/tickets/{ticket}/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.tickets.resend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/reconciliation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.reconciliation.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/reconciliation/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.reconciliation.run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/imports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.imports.index"];
+        put?: never;
+        post: operations["ticketing.imports.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/imports/{import}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.imports.show"];
+        put?: never;
+        post?: never;
+        delete: operations["ticketing.imports.destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/imports/{import}/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["ticketing.imports.map"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/imports/{import}/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.imports.start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/imports/{import}/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.imports.resume"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/imports/{import}/rejections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.imports.rejections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/imports/{import}/rejections.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Relatório das linhas que não entraram, em CSV com o mesmo cabeçalho
+         *     do arquivo original mais a linha e o motivo, para corrigir e reenviar
+         */
+        get: operations["ticketing.imports.rejections.csv"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/imports/{import}/email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.imports.email"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/reconciliation/{issue}/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.reconciliation.resolve"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkout/editions/{edition}/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.checkout.orders.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkout/editions/{edition}/orders/{order}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.checkout.orders.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkout/editions/{edition}/orders/{order}/payment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.checkout.orders.payment.show"];
+        put?: never;
+        post: operations["ticketing.checkout.orders.payment.start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkout/editions/{edition}/orders/{order}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.checkout.orders.cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/editions/{edition}/coupons/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.public.coupons.check"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/editions/{edition}/tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.public.tickets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/attendee/editions/{edition}/tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.attendee.tickets.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/attendee/editions/{edition}/tickets/{ticket}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ticketing.attendee.tickets.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ticketing.attendee.tickets.update"];
+        trace?: never;
+    };
+    "/v1/attendee/editions/{edition}/tickets/{ticket}/transfer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.attendee.tickets.transfer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/attendee/editions/{edition}/tickets/{ticket}/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ticketing.attendee.tickets.resend"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1492,6 +3387,11 @@ export interface components {
             /** Format: uuid */
             reviewer_id: string;
         };
+        /**
+         * AttachmentKind
+         * @enum {string}
+         */
+        AttachmentKind: "contract" | "logo" | "other";
         /** AutoAssignRequest */
         AutoAssignRequest: {
             reviewers_per_proposal: number;
@@ -1528,6 +3428,7 @@ export interface components {
             name: string;
             slots: number;
             position: number;
+            proposals_count: number;
         } | string[];
         /** ChangeEditionStatusRequest */
         ChangeEditionStatusRequest: {
@@ -1543,11 +3444,28 @@ export interface components {
             password: string;
             password_confirmation: string;
         };
+        /** ChangeStatusRequest */
+        ChangeStatusRequest: {
+            status: components["schemas"]["SupplierStatus"];
+            /** Format: uuid */
+            quote_id?: string | null;
+            contracted_cents?: number | null;
+            reason?: string | null;
+        };
+        /** CheckCouponRequest */
+        CheckCouponRequest: {
+            code: string;
+            items: {
+                /** Format: uuid */
+                ticket_type_id: string;
+                quantity: number;
+            }[];
+        };
         /** CloneEditionRequest */
         CloneEditionRequest: {
             name: string;
             slug: string;
-            parts: ("identity" | "cfp" | "team" | "emails")[];
+            parts: ("identity" | "cfp" | "team" | "finance" | "emails" | "sponsor_tiers" | "suppliers" | "tasks" | "ticketing")[];
         };
         /** CommunityResource */
         CommunityResource: {
@@ -1556,6 +3474,56 @@ export interface components {
             slug: string;
             created_at: string | null;
         } | string[];
+        /**
+         * ContactChannel
+         * @enum {string}
+         */
+        ContactChannel: "email" | "phone" | "whatsapp" | "meeting" | "other";
+        /**
+         * CouponKind
+         * @enum {string}
+         */
+        CouponKind: "percent" | "fixed";
+        /** CouponResource */
+        CouponResource: {
+            id: string;
+            code: string;
+            description: string | null;
+            /** @enum {string} */
+            kind: "percent" | "fixed";
+            /** @enum {string} */
+            kind_label: "Percentual" | "Valor fixo por pedido";
+            value: number;
+            max_uses: number | null;
+            used: number;
+            remaining: number | null;
+            starts_at: string | null;
+            ends_at: string | null;
+            ticket_type_ids: string[];
+            active: boolean;
+            /** @enum {string} */
+            status: "paused" | "exhausted" | "expired" | "scheduled" | "active";
+            discount_total: {
+                amount: number;
+                currency: string;
+            } | null;
+        } | string[];
+        /** CreatePaymentAccountRequest */
+        CreatePaymentAccountRequest: {
+            /** @enum {string} */
+            driver: "asaas" | "mercadopago" | "fake";
+            environment: components["schemas"]["GatewayEnvironment"];
+            api_key: string;
+            webhook_secret: string;
+            public_key?: string | null;
+            holder_type: components["schemas"]["HolderType"];
+            holder_name: string;
+            holder_document: string;
+            methods: components["schemas"]["PaymentMethod"][];
+            max_installments?: number;
+            pix_expiration_minutes?: number;
+            confirm?: boolean;
+        };
         /** DecisionsRequest */
         DecisionsRequest: {
             decisions: {
@@ -1565,10 +3533,15 @@ export interface components {
             }[];
         };
         /**
+         * DeliverableStatus
+         * @enum {string}
+         */
+        DeliverableStatus: "pending" | "in_progress" | "done";
+        /**
          * DeliveryStatus
          * @enum {string}
          */
-        DeliveryStatus: "queued" | "sent" | "failed" | "suppressed";
+        DeliveryStatus: "queued" | "sent" | "delivered" | "bounced" | "complained" | "failed" | "suppressed";
         /** EditionCloneResource */
         EditionCloneResource: {
             id: string;
@@ -1608,6 +3581,11 @@ export interface components {
         EditionResource: {
             id: string;
             community_id: string;
+            community: {
+                id: string;
+                name: string;
+                slug: string;
+            } | Record<string, never>;
             name: string;
             slug: string;
             /** @enum {string} */
@@ -1615,6 +3593,7 @@ export interface components {
             /** @enum {string} */
             status_label: "Rascunho" | "CFP aberto" | "Vendas abertas" | "Em andamento" | "Encerrada";
             allowed_transitions: unknown[];
+            status_options: unknown[];
             starts_on: string | null;
             ends_on: string | null;
             year: string | null;
@@ -1622,7 +3601,13 @@ export interface components {
             /** @enum {string|null} */
             state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
             timezone: string;
-            site_url: null;
+            /** @enum {string} */
+            site_mode: "platform" | "external";
+            external_site_url: string | null;
+            site_url: string | null;
+            privacy_contact_email: string | null;
+            privacy_policy_url: string | null;
+            anonymize_after_event: boolean;
             role: null | Record<string, never> | ("organizador" | "financeiro" | "avaliador" | "checkin" | "voluntario");
             created_at: string | null;
         } | string[];
@@ -1640,36 +3625,59 @@ export interface components {
         EmailDeliveryResource: {
             id: string;
             /** @enum {string} */
-            template: "order_confirmed" | "pix_reminder" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder";
+            template: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon";
             to_email: string;
             to_name: string;
             /** @enum {string} */
-            status: "queued" | "sent" | "failed" | "suppressed";
+            status: "queued" | "sent" | "delivered" | "bounced" | "complained" | "failed" | "suppressed";
+            /** @enum {string} */
+            status_label: "Na fila" | "Enviado" | "Entregue" | "Voltou (bounce)" | "Marcado como spam" | "Falhou" | "Não enviado: endereço bloqueado";
+            provider_detail: string | null;
+            delivered_at: string | null;
+            bounced_at: string | null;
+            complained_at: string | null;
             attempts: number;
             last_error: string | null;
             is_test: boolean;
             sent_at: string | null;
             created_at: string | null;
         } | string[];
+        /** EmailImportedTicketsRequest */
+        EmailImportedTicketsRequest: {
+            confirm: boolean;
+            recipients: number;
+        };
         /**
          * EmailTemplate
          * @enum {string}
          */
-        EmailTemplate: "order_confirmed" | "pix_reminder" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder";
+        EmailTemplate: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon";
         /** EmailTemplateResource */
         EmailTemplateResource: {
             /** @enum {string} */
-            id: "order_confirmed" | "pix_reminder" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder";
+            id: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon";
             /** @enum {string} */
-            label: "Confirmação de compra" | "Lembrete de Pix" | "Resultado do CFP: aprovada" | "Resultado do CFP: lista de espera" | "Antes do evento" | "Convite para a equipe" | "Proposta recebida" | "Lembrete de confirmação do palestrante";
+            label: "Confirmação de compra" | "Lembrete de pagamento" | "Reembolso do pedido" | "Ingresso transferido" | "Resultado do CFP: aprovada" | "Resultado do CFP: lista de espera" | "Antes do evento" | "Convite para a equipe" | "Proposta recebida" | "Lembrete de confirmação do palestrante" | "Convite para palestrar" | "Tarefa atribuída" | "Prazo de tarefa chegando";
             /** @enum {string} */
-            trigger: "Ao pagar o pedido" | "30 min antes de expirar" | "Manual" | "7 dias antes" | "Ao convidar alguém para a equipe" | "Ao enviar uma proposta" | "2 dias antes do prazo de confirmação";
+            trigger: "Ao pagar o pedido" | "Quando a organização reenvia a cobrança" | "Ao reembolsar o pedido" | "Ao receber um ingresso transferido" | "Manual" | "7 dias antes" | "Ao convidar alguém para a equipe" | "Ao enviar uma proposta" | "2 dias antes do prazo de confirmação" | "Ao convidar alguém direto para palestrar" | "Ao virar responsável por uma tarefa" | "1 dia antes do prazo da tarefa";
             transactional: boolean;
             variables: [
                 "nome",
                 "edicao",
                 "pedido",
                 "data"
+            ] | [
+                "nome",
+                "edicao",
+                "pedido",
+                "valor",
+                "ingressos"
+            ] | [
+                "nome",
+                "edicao",
+                "data",
+                "remetente",
+                "ingresso"
             ] | [
                 "nome",
                 "edicao",
@@ -1694,14 +3702,24 @@ export interface components {
                 "edicao",
                 "proposta",
                 "prazo"
+            ] | [
+                "nome",
+                "edicao",
+                "tarefa",
+                "prazo"
             ];
             /** @enum {string} */
-            action_label: "Ver meu ingresso" | "Pagar com Pix" | "Confirmar participação" | "Ver minha proposta" | "Ver programação" | "Aceitar convite";
+            action_label: "Ver meu ingresso" | "Pagar o pedido" | "Ver meu pedido" | "Confirmar participação" | "Ver minha proposta" | "Ver programação" | "Aceitar convite" | "Ver tarefa";
             subject: string;
             body: string;
             customized: boolean;
             last_sent_at: string | null;
         };
+        /**
+         * ExpenseStatus
+         * @enum {string}
+         */
+        ExpenseStatus: "pending" | "paid" | "cancelled";
         /** ExtendDeadlineRequest */
         ExtendDeadlineRequest: {
             /** Format: date-time */
@@ -1712,11 +3730,32 @@ export interface components {
             /** Format: email */
             email: string;
         };
+        /**
+         * GatewayEnvironment
+         * @enum {string}
+         */
+        GatewayEnvironment: "sandbox" | "production";
         /** GithubCallbackRequest */
         GithubCallbackRequest: {
             code: string;
             state: string;
             device_name?: string | null;
+        };
+        /**
+         * HolderType
+         * @enum {string}
+         */
+        HolderType: "individual" | "company";
+        /** InviteSpeakerRequest */
+        InviteSpeakerRequest: {
+            name: string;
+            /** Format: email */
+            email: string;
+            title: string;
+            /** Format: uuid */
+            track_id: string;
+            format: components["schemas"]["ProposalFormat"];
+            summary?: string | null;
         };
         /** InviteTeamMemberRequest */
         InviteTeamMemberRequest: {
@@ -1725,6 +3764,20 @@ export interface components {
             name?: string | null;
             role: components["schemas"]["EditionRole"];
         };
+        /** LogActivityRequest */
+        LogActivityRequest: {
+            channel: components["schemas"]["PHPeste.Suppliers.Enums.ContactChannel"];
+            /** Format: date-time */
+            happened_at?: string | null;
+            summary: string;
+        };
+        /** LogContactRequest */
+        LogContactRequest: {
+            channel: components["schemas"]["ContactChannel"];
+            /** Format: date-time */
+            happened_at?: string | null;
+            summary: string;
+        };
         /** LoginRequest */
         LoginRequest: {
             /** Format: email */
@@ -1732,6 +3785,114 @@ export interface components {
             password: string;
             device_name?: string;
         };
+        /** MapTicketImportRequest */
+        MapTicketImportRequest: {
+            mapping: number[];
+            ticket_type_map?: {
+                value: string;
+                /** Format: uuid */
+                ticket_type_id: string | null;
+            }[];
+            /** Format: uuid */
+            default_ticket_type_id?: string | null;
+        };
+        /** MarkOrderPaidRequest */
+        MarkOrderPaidRequest: {
+            justification: string;
+        };
+        /** MoveSponsorshipRequest */
+        MoveSponsorshipRequest: {
+            stage: components["schemas"]["SponsorshipStage"];
+            position?: number | null;
+            lost_reason?: string | null;
+            confirm?: boolean;
+        };
+        /** MoveTaskRequest */
+        MoveTaskRequest: {
+            /** Format: uuid */
+            task_column_id: string;
+            position: number;
+        };
+        /** OrderResource */
+        OrderResource: ({
+            id: string | unknown;
+            number: number | unknown;
+            status: ("created" | "awaiting_payment" | "paid" | "expired" | "cancelled" | "refunded") | unknown;
+            status_label: ("Criado" | "Aguardando pagamento" | "Pago" | "Expirado" | "Cancelado" | "Reembolsado") | unknown;
+            source: ("checkout" | "import") | unknown;
+            external: ({
+                platform: string | null;
+                reference: string | null;
+            } | null) | unknown;
+            buyer: {
+                name: string;
+                email: string;
+                document: string | null;
+            } | unknown;
+            subtotal: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            discount: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            fee: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            total: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            refunded: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            gateway_fee: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            requires_payment: boolean | unknown;
+            coupon_code: (string | null) | unknown;
+            payment_account_id: (string | null) | unknown;
+            expires_at: (string | null) | unknown;
+            paid_at: (string | null) | unknown;
+            created_at: (string | null) | unknown;
+            items: {
+                id: string;
+                ticket_type_id: string;
+                ticket_type_name: string;
+                batch_name: string;
+                unit_price: {
+                    amount: number;
+                    currency: string;
+                } | null;
+                discount: {
+                    amount: number;
+                    currency: string;
+                } | null;
+                fee: {
+                    amount: number;
+                    currency: string;
+                } | null;
+                total: {
+                    amount: number;
+                    currency: string;
+                } | null;
+                attendee: {
+                    name: string;
+                    email: string;
+                };
+                answers: {
+                    [key: string]: string | boolean;
+                } | string;
+                cancelled_at: string | null;
+                external_code: string | null;
+            }[] | unknown;
+        } & {
+            [key: string]: unknown;
+        }) | string[];
         /** OrganizationLogisticsRequest */
         OrganizationLogisticsRequest: {
             origin_city?: string | null;
@@ -1741,6 +3902,88 @@ export interface components {
             travel_paid_by_organization?: boolean;
             lodging_paid_by_organization?: boolean;
             organization_notes?: string | null;
+        };
+        /**
+         * PHPeste.Suppliers.Enums.AttachmentKind
+         * @enum {string}
+         */
+        "PHPeste.Suppliers.Enums.AttachmentKind": "quote" | "contract" | "invoice" | "other";
+        /**
+         * PHPeste.Suppliers.Enums.ContactChannel
+         * @enum {string}
+         */
+        "PHPeste.Suppliers.Enums.ContactChannel": "email" | "phone" | "whatsapp" | "meeting" | "visit" | "other";
+        /** PHPeste.Suppliers.Http.Requests.UploadAttachmentRequest */
+        "PHPeste.Suppliers.Http.Requests.UploadAttachmentRequest": {
+            kind: components["schemas"]["PHPeste.Suppliers.Enums.AttachmentKind"];
+            /**
+             * Format: binary
+             * @description Maximum file size: 20480 kilobytes.
+             */
+            file: string;
+        };
+        /** PaymentAccountResource */
+        PaymentAccountResource: {
+            id: string;
+            driver: string;
+            /** @enum {string} */
+            environment: "sandbox" | "production";
+            /** @enum {string} */
+            environment_label: "Sandbox (testes)" | "Produção";
+            credentials_hint: string;
+            holder: {
+                /** @enum {string} */
+                type: "individual" | "company";
+                /** @enum {string} */
+                type_label: "Pessoa física (CPF)" | "Pessoa jurídica (CNPJ)";
+                name: string;
+                document: string;
+            };
+            methods: unknown[];
+            max_installments: number;
+            pix_expiration_minutes: number;
+            active: boolean;
+            ready: boolean;
+            verified_at: string | null;
+            webhook_verified_at: string | null;
+            webhook_rejections: {
+                count: number;
+                last_at: string | null;
+            };
+            retired_at: string | null;
+            created_at: string | null;
+            webhook_url: string | null;
+            /**
+             * @description Último evento assinado que o gateway mandou para esta conta: mostra
+             *     no painel se o webhook continua chegando depois do primeiro teste.
+             */
+            last_event_at: string | null;
+        } | string[];
+        /**
+         * PaymentMethod
+         * @enum {string}
+         */
+        PaymentMethod: "pix" | "card" | "boleto";
+        /** PlaceOrderRequest */
+        PlaceOrderRequest: {
+            buyer: {
+                name: string;
+                /** Format: email */
+                email: string;
+                document?: string | null;
+            };
+            coupon?: string | null;
+            access_code?: string | null;
+            items: {
+                /** Format: uuid */
+                ticket_type_id: string;
+                attendees: {
+                    name: string;
+                    /** Format: email */
+                    email: string;
+                    answers?: string[];
+                }[];
+            }[];
         };
         /** PreviewEmailTemplateRequest */
         PreviewEmailTemplateRequest: {
@@ -1831,6 +4074,75 @@ export interface components {
                 slug: string;
             };
         } | string[];
+        /** ReconciliationIssueResource */
+        ReconciliationIssueResource: {
+            id: string;
+            /** @enum {string} */
+            kind: "paid_without_charge" | "charge_without_order" | "amount_mismatch" | "duplicate_payment" | "disputed" | "refund_unconfirmed";
+            /** @enum {string} */
+            label: "Pedido pago sem pagamento confirmado no gateway" | "Pagamento recebido para pedido que não está pago" | "Valor pago diferente do total do pedido" | "Pedido pago mais de uma vez" | "Pagamento em contestação no cartão" | "Reembolso sem confirmação do gateway";
+            /** @enum {string} */
+            advice: "Confira no painel do gateway se o pagamento existe. Se não existir, cancele o pedido." | "O pagamento chegou depois de a reserva expirar ou de o pedido ser cancelado. Reembolse com o motivo \"Pago depois de a reserva expirar\"." | "Confira o valor no painel do gateway e reembolse a diferença, se for o caso." | "Reembolse o pagamento repetido." | "Responda à contestação no painel do gateway, com o comprovante de compra e de presença." | "Confira no painel do gateway se o estorno saiu e registre o resultado no reembolso.";
+            order_id: string | null;
+            payment_charge_id: string | null;
+            details: {
+                [key: string]: unknown;
+            };
+            first_seen_at: string | null;
+            last_seen_at: string | null;
+            resolved: boolean;
+            resolved_at: string | null;
+            resolved_by: string | null;
+            resolution: string | null;
+        } | string[];
+        /** RecordPaymentRequest */
+        RecordPaymentRequest: {
+            amount_cents: number;
+            /** Format: date */
+            paid_on: string;
+            note?: string | null;
+        };
+        /** RecordQuoteRequest */
+        RecordQuoteRequest: {
+            amount_cents: number;
+            description: string;
+            /** Format: date */
+            received_on: string;
+            /** Format: date */
+            valid_until?: string | null;
+        };
+        /** RefundOrderRequest */
+        RefundOrderRequest: {
+            amount_cents?: number | null;
+            reason: components["schemas"]["RefundReason"];
+            note?: string | null;
+            cancel_tickets?: boolean;
+            item_ids?: string[] | null;
+        };
+        /**
+         * RefundReason
+         * @enum {string}
+         */
+        RefundReason: "buyer_request" | "event_changed" | "duplicate" | "paid_after_expiry" | "other";
+        /** RefundResource */
+        RefundResource: {
+            id: string;
+            order_id: string;
+            amount: {
+                amount: number;
+                currency: string;
+            } | null;
+            status: string;
+            status_label: string;
+            reason: string;
+            reason_label: string;
+            note: string;
+            cancelled_item_ids: unknown[];
+            failure_reason: string;
+            requested_by: string;
+            created_at: string | null;
+            completed_at: string | null;
+        } | string[];
         /** RegisterRequest */
         RegisterRequest: {
             name: string;
@@ -1838,6 +4150,15 @@ export interface components {
             email: string;
             password: string;
             password_confirmation: string;
+        };
+        /** RemindSpeakersRequest */
+        RemindSpeakersRequest: {
+            /** Format: uuid */
+            proposal_id?: string | null;
+        };
+        /** ReorderColumnsRequest */
+        ReorderColumnsRequest: {
+            ids: string[];
         };
         /** ResetPasswordRequest */
         ResetPasswordRequest: {
@@ -1851,6 +4172,39 @@ export interface components {
         RespondConfirmationRequest: {
             reason?: string | null;
         };
+        /** SaveCategoryRequest */
+        SaveCategoryRequest: {
+            name: string;
+            budget_cents?: number | null;
+            position?: number;
+        };
+        /** SaveColumnRequest */
+        SaveColumnRequest: {
+            name: string;
+            is_done?: boolean;
+        };
+        /** SaveContactRequest */
+        SaveContactRequest: {
+            name: string;
+            role?: string | null;
+            /** Format: email */
+            email?: string | null;
+            phone?: string | null;
+        };
+        /** SaveCouponRequest */
+        SaveCouponRequest: {
+            code: string;
+            description?: string | null;
+            kind: components["schemas"]["CouponKind"];
+            value: number;
+            max_uses?: number | null;
+            /** Format: date-time */
+            starts_at?: string | null;
+            /** Format: date-time */
+            ends_at?: string | null;
+            ticket_type_ids?: string[] | null;
+            active?: boolean;
+        };
         /** SaveCriterionRequest */
         SaveCriterionRequest: {
             name: string;
@@ -1859,10 +4213,34 @@ export interface components {
             position?: number;
             confirm?: boolean;
         };
+        /** SaveDeliverableRequest */
+        SaveDeliverableRequest: {
+            title: string;
+            /** Format: uuid */
+            owner_id?: string | null;
+            /** Format: date */
+            due_on?: string | null;
+            status?: components["schemas"]["DeliverableStatus"];
+        };
         /** SaveEmailTemplateRequest */
         SaveEmailTemplateRequest: {
             subject: string;
             body: string;
+        };
+        /** SaveExpenseRequest */
+        SaveExpenseRequest: {
+            /** Format: uuid */
+            finance_category_id: string;
+            /** Format: uuid */
+            edition_supplier_id?: string | null;
+            description: string;
+            amount_cents: number;
+            /** Format: date */
+            due_on?: string | null;
+            /** Format: date */
+            paid_on?: string | null;
+            status?: components["schemas"]["ExpenseStatus"];
+            notes?: string | null;
         };
         /** SaveProposalRequest */
         SaveProposalRequest: {
@@ -1900,11 +4278,119 @@ export interface components {
             accessibility_needs?: string | null;
             dietary_restrictions?: string | null;
         };
+        /** SaveSponsorRequest */
+        SaveSponsorRequest: {
+            name: string;
+            /** Format: uri */
+            website?: string | null;
+            contact_name?: string | null;
+            /** Format: email */
+            contact_email?: string | null;
+            contact_phone?: string | null;
+            notes?: string | null;
+        };
+        /** SaveSponsorTierRequest */
+        SaveSponsorTierRequest: {
+            name: string;
+            price_cents: number;
+            slots?: number | null;
+            benefits?: string[];
+            position?: number;
+        };
+        /** SaveSponsorshipRequest */
+        SaveSponsorshipRequest: {
+            /** Format: uuid */
+            sponsor_tier_id?: string | null;
+            value_cents?: number | null;
+            /** Format: uuid */
+            owner_id?: string | null;
+            stage?: components["schemas"]["SponsorshipStage"];
+            confirm?: boolean;
+        };
+        /** SaveSupplierRequest */
+        SaveSupplierRequest: {
+            name: string;
+            service: components["schemas"]["SupplierService"];
+            description?: string | null;
+            document?: string | null;
+            /** Format: uri */
+            website?: string | null;
+            city?: string | null;
+            state?: string | null;
+            /** Format: uuid */
+            owner_id?: string | null;
+            contacts?: {
+                name: string;
+                role?: string | null;
+                /** Format: email */
+                email?: string | null;
+                phone?: string | null;
+            }[];
+        };
+        /** SaveTaskRequest */
+        SaveTaskRequest: {
+            title: string;
+            description?: string | null;
+            /** Format: uuid */
+            assignee_id?: string | null;
+            /** Format: date */
+            due_on?: string | null;
+            link_type?: string | null;
+            /** Format: uuid */
+            link_id?: string | null;
+            /** Format: uuid */
+            task_column_id?: string;
+        };
+        /** SaveTicketBatchRequest */
+        SaveTicketBatchRequest: {
+            name: string;
+            price_cents: number;
+            quantity: number;
+            /** Format: date-time */
+            starts_at?: string | null;
+            /** Format: date-time */
+            ends_at?: string | null;
+            on_sell_out?: components["schemas"]["SellOutBehavior"];
+            position?: number;
+        };
+        /** SaveTicketTypeRequest */
+        SaveTicketTypeRequest: {
+            name: string;
+            description?: string | null;
+            visibility?: components["schemas"]["TicketVisibility"];
+            access_code?: string | null;
+            min_per_order?: number;
+            max_per_order?: number;
+            show_remaining?: boolean;
+            pass_fee_to_buyer?: boolean;
+            questions?: {
+                label: string;
+                /** @enum {string} */
+                type: "text" | "select" | "boolean";
+                required?: boolean;
+                options?: string[];
+            }[] | null;
+            position?: number;
+        };
         /** SaveTrackRequest */
         SaveTrackRequest: {
             name: string;
             slots: number;
             position?: number;
+        };
+        /**
+         * SellOutBehavior
+         * @enum {string}
+         */
+        SellOutBehavior: "next" | "close";
+        /**
+         * SiteMode
+         * @enum {string}
+         */
+        SiteMode: "platform" | "external";
+        /** SpeakerAttendanceRequest */
+        SpeakerAttendanceRequest: {
+            present: boolean;
         };
         /** SpeakerLogisticsRequest */
         SpeakerLogisticsRequest: {
@@ -1934,6 +4420,129 @@ export interface components {
             email: string;
             updated_at: string | null;
         } | string[];
+        /** SponsorAttachmentResource */
+        SponsorAttachmentResource: {
+            id: string;
+            /** @enum {string} */
+            kind: "contract" | "logo" | "other";
+            /** @enum {string} */
+            kind_label: "Contrato" | "Logo" | "Outro";
+            name: string;
+            mime_type: string;
+            size_bytes: number;
+            uploaded_by: {
+                id: string;
+                name: string;
+            } | null;
+            created_at: string;
+        } | string[];
+        /** SponsorDeliverableResource */
+        SponsorDeliverableResource: ({
+            id: string | unknown;
+            sponsorship_id: string | unknown;
+            title: string | unknown;
+            owner: ({
+                id: string;
+                name: string;
+            } | null) | unknown;
+            due_on: (string | null) | unknown;
+            status: ("pending" | "in_progress" | "done") | unknown;
+            status_label: ("A fazer" | "Em andamento" | "Entregue") | unknown;
+            overdue: boolean | unknown;
+            done_at: (string | null) | unknown;
+            position: number | unknown;
+        } & {
+            [key: string]: unknown;
+        }) | string[];
+        /** SponsorResource */
+        SponsorResource: ({
+            id: string | unknown;
+            name: string | unknown;
+            website: (string | null) | unknown;
+            contact: {
+                name: string | null;
+                email: string | null;
+                phone: string | null;
+            } | unknown;
+            notes: (string | null) | unknown;
+            created_at: (string | null) | unknown;
+        } & {
+            [key: string]: unknown;
+        }) | string[];
+        /** SponsorTierResource */
+        SponsorTierResource: {
+            id: string;
+            name: string;
+            price: {
+                amount: number;
+                currency: string;
+            } | null;
+            slots: number | null;
+            slots_taken: number;
+            slots_left: unknown;
+            benefits: string[];
+            position: number;
+        } | string[];
+        /** SponsorshipResource */
+        SponsorshipResource: ({
+            id: string | unknown;
+            sponsor: ({
+                id: string;
+                name: string;
+            } | {
+                id: string;
+            }) | unknown;
+            tier: ({
+                id: string;
+                name: string;
+            } | null) | unknown;
+            stage: ("prospecting" | "negotiating" | "closed" | "paid" | "lost") | unknown;
+            stage_label: ("Prospecção" | "Negociando" | "Fechado" | "Pago" | "Perdido") | unknown;
+            value: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            received: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            outstanding: ({
+                amount: number;
+                currency: string;
+            } | null) | unknown;
+            owner: string | unknown;
+            lost_reason: (string | null) | unknown;
+            position: number | unknown;
+            closed_at: (string | null) | unknown;
+            paid_at: (string | null) | unknown;
+            lost_at: (string | null) | unknown;
+            created_at: (string | null) | unknown;
+        } & {
+            [key: string]: unknown;
+        }) | string[];
+        /**
+         * SponsorshipStage
+         * @enum {string}
+         */
+        SponsorshipStage: "prospecting" | "negotiating" | "closed" | "paid" | "lost";
+        /** StartOrderPaymentRequest */
+        StartOrderPaymentRequest: {
+            method: components["schemas"]["PaymentMethod"];
+            installments?: number;
+            card_token?: string | null;
+            card_brand?: string | null;
+            card_issuer?: string | null;
+            card?: string;
+            card_number?: string;
+            number?: string;
+            cvv?: string;
+            ccv?: string;
+            cvc?: string;
+            expiry?: string;
+            expiry_month?: string;
+            expiry_year?: string;
+            holder_name?: string;
+        };
         /** StoreCommunityRequest */
         StoreCommunityRequest: {
             name: string;
@@ -1951,6 +4560,16 @@ export interface components {
             state?: components["schemas"]["BrazilianState"] | null;
             timezone?: string;
         };
+        /**
+         * SupplierService
+         * @enum {string}
+         */
+        SupplierService: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+        /**
+         * SupplierStatus
+         * @enum {string}
+         */
+        SupplierStatus: "to_contact" | "quoting" | "hired" | "declined";
         /** TeamInvitationResource */
         TeamInvitationResource: {
             id: string;
@@ -1995,11 +4614,137 @@ export interface components {
                 passes: boolean;
             }[];
         } | string[];
+        /** TicketBatchResource */
+        TicketBatchResource: {
+            id: string;
+            ticket_type_id: string;
+            name: string;
+            position: number;
+            price: {
+                amount: number;
+                currency: string;
+            } | null;
+            quantity: number;
+            allocated: number;
+            remaining: number;
+            starts_at: string | null;
+            ends_at: string | null;
+            opens_at: string | null;
+            /** @enum {string} */
+            on_sell_out: "next" | "close";
+            /** @enum {string} */
+            status: "scheduled" | "on_sale" | "ended" | "sold_out";
+            /** @enum {string} */
+            status_label: "Agendado" | "À venda" | "Encerrado" | "Esgotado";
+            closed_at: string | null;
+        } | string[];
+        /** TicketImportResource */
+        TicketImportResource: ({
+            id: string | unknown;
+            platform: string | unknown;
+            file_name: string | unknown;
+            status: ("uploaded" | "ready" | "processing" | "completed" | "failed") | unknown;
+            status_label: ("Aguardando mapeamento" | "Pronta para importar" | "Importando" | "Concluída" | "Interrompida") | unknown;
+            failure: (string | null) | unknown;
+            rows: {
+                total: number;
+                processed: number;
+                imported: number;
+                duplicates: number;
+                rejected: number;
+            } | unknown;
+            progress: number | unknown;
+            can_resume: boolean | unknown;
+            emails: {
+                pending: string | null;
+                requested_at: string | null;
+            } | unknown;
+            started_at: (string | null) | unknown;
+            finished_at: (string | null) | unknown;
+            created_at: (string | null) | unknown;
+        } & {
+            [key: string]: unknown;
+        }) | string[];
+        /** TicketResource */
+        TicketResource: ({
+            id: string | unknown;
+            code: string | unknown;
+            status: ("active" | "cancelled") | unknown;
+            status_label: ("Válido" | "Cancelado") | unknown;
+            order_id: string | unknown;
+            order_number: (number | null) | unknown;
+            ticket_type_id: string | unknown;
+            ticket_type_name: (string | null) | unknown;
+            batch_name: (string | null) | unknown;
+            holder: ({
+                name: string | unknown;
+                email: string | unknown;
+                badge_name: (string | null) | unknown;
+                company: (string | null) | unknown;
+                tshirt_size: ("PP" | "P" | "M" | "G" | "GG" | "XGG" | "BL-P" | "BL-M" | "BL-G" | "BL-GG" | null) | unknown;
+            } & {
+                [key: string]: unknown;
+            }) | unknown;
+            issued_at: (string | null) | unknown;
+            cancelled_at: (string | null) | unknown;
+            last_sent_at: (string | null) | unknown;
+        } & {
+            [key: string]: unknown;
+        }) | string[];
+        /** TicketTypeResource */
+        TicketTypeResource: {
+            id: string;
+            name: string;
+            description: string | null;
+            /** @enum {string} */
+            visibility: "public" | "code" | "hidden";
+            /** @enum {string} */
+            visibility_label: "Qualquer pessoa" | "Quem tem o código" | "Só por convite da organização";
+            access_code: string | null;
+            min_per_order: number;
+            max_per_order: number;
+            show_remaining: boolean;
+            pass_fee_to_buyer: boolean;
+            questions: {
+                id: string;
+                label: string;
+                type: string;
+                required: boolean;
+                options: string[];
+            }[];
+            position: number;
+            allocated: number;
+            quantity: number;
+            current_batch_id: string | null;
+            batches: unknown[];
+        } | string[];
+        /**
+         * TicketVisibility
+         * @enum {string}
+         */
+        TicketVisibility: "public" | "code" | "hidden";
+        /** TransferTicketRequest */
+        TransferTicketRequest: {
+            name: string;
+            /** Format: email */
+            email: string;
+        };
+        /**
+         * TshirtSize
+         * @enum {string}
+         */
+        TshirtSize: "PP" | "P" | "M" | "G" | "GG" | "XGG" | "BL-P" | "BL-M" | "BL-G" | "BL-GG";
         /** UpdateAccountRequest */
         UpdateAccountRequest: {
             name?: string;
             /** @enum {string} */
             locale?: "pt_BR" | "en" | "es";
+            notifications?: {
+                proposals_to_review?: boolean;
+                payment_failures?: boolean;
+                assigned_tasks?: boolean;
+                weekly_summary?: boolean;
+            };
         };
         /** UpdateCfpSettingsRequest */
         UpdateCfpSettingsRequest: {
@@ -2030,6 +4775,25 @@ export interface components {
             city?: string | null;
             state?: components["schemas"]["BrazilianState"] | null;
             timezone?: string;
+            site_mode?: components["schemas"]["SiteMode"];
+            /** Format: uri */
+            external_site_url?: string | null;
+            /** Format: email */
+            privacy_contact_email?: string | null;
+            /** Format: uri */
+            privacy_policy_url?: string | null;
+            anonymize_after_event?: boolean;
+        };
+        /** UpdatePaymentAccountRequest */
+        UpdatePaymentAccountRequest: {
+            holder_name?: string;
+            methods?: components["schemas"]["PaymentMethod"][];
+            max_installments?: number;
+            pix_expiration_minutes?: number;
+        };
+        /** UpdateSponsorSettingsRequest */
+        UpdateSponsorSettingsRequest: {
+            goal_cents: number | null;
         };
         /** UpdateThemeDraftRequest */
         UpdateThemeDraftRequest: {
@@ -2062,6 +4826,30 @@ export interface components {
             };
             radius: number;
         };
+        /** UpdateTicketAttendeeRequest */
+        UpdateTicketAttendeeRequest: {
+            holder_name?: string;
+            badge_name?: string | null;
+            company?: string | null;
+            tshirt_size?: components["schemas"]["TshirtSize"] | null;
+            accessibility?: string | null;
+        };
+        /** UpdateTicketingSettingsRequest */
+        UpdateTicketingSettingsRequest: {
+            capacity?: number | null;
+            reservation_minutes?: number;
+            max_tickets_per_buyer?: number | null;
+            gateway_fee_basis_points?: number;
+        };
+        /** UploadAttachmentRequest */
+        UploadAttachmentRequest: {
+            kind: components["schemas"]["AttachmentKind"];
+            /**
+             * Format: binary
+             * @description Maximum file size: 20480 kilobytes.
+             */
+            file: string;
+        };
         /** UploadLogoRequest */
         UploadLogoRequest: {
             /**
@@ -2078,6 +4866,23 @@ export interface components {
              */
             photo: string;
         };
+        /** UploadReceiptRequest */
+        UploadReceiptRequest: {
+            /**
+             * Format: binary
+             * @description Maximum file size: 10240 kilobytes.
+             */
+            file: string;
+        };
+        /** UploadTicketImportRequest */
+        UploadTicketImportRequest: {
+            /**
+             * Format: binary
+             * @description Maximum file size: 10240 kilobytes.
+             */
+            file: string;
+            platform: string;
+        };
         /** UserResource */
         UserResource: {
             id: string;
@@ -2085,10 +4890,28 @@ export interface components {
             email: string;
             avatar_url: null;
             locale: string;
+            notifications: unknown[];
             email_verified_at: string | null;
             has_password: boolean;
             providers: unknown[];
             created_at: string | null;
+        } | string[];
+        /** WebhookEventResource */
+        WebhookEventResource: {
+            id: string;
+            payment_account_id: string;
+            driver: string;
+            event_id: string;
+            type: string;
+            gateway_charge_id: string;
+            status: string;
+            status_label: string;
+            result: string;
+            attempts: string;
+            can_reprocess: string;
+            next_attempt_at: string | null;
+            processed_at: string | null;
+            received_at: string | null;
         } | string[];
     };
     responses: {
@@ -2566,11 +5389,11 @@ export interface operations {
                 content: {
                     "application/json": {
                         data: {
-                            edition_id: string;
-                            edition_name: string;
-                            host: string;
-                            primary_host: string;
-                        } | null;
+                            site_mode: string;
+                            external_site_url: string | null;
+                        } & {
+                            [key: string]: unknown;
+                        };
                     };
                 };
             };
@@ -2613,6 +5436,20 @@ export interface operations {
                 content: {
                     "application/json": {
                         data: unknown[];
+                        meta: {
+                            tokens: unknown[];
+                            contrast_pairs: [
+                                unknown[],
+                                unknown[]
+                            ];
+                            fonts: unknown[];
+                            radius: {
+                                /** @constant */
+                                min: 0;
+                                /** @constant */
+                                max: 24;
+                            };
+                        };
                     };
                 };
             };
@@ -2670,6 +5507,21 @@ export interface operations {
                 content: {
                     "application/json": {
                         data: components["schemas"]["CfpSettingsResource"];
+                        meta: {
+                            form: {
+                                formats: unknown[];
+                                levels: unknown[];
+                                languages: unknown[];
+                                limits: {
+                                    /** @constant */
+                                    title: 90;
+                                    /** @constant */
+                                    summary: 3000;
+                                    /** @constant */
+                                    audience: 1000;
+                                };
+                            };
+                        };
                     };
                 };
             };
@@ -2700,6 +5552,21 @@ export interface operations {
                 content: {
                     "application/json": {
                         data: components["schemas"]["CfpSettingsResource"];
+                        meta: {
+                            form: {
+                                formats: unknown[];
+                                levels: unknown[];
+                                languages: unknown[];
+                                limits: {
+                                    /** @constant */
+                                    title: 90;
+                                    /** @constant */
+                                    summary: 3000;
+                                    /** @constant */
+                                    audience: 1000;
+                                };
+                            };
+                        };
                     };
                 };
             };
@@ -2839,6 +5706,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         data: components["schemas"]["CfpCriterionResource"][];
+                        meta: {
+                            submitted_reviews: number;
+                        };
                     };
                 };
             };
@@ -3084,6 +5954,31 @@ export interface operations {
                 };
                 content: {
                     "text/csv; charset=UTF-8": string;
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.reviewers.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
                 };
             };
             401: components["responses"]["AuthenticationException"];
@@ -3407,6 +6302,222 @@ export interface operations {
             422: components["responses"]["ValidationException"];
         };
     };
+    "cfp.speakers.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        summary: {
+                            confirmed: number;
+                            awaiting: number;
+                            waitlisted: number;
+                            slots: number;
+                            nordeste_percent: number | null;
+                            nordeste_quota_percent: number;
+                        };
+                        coverage: unknown[];
+                        data: {
+                            user_id: string;
+                            name: string | null;
+                            email: string | null;
+                            state: string | null;
+                            nordeste: string | boolean;
+                            proposal: {
+                                id: string;
+                                number: string;
+                                title: string;
+                                track: string | null;
+                                origin: string;
+                            };
+                            /** @enum {string} */
+                            status: "pending" | "confirmed" | "declined" | "withdrawn" | "no_response" | "cancelled" | "waitlisted";
+                            /** @enum {string} */
+                            status_label: "Lista de espera" | "Aguardando resposta" | "Confirmada" | "Recusou" | "Desistiu" | "Sem resposta" | "Cancelada";
+                            deadline_at: string | null;
+                            reminded_at: string | null;
+                            attended_at: string | null;
+                        }[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "cfp.speakers.invite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteSpeakerRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            proposal_id: string;
+                            number: number;
+                            user_id: string | null;
+                            deadline_at: string | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.speakers.remind": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["RemindSpeakersRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            reminded: number;
+                            skipped: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "cfp.speakers.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                user: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            user_id: string;
+                            name: string | null;
+                            email: string | null;
+                            profile: {
+                                user_id: string;
+                                display_name: string;
+                                job_title: string | null;
+                                company: string | null;
+                                bio: string | null;
+                                city: string | null;
+                                state: string | null;
+                                links: {
+                                    [key: string]: string | null;
+                                };
+                                photo_url: string | null;
+                            } | null;
+                            can_view_private_data: boolean;
+                            proposals: unknown[];
+                            logistics: {
+                                user_id: string;
+                                origin_city: string | null;
+                                /** @enum {string|null} */
+                                origin_state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
+                                needs_travel: boolean;
+                                needs_lodging: boolean;
+                                travel_paid_by_organization: boolean;
+                                lodging_paid_by_organization: boolean;
+                                organization_notes: string | null;
+                                restrictions: {
+                                    accessibility_needs: string | null;
+                                    dietary_restrictions: string | null;
+                                } | null;
+                            } | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "cfp.speakers.attendance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                user: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SpeakerAttendanceRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            updated: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
     "cfp.confirmations.index": {
         parameters: {
             query?: never;
@@ -3561,7 +6672,7 @@ export interface operations {
                             restrictions: {
                                 accessibility_needs: string | null;
                                 dietary_restrictions: string | null;
-                            };
+                            } | null;
                         };
                     };
                 };
@@ -3605,7 +6716,7 @@ export interface operations {
                             restrictions: {
                                 accessibility_needs: string | null;
                                 dietary_restrictions: string | null;
-                            };
+                            } | null;
                         };
                     };
                 };
@@ -3812,14 +6923,24 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description `ProposalResource` */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": {
-                        data: components["schemas"]["ProposalResource"];
+                        data: {
+                            confirmation: {
+                                /** @enum {string} */
+                                status: "pending" | "confirmed" | "declined" | "withdrawn" | "no_response" | "cancelled";
+                                /** @enum {string} */
+                                status_label: "Aguardando resposta" | "Confirmada" | "Recusou" | "Desistiu" | "Sem resposta" | "Cancelada";
+                                deadline_at: string;
+                                responded_at: string | null;
+                            } | null;
+                        } & {
+                            [key: string]: unknown;
+                        };
                     };
                 };
             };
@@ -4108,6 +7229,19 @@ export interface operations {
                                 id: string;
                                 name: string;
                             }[];
+                            form: {
+                                formats: unknown[];
+                                levels: unknown[];
+                                languages: unknown[];
+                                limits: {
+                                    /** @constant */
+                                    title: 90;
+                                    /** @constant */
+                                    summary: 3000;
+                                    /** @constant */
+                                    audience: 1000;
+                                };
+                            };
                         };
                     };
                 };
@@ -4142,10 +7276,7 @@ export interface operations {
                             travel_paid_by_organization: boolean;
                             lodging_paid_by_organization: boolean;
                             organization_notes: string | null;
-                            restrictions: {
-                                accessibility_needs: string | null;
-                                dietary_restrictions: string | null;
-                            };
+                            restrictions: null;
                         };
                     };
                 };
@@ -4184,10 +7315,7 @@ export interface operations {
                             travel_paid_by_organization: boolean;
                             lodging_paid_by_organization: boolean;
                             organization_notes: string | null;
-                            restrictions: {
-                                accessibility_needs: string | null;
-                                dietary_restrictions: string | null;
-                            };
+                            restrictions: null;
                         };
                     };
                 };
@@ -4854,6 +7982,63 @@ export interface operations {
             422: components["responses"]["ValidationException"];
         };
     };
+    "community.editions.overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            edition: {
+                                id: string;
+                                name: string;
+                                starts_on: string | null;
+                                ends_on: string | null;
+                                city: string | null;
+                                /** @enum {string|null} */
+                                state: "AC" | "AL" | "AP" | "AM" | "BA" | "CE" | "DF" | "ES" | "GO" | "MA" | "MT" | "MS" | "MG" | "PA" | "PB" | "PR" | "PE" | "PI" | "RJ" | "RN" | "RS" | "RO" | "RR" | "SC" | "SP" | "SE" | "TO" | null;
+                            };
+                            stage: {
+                                /** @enum {string} */
+                                current: "draft" | "cfp_open" | "sales_open" | "ongoing" | "closed";
+                                days_until_event: number | null;
+                                steps: unknown[];
+                            };
+                            indicators: {
+                                tickets: unknown;
+                                revenue: unknown;
+                                proposals: unknown;
+                                speakers: unknown;
+                            } & {
+                                [key: string]: unknown;
+                            };
+                            sections: {
+                                tickets_per_week: unknown;
+                                nordeste: unknown;
+                            } & {
+                                [key: string]: unknown;
+                            };
+                            pending: unknown[];
+                            milestones: unknown[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
     "community.editions.clone-options": {
         parameters: {
             query?: never;
@@ -4945,6 +8130,571 @@ export interface operations {
                     "application/json": {
                         data: components["schemas"]["PublicEditionResource"];
                     };
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "finance.summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            revenue: {
+                                tickets: {
+                                    gross: number;
+                                    refunded: number;
+                                    fees: number;
+                                    net: number;
+                                    by_account: unknown[];
+                                };
+                                sponsors: {
+                                    received: number;
+                                    outstanding: number;
+                                };
+                                total: number;
+                            };
+                            expenses: {
+                                paid: number;
+                                pending: number;
+                                overdue: number;
+                            };
+                            balance: number;
+                            forecast: number;
+                            budget: {
+                                categories: unknown[];
+                                budgeted: number;
+                                committed: number;
+                                paid: number;
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "finance.export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    /** @example attachment; filename=.xlsx */
+                    "Content-Disposition"?: string;
+                    "Transfer-Encoding"?: "chunked";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": string;
+                    "text/csv; charset=UTF-8": string;
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            /** @description An error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Error overview.
+                         * @example
+                         */
+                        message: string;
+                    };
+                };
+            };
+        };
+    };
+    "finance.suppliers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "finance.categories.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            budget: number | null;
+                            position: number;
+                        }[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "finance.categories.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveCategoryRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            budget: number | null;
+                            position: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "finance.categories.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                category: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "finance.categories.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+                category: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveCategoryRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            budget: number | null;
+                            position: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "finance.expenses.index": {
+        parameters: {
+            query?: {
+                finance_category_id?: string;
+                edition_supplier_id?: string;
+                overdue?: boolean;
+            };
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            description: string;
+                            category: {
+                                id: string;
+                                name: string;
+                            };
+                            supplier: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            amount: number;
+                            due_on: string | null;
+                            paid_on: string | null;
+                            /** @enum {string} */
+                            status: "pending" | "paid" | "cancelled";
+                            /** @enum {string} */
+                            status_label: "Atrasada" | "A pagar" | "Paga" | "Cancelada";
+                            overdue: boolean;
+                            notes: string | null;
+                            receipt: {
+                                name: string | null;
+                                mime_type: string | null;
+                                size_bytes: number | null;
+                            } | null;
+                        }[];
+                        totals: {
+                            count: number;
+                            amount: number;
+                            paid: number;
+                            pending: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "finance.expenses.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveExpenseRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            description: string;
+                            category: {
+                                id: string;
+                                name: string;
+                            };
+                            supplier: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            amount: number;
+                            due_on: string | null;
+                            paid_on: string | null;
+                            /** @enum {string} */
+                            status: "pending" | "paid" | "cancelled";
+                            /** @enum {string} */
+                            status_label: "Atrasada" | "A pagar" | "Paga" | "Cancelada";
+                            overdue: boolean;
+                            notes: string | null;
+                            receipt: {
+                                name: string | null;
+                                mime_type: string | null;
+                                size_bytes: number | null;
+                            } | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "finance.expenses.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                expense: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "finance.expenses.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+                expense: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveExpenseRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            description: string;
+                            category: {
+                                id: string;
+                                name: string;
+                            };
+                            supplier: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            amount: number;
+                            due_on: string | null;
+                            paid_on: string | null;
+                            /** @enum {string} */
+                            status: "pending" | "paid" | "cancelled";
+                            /** @enum {string} */
+                            status_label: "Atrasada" | "A pagar" | "Paga" | "Cancelada";
+                            overdue: boolean;
+                            notes: string | null;
+                            receipt: {
+                                name: string | null;
+                                mime_type: string | null;
+                                size_bytes: number | null;
+                            } | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "finance.expenses.receipt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                expense: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadReceiptRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            description: string;
+                            category: {
+                                id: string;
+                                name: string;
+                            };
+                            supplier: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            amount: string;
+                            due_on: string | null;
+                            paid_on: string | null;
+                            /** @enum {string} */
+                            status: "pending" | "paid" | "cancelled";
+                            /** @enum {string} */
+                            status_label: "Atrasada" | "A pagar" | "Paga" | "Cancelada";
+                            overdue: boolean;
+                            notes: string | null;
+                            receipt: {
+                                name: string | null;
+                                mime_type: string | null;
+                                size_bytes: number | null;
+                            } | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "finance.expenses.receipt.url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                expense: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            url: string;
+                            expires_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "finance.receipts.download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                expense: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "Transfer-Encoding": "chunked";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
                 };
             };
             404: components["responses"]["ModelNotFoundException"];
@@ -5425,6 +9175,50 @@ export interface operations {
             422: components["responses"]["ValidationException"];
         };
     };
+    "me.sessions.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "me.sessions.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
     "identity.people.speaker-profile": {
         parameters: {
             query?: never;
@@ -5716,6 +9510,121 @@ export interface operations {
             404: components["responses"]["ModelNotFoundException"];
         };
     };
+    "notifications.suppressions.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            email: string;
+                            /** @enum {string} */
+                            reason: "bounced" | "complained";
+                            /** @enum {string} */
+                            reason_label: "Bounce permanente (endereço não existe ou recusa)" | "Marcou o e-mail como spam";
+                            detail: string | null;
+                            delivery_id: string | null;
+                            created_at: string;
+                        }[];
+                        meta: {
+                            current_page: number;
+                            last_page: number;
+                            per_page: number;
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "notifications.suppressions.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                suppression: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "notifications.webhooks.resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            outcome: string;
+                            duplicate: boolean;
+                        };
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @constant */
+                        code: "invalid_payload";
+                        /** @constant */
+                        message: "Corpo inválido.";
+                    };
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @constant */
+                        code: "invalid_signature";
+                        /** @constant */
+                        message: "Assinatura inválida.";
+                    };
+                };
+            };
+        };
+    };
     "notifications.unsubscribe": {
         parameters: {
             query?: {
@@ -5742,6 +9651,282 @@ export interface operations {
             404: components["responses"]["ModelNotFoundException"];
         };
     };
+    "payments.accounts.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            active: unknown[] | null;
+                            previous: unknown[];
+                            drivers: unknown[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "payments.accounts.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePaymentAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description `PaymentAccountResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["PaymentAccountResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "payments.accounts.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                account: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UpdatePaymentAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description `PaymentAccountResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["PaymentAccountResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "payments.accounts.verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                account: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `PaymentAccountResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["PaymentAccountResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "payments.webhook-events.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated set of `WebhookEventResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["WebhookEventResource"][];
+                        links: {
+                            first: string | null;
+                            last: string | null;
+                            prev: string | null;
+                            next: string | null;
+                        };
+                        meta: {
+                            current_page: number;
+                            from: number | null;
+                            last_page: number;
+                            /** @description Generated paginator links. */
+                            links: {
+                                url: string | null;
+                                label: string;
+                                active: boolean;
+                            }[];
+                            /** @description Base path for paginator generated URLs. */
+                            path: string | null;
+                            /** @description Number of items shown per page. */
+                            per_page: number;
+                            /** @description Number of the last item in the slice. */
+                            to: number | null;
+                            /** @description Total number of items being paginated. */
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "payments.webhook-events.reprocess": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                event: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `WebhookEventResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["WebhookEventResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "payments.public.receiver": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            driver: string;
+                            public_key: string | null;
+                            holder_name: string;
+                            /** @enum {string} */
+                            holder_type: "individual" | "company";
+                            methods: unknown[];
+                            max_installments: number;
+                            pix_expiration_minutes: number;
+                            sandbox: boolean;
+                            ready: boolean;
+                        } | null;
+                    };
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "payments.webhooks.receive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            received: boolean;
+                            event_id: string;
+                            duplicate: boolean;
+                        };
+                    };
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @constant */
+                        code: "invalid_signature";
+                        /** @constant */
+                        message: "Assinatura do webhook inválida.";
+                        errors: null;
+                        request_id: string;
+                    };
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
     ping: {
         parameters: {
             query?: never;
@@ -5759,6 +9944,4224 @@ export interface operations {
                     "application/json": {
                         status: string;
                         request_id: string | null;
+                    };
+                };
+            };
+        };
+    };
+    "sponsors.board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            indicators: {
+                                goal: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                committed: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                received: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                pipeline: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                deliverables_overdue: number;
+                            };
+                            columns: unknown[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "sponsors.settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSponsorSettingsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            goal: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.tiers.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `SponsorTierResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorTierResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.tiers.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSponsorTierRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorTierResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorTierResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.tiers.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                tier: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.tiers.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+                tier: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSponsorTierRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorTierResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorTierResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.companies.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated set of `SponsorResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorResource"][];
+                        links: {
+                            first: string | null;
+                            last: string | null;
+                            prev: string | null;
+                            next: string | null;
+                        };
+                        meta: {
+                            current_page: number;
+                            from: number | null;
+                            last_page: number;
+                            /** @description Generated paginator links. */
+                            links: {
+                                url: string | null;
+                                label: string;
+                                active: boolean;
+                            }[];
+                            /** @description Base path for paginator generated URLs. */
+                            path: string | null;
+                            /** @description Number of items shown per page. */
+                            per_page: number;
+                            /** @description Number of the last item in the slice. */
+                            to: number | null;
+                            /** @description Total number of items being paginated. */
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.companies.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSponsorRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.companies.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsor: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `SponsorResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.companies.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsor: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.companies.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+                sponsor: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSponsorRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.contacts.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsor: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LogContactRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.contacts.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsor: string;
+                contact: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "sponsors.attachments.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsor: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadAttachmentRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorAttachmentResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorAttachmentResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.sponsorships.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsor: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SaveSponsorshipRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorshipResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorshipResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.attachments.url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                attachment: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            url: string;
+                            expires_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.attachments.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                attachment: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.sponsorships.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsorship: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `SponsorshipResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorshipResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.sponsorships.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsorship: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.sponsorships.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsorship: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SaveSponsorshipRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorshipResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorshipResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.sponsorships.move": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsorship: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MoveSponsorshipRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorshipResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorshipResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.payments.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsorship: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecordPaymentRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorshipResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorshipResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.payments.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsorship: string;
+                payment: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "sponsors.deliverables.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                sponsorship: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveDeliverableRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorDeliverableResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorDeliverableResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.deliverables.index": {
+        parameters: {
+            query?: {
+                owner_id?: string;
+                overdue?: boolean;
+            };
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated set of `SponsorDeliverableResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorDeliverableResource"][];
+                        links: {
+                            first: string | null;
+                            last: string | null;
+                            prev: string | null;
+                            next: string | null;
+                        };
+                        meta: {
+                            current_page: number;
+                            from: number | null;
+                            last_page: number;
+                            /** @description Generated paginator links. */
+                            links: {
+                                url: string | null;
+                                label: string;
+                                active: boolean;
+                            }[];
+                            /** @description Base path for paginator generated URLs. */
+                            path: string | null;
+                            /** @description Number of items shown per page. */
+                            per_page: number;
+                            /** @description Number of the last item in the slice. */
+                            to: number | null;
+                            /** @description Total number of items being paginated. */
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.deliverables.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                deliverable: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "sponsors.deliverables.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                deliverable: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveDeliverableRequest"];
+            };
+        };
+        responses: {
+            /** @description `SponsorDeliverableResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["SponsorDeliverableResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "sponsors.attachments.download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                attachment: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "Transfer-Encoding": "chunked";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "suppliers.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            supplier: {
+                                id: string;
+                                name: string;
+                                /** @enum {string} */
+                                service: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+                                /** @enum {string} */
+                                service_label: "Local" | "Alimentação" | "Som, luz e vídeo" | "Gráfica" | "Brindes e camisetas" | "Transporte" | "Hospedagem" | "Foto e filmagem" | "Acessibilidade (Libras, legenda)" | "Outro";
+                                description: string | null;
+                                document: string | null;
+                                website: string | null;
+                                city: string | null;
+                                state: string | null;
+                                contacts_visible: boolean;
+                                contacts: {
+                                    id: string;
+                                    name: string;
+                                    role: string | null;
+                                    email: string | null;
+                                    phone: string | null;
+                                }[] | null;
+                            };
+                            /** @enum {string} */
+                            status: "to_contact" | "quoting" | "hired" | "declined";
+                            /** @enum {string} */
+                            status_label: "A contatar" | "Em orçamento" | "Contratado" | "Recusado";
+                            owner: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            quoted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            contracted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            accepted_quote_id: string | null;
+                            decline_reason: string | null;
+                            hired_at: string | null;
+                            declined_at: string | null;
+                            quotes_count: number;
+                        }[];
+                        totals: {
+                            count: number;
+                            quoted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            contracted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            by_status: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "suppliers.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSupplierRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            supplier: {
+                                id: string;
+                                name: string;
+                                /** @enum {string} */
+                                service: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+                                /** @enum {string} */
+                                service_label: "Local" | "Alimentação" | "Som, luz e vídeo" | "Gráfica" | "Brindes e camisetas" | "Transporte" | "Hospedagem" | "Foto e filmagem" | "Acessibilidade (Libras, legenda)" | "Outro";
+                                description: string | null;
+                                document: string | null;
+                                website: string | null;
+                                city: string | null;
+                                state: string | null;
+                                contacts_visible: boolean;
+                                contacts: {
+                                    id: string;
+                                    name: string;
+                                    role: string | null;
+                                    email: string | null;
+                                    phone: string | null;
+                                }[] | null;
+                            };
+                            /** @enum {string} */
+                            status: "to_contact" | "quoting" | "hired" | "declined";
+                            /** @enum {string} */
+                            status_label: "A contatar" | "Em orçamento" | "Contratado" | "Recusado";
+                            owner: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            quoted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            contracted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            accepted_quote_id: string | null;
+                            decline_reason: string | null;
+                            hired_at: string | null;
+                            declined_at: string | null;
+                            quotes_count: number;
+                            quotes: {
+                                id: string;
+                                amount: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                description: string;
+                                received_on: string;
+                                valid_until: string | null;
+                                expired: boolean;
+                                /** @enum {string} */
+                                status: "received" | "accepted" | "rejected";
+                                /** @enum {string} */
+                                status_label: "Recebido" | "Aceito" | "Recusado";
+                                recorded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                            }[];
+                            attachments: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "quote" | "contract" | "invoice" | "other";
+                                /** @enum {string} */
+                                kind_label: "Orçamento" | "Contrato" | "Nota fiscal" | "Outro";
+                                name: string;
+                                mime_type: string;
+                                size_bytes: number;
+                                uploaded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                created_at: string | null;
+                            }[];
+                            activities: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "note" | "status" | "quote" | "attachment";
+                                /** @enum {string|null} */
+                                channel: "email" | "phone" | "whatsapp" | "meeting" | "visit" | "other" | null;
+                                /** @enum {string|null} */
+                                channel_label: "E-mail" | "Telefone" | "WhatsApp" | "Reunião" | "Visita" | "Outro" | null;
+                                summary: string;
+                                author: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                happened_at: string | null;
+                            }[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "suppliers.directory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            /** @enum {string} */
+                            service: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+                            /** @enum {string} */
+                            service_label: "Local" | "Alimentação" | "Som, luz e vídeo" | "Gráfica" | "Brindes e camisetas" | "Transporte" | "Hospedagem" | "Foto e filmagem" | "Acessibilidade (Libras, legenda)" | "Outro";
+                            description: string | null;
+                            document: string | null;
+                            website: string | null;
+                            city: string | null;
+                            state: string | null;
+                            contacts_visible: boolean;
+                            contacts: {
+                                id: string;
+                                name: string;
+                                role: string | null;
+                                email: string | null;
+                                phone: string | null;
+                            }[] | null;
+                            in_this_edition: boolean;
+                            editions: {
+                                id: string;
+                                name: string;
+                                /** @enum {string} */
+                                status: "to_contact" | "quoting" | "hired" | "declined";
+                                /** @enum {string} */
+                                status_label: "A contatar" | "Em orçamento" | "Contratado" | "Recusado";
+                            }[];
+                        }[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "suppliers.directory.link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+                supplier: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    owner_id?: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            supplier: {
+                                id: string;
+                                name: string;
+                                /** @enum {string} */
+                                service: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+                                /** @enum {string} */
+                                service_label: "Local" | "Alimentação" | "Som, luz e vídeo" | "Gráfica" | "Brindes e camisetas" | "Transporte" | "Hospedagem" | "Foto e filmagem" | "Acessibilidade (Libras, legenda)" | "Outro";
+                                description: string | null;
+                                document: string | null;
+                                website: string | null;
+                                city: string | null;
+                                state: string | null;
+                                contacts_visible: boolean;
+                                contacts: {
+                                    id: string;
+                                    name: string;
+                                    role: string | null;
+                                    email: string | null;
+                                    phone: string | null;
+                                }[] | null;
+                            };
+                            /** @enum {string} */
+                            status: "to_contact" | "quoting" | "hired" | "declined";
+                            /** @enum {string} */
+                            status_label: "A contatar" | "Em orçamento" | "Contratado" | "Recusado";
+                            owner: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            quoted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            contracted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            accepted_quote_id: string | null;
+                            decline_reason: string | null;
+                            hired_at: string | null;
+                            declined_at: string | null;
+                            quotes_count: number;
+                            quotes: {
+                                id: string;
+                                amount: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                description: string;
+                                received_on: string;
+                                valid_until: string | null;
+                                expired: boolean;
+                                /** @enum {string} */
+                                status: "received" | "accepted" | "rejected";
+                                /** @enum {string} */
+                                status_label: "Recebido" | "Aceito" | "Recusado";
+                                recorded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                            }[];
+                            attachments: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "quote" | "contract" | "invoice" | "other";
+                                /** @enum {string} */
+                                kind_label: "Orçamento" | "Contrato" | "Nota fiscal" | "Outro";
+                                name: string;
+                                mime_type: string;
+                                size_bytes: number;
+                                uploaded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                created_at: string | null;
+                            }[];
+                            activities: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "note" | "status" | "quote" | "attachment";
+                                /** @enum {string|null} */
+                                channel: "email" | "phone" | "whatsapp" | "meeting" | "visit" | "other" | null;
+                                /** @enum {string|null} */
+                                channel_label: "E-mail" | "Telefone" | "WhatsApp" | "Reunião" | "Visita" | "Outro" | null;
+                                summary: string;
+                                author: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                happened_at: string | null;
+                            }[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "suppliers.attachments.url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                attachment: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            url: string;
+                            expires_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "suppliers.attachments.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                attachment: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "suppliers.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            supplier: {
+                                id: string;
+                                name: string;
+                                /** @enum {string} */
+                                service: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+                                /** @enum {string} */
+                                service_label: "Local" | "Alimentação" | "Som, luz e vídeo" | "Gráfica" | "Brindes e camisetas" | "Transporte" | "Hospedagem" | "Foto e filmagem" | "Acessibilidade (Libras, legenda)" | "Outro";
+                                description: string | null;
+                                document: string | null;
+                                website: string | null;
+                                city: string | null;
+                                state: string | null;
+                                contacts_visible: boolean;
+                                contacts: {
+                                    id: string;
+                                    name: string;
+                                    role: string | null;
+                                    email: string | null;
+                                    phone: string | null;
+                                }[] | null;
+                            };
+                            /** @enum {string} */
+                            status: "to_contact" | "quoting" | "hired" | "declined";
+                            /** @enum {string} */
+                            status_label: "A contatar" | "Em orçamento" | "Contratado" | "Recusado";
+                            owner: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            quoted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            contracted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            accepted_quote_id: string | null;
+                            decline_reason: string | null;
+                            hired_at: string | null;
+                            declined_at: string | null;
+                            quotes_count: number;
+                            quotes: {
+                                id: string;
+                                amount: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                description: string;
+                                received_on: string;
+                                valid_until: string | null;
+                                expired: boolean;
+                                /** @enum {string} */
+                                status: "received" | "accepted" | "rejected";
+                                /** @enum {string} */
+                                status_label: "Recebido" | "Aceito" | "Recusado";
+                                recorded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                            }[];
+                            attachments: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "quote" | "contract" | "invoice" | "other";
+                                /** @enum {string} */
+                                kind_label: "Orçamento" | "Contrato" | "Nota fiscal" | "Outro";
+                                name: string;
+                                mime_type: string;
+                                size_bytes: number;
+                                uploaded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                created_at: string | null;
+                            }[];
+                            activities: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "note" | "status" | "quote" | "attachment";
+                                /** @enum {string|null} */
+                                channel: "email" | "phone" | "whatsapp" | "meeting" | "visit" | "other" | null;
+                                /** @enum {string|null} */
+                                channel_label: "E-mail" | "Telefone" | "WhatsApp" | "Reunião" | "Visita" | "Outro" | null;
+                                summary: string;
+                                author: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                happened_at: string | null;
+                            }[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "suppliers.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "suppliers.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveSupplierRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            supplier: {
+                                id: string;
+                                name: string;
+                                /** @enum {string} */
+                                service: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+                                /** @enum {string} */
+                                service_label: "Local" | "Alimentação" | "Som, luz e vídeo" | "Gráfica" | "Brindes e camisetas" | "Transporte" | "Hospedagem" | "Foto e filmagem" | "Acessibilidade (Libras, legenda)" | "Outro";
+                                description: string | null;
+                                document: string | null;
+                                website: string | null;
+                                city: string | null;
+                                state: string | null;
+                                contacts_visible: boolean;
+                                contacts: {
+                                    id: string;
+                                    name: string;
+                                    role: string | null;
+                                    email: string | null;
+                                    phone: string | null;
+                                }[] | null;
+                            };
+                            /** @enum {string} */
+                            status: "to_contact" | "quoting" | "hired" | "declined";
+                            /** @enum {string} */
+                            status_label: "A contatar" | "Em orçamento" | "Contratado" | "Recusado";
+                            owner: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            quoted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            contracted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            accepted_quote_id: string | null;
+                            decline_reason: string | null;
+                            hired_at: string | null;
+                            declined_at: string | null;
+                            quotes_count: number;
+                            quotes: {
+                                id: string;
+                                amount: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                description: string;
+                                received_on: string;
+                                valid_until: string | null;
+                                expired: boolean;
+                                /** @enum {string} */
+                                status: "received" | "accepted" | "rejected";
+                                /** @enum {string} */
+                                status_label: "Recebido" | "Aceito" | "Recusado";
+                                recorded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                            }[];
+                            attachments: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "quote" | "contract" | "invoice" | "other";
+                                /** @enum {string} */
+                                kind_label: "Orçamento" | "Contrato" | "Nota fiscal" | "Outro";
+                                name: string;
+                                mime_type: string;
+                                size_bytes: number;
+                                uploaded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                created_at: string | null;
+                            }[];
+                            activities: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "note" | "status" | "quote" | "attachment";
+                                /** @enum {string|null} */
+                                channel: "email" | "phone" | "whatsapp" | "meeting" | "visit" | "other" | null;
+                                /** @enum {string|null} */
+                                channel_label: "E-mail" | "Telefone" | "WhatsApp" | "Reunião" | "Visita" | "Outro" | null;
+                                summary: string;
+                                author: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                happened_at: string | null;
+                            }[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "suppliers.status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeStatusRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            supplier: {
+                                id: string;
+                                name: string;
+                                /** @enum {string} */
+                                service: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+                                /** @enum {string} */
+                                service_label: "Local" | "Alimentação" | "Som, luz e vídeo" | "Gráfica" | "Brindes e camisetas" | "Transporte" | "Hospedagem" | "Foto e filmagem" | "Acessibilidade (Libras, legenda)" | "Outro";
+                                description: string | null;
+                                document: string | null;
+                                website: string | null;
+                                city: string | null;
+                                state: string | null;
+                                contacts_visible: boolean;
+                                contacts: {
+                                    id: string;
+                                    name: string;
+                                    role: string | null;
+                                    email: string | null;
+                                    phone: string | null;
+                                }[] | null;
+                            };
+                            /** @enum {string} */
+                            status: "to_contact" | "quoting" | "hired" | "declined";
+                            /** @enum {string} */
+                            status_label: "A contatar" | "Em orçamento" | "Contratado" | "Recusado";
+                            owner: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            quoted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            contracted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            accepted_quote_id: string | null;
+                            decline_reason: string | null;
+                            hired_at: string | null;
+                            declined_at: string | null;
+                            quotes_count: number;
+                            quotes: {
+                                id: string;
+                                amount: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                description: string;
+                                received_on: string;
+                                valid_until: string | null;
+                                expired: boolean;
+                                /** @enum {string} */
+                                status: "received" | "accepted" | "rejected";
+                                /** @enum {string} */
+                                status_label: "Recebido" | "Aceito" | "Recusado";
+                                recorded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                            }[];
+                            attachments: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "quote" | "contract" | "invoice" | "other";
+                                /** @enum {string} */
+                                kind_label: "Orçamento" | "Contrato" | "Nota fiscal" | "Outro";
+                                name: string;
+                                mime_type: string;
+                                size_bytes: number;
+                                uploaded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                created_at: string | null;
+                            }[];
+                            activities: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "note" | "status" | "quote" | "attachment";
+                                /** @enum {string|null} */
+                                channel: "email" | "phone" | "whatsapp" | "meeting" | "visit" | "other" | null;
+                                /** @enum {string|null} */
+                                channel_label: "E-mail" | "Telefone" | "WhatsApp" | "Reunião" | "Visita" | "Outro" | null;
+                                summary: string;
+                                author: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                happened_at: string | null;
+                            }[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "suppliers.activities.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LogActivityRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            supplier: {
+                                id: string;
+                                name: string;
+                                /** @enum {string} */
+                                service: "venue" | "catering" | "audio_visual" | "printing" | "merch" | "transport" | "accommodation" | "photo_video" | "accessibility" | "other";
+                                /** @enum {string} */
+                                service_label: "Local" | "Alimentação" | "Som, luz e vídeo" | "Gráfica" | "Brindes e camisetas" | "Transporte" | "Hospedagem" | "Foto e filmagem" | "Acessibilidade (Libras, legenda)" | "Outro";
+                                description: string | null;
+                                document: string | null;
+                                website: string | null;
+                                city: string | null;
+                                state: string | null;
+                                contacts_visible: boolean;
+                                contacts: {
+                                    id: string;
+                                    name: string;
+                                    role: string | null;
+                                    email: string | null;
+                                    phone: string | null;
+                                }[] | null;
+                            };
+                            /** @enum {string} */
+                            status: "to_contact" | "quoting" | "hired" | "declined";
+                            /** @enum {string} */
+                            status_label: "A contatar" | "Em orçamento" | "Contratado" | "Recusado";
+                            owner: {
+                                id: string;
+                                name: string;
+                            } | null;
+                            quoted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            contracted: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            accepted_quote_id: string | null;
+                            decline_reason: string | null;
+                            hired_at: string | null;
+                            declined_at: string | null;
+                            quotes_count: number;
+                            quotes: {
+                                id: string;
+                                amount: {
+                                    amount: number;
+                                    currency: string;
+                                } | null;
+                                description: string;
+                                received_on: string;
+                                valid_until: string | null;
+                                expired: boolean;
+                                /** @enum {string} */
+                                status: "received" | "accepted" | "rejected";
+                                /** @enum {string} */
+                                status_label: "Recebido" | "Aceito" | "Recusado";
+                                recorded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                            }[];
+                            attachments: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "quote" | "contract" | "invoice" | "other";
+                                /** @enum {string} */
+                                kind_label: "Orçamento" | "Contrato" | "Nota fiscal" | "Outro";
+                                name: string;
+                                mime_type: string;
+                                size_bytes: number;
+                                uploaded_by: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                created_at: string | null;
+                            }[];
+                            activities: {
+                                id: string;
+                                /** @enum {string} */
+                                kind: "note" | "status" | "quote" | "attachment";
+                                /** @enum {string|null} */
+                                channel: "email" | "phone" | "whatsapp" | "meeting" | "visit" | "other" | null;
+                                /** @enum {string|null} */
+                                channel_label: "E-mail" | "Telefone" | "WhatsApp" | "Reunião" | "Visita" | "Outro" | null;
+                                summary: string;
+                                author: {
+                                    id: string;
+                                    name: string;
+                                } | null;
+                                happened_at: string | null;
+                            }[];
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "suppliers.contacts.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveContactRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            role: string | null;
+                            email: string | null;
+                            phone: string | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "suppliers.contacts.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+                contact: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "suppliers.contacts.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+                contact: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveContactRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            role: string | null;
+                            email: string | null;
+                            phone: string | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "suppliers.quotes.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecordQuoteRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            amount: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            description: string;
+                            received_on: string;
+                            valid_until: string | null;
+                            /** @enum {string} */
+                            status: "received" | "accepted" | "rejected";
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "suppliers.quotes.reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+                quote: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            amount: {
+                                amount: number;
+                                currency: string;
+                            } | null;
+                            description: string;
+                            received_on: string;
+                            valid_until: string | null;
+                            /** @enum {string} */
+                            status: "received" | "accepted" | "rejected";
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "suppliers.quotes.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+                quote: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "suppliers.attachments.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                link: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["PHPeste.Suppliers.Http.Requests.UploadAttachmentRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            /** @enum {string} */
+                            kind: "quote" | "contract" | "invoice" | "other";
+                            name: string;
+                            mime_type: string;
+                            size_bytes: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "suppliers.attachments.download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                attachment: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "Transfer-Encoding": "chunked";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "tasks.board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            filter: string;
+                            can_manage: boolean;
+                            columns: {
+                                id: string;
+                                name: string;
+                                position: number;
+                                is_done: boolean;
+                                count: number;
+                                tasks: {
+                                    id: string;
+                                    column_id: string;
+                                    position: number;
+                                    title: string;
+                                    description: string | null;
+                                    assignee: string | null;
+                                    due_on: string | null;
+                                    overdue: boolean;
+                                    done: boolean;
+                                    link: string;
+                                    updated_at: string;
+                                }[];
+                            }[];
+                            totals: {
+                                tasks: number;
+                                overdue: number;
+                            };
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "tasks.link-options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "tasks.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveTaskRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            column_id: string;
+                            position: number;
+                            title: string;
+                            description: string | null;
+                            assignee: string | null;
+                            due_on: string | null;
+                            overdue: boolean;
+                            done: boolean;
+                            link: string;
+                            updated_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "tasks.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                task: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "tasks.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+                task: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveTaskRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            column_id: string;
+                            position: number;
+                            title: string;
+                            description: string | null;
+                            assignee: string | null;
+                            due_on: string | null;
+                            overdue: boolean;
+                            done: boolean;
+                            link: string;
+                            updated_at: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "tasks.move": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                task: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MoveTaskRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            task: {
+                                id: string;
+                                column_id: string;
+                                position: number;
+                                title: string;
+                                description: string | null;
+                                assignee: string | null;
+                                due_on: string | null;
+                                overdue: boolean;
+                                done: boolean;
+                                link: string;
+                                updated_at: string;
+                            };
+                            columns: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            /** @description An error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Error overview.
+                         * @example Só quem organiza ou o responsável pela tarefa pode mover.
+                         */
+                        message: string;
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "tasks.columns.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveColumnRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            position: number;
+                            is_done: boolean;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "tasks.columns.reorder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReorderColumnsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            position: number;
+                            is_done: boolean;
+                        }[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "tasks.columns.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                column: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "tasks.columns.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+                column: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveColumnRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            name: string;
+                            position: number;
+                            is_done: boolean;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.types.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[];
+                        meta: {
+                            /** @description Lote pago só vende com a conta do gateway pronta (chaves e webhook testados). */
+                            gateway_ready: string;
+                            capacity: number | null;
+                            allocated: number;
+                            remaining: unknown;
+                            reservation_minutes: number;
+                            max_tickets_per_buyer: number | null;
+                            gateway_fee_basis_points: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.types.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketTypeResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketTypeResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.settings.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UpdateTicketingSettingsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            /** @description Lote pago só vende com a conta do gateway pronta (chaves e webhook testados). */
+                            gateway_ready: string;
+                            capacity: number | null;
+                            allocated: number;
+                            remaining: unknown;
+                            reservation_minutes: number;
+                            max_tickets_per_buyer: number | null;
+                            gateway_fee_basis_points: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.types.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticketType: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.types.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticketType: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketTypeResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketTypeResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.batches.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticketType: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveTicketBatchRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketBatchResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketBatchResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.batches.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticketType: string;
+                batch: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.batches.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticketType: string;
+                batch: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveTicketBatchRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketBatchResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketBatchResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.batches.close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticketType: string;
+                batch: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TicketBatchResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketBatchResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.coupons.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `CouponResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CouponResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.coupons.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveCouponRequest"];
+            };
+        };
+        responses: {
+            /** @description `CouponResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CouponResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.coupons.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                coupon: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.coupons.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                coupon: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveCouponRequest"];
+            };
+        };
+        responses: {
+            /** @description `CouponResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["CouponResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.coupons.redemptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                coupon: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            order_reference: string | null;
+                            email: string | null;
+                            discount: {
+                                amount: number;
+                                /** @constant */
+                                currency: "BRL";
+                            };
+                            released: boolean;
+                            created_at: string;
+                        }[];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.orders.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated set of `OrderResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["OrderResource"][];
+                        links: {
+                            first: string | null;
+                            last: string | null;
+                            prev: string | null;
+                            next: string | null;
+                        };
+                        meta: {
+                            current_page: number;
+                            from: number | null;
+                            last_page: number;
+                            /** @description Generated paginator links. */
+                            links: {
+                                url: string | null;
+                                label: string;
+                                active: boolean;
+                            }[];
+                            /** @description Base path for paginator generated URLs. */
+                            path: string | null;
+                            /** @description Number of items shown per page. */
+                            per_page: number;
+                            /** @description Number of the last item in the slice. */
+                            to: number | null;
+                            /** @description Total number of items being paginated. */
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.orders.export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "Transfer-Encoding": "chunked";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv; charset=UTF-8": string;
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.orders.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `OrderResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["OrderResource"];
+                        meta: {
+                            payment: {
+                                /** @enum {string} */
+                                method: "pix" | "card" | "boleto";
+                                /** @enum {string} */
+                                method_label: "Pix" | "Cartão de crédito" | "Boleto";
+                                /** @enum {string} */
+                                status: "pending" | "paid" | "failed" | "expired" | "cancelled" | "refunded" | "disputed";
+                                /** @enum {string} */
+                                status_label: "Aguardando pagamento" | "Pago" | "Recusado" | "Vencido" | "Cancelado" | "Reembolsado" | "Em contestação";
+                                installments: number;
+                                expires_at: string | null;
+                                paid_at: string | null;
+                                failure_reason: string | null;
+                            } | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.orders.cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `OrderResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["OrderResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.orders.mark-paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkOrderPaidRequest"];
+            };
+        };
+        responses: {
+            /** @description `OrderResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["OrderResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.orders.payment-reminder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            delivery_id: string;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.orders.history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: [
+                            {
+                                /** @constant */
+                                id: "created";
+                                /** @constant */
+                                kind: "created";
+                                title: string;
+                                detail: null;
+                                actor: null;
+                                at: string;
+                            },
+                            unknown[]
+                        ];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.orders.refunds.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of `RefundResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["RefundResource"][];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.orders.refunds.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefundOrderRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.orders.refunds.settle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+                refund: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    completed: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description `RefundResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["RefundResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.tickets.index": {
+        parameters: {
+            query?: {
+                ticket_type_id?: string;
+            };
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated set of `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"][];
+                        links: {
+                            first: string | null;
+                            last: string | null;
+                            prev: string | null;
+                            next: string | null;
+                        };
+                        meta: {
+                            current_page: number;
+                            from: number | null;
+                            last_page: number;
+                            /** @description Generated paginator links. */
+                            links: {
+                                url: string | null;
+                                label: string;
+                                active: boolean;
+                            }[];
+                            /** @description Base path for paginator generated URLs. */
+                            path: string | null;
+                            /** @description Number of items shown per page. */
+                            per_page: number;
+                            /** @description Number of the last item in the slice. */
+                            to: number | null;
+                            /** @description Total number of items being paginated. */
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.tickets.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticket: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.tickets.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticket: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UpdateTicketAttendeeRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.tickets.transfer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticket: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransferTicketRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.tickets.resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticket: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            /** @description An error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Error overview.
+                         * @example Ingresso cancelado.
+                         */
+                        message: string;
+                    };
+                };
+            };
+        };
+    };
+    "ticketing.reconciliation.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated set of `ReconciliationIssueResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ReconciliationIssueResource"][];
+                        links: {
+                            first: string | null;
+                            last: string | null;
+                            prev: string | null;
+                            next: string | null;
+                        };
+                        meta: {
+                            current_page: number;
+                            from: number | null;
+                            last_page: number;
+                            /** @description Generated paginator links. */
+                            links: {
+                                url: string | null;
+                                label: string;
+                                active: boolean;
+                            }[];
+                            /** @description Base path for paginator generated URLs. */
+                            path: string | null;
+                            /** @description Number of items shown per page. */
+                            per_page: number;
+                            /** @description Number of the last item in the slice. */
+                            to: number | null;
+                            /** @description Total number of items being paginated. */
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.reconciliation.run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            refreshed: number;
+                            orders: number;
+                            open: number;
+                            new: number;
+                            resolved: number;
+                            fees: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.imports.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated set of `TicketImportResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketImportResource"][];
+                        links: {
+                            first: string | null;
+                            last: string | null;
+                            prev: string | null;
+                            next: string | null;
+                        };
+                        meta: {
+                            current_page: number;
+                            from: number | null;
+                            last_page: number;
+                            /** @description Generated paginator links. */
+                            links: {
+                                url: string | null;
+                                label: string;
+                                active: boolean;
+                            }[];
+                            /** @description Base path for paginator generated URLs. */
+                            path: string | null;
+                            /** @description Number of items shown per page. */
+                            per_page: number;
+                            /** @description Number of the last item in the slice. */
+                            to: number | null;
+                            /** @description Total number of items being paginated. */
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.imports.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The edition ID */
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadTicketImportRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketImportResource` */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketImportResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.imports.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                import: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TicketImportResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketImportResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.imports.destroy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                import: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.imports.map": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                import: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MapTicketImportRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketImportResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketImportResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.imports.start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                import: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TicketImportResource` */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketImportResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.imports.resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                import: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TicketImportResource` */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketImportResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.imports.rejections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                import: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            line: number;
+                            /** @enum {string} */
+                            kind: "import" | "duplicate" | "rejected";
+                            reason: string;
+                            values: string[];
+                        }[];
+                        headers: string[];
+                        meta: {
+                            current_page: number;
+                            last_page: number;
+                            per_page: number;
+                            total: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.imports.rejections.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                import: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "Transfer-Encoding": "chunked";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv; charset=UTF-8": string;
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.imports.email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                import: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailImportedTicketsRequest"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            queued: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.reconciliation.resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                issue: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    resolution: string;
+                };
+            };
+        };
+        responses: {
+            /** @description `ReconciliationIssueResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["ReconciliationIssueResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.checkout.orders.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaceOrderRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @constant */
+                        code: "idempotency_key_required";
+                        /** @constant */
+                        message: "O header Idempotency-Key é obrigatório para esta operação.";
+                        errors: null;
+                        request_id: string;
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.checkout.orders.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `OrderResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["OrderResource"];
+                    };
+                };
+            };
+        };
+    };
+    "ticketing.checkout.orders.payment.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            /** @enum {string} */
+                            method: "pix" | "card" | "boleto";
+                            /** @enum {string} */
+                            status: "pending" | "paid" | "failed" | "expired" | "cancelled" | "refunded" | "disputed";
+                            /** @enum {string} */
+                            status_label: "Aguardando pagamento" | "Pago" | "Recusado" | "Vencido" | "Cancelado" | "Reembolsado" | "Em contestação";
+                            amount: {
+                                amount: number;
+                                /** @constant */
+                                currency: "BRL";
+                            };
+                            installments: number;
+                            pix: {
+                                copy_paste: string | null;
+                                qr_code_base64: string | null;
+                            } | null;
+                            checkout_url: string | null;
+                            expires_at: string | null;
+                            paid_at: string | null;
+                            failure_reason: string | null;
+                            /** @enum {string} */
+                            order_status: "created" | "awaiting_payment" | "paid" | "expired" | "cancelled" | "refunded";
+                        } | null;
+                    };
+                };
+            };
+        };
+    };
+    "ticketing.checkout.orders.payment.start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartOrderPaymentRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            id: string;
+                            /** @enum {string} */
+                            method: "pix" | "card" | "boleto";
+                            /** @enum {string} */
+                            status: "pending" | "paid" | "failed" | "expired" | "cancelled" | "refunded" | "disputed";
+                            /** @enum {string} */
+                            status_label: "Aguardando pagamento" | "Pago" | "Recusado" | "Vencido" | "Cancelado" | "Reembolsado" | "Em contestação";
+                            amount: {
+                                amount: number;
+                                /** @constant */
+                                currency: "BRL";
+                            };
+                            installments: number;
+                            pix: {
+                                copy_paste: string | null;
+                                qr_code_base64: string | null;
+                            } | null;
+                            checkout_url: string | null;
+                            expires_at: string | null;
+                            paid_at: string | null;
+                            failure_reason: string | null;
+                            /** @enum {string} */
+                            order_status: "created" | "awaiting_payment" | "paid" | "expired" | "cancelled" | "refunded";
+                        };
+                    };
+                };
+            };
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.checkout.orders.cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                order: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `OrderResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["OrderResource"];
+                    };
+                };
+            };
+        };
+    };
+    "ticketing.public.coupons.check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckCouponRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.public.tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            404: components["responses"]["ModelNotFoundException"];
+        };
+    };
+    "ticketing.attendee.tickets.index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: unknown[][];
+                        meta: {
+                            email_verified: boolean;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "ticketing.attendee.tickets.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticket: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+        };
+    };
+    "ticketing.attendee.tickets.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticket: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UpdateTicketAttendeeRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.attendee.tickets.transfer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticket: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransferTicketRequest"];
+            };
+        };
+        responses: {
+            /** @description `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            422: components["responses"]["ValidationException"];
+        };
+    };
+    "ticketing.attendee.tickets.resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+                ticket: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description `TicketResource` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["TicketResource"];
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            /** @description An error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Error overview.
+                         * @example Ingresso cancelado.
+                         */
+                        message: string;
                     };
                 };
             };
