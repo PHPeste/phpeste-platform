@@ -371,7 +371,7 @@ perms = [
     ("cfp.review", "Avaliar propostas", "●", "", "●", "", ""),
     ("program.manage", "Gerenciar palestrantes e grade", "●", "", "", "", ""),
     ("speakers.private", "Ver acessibilidade e alimentação", "●", "", "", "", ""),
-    ("orders.view", "Ver pedidos e pagamentos", "●", "●", "", "", ""),
+    ("orders.view", "Ver pedidos, a cobrança de cada um, o histórico e o CSV", "●", "●", "", "", ""),
     ("orders.refund", "Reembolsar pedidos", "●", "●", "", "", ""),
     ("payments.gateway", "Editar chaves do gateway", "●", "", "", "", ""),
     ("checkin.scan", "Fazer check-in", "●", "", "", "●", ""),
