@@ -110,3 +110,7 @@ Tokens oficiais em `../docs/design/tema-sertao-tokens.png`, aplicados em `app/as
 
 - No generator/skill scaffolding a new module — creating one is by hand, following `login`'s shape and `docs/ARCHITECTURE.md`.
 - Cadastro aberto (`register`) não existe por decisão: a entrada no painel é por convite da organização.
+
+## Documento de arquitetura
+
+Tela nova que mude o que o painel ou o site mostram, ou mudança de como o front fala com a API (resolução da edição pelo host, autenticação, tema), atualiza `../docs/arquitetura/` no mesmo PR. Ver `../docs/arquitetura/README.md`. Os prints do painel saem de `CAPTURAR_TELAS=1 npx playwright test e2e/capturas-arquitetura.spec.ts`.

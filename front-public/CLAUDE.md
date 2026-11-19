@@ -49,3 +49,7 @@ Para testar vários hosts no dev: `NUXT_TRUST_FORWARDED_HOST=true npm run dev` e
 - Tudo que vai para o `<head>` a partir do tema passa pelas validações de `shared/edition` (cor, fonte, URL https); nunca injete valor da API sem validar.
 - Página nova de conta, palestrante ou checkout entra em `AREA_PREFIXES` (para funcionar no site próprio) e, se depende de sessão, em `routeRules` com `ssr: false`.
 - Os mesmos padrões do painel valem aqui: services não traduzem resposta, views não chamam service, e mudança de tela se verifica com `npm run test:e2e`.
+
+## Documento de arquitetura
+
+Tela nova que mude o que o painel ou o site mostram, ou mudança de como o front fala com a API (resolução da edição pelo host, autenticação, tema), atualiza `../docs/arquitetura/` no mesmo PR. Ver `../docs/arquitetura/README.md`.
