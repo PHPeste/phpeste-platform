@@ -17,6 +17,7 @@ dataset('matriz de permissões', function (): array {
         EditionPermission::RefundOrders->value => [EditionRole::Organizer, EditionRole::Finance],
         EditionPermission::ManageGateway->value => [EditionRole::Organizer],
         EditionPermission::CheckIn->value => [EditionRole::Organizer, EditionRole::CheckIn],
+        EditionPermission::ManageSponsors->value => [EditionRole::Organizer],
     ];
 
     $cases = [];
