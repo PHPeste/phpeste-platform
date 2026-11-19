@@ -7,6 +7,7 @@ namespace PHPeste\Notifications\Jobs;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
+use PHPeste\Notifications\Actions\QueueEmail;
 use PHPeste\Notifications\Enums\DeliveryStatus;
 use PHPeste\Notifications\Mail\EditionMail;
 use PHPeste\Notifications\Mail\EmailComposer;
@@ -39,6 +40,14 @@ class SendEmailDelivery implements ShouldQueue
         $delivery = $this->delivery();
 
         if (!$delivery instanceof EmailDelivery || $delivery->status !== DeliveryStatus::Queued) {
+            return;
+        }
+
+        // O endereço pode ter sido bloqueado (bounce, spam) enquanto o envio
+        // esperava na fila.
+        if (resolve(QueueEmail::class)->isBlocked($delivery->edition_id, $delivery->to_email)) {
+            $delivery->update(['status' => DeliveryStatus::Suppressed, 'provider_detail' => 'Endereço bloqueado nesta edição por bounce permanente ou spam']);
+
             return;
         }
 
