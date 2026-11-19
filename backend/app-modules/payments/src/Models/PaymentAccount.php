@@ -33,6 +33,8 @@ use PHPeste\Payments\Enums\PaymentMethod;
  * @property string $webhook_token
  * @property Carbon|null $verified_at
  * @property Carbon|null $webhook_verified_at
+ * @property int $webhook_rejections
+ * @property Carbon|null $webhook_rejected_at
  * @property Carbon|null $retired_at
  * @property string|null $created_by
  * @property Carbon $created_at
@@ -99,6 +101,8 @@ class PaymentAccount extends Model
             'pix_expiration_minutes' => 'integer',
             'verified_at' => 'datetime',
             'webhook_verified_at' => 'datetime',
+            'webhook_rejections' => 'integer',
+            'webhook_rejected_at' => 'datetime',
             'retired_at' => 'datetime',
         ];
     }

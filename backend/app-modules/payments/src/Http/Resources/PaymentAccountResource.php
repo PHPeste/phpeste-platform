@@ -41,6 +41,7 @@ class PaymentAccountResource extends ApiResource
             'ready' => $account->isReady(),
             'verified_at' => $this->isoDate($account->verified_at),
             'webhook_verified_at' => $this->isoDate($account->webhook_verified_at),
+            'webhook_rejections' => ['count' => $account->webhook_rejections, 'last_at' => $this->isoDate($account->webhook_rejected_at)],
             'retired_at' => $this->isoDate($account->retired_at),
             'created_at' => $this->isoDate($account->created_at),
             'webhook_url' => $account->isActive() ? url("/api/v1/webhooks/payments/{$account->webhook_token}") : null,
