@@ -39,6 +39,24 @@ class EloquentEditionDirectory implements EditionDirectory
         ];
     }
 
+    public function communityId(string $editionId): ?string
+    {
+        $community = Edition::query()->whereKey($editionId)->value('community_id');
+
+        return is_string($community) ? $community : null;
+    }
+
+    public function names(array $editionIds): array
+    {
+        $names = [];
+
+        foreach (Edition::query()->whereKey($editionIds)->oldest('starts_on')->get(['id', 'name', 'starts_on']) as $edition) {
+            $names[$edition->id] = ['id' => $edition->id, 'name' => $edition->name, 'starts_on' => $edition->starts_on?->toDateString()];
+        }
+
+        return $names;
+    }
+
     public function site(string $editionId): array
     {
         $edition = Edition::query()->find($editionId);
