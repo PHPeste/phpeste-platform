@@ -20,7 +20,7 @@ beforeEach(function (): void {
 it('lista os modelos da edição com o padrão de cada um', function (): void {
     $this->getJson($this->url)
         ->assertOk()
-        ->assertJsonCount(11, 'data')
+        ->assertJsonCount(13, 'data')
         ->assertJsonPath('data.0.id', 'order_confirmed')
         ->assertJsonPath('data.0.label', 'Confirmação de compra')
         ->assertJsonPath('data.0.trigger', 'Ao pagar o pedido')
@@ -30,7 +30,9 @@ it('lista os modelos da edição com o padrão de cada um', function (): void {
         ->assertJsonPath('data.0.last_sent_at', null)
         ->assertJsonPath('data.6.transactional', false)
         ->assertJsonPath('data.10.id', 'speaker_invited')
-        ->assertJsonPath('data.10.subject', 'Convite para palestrar no {edicao}');
+        ->assertJsonPath('data.10.subject', 'Convite para palestrar no {edicao}')
+        ->assertJsonPath('data.12.id', 'task_due_soon')
+        ->assertJsonPath('data.12.variables', ['nome', 'edicao', 'tarefa', 'prazo']);
 });
 
 it('salva um modelo personalizado e restaura o padrão', function (): void {

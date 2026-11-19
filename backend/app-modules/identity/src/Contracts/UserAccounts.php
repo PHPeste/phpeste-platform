@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPeste\Identity\Contracts;
 
 use Laravel\Sanctum\NewAccessToken;
+use PHPeste\Identity\Enums\NotificationTopic;
 
 interface UserAccounts
 {
@@ -30,6 +31,11 @@ interface UserAccounts
     public function findOrCreateInvited(string $name, string $email): array;
 
     public function checkPassword(string $userId, string $password): bool;
+
+    /**
+     * Se a pessoa quer receber e-mail deste assunto (preferência em /me).
+     */
+    public function wantsNotification(string $userId, NotificationTopic $topic): bool;
 
     public function issueToken(string $userId, string $deviceName): NewAccessToken;
 }
