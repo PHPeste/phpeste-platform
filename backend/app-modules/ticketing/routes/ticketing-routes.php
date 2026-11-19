@@ -31,8 +31,12 @@ Route::apiV1Edition('ticketing')->group(function (): void {
     Route::delete('/coupons/{coupon}', [CouponController::class, 'destroy'])->whereUuid('coupon')->name('ticketing.coupons.destroy');
     Route::get('/coupons/{coupon}/redemptions', [CouponController::class, 'redemptions'])->whereUuid('coupon')->name('ticketing.coupons.redemptions');
     Route::get('/orders', [OrderController::class, 'index'])->name('ticketing.orders.index');
+    Route::get('/orders/export', [OrderController::class, 'export'])->name('ticketing.orders.export');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->whereUuid('order')->name('ticketing.orders.show');
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->whereUuid('order')->name('ticketing.orders.cancel');
+    Route::post('/orders/{order}/mark-paid', [OrderController::class, 'markPaid'])->whereUuid('order')->name('ticketing.orders.mark-paid');
+    Route::post('/orders/{order}/payment-reminder', [OrderController::class, 'remind'])->whereUuid('order')->middleware('throttle:6,1')->name('ticketing.orders.payment-reminder');
+    Route::get('/orders/{order}/history', [OrderController::class, 'history'])->whereUuid('order')->name('ticketing.orders.history');
     Route::get('/orders/{order}/refunds', [OrderRefundController::class, 'index'])->whereUuid('order')->name('ticketing.orders.refunds.index');
     Route::post('/orders/{order}/refunds', [OrderRefundController::class, 'store'])->whereUuid('order')->name('ticketing.orders.refunds.store');
     Route::post('/orders/{order}/refunds/{refund}/settle', [OrderRefundController::class, 'settle'])->whereUuid(['order', 'refund'])->name('ticketing.orders.refunds.settle');
