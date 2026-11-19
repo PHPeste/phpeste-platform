@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Arquitetura PHPeste Platform</title>
+<style>
+@page { size: A4 landscape; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff; }
+body { font-family: 'Lexend', 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; color: #2B1408; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: .88em; background: #F7EFE3; padding: 0 3px; border-radius: 3px; }
+.page { width: 297mm; height: 210mm; padding: 10mm 13mm 8mm; display: flex; flex-direction: column; page-break-after: always; break-after: page; position: relative; overflow: hidden; }
+.page::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2.2mm; background: repeating-linear-gradient(90deg, #E8B23A 0 6mm, #B4441B 6mm 12mm); }
+.page:last-child { page-break-after: auto; break-after: auto; }
+header { margin-bottom: 3mm; }
+.kicker { font-size: 9.5pt; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #B4441B; }
+h1 { font-size: 19pt; margin: 1.5mm 0 1mm; letter-spacing: -.01em; color: #3A1708; }
+.sub { margin: 0; font-size: 10.3pt; color: #5B4636; max-width: 262mm; line-height: 1.4; }
+.content { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.content svg { width: 100%; height: 100%; max-height: 100%; }
+.notes { margin: 2mm 0 0; padding: 0 0 0 4.5mm; font-size: 8.8pt; color: #5B4636; line-height: 1.38; }
+.notes li { margin: .4mm 0; }
+footer { display: flex; justify-content: space-between; font-size: 8pt; color: #A08B78; border-top: 1px solid #EADBC8; padding-top: 2mm; margin-top: 2.5mm; }
+.cover { background: linear-gradient(135deg, #FBF4E6 0%, #FFFFFF 60%); }
+.cover-top { margin-top: 4mm; }
+.cover-title { font-size: 28pt; line-height: 1.12; margin: 3mm 0 3mm; }
+.cover-sub { font-size: 11pt; color: #5B4636; max-width: 240mm; line-height: 1.45; margin: 0; }
+.cover-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 6mm; margin-top: 5mm; }
+.cover-card { border: 1px solid #EADBC8; border-radius: 12px; padding: 4mm 5mm; background: #fff; }
+.cover-card h3, .cover-legend h3 { margin: 0 0 2mm; font-size: 11pt; }
+.cover-card ol { margin: 0; padding-left: 5mm; font-size: 9.3pt; line-height: 1.4; }
+.cover-card ol li { margin: .8mm 0; }
+.toc { font-size: 8.8pt !important; }
+.toc li { margin: .2mm 0 !important; }
+.toc li span:first-child { display: inline-block; width: 85%; }
+.toc li span:last-child { float: right; color: #A08B78; font-weight: 600; }
+.cover-legend { margin-top: 4mm; }
+.cover-legend svg { width: 100%; height: auto; max-height: 26mm; }
+.cover footer { margin-top: auto; }
+table.cmp { width: 100%; border-collapse: collapse; font-size: 9.4pt; align-self: flex-start; }
+table.cmp th, table.cmp td { text-align: left; padding: 1.6mm 2.4mm; border-bottom: 1px solid #EADBC8; vertical-align: top; line-height: 1.35; }
+table.cmp th { background: #3A1708; color: #FBF4E6; font-weight: 700; font-size: 9pt; }
+table.cmp tr:nth-child(even) td { background: #FBF6EE; }
+table.perms { font-size: 8.6pt; }
+table.perms th, table.perms td { padding: 1.1mm 2mm; }
+table.perms td:nth-child(n+3), table.perms th:nth-child(n+3) { text-align: center; width: 17mm; }
+table.perms td:nth-child(n+3) { color: #6B2A14; font-weight: 700; }
+table.perms td:nth-child(2) { width: 58mm; }
+table.sec td:first-child, table.roadmap td:first-child { width: 42mm; font-weight: 700; }
+table.roadmap td:nth-child(2) { width: 42mm; color: #6B2A14; font-weight: 600; }
+.two { display: grid; grid-template-columns: 1.85fr 1fr; gap: 7mm; width: 100%; align-self: flex-start; }
+.side { font-size: 9.2pt; line-height: 1.4; }
+.side h3 { font-size: 10.5pt; margin: 0 0 1mm; color: #6B2A14; }
+.side ul { margin: 0 0 3mm; padding-left: 4.5mm; }
+.side li { margin: .6mm 0; }
+.shots { display: grid; gap: 5mm; width: 100%; height: 100%; align-items: start; }
+.two-shots { grid-template-columns: 1fr 1fr; }
+.mosaic { grid-template-columns: 1.05fr 1fr; grid-template-rows: 1fr 1fr; }
+.mosaic .big { grid-row: span 2; }
+.mosaic figure:not(.big) img { max-height: 64mm; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 1.5mm; min-height: 0; }
+figure img { width: 100%; max-height: 145mm; object-fit: contain; object-position: top; border: 1px solid #EADBC8; border-radius: 8px; background: #FBF4E6; }
+figcaption { font-size: 8.8pt; color: #5B4636; }
+</style></head>
+<body>
+
+<section class="page cover">
+  <div class="cover-top">
+    <div class="kicker">PHPeste Platform · documentação de arquitetura</div>
+    <h1 class="cover-title">Uma plataforma, um banco,<br>uma edição por vez</h1>
+    <p class="cover-sub">Como funciona a plataforma que organiza o PHPeste todo ano: o painel da organização, o site público de cada
+    edição e a API Laravel em módulos por trás dos dois. Cada comunidade anfitriã cria a sua <b>edição</b>, e a edição é o tenant:
+    todo dado de evento carrega <code>edition_id</code> e só aparece dentro dela.</p>
+  </div>
+  <div class="cover-grid">
+    <div class="cover-card">
+      <h3>Resumo em cinco pontos</h3>
+      <ol>
+        <li><b>Monorepo com três partes.</b> <code>backend/</code> (Laravel 13, API), <code>front-admin/</code> (Nuxt SPA da organização) e <code>front-public/</code> (Nuxt SSR do site da edição, resolvido pelo domínio).</li>
+        <li><b>A edição é o tenant</b> (ADR 0007). Um banco só; escopo global por <code>edition_id</code> e a edição no contexto só durante a requisição ou o job.</li>
+        <li><b>15 módulos</b> (<code>internachi/modular</code>) que só conversam por contratos e eventos. 12 já têm lógica; Program, CheckIn, Tasks e Engagement ainda são casca.</li>
+        <li><b>A plataforma não toca no dinheiro</b> (ADR 0009). Cada edição usa a conta do próprio gateway (Asaas ou Mercado Pago); a receita é calculada dos pedidos, nunca guardada.</li>
+        <li><b>Toda ação sensível vira trilha de auditoria</b> por evento, com segredo removido e dado pessoal mascarado.</li>
+      </ol>
+    </div>
+    <div class="cover-card">
+      <h3>Conteúdo</h3>
+      <ol class="toc"><li><span>Visão geral do sistema</span><span>2</span></li><li><span>Tenancy: comunidade, edição e o que é global</span><span>3</span></li><li><span>Como uma requisição encontra a edição</span><span>4</span></li><li><span>Ciclo de vida da edição</span><span>5</span></li><li><span>Os 15 módulos do backend</span><span>6</span></li><li><span>Como os módulos conversam</span><span>7</span></li><li><span>Banco de dados por domínio</span><span>8</span></li><li><span>Papéis e permissões</span><span>9</span></li><li><span>Ingresso: da compra ao QR</span><span>10</span></li><li><span>CFP: da proposta à grade</span><span>11</span></li><li><span>Dinheiro: patrocínio, fornecedores e finanças</span><span>12</span></li><li><span>Fila, rotinas agendadas, e-mail e auditoria</span><span>13</span></li><li><span>Segurança</span><span>14</span></li><li><span>Desenvolvimento, CI e deploy</span><span>15</span></li><li><span>Telas: design e painel</span><span>16</span></li><li><span>Telas: painel em uso</span><span>17</span></li><li><span>Onde estamos e o que falta</span><span>18</span></li></ol>
+    </div>
+  </div>
+  <div class="cover-legend"><h3>Legenda usada nos diagramas</h3><svg viewBox="0 0 1020 100" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="10" width="34" height="22" rx="6" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6"/>
+<text x="54" y="25" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Front-end (painel, site, app)</text>
+<rect x="265" y="10" width="34" height="22" rx="6" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="309" y="25" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Backend Laravel</text>
+<rect x="520" y="10" width="34" height="22" rx="6" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="564" y="25" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Dado da edição (tenant)</text>
+<rect x="775" y="10" width="34" height="22" rx="6" fill="#E8F0FB" stroke="#3B6FD8" stroke-width="1.6"/>
+<text x="819" y="25" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Dado global ou da comunidade</text>
+<rect x="10" y="42" width="34" height="22" rx="6" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6"/>
+<text x="54" y="57" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Banco, cache e arquivos</text>
+<rect x="265" y="42" width="34" height="22" rx="6" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="309" y="57" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Serviço externo</text>
+<rect x="520" y="42" width="34" height="22" rx="6" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="564" y="57" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Infra e operação</text>
+<rect x="775" y="42" width="34" height="22" rx="6" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="819" y="57" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Planejado, ainda vazio</text>
+<path d="M 10 88 L 60 88" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#a-infra)"/>
+<text x="70" y="92" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">chamada ou dependência</text>
+<path d="M 265 88 L 315 88" fill="none" stroke="#475569" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-infra)"/>
+<text x="325" y="92" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">assíncrono (evento, fila, webhook)</text></svg></div>
+  <footer><span>Fonte: código da main, backend/CLAUDE.md, docs/produto.md e ADRs 0001–0009.</span><span>19/11/2026 · main em b4293b3 · página 1</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">02 · Visão geral</div>
+    <h1>Visão geral do sistema</h1>
+    <p class="sub">Dois front-ends Nuxt e um site próprio opcional falam com uma API só. O Caddy emite o certificado de cada domínio de edição na hora; a API resolve a edição pelo host.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 545" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="30" width="230" height="500" rx="14" fill="#FDF1DD" fill-opacity="0.5" stroke="#B8761E" stroke-width="1.4" stroke-dasharray="7 5"/><text x="23" y="48" font-size="11" font-weight="700" fill="#B8761E" text-anchor="start" font-family="inherit" xml:space="preserve">Quem usa</text>
+<rect x="24" y="62" width="202" height="92" rx="9" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6"/>
+<text x="34" y="81" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Painel da organização</text>
+<text x="34" y="98" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">front-admin · Nuxt 4 SPA</text>
+<text x="34" y="112" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">organizador, financeiro,</text>
+<text x="34" y="126" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">avaliador, check-in</text>
+<rect x="24" y="168" width="202" height="104" rx="9" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6"/>
+<text x="34" y="187" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Site da edição</text>
+<text x="34" y="204" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">front-public · Nuxt 4 SSR</text>
+<text x="34" y="218" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">site, CFP, checkout,</text>
+<text x="34" y="232" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">área do palestrante e</text>
+<text x="34" y="246" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">do participante</text>
+<rect x="24" y="286" width="202" height="78" rx="9" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="34" y="305" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Site próprio da comunidade</text>
+<text x="34" y="322" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">opcional: chama só a</text>
+<text x="34" y="336" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">API pública (CORS por edição)</text>
+<rect x="24" y="378" width="202" height="64" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="34" y="397" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">App Flutter</text>
+<text x="34" y="414" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ainda não iniciado</text>
+<rect x="24" y="456" width="202" height="62" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="34" y="475" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Gateways (webhooks)</text>
+<text x="34" y="492" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Asaas e Mercado Pago</text>
+<rect x="275" y="200" width="120" height="150" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="335.0" y="219" font-size="12" font-weight="700" fill="#2B1408" text-anchor="middle" font-family="inherit" xml:space="preserve">Caddy</text>
+<text x="335.0" y="236" font-size="10" font-weight="400" fill="#5B4636" text-anchor="middle" font-family="inherit" xml:space="preserve">proxy reverso</text>
+<text x="335.0" y="250" font-size="10" font-weight="400" fill="#5B4636" text-anchor="middle" font-family="inherit" xml:space="preserve">TLS sob demanda</text>
+<text x="335.0" y="264" font-size="10" font-weight="400" fill="#5B4636" text-anchor="middle" font-family="inherit" xml:space="preserve">para domínio de</text>
+<text x="335.0" y="278" font-size="10" font-weight="400" fill="#5B4636" text-anchor="middle" font-family="inherit" xml:space="preserve">cada edição</text>
+<text x="335.0" y="292" font-size="10" font-weight="400" fill="#5B4636" text-anchor="middle" font-family="inherit" xml:space="preserve">(tls-check)</text>
+<path d="M 226 108 L 275 275" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#a-infra)"/>
+<path d="M 226 220 L 275 275" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#a-infra)"/>
+<path d="M 226 325 L 275 275" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#a-infra)"/>
+<path d="M 226 487 L 275 275" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#a-infra)"/>
+<rect x="430" y="30" width="380" height="500" rx="14" fill="#F7E9E1" fill-opacity="0.5" stroke="#6B2A14" stroke-width="1.4"/><text x="443" y="48" font-size="11" font-weight="700" fill="#6B2A14" text-anchor="start" font-family="inherit" xml:space="preserve">API · Laravel 13 · PHP 8.4 · /api/v1</text>
+<rect x="445" y="62" width="350" height="86" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="455" y="81" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Rotas por tipo</text>
+<text x="455" y="98" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/editions/{id}/…  painel (Sanctum + papel na edição)</text>
+<text x="455" y="112" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/speaker, /attendee, /checkout/editions/{id}/…  publicada</text>
+<text x="455" y="126" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/public/…  site, tema, ingressos (cache + ETag)</text>
+<text x="455" y="140" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/webhooks/payments/{token}  assinado</text>
+<rect x="445" y="160" width="350" height="98" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="455" y="179" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">15 módulos (app-modules/)</text>
+<text x="455" y="196" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Identity · Community · Branding · Cfp · Ticketing</text>
+<text x="455" y="210" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Payments · Notifications · Audit · Sponsors</text>
+<text x="455" y="224" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Suppliers · Finance</text>
+<text x="455" y="238" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">casca: Program · CheckIn · Tasks · Engagement</text>
+<rect x="445" y="270" width="170" height="112" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="455" y="289" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Horizon (fila)</text>
+<text x="455" y="306" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">e-mail, webhooks,</text>
+<text x="455" y="320" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">importação, clonagem</text>
+<text x="455" y="334" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">de edição, emissão</text>
+<text x="455" y="348" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">de ingressos</text>
+<rect x="625" y="270" width="170" height="112" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="635" y="289" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Scheduler</text>
+<text x="635" y="306" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cfp:sync-status</text>
+<text x="635" y="320" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticketing:expire-orders</text>
+<text x="635" y="334" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticketing:reconcile</text>
+<text x="635" y="348" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">payments:retry-webhooks</text>
+<text x="635" y="362" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">…8 rotinas</text>
+<rect x="445" y="394" width="350" height="122" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="455" y="413" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Regras que valem para todo módulo</text>
+<text x="455" y="430" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Tenancy por edição (BelongsToEdition)</text>
+<text x="455" y="444" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Mutação só em Action · validação em FormRequest</text>
+<text x="455" y="458" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Módulo não usa model de outro (arch test)</text>
+<text x="455" y="472" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Ação sensível → evento Auditable</text>
+<text x="455" y="486" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Logs JSON com segredo redigido · Sentry opcional</text>
+<path d="M 395 275 L 430 275" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#a-infra)"/>
+<rect x="845" y="40" width="245" height="70" rx="9" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6"/>
+<text x="855" y="59" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">MySQL 8</text>
+<text x="855" y="76" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">um banco · 65 tabelas</text>
+<text x="855" y="90" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">UUID em toda tabela</text>
+<rect x="845" y="122" width="245" height="70" rx="9" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6"/>
+<text x="855" y="141" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Redis</text>
+<text x="855" y="158" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cache, filas, locks,</text>
+<text x="855" y="172" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">rate limit</text>
+<rect x="845" y="204" width="245" height="70" rx="9" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6"/>
+<text x="855" y="223" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Disco privado</text>
+<text x="855" y="240" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">CSV de importação, anexos,</text>
+<text x="855" y="254" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">comprovantes (URL assinada)</text>
+<rect x="845" y="292" width="245" height="56" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="855" y="311" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Asaas · Mercado Pago</text>
+<text x="855" y="328" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">conta de cada edição (ADR 0009)</text>
+<rect x="845" y="360" width="245" height="50" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="855" y="379" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Resend (e-mail)</text>
+<text x="855" y="396" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Mailpit no dev</text>
+<rect x="845" y="422" width="245" height="50" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="855" y="441" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">GitHub OAuth</text>
+<text x="855" y="458" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">login de palestrante</text>
+<rect x="845" y="484" width="245" height="46" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="855" y="503" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Sentry</text>
+<text x="855" y="520" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">opcional, sem DSN fica desligado</text>
+<path d="M 810 75 L 845 75" fill="none" stroke="#C98A12" stroke-width="1.6" marker-end="url(#a-data)"/>
+<path d="M 810 157 L 845 157" fill="none" stroke="#C98A12" stroke-width="1.6" marker-end="url(#a-data)"/>
+<path d="M 810 239 L 845 239" fill="none" stroke="#C98A12" stroke-width="1.6" marker-end="url(#a-data)"/>
+<path d="M 810 320 L 845 320" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/>
+<path d="M 810 385 L 845 385" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/>
+<path d="M 810 447 L 845 447" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/>
+<path d="M 810 507 L 845 507" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/></svg></div>
+  <ul class="notes"><li>Painel e site são projetos separados (decisão: <code>front-admin</code> SPA, <code>front-public</code> SSR). O token é Bearer do Sanctum nos dois (ADR 0005).</li><li>Fila e agendador rodam a mesma imagem do backend (<code>horizon</code> e <code>scheduler</code> no <code>infra/docker-compose.yml</code>).</li></ul>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 2</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">03 · Tenancy</div>
+    <h1>Tenancy: comunidade, edição e o que é global</h1>
+    <p class="sub">ADR 0007: uma instalação e um banco. A edição é o tenant; usuários e perfis de palestrante são globais para guardar o histórico entre edições. Toda chave é UUID.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 550" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="20" width="340" height="520" rx="14" fill="#E8F0FB" fill-opacity="0.5" stroke="#3B6FD8" stroke-width="1.4" stroke-dasharray="7 5"/><text x="23" y="38" font-size="11" font-weight="700" fill="#3B6FD8" text-anchor="start" font-family="inherit" xml:space="preserve">Global (da plataforma)</text>
+<rect x="25" y="52" width="310" height="92" rx="9" fill="#E8F0FB" stroke="#3B6FD8" stroke-width="1.6"/>
+<text x="35" y="71" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">users</text>
+<text x="35" y="88" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">conta única: organização, palestrante e</text>
+<text x="35" y="102" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">participante · login por senha ou GitHub</text>
+<text x="35" y="116" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">social_accounts · password_reset_tokens</text>
+<rect x="25" y="156" width="310" height="78" rx="9" fill="#E8F0FB" stroke="#3B6FD8" stroke-width="1.6"/>
+<text x="35" y="175" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">speaker_profiles</text>
+<text x="35" y="192" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">perfil público do palestrante, vale em todas</text>
+<text x="35" y="206" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">as edições · dados sensíveis cifrados à parte</text>
+<rect x="25" y="246" width="310" height="64" rx="9" fill="#E8F0FB" stroke="#3B6FD8" stroke-width="1.6"/>
+<text x="35" y="265" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">communities</text>
+<text x="35" y="282" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">PHP-PB, PHPCE… dona das edições</text>
+<rect x="25" y="322" width="310" height="90" rx="9" fill="#E8F0FB" stroke="#3B6FD8" stroke-width="1.6"/>
+<text x="35" y="341" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">suppliers + supplier_contacts</text>
+<text x="35" y="358" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">global DA COMUNIDADE: reaproveitado entre</text>
+<text x="35" y="372" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">as edições dela, nunca visto por outra</text>
+<text x="35" y="386" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">contato só para quem é de uma edição dele</text>
+<rect x="25" y="424" width="310" height="104" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="35" y="443" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">infra do Laravel</text>
+<text x="35" y="460" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">personal_access_tokens (um por dispositivo)</text>
+<text x="35" y="474" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">jobs, cache, sessions</text>
+<text x="35" y="488" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">audit_logs: global, mas cada registro</text>
+<text x="35" y="502" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">leva o edition_id</text>
+<rect x="380" y="20" width="710" height="520" rx="14" fill="#E6F2EC" fill-opacity="0.5" stroke="#2F7D5B" stroke-width="1.4" stroke-dasharray="7 5"/><text x="393" y="38" font-size="11" font-weight="700" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">Por edição (o tenant) · toda tabela tem edition_id + escopo global</text>
+<rect x="395" y="52" width="230" height="120" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="405" y="71" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">editions</text>
+<text x="405" y="88" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">community_id · status (máquina</text>
+<text x="405" y="102" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">de estados) · datas, cidade</text>
+<text x="405" y="116" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">site_mode: plataforma ou</text>
+<text x="405" y="130" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">site próprio</text>
+<rect x="640" y="52" width="435" height="120" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="650" y="71" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Equipe e configuração</text>
+<text x="650" y="88" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">edition_members (papel na edição) · edition_invitations</text>
+<text x="650" y="102" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">edition_settings (tema) · edition_domains</text>
+<text x="650" y="116" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cfp_settings · ticketing_settings · sponsor_settings</text>
+<text x="650" y="130" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">email_templates · finance_categories</text>
+<rect x="395" y="186" width="335" height="110" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="405" y="205" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Conteúdo</text>
+<text x="405" y="222" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cfp_tracks · cfp_criteria · proposals</text>
+<text x="405" y="236" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">proposal_speakers · review_assignments</text>
+<text x="405" y="250" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">reviews · speaker_confirmations · speaker_logistics</text>
+<rect x="745" y="186" width="330" height="110" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="755" y="205" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Vendas</text>
+<text x="755" y="222" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticket_types · ticket_batches · coupons</text>
+<text x="755" y="236" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">orders · order_items · tickets</text>
+<text x="755" y="250" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">payment_accounts · payment_charges</text>
+<text x="755" y="264" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">webhook_events · payment_refunds</text>
+<rect x="395" y="310" width="335" height="96" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="405" y="329" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Organização</text>
+<text x="405" y="346" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sponsors · sponsorships · sponsor_tiers</text>
+<text x="405" y="360" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">edition_suppliers · supplier_quotes</text>
+<text x="405" y="374" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">expenses</text>
+<rect x="745" y="310" width="330" height="96" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="755" y="329" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Comunicação e operação</text>
+<text x="755" y="346" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">email_deliveries · email_unsubscribes</text>
+<text x="755" y="360" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticket_imports · reconciliation_issues</text>
+<text x="755" y="374" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">edition_clones</text>
+<rect x="395" y="420" width="680" height="108" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="405" y="439" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Como o isolamento é garantido</text>
+<text x="405" y="456" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Model de edição usa o trait BelongsToEdition: liga o EditionScope e preenche edition_id ao criar.</text>
+<text x="405" y="470" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Sem edição no contexto, a consulta não devolve nada e criar sem edition_id lança LogicException.</text>
+<text x="405" y="484" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Ler outra edição de propósito exige -&gt;forEdition($id) explícito (clonagem, rotinas agendadas).</text>
+<text x="405" y="498" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Comunidade A nunca vê edição, fornecedor ou dado da comunidade B.</text>
+<path d="M 335 278 L 365 278 L 365 112 L 395 112" fill="none" stroke="#3B6FD8" stroke-width="1.6" marker-end="url(#a-global)"/>
+<text x="370" y="200" font-size="9.5" font-weight="600" fill="#3B6FD8" text-anchor="start" font-family="inherit" xml:space="preserve">community_id</text></svg></div>
+  <ul class="notes"><li>Por que não um banco por comunidade: a mesma pessoa palestra no PHPeste de um ano e compra ingresso no outro, e o perfil dela é um só.</li><li>Dado de edição que vai para a próxima ("criar edição a partir da anterior") é copiado por um <code>EditionCloner</code> de cada módulo, nunca dado de pessoa.</li></ul>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 3</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">04 · Tenancy na prática</div>
+    <h1>Como uma requisição encontra a edição</h1>
+    <p class="sub">Toda rota do painel passa pela mesma esteira; o módulo só escreve a regra de negócio. A edição entra no contexto e sai no fim, e o escopo global faz o resto.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="30" width="168" height="82" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="20" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">1 · Rota</text>
+<text x="20" y="66" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Route::apiV1Edition(&#x27;ticketing&#x27;)</text>
+<text x="20" y="80" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/api/v1/editions/{edition}/…</text>
+<path d="M 178 71 L 192 71" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<rect x="192" y="30" width="168" height="82" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="202" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">2 · auth:sanctum</text>
+<text x="202" y="66" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">token Bearer válido</text>
+<text x="202" y="80" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">(um por dispositivo)</text>
+<path d="M 360 71 L 374 71" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<rect x="374" y="30" width="168" height="82" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="384" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">3 · Papel na edição</text>
+<text x="384" y="66" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">edition_members tem a</text>
+<text x="384" y="80" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pessoa? senão 403</text>
+<path d="M 542 71 L 556 71" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<rect x="556" y="30" width="168" height="82" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="566" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">4 · CurrentEdition</text>
+<text x="566" y="66" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">liga a edição no contexto</text>
+<text x="566" y="80" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">só durante a requisição</text>
+<path d="M 724 71 L 738 71" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<rect x="738" y="30" width="168" height="82" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="748" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">5 · Gate da permissão</text>
+<text x="748" y="66" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Gate::authorize(</text>
+<text x="748" y="80" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">&#x27;orders.refund&#x27;)</text>
+<path d="M 906 71 L 920 71" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<rect x="920" y="30" width="168" height="82" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="930" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">6 · FormRequest → Action</text>
+<text x="930" y="66" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">valida, depois a Action</text>
+<text x="930" y="80" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">muda o Model</text>
+<rect x="10" y="140" width="530" height="140" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="20" y="159" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Rotas de quem não é da equipe</text>
+<text x="20" y="176" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Route::apiV1PublishedEdition(&#x27;speaker&#x27;, &#x27;proposals&#x27;, [&#x27;auth:sanctum&#x27;])</text>
+<text x="20" y="190" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ /api/v1/speaker/editions/{edition}/proposals</text>
+<text x="20" y="204" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">só aceita edição publicada (rascunho = 404) e liga a edição no contexto</text>
+<text x="20" y="218" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sem exigir papel. Usado por palestrante, participante e checkout.</text>
+<text x="20" y="232" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">A posse do dado é conferida na Action (a proposta é dela?).</text>
+<rect x="560" y="140" width="530" height="140" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="570" y="159" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Rotas públicas e de máquina</text>
+<text x="570" y="176" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/api/v1/public/resolve?host=…  site descobre a edição pelo domínio</text>
+<text x="570" y="190" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/api/v1/public/editions/{id}/theme  tema publicado com ETag</text>
+<text x="570" y="204" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/api/v1/webhooks/payments/{token}  assinatura do gateway</text>
+<text x="570" y="218" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/api/v1/sponsors/attachments/{id}/download  URL assinada</text>
+<text x="570" y="232" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">CORS: só a origem do site próprio da edição, só em /public/*</text>
+<rect x="10" y="305" width="530" height="120" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="20" y="324" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Job e listener</text>
+<text x="20" y="341" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">recebem edition_id explícito no construtor e rodam dentro de</text>
+<text x="20" y="355" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">resolve(CurrentEdition::class)-&gt;run($editionId, fn () =&gt; …)</text>
+<text x="20" y="369" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">nunca herdam a edição de quem disparou: a fila roda depois,</text>
+<text x="20" y="383" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">em outro processo, e a edição do contexto já não existe.</text>
+<rect x="560" y="305" width="530" height="120" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="570" y="324" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Evento de domínio</text>
+<text x="570" y="341" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">carrega ids e enums, nunca Model de outro módulo</text>
+<text x="570" y="355" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ex.: EditionStatusChanged(editionId, from, to)</text>
+<text x="570" y="369" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ShouldDispatchAfterCommit: só sai se a transação gravou</text>
+<text x="570" y="383" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">evento Auditable vira registro em audit_logs</text>
+<rect x="10" y="450" width="1080" height="80" rx="9" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6"/>
+<text x="20" y="469" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Front-public: a edição vem do host</text>
+<text x="20" y="486" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">O site chama /public/resolve com o host da requisição, recebe edition_id e o domínio principal e redireciona se for preciso (ADR 0008).</text>
+<text x="20" y="500" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">O host é normalizado (minúsculas, sem porta, IDN em punycode) e nunca é usado para montar URL sem passar pela tabela edition_domains.</text></svg></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 4</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">05 · Edição</div>
+    <h1>Ciclo de vida da edição</h1>
+    <p class="sub">EditionStatus é uma máquina de estados com o que cada etapa libera e bloqueia (effects()). Só anda para a frente; o painel mostra a etapa atual e a próxima.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="30" y="50" width="180" height="150" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="40" y="69" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Rascunho</text>
+<text x="40" y="86" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">preparação, nada público</text>
+<rect x="245" y="50" width="180" height="150" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="255" y="69" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">CFP aberto</text>
+<text x="255" y="86" font-size="9.8" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">site e domínios públicos</text>
+<text x="255" y="100" font-size="9.8" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">propostas na janela</text>
+<text x="255" y="114" font-size="9.8" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">tema publicado vale</text>
+<text x="255" y="128" font-size="9.8" font-weight="600" fill="#C2410C" text-anchor="start" font-family="inherit" xml:space="preserve">slug da URL travado</text>
+<rect x="460" y="50" width="180" height="150" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="470" y="69" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Vendas abertas</text>
+<text x="470" y="86" font-size="9.8" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">venda de ingressos</text>
+<text x="470" y="100" font-size="9.8" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">CFP segue a janela</text>
+<text x="470" y="114" font-size="9.8" font-weight="600" fill="#C2410C" text-anchor="start" font-family="inherit" xml:space="preserve">exige gateway pronto</text>
+<text x="470" y="128" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">  se houver lote pago</text>
+<rect x="675" y="50" width="180" height="150" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="685" y="69" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Em andamento</text>
+<text x="685" y="86" font-size="9.8" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">check-in</text>
+<text x="685" y="100" font-size="9.8" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">presença de palestrante</text>
+<text x="685" y="114" font-size="9.8" font-weight="600" fill="#C2410C" text-anchor="start" font-family="inherit" xml:space="preserve">não volta a vender</text>
+<rect x="890" y="50" width="180" height="150" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="900" y="69" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Encerrada</text>
+<text x="900" y="86" font-size="9.8" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">relatórios finais</text>
+<text x="900" y="100" font-size="9.8" font-weight="600" fill="#C2410C" text-anchor="start" font-family="inherit" xml:space="preserve">só consulta</text>
+<text x="900" y="114" font-size="9.8" font-weight="600" fill="#C2410C" text-anchor="start" font-family="inherit" xml:space="preserve">não reabre</text>
+<path d="M 210 125 L 245 125" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<path d="M 425 125 L 460 125" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<path d="M 640 125 L 675 125" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<path d="M 855 125 L 890 125" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<path d="M 120 200 L 120 230 L 550 230 L 550 200" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<text x="335.0" y="244.0" font-size="9.5" font-weight="600" fill="#2F7D5B" text-anchor="middle" font-family="inherit" xml:space="preserve">rascunho pode ir direto para vendas</text>
+<rect x="30" y="270" width="340" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="40" y="289" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Quem decide a transição</text>
+<text x="40" y="306" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">A organização muda o status no painel.</text>
+<text x="40" y="320" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Cada módulo pode barrar a mudança com um</text>
+<text x="40" y="334" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">EditionTransitionGuard (ex.: SalesReadinessGuard</text>
+<text x="40" y="348" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">do Ticketing: lote pago sem conta de gateway</text>
+<text x="40" y="362" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pronta = não abre vendas).</text>
+<rect x="385" y="270" width="340" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="395" y="289" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Quem reage</text>
+<text x="395" y="306" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">EditionStatusChanged (auditado) dispara:</text>
+<text x="395" y="320" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Cfp: CfpOpened / CfpClosed, derivados da janela</text>
+<text x="395" y="334" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">  e do status (cfp:sync-status a cada minuto)</text>
+<text x="395" y="348" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Branding: tema publicado passa a valer</text>
+<text x="395" y="362" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Ticketing: rotação de lotes e expiração</text>
+<rect x="740" y="270" width="330" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="750" y="289" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Criar a partir da anterior</text>
+<text x="750" y="306" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Job CloneEdition: nova edição em rascunho,</text>
+<text x="750" y="320" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sem datas, e cada EditionCloner escolhido</text>
+<text x="750" y="334" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">copia numa transação só: tema, domínios,</text>
+<text x="750" y="348" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">equipe, CFP, e-mails, ingressos, cotas,</text>
+<text x="750" y="362" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">fornecedores contratados, orçamento.</text>
+<rect x="30" y="420" width="1040" height="110" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="40" y="439" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Visão geral da edição (um endpoint, vários módulos)</text>
+<text x="40" y="456" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">GET /editions/{id}/overview junta o que cada módulo devolve no seu EditionOverviewContributor: indicadores (ingressos, receita, propostas,</text>
+<text x="40" y="470" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">palestrantes, patrocínio, fornecedores), pendências com caminho e filtro (propostas sem revisor, divergência na conciliação, entregas e despesas</text>
+<text x="40" y="484" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">vencidas) e marcos. O Community filtra cada pendência pela permissão de quem vê: o voluntário não vê pendência de finanças.</text></svg></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 5</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">06 · Backend</div>
+    <h1>Os 15 módulos do backend</h1>
+    <p class="sub">Cada módulo é um pacote Composer real em <code>backend/app-modules/&lt;nome&gt;</code> (ADR 0002), com namespace <code>PHPeste\&lt;Nome&gt;</code>: Models, Actions, Contracts, Events, Http, Jobs. 247 rotas na API.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 545" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="20" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="20" y="39" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Identity</text>
+<text x="20" y="56" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">contas, login (senha e GitHub), sessões por</text>
+<text x="20" y="70" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">dispositivo, perfil e perfil de palestrante</text>
+<rect x="295" y="26" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="324.0" y="38" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">22 rotas</text>
+<rect x="375" y="20" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="385" y="39" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Community</text>
+<text x="385" y="56" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">comunidades, edições, estados, equipe, convites,</text>
+<text x="385" y="70" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">tenancy, Visão geral, clonagem</text>
+<rect x="660" y="26" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="689.0" y="38" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">26 rotas</text>
+<rect x="740" y="20" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="750" y="39" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Branding</text>
+<text x="750" y="56" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">tema por edição (rascunho/publicado), presets,</text>
+<text x="750" y="70" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">contraste AA, logos, domínios e TLS</text>
+<rect x="1025" y="26" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="1054.0" y="38" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">17 rotas</text>
+<rect x="10" y="124" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="20" y="143" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Cfp</text>
+<text x="20" y="160" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">chamada, trilhas, critérios, propostas,</text>
+<text x="20" y="174" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">avaliação cega, decisão, cota do Nordeste,</text>
+<text x="20" y="188" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">confirmação</text>
+<rect x="295" y="130" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="324.0" y="142" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">52 rotas</text>
+<rect x="375" y="124" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="385" y="143" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Ticketing</text>
+<text x="385" y="160" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">tipos, lotes, cupons, pedidos, estoque atômico,</text>
+<text x="385" y="174" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ingressos com QR, transferência, importação,</text>
+<text x="385" y="188" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">conciliação</text>
+<rect x="660" y="130" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="689.0" y="142" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">50 rotas</text>
+<rect x="740" y="124" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="750" y="143" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Payments</text>
+<text x="750" y="160" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">contas de gateway por edição, drivers Asaas e</text>
+<text x="750" y="174" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Mercado Pago, cobranças, webhooks, reembolsos</text>
+<rect x="1031" y="130" width="52" height="16" rx="8" fill="#6B2A14"/>
+<text x="1057.0" y="142" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">8 rotas</text>
+<rect x="10" y="228" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="20" y="247" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Notifications</text>
+<text x="20" y="264" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">e-mail transacional por edição com modelos</text>
+<text x="20" y="278" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">editáveis, descadastro, Resend</text>
+<rect x="301" y="234" width="52" height="16" rx="8" fill="#6B2A14"/>
+<text x="327.0" y="246" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">9 rotas</text>
+<rect x="375" y="228" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="385" y="247" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Audit</text>
+<text x="385" y="264" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">trilha append-only das ações sensíveis, com</text>
+<text x="385" y="278" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">redação de segredos</text>
+<rect x="666" y="234" width="52" height="16" rx="8" fill="#6B2A14"/>
+<text x="692.0" y="246" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">1 rotas</text>
+<rect x="740" y="228" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="750" y="247" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Sponsors</text>
+<text x="750" y="264" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cotas, funil, vagas, pagamentos, entregas,</text>
+<text x="750" y="278" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">anexos por URL assinada</text>
+<rect x="1025" y="234" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="1054.0" y="246" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">28 rotas</text>
+<rect x="10" y="332" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="20" y="351" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Suppliers</text>
+<text x="20" y="368" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cadastro da comunidade, orçamentos, contratação,</text>
+<text x="20" y="382" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">anexos, reaproveitamento</text>
+<rect x="295" y="338" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="324.0" y="350" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">19 rotas</text>
+<rect x="375" y="332" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="385" y="351" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Finance</text>
+<text x="385" y="368" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">despesas, orçamento por categoria, receita</text>
+<text x="385" y="382" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">calculada, saldo, planilha</text>
+<rect x="660" y="338" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="689.0" y="350" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">14 rotas</text>
+<rect x="740" y="332" width="350" height="94" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="750" y="351" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Program</text>
+<text x="750" y="368" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">salas, sessões e grade (B35–B37)</text>
+<rect x="1043" y="338" width="40" height="16" rx="8" fill="#94A3B8"/>
+<text x="1063.0" y="350" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">casca</text>
+<rect x="10" y="436" width="350" height="94" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="20" y="455" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">CheckIn</text>
+<text x="20" y="472" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">leitura de QR, entrada, modo offline (B38–B39)</text>
+<rect x="313" y="442" width="40" height="16" rx="8" fill="#94A3B8"/>
+<text x="333.0" y="454" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">casca</text>
+<rect x="375" y="436" width="350" height="94" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="385" y="455" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Tasks</text>
+<text x="385" y="472" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">kanban da organização (B34)</text>
+<rect x="678" y="442" width="40" height="16" rx="8" fill="#94A3B8"/>
+<text x="698.0" y="454" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">casca</text>
+<rect x="740" y="436" width="350" height="94" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="750" y="455" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Engagement</text>
+<text x="750" y="472" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">feedback, certificados, sorteio (B42)</text>
+<rect x="1043" y="442" width="40" height="16" rx="8" fill="#94A3B8"/>
+<text x="1063.0" y="454" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">casca</text></svg></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 6</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">07 · Backend</div>
+    <h1>Como os módulos conversam</h1>
+    <p class="sub">Módulo nunca usa model de outro: ou chama um contrato (interface em <code>Contracts/</code>, ligada no service provider) ou escuta um evento. 24 contratos hoje. O arch test barra dependência de <code>App\</code>.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="430" y="20" width="240" height="96" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="550.0" y="39" font-size="12" font-weight="700" fill="#2B1408" text-anchor="middle" font-family="inherit" xml:space="preserve">Community</text>
+<text x="550.0" y="56" font-size="10" font-weight="400" fill="#5B4636" text-anchor="middle" font-family="inherit" xml:space="preserve">EditionMemberships</text>
+<text x="550.0" y="70" font-size="10" font-weight="400" fill="#5B4636" text-anchor="middle" font-family="inherit" xml:space="preserve">EditionDirectory</text>
+<text x="550.0" y="84" font-size="10" font-weight="400" fill="#5B4636" text-anchor="middle" font-family="inherit" xml:space="preserve">pontos de extensão (tags) ↓</text>
+<rect x="20" y="150" width="255" height="52" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="30" y="169" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">EditionOverviewContributor</text>
+<text x="30" y="186" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">números da Visão geral</text>
+<path d="M 550 116 L 147 150" fill="none" stroke="#2F7D5B" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-edition)"/>
+<rect x="290" y="150" width="255" height="52" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="300" y="169" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">EditionCloner</text>
+<text x="300" y="186" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">copiar para a próxima</text>
+<path d="M 550 116 L 417 150" fill="none" stroke="#2F7D5B" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-edition)"/>
+<rect x="560" y="150" width="255" height="52" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="570" y="169" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">EditionTransitionGuard</text>
+<text x="570" y="186" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">barrar mudança de status</text>
+<path d="M 550 116 L 687 150" fill="none" stroke="#2F7D5B" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-edition)"/>
+<rect x="830" y="150" width="255" height="52" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="840" y="169" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">EditionParticipation</text>
+<text x="840" y="186" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">quem participa (Identity)</text>
+<path d="M 550 116 L 957 150" fill="none" stroke="#2F7D5B" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-edition)"/>
+<rect x="20" y="240" width="340" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="30" y="259" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Cfp</text>
+<text x="30" y="276" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ UserAccounts, SpeakerProfiles (Identity)</text>
+<text x="30" y="290" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ EditionMailer (Notifications)</text>
+<text x="30" y="304" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ EditionSites (Branding)</text>
+<text x="30" y="318" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ReviewLedger ← quem conta avaliações</text>
+<rect x="390" y="240" width="340" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="400" y="259" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Ticketing</text>
+<text x="400" y="276" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ PaymentProcessor, PaymentLedger</text>
+<text x="400" y="290" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ PaymentAccounts (Payments)</text>
+<text x="400" y="304" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">AccountUsage, TicketVerifier,</text>
+<text x="400" y="318" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">TicketRevenue ← Payments, CheckIn, Finance</text>
+<rect x="760" y="240" width="340" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="770" y="259" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Payments</text>
+<text x="770" y="276" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ PaymentGateway (driver Asaas/MP)</text>
+<text x="770" y="290" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ChargeStatusChanged → Ticketing</text>
+<text x="770" y="304" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">RefundAccepted → Ticketing</text>
+<text x="770" y="318" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sem acesso a pedidos: só referência</text>
+<rect x="20" y="395" width="340" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="30" y="414" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Finance</text>
+<text x="30" y="431" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ TicketRevenue (Ticketing)</text>
+<text x="30" y="445" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ SponsorRevenue (Sponsors)</text>
+<text x="30" y="459" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ PaymentAccounts::all (Payments)</text>
+<text x="30" y="473" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ EditionSuppliers (Suppliers)</text>
+<rect x="390" y="395" width="340" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="400" y="414" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Sponsors · Suppliers</text>
+<text x="400" y="431" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ EditionMemberships (responsável)</text>
+<text x="400" y="445" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ UserAccounts (nomes)</text>
+<text x="400" y="459" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Suppliers → EditionDirectory::communityId</text>
+<text x="400" y="473" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">para não vazar entre comunidades</text>
+<rect x="760" y="395" width="340" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="770" y="414" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Audit · Notifications</text>
+<text x="770" y="431" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Auditable: qualquer evento vira registro</text>
+<text x="770" y="445" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pelo listener genérico RecordAuditableEvent</text>
+<text x="770" y="459" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">EditionMailer::send(...): todo e-mail</text>
+<text x="770" y="473" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">passa por aqui, com tema da edição</text></svg></div>
+  <ul class="notes"><li>Ponto de extensão é registrado com <code>$app-&gt;tag([...], Contrato::TAG)</code>: o Community não conhece os módulos, só a tag. Módulo novo aparece na Visão geral e na clonagem sem mexer no Community.</li></ul>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 7</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">08 · Dados</div>
+    <h1>Banco de dados por domínio</h1>
+    <p class="sub">MySQL 8, 65 tabelas, todas com UUID como chave. Verde é da edição (tem <code>edition_id</code>); azul é global. ● em Suppliers: global da comunidade (<code>community_id</code>).</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 436" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="12" width="260" height="108" rx="9" fill="#E8F0FB" stroke="#3B6FD8" stroke-width="1.6"/>
+<text x="20" y="31" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Identity · 5</text>
+<text x="20" y="48" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">users</text>
+<text x="20" y="62" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">social_accounts</text>
+<text x="20" y="76" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">password_reset_tokens</text>
+<text x="20" y="90" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">speaker_profiles</text>
+<text x="20" y="104" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">speaker_private_details</text>
+<rect x="285" y="12" width="260" height="108" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="295" y="31" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Community · 5</text>
+<text x="295" y="48" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">communities</text>
+<text x="295" y="62" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">editions</text>
+<text x="295" y="76" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">edition_members</text>
+<text x="295" y="90" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">edition_invitations</text>
+<text x="295" y="104" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">edition_clones</text>
+<rect x="560" y="12" width="260" height="66" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="570" y="31" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Branding · 2</text>
+<text x="570" y="48" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">edition_settings</text>
+<text x="570" y="62" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">edition_domains</text>
+<rect x="835" y="12" width="260" height="178" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="845" y="31" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Cfp · 10</text>
+<text x="845" y="48" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">cfp_settings</text>
+<text x="845" y="62" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">cfp_tracks</text>
+<text x="845" y="76" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">cfp_criteria</text>
+<text x="845" y="90" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">proposals</text>
+<text x="845" y="104" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">proposal_speakers</text>
+<text x="845" y="118" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">review_assignments</text>
+<text x="845" y="132" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">reviews</text>
+<text x="845" y="146" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">review_scores</text>
+<text x="845" y="160" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">speaker_confirmations</text>
+<text x="845" y="174" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">speaker_logistics</text>
+<rect x="560" y="90" width="260" height="206" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="570" y="109" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Ticketing · 12</text>
+<text x="570" y="126" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">ticketing_settings</text>
+<text x="570" y="140" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">ticket_types</text>
+<text x="570" y="154" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">ticket_batches</text>
+<text x="570" y="168" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">coupons</text>
+<text x="570" y="182" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">coupon_redemptions</text>
+<text x="570" y="196" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">orders</text>
+<text x="570" y="210" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">order_items</text>
+<text x="570" y="224" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">tickets</text>
+<text x="570" y="238" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">ticket_transfers</text>
+<text x="570" y="252" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">reconciliation_issues</text>
+<text x="570" y="266" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">ticket_imports</text>
+<text x="570" y="280" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">ticket_import_rejections</text>
+<rect x="10" y="132" width="260" height="94" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="20" y="151" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Payments · 4</text>
+<text x="20" y="168" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">payment_accounts</text>
+<text x="20" y="182" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">payment_charges</text>
+<text x="20" y="196" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">webhook_events</text>
+<text x="20" y="210" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">payment_refunds</text>
+<rect x="285" y="132" width="260" height="80" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="295" y="151" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Notifications · 3</text>
+<text x="295" y="168" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">email_templates</text>
+<text x="295" y="182" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">email_deliveries</text>
+<text x="295" y="196" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">email_unsubscribes</text>
+<rect x="835" y="202" width="260" height="52" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="845" y="221" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Audit · 1</text>
+<text x="845" y="238" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">audit_logs</text>
+<rect x="285" y="224" width="260" height="150" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="295" y="243" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Sponsors · 8</text>
+<text x="295" y="260" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sponsor_settings</text>
+<text x="295" y="274" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sponsor_tiers</text>
+<text x="295" y="288" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sponsors</text>
+<text x="295" y="302" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sponsorships</text>
+<text x="295" y="316" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sponsorship_payments</text>
+<text x="295" y="330" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sponsor_deliverables</text>
+<text x="295" y="344" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sponsor_contacts</text>
+<text x="295" y="358" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sponsor_attachments</text>
+<rect x="10" y="238" width="260" height="122" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="20" y="257" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Suppliers · 6</text>
+<text x="20" y="274" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">suppliers ●</text>
+<text x="20" y="288" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">supplier_contacts ●</text>
+<text x="20" y="302" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">edition_suppliers</text>
+<text x="20" y="316" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">supplier_quotes</text>
+<text x="20" y="330" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">supplier_attachments</text>
+<text x="20" y="344" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">supplier_activities</text>
+<rect x="835" y="266" width="260" height="66" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="845" y="285" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Finance · 2</text>
+<text x="845" y="302" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">finance_categories</text>
+<text x="845" y="316" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">expenses</text>
+<rect x="560" y="308" width="260" height="108" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="570" y="327" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Laravel · 7</text>
+<text x="570" y="344" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">personal_access_tokens</text>
+<text x="570" y="358" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">jobs · job_batches</text>
+<text x="570" y="372" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">failed_jobs</text>
+<text x="570" y="386" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">cache · cache_locks</text>
+<text x="570" y="400" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sessions</text></svg></div>
+  <ul class="notes"><li>Dinheiro sempre em centavos (inteiro). Dado sensível cifrado no banco: CPF de quem compra, credenciais do gateway, acessibilidade, corpo de webhook, linhas de importação. <code>APP_PREVIOUS_KEYS</code> + comandos <code>*:reencrypt-*</code> para trocar a chave.</li><li>Estoque e cupom nunca são lidos e depois gravados: <code>UPDATE … WHERE allocated + q &lt;= quantity</code>. Testes com 12 processos simultâneos provam que não vende além do lote.</li></ul>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 8</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">09 · Acesso</div>
+    <h1>Papéis e permissões</h1>
+    <p class="sub">Cinco papéis por edição e doze permissões. O organizador tem todas.</p>
+  </header>
+  <div class="content"><div class="two"><table class="cmp perms"><thead><tr><th>Permissão</th><th>O que libera</th><th>Organizador</th><th>Financeiro</th><th>Avaliador</th><th>Check-in</th><th>Voluntário</th></tr></thead><tbody><tr><td><code>edition.manage</code></td><td>Configurar edição e identidade</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>edition.team</code></td><td>Gerenciar equipe e convites</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>cfp.review</code></td><td>Avaliar propostas</td><td>●</td><td></td><td>●</td><td></td><td></td></tr><tr><td><code>program.manage</code></td><td>Gerenciar palestrantes e grade</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>speakers.private</code></td><td>Ver acessibilidade e alimentação</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>orders.view</code></td><td>Ver pedidos e pagamentos</td><td>●</td><td>●</td><td></td><td></td><td></td></tr><tr><td><code>orders.refund</code></td><td>Reembolsar pedidos</td><td>●</td><td>●</td><td></td><td></td><td></td></tr><tr><td><code>payments.gateway</code></td><td>Editar chaves do gateway</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>checkin.scan</code></td><td>Fazer check-in</td><td>●</td><td></td><td></td><td>●</td><td></td></tr><tr><td><code>sponsors.manage</code></td><td>Gerenciar patrocinadores</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>suppliers.manage</code></td><td>Gerenciar fornecedores</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>finance.manage</code></td><td>Ver e editar finanças</td><td>●</td><td>●</td><td></td><td></td><td></td></tr></tbody></table>
+<div class="side">
+<h3>Como funciona</h3>
+<ul>
+<li>O papel é por edição (<code>edition_members</code>): a mesma pessoa pode organizar uma edição e só avaliar outra.</li>
+<li>Papel e permissão vivem em código (<code>EditionRole::permissions()</code>). Cada permissão vira um Gate com o próprio nome.</li>
+<li>Policy e Gate conferem <b>permissão</b>, nunca papel: <code>Gate::authorize('orders.refund')</code>.</li>
+<li>Outro módulo pergunta pelo contrato: <code>EditionMemberships::can($edition, $user, $permissão)</code>.</li>
+<li>A edição nunca fica sem organizador: trocar o papel ou remover o último é bloqueado.</li>
+<li>O painel lê a tabela em <code>GET /roles</code> e monta o menu por papel.</li>
+<li>Palestrante e participante não têm papel: entram pelas rotas de edição publicada.</li>
+</ul></div></div></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 9</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">10 · Fluxo</div>
+    <h1>Ingresso: da compra ao QR</h1>
+    <p class="sub">O pedido nasce reservando estoque; o pagamento só confirma quando a API consulta o gateway. Evento falso, repetido ou fora de ordem não muda pedido.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="18" width="1080" height="96" rx="10" fill="#FDF1DD" fill-opacity="0.45" stroke="#B8761E" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="20" y="34" font-size="10.5" font-weight="700" fill="#B8761E" text-anchor="start" font-family="inherit" xml:space="preserve">Quem compra (site)</text>
+<rect x="10" y="122" width="1080" height="96" rx="10" fill="#F7E9E1" fill-opacity="0.45" stroke="#6B2A14" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="20" y="138" font-size="10.5" font-weight="700" fill="#6B2A14" text-anchor="start" font-family="inherit" xml:space="preserve">Ticketing</text>
+<rect x="10" y="226" width="1080" height="96" rx="10" fill="#F7E9E1" fill-opacity="0.45" stroke="#6B2A14" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="20" y="242" font-size="10.5" font-weight="700" fill="#6B2A14" text-anchor="start" font-family="inherit" xml:space="preserve">Payments</text>
+<rect x="10" y="330" width="1080" height="96" rx="10" fill="#F3F4F6" fill-opacity="0.45" stroke="#6B7280" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="20" y="346" font-size="10.5" font-weight="700" fill="#6B7280" text-anchor="start" font-family="inherit" xml:space="preserve">Gateway</text>
+<rect x="10" y="434" width="1080" height="96" rx="10" fill="#F1F5F9" fill-opacity="0.45" stroke="#475569" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="20" y="450" font-size="10.5" font-weight="700" fill="#475569" text-anchor="start" font-family="inherit" xml:space="preserve">Fila e rotinas</text>
+<rect x="30" y="42" width="170" height="66" rx="9" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6"/>
+<text x="40" y="61" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Escolhe ingressos</text>
+<text x="40" y="78" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">tipo, lote, cupom,</text>
+<text x="40" y="92" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">participantes</text>
+<rect x="180" y="146" width="170" height="66" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="190" y="165" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">PlaceOrder</text>
+<text x="190" y="182" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">reserva estoque e cupom</text>
+<text x="190" y="196" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">numa transação</text>
+<text x="190" y="210" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Idempotency-Key</text>
+<rect x="330" y="42" width="170" height="66" rx="9" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6"/>
+<text x="340" y="61" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Pix ou cartão</text>
+<text x="340" y="78" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sem dado de cartão</text>
+<text x="340" y="92" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">na nossa API</text>
+<rect x="330" y="250" width="170" height="66" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="340" y="269" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">ChargeService</text>
+<text x="340" y="286" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cobrança na conta da</text>
+<text x="340" y="300" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">edição · trava clique duplo</text>
+<rect x="480" y="354" width="170" height="66" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="490" y="373" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Asaas / Mercado Pago</text>
+<text x="490" y="390" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Pix com QR, cartão</text>
+<text x="490" y="404" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">na fatura ou token</text>
+<rect x="680" y="354" width="170" height="66" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="690" y="373" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Webhook assinado</text>
+<text x="690" y="390" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">→ /webhooks/payments/{t}</text>
+<rect x="680" y="250" width="170" height="66" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="690" y="269" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">webhook_events</text>
+<text x="690" y="286" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">caixa de entrada, 2xx</text>
+<text x="690" y="300" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">antes de processar</text>
+<rect x="880" y="458" width="170" height="66" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="890" y="477" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">ProcessWebhookEvent</text>
+<text x="890" y="494" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">consulta o gateway:</text>
+<text x="890" y="508" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">não confia no corpo</text>
+<rect x="860" y="146" width="210" height="66" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="870" y="165" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Pedido pago</text>
+<text x="870" y="182" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">TransitionOrder</text>
+<text x="870" y="196" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">IssueTicketsWhenPaid</text>
+<rect x="860" y="42" width="210" height="66" rx="9" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6"/>
+<text x="870" y="61" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">E-mail + QR</text>
+<text x="870" y="78" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">QR assinado (HMAC)</text>
+<text x="870" y="92" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">/ingressos no site</text>
+<path d="M 115 108 L 200 146" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<path d="M 350 146 L 400 108" fill="none" stroke="#B8761E" stroke-width="1.6" marker-end="url(#a-client)"/>
+<path d="M 420 108 L 420 250" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<path d="M 500 284 L 565 354" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/>
+<path d="M 650 384 L 680 384" fill="none" stroke="#6B7280" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-external)"/>
+<path d="M 765 354 L 765 316" fill="none" stroke="#6B7280" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-external)"/>
+<path d="M 850 283 L 930 458" fill="none" stroke="#475569" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-infra)"/>
+<text x="890.0" y="366.5" font-size="9.5" font-weight="600" fill="#475569" text-anchor="start" font-family="inherit" xml:space="preserve">job na fila</text>
+<path d="M 1030 458 L 1030 212" fill="none" stroke="#475569" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-infra)"/>
+<text x="1030.0" y="335.0" font-size="9.5" font-weight="600" fill="#475569" text-anchor="start" font-family="inherit" xml:space="preserve">sync</text>
+<path d="M 960 146 L 960 108" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<rect x="30" y="458" width="600" height="70" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="40" y="477" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Rotinas que fecham as pontas</text>
+<text x="40" y="494" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticketing:expire-orders (1/min) devolve estoque de reserva vencida · ticketing:rotate-batches abre o próximo lote</text>
+<text x="40" y="508" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">payments:retry-webhooks (1, 5, 15, 60 min) · ticketing:reconcile (diário) grava divergência com o gateway</text></svg></div>
+  <ul class="notes"><li>Reembolso: <code>PaymentLedger::refund</code> reserva o valor antes de chamar o gateway (dois reembolsos ao mesmo tempo nunca passam do pago). Pedido importado de outra plataforma entra pago, sem cobrança, e não passa por reembolso nem conciliação.</li></ul>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 10</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">11 · Fluxo</div>
+    <h1>CFP: da proposta à grade</h1>
+    <p class="sub">A chamada de trabalhos é o coração do Marco 1. O estatuto do PHPeste pede pelo menos metade de palestrantes do Nordeste e um de cada estado; a decisão mostra isso antes de gravar.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="30" width="168" height="120" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="20" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Configuração</text>
+<text x="20" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">janela, trilhas com</text>
+<text x="20" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">vagas, critérios com</text>
+<text x="20" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">peso, cota Nordeste,</text>
+<text x="20" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">avaliação anônima</text>
+<path d="M 178 90 L 192 90" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<rect x="192" y="30" width="168" height="120" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="202" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Submissão</text>
+<text x="202" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">palestrante com perfil</text>
+<text x="202" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">global · rascunho e</text>
+<text x="202" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">envio na janela · até</text>
+<text x="202" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">3 coautores · limite</text>
+<path d="M 360 90 L 374 90" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<rect x="374" y="30" width="168" height="120" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="384" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Atribuição</text>
+<text x="384" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">manual ou automática</text>
+<text x="384" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">(menor carga primeiro)</text>
+<text x="384" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sem conflito: autoria</text>
+<text x="384" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ou mesma empresa</text>
+<path d="M 542 90 L 556 90" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<rect x="556" y="30" width="168" height="120" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="566" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Avaliação</text>
+<text x="566" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">notas 1–5 por critério</text>
+<text x="566" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">nota ponderada na hora</text>
+<text x="566" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">revisor não vê autor</text>
+<text x="566" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">quando é anônima</text>
+<path d="M 724 90 L 738 90" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<rect x="738" y="30" width="168" height="120" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="748" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Decisão</text>
+<text x="748" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ranking por trilha</text>
+<text x="748" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">respeitando vagas · simula</text>
+<text x="748" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cobertura por UF e % do</text>
+<text x="748" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Nordeste antes de gravar</text>
+<path d="M 906 90 L 920 90" fill="none" stroke="#2F7D5B" stroke-width="1.6" marker-end="url(#a-edition)"/>
+<rect x="920" y="30" width="168" height="120" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="930" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Confirmação</text>
+<text x="930" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">e-mail com prazo</text>
+<text x="930" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">lembrete 48 h antes</text>
+<text x="930" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">recusa libera vaga e</text>
+<text x="930" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sugere lista de espera</text>
+<rect x="10" y="180" width="350" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="20" y="199" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Status do CFP é derivado, nunca editado</text>
+<text x="20" y="216" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">CfpStatus vem da janela + status da edição.</text>
+<text x="20" y="230" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cfp:sync-status (1/min) e o listener de</text>
+<text x="20" y="244" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">EditionStatusChanged disparam CfpOpened e</text>
+<text x="20" y="258" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">CfpClosed uma vez cada.</text>
+<rect x="375" y="180" width="350" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="385" y="199" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Convite direto</text>
+<text x="385" y="216" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">organização convida pelo e-mail: cria a conta</text>
+<text x="385" y="230" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sem senha se precisar, proposta já aprovada</text>
+<text x="385" y="244" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">(origin = invited), fora da avaliação mas</text>
+<text x="385" y="258" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ocupando vaga da trilha.</text>
+<rect x="740" y="180" width="350" height="130" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="750" y="199" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Depois do aceite</text>
+<text x="750" y="216" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">logística por palestrante (viagem, hospedagem)</text>
+<text x="750" y="230" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">quadro de palestrantes com os 9 estados do</text>
+<text x="750" y="244" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Nordeste · acessibilidade e alimentação só</text>
+<text x="750" y="258" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">com speakers.private · presença no evento</text>
+<rect x="10" y="335" width="1080" height="90" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="20" y="354" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Próximo passo: grade (Program, B35–B37)</text>
+<text x="20" y="371" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Propostas confirmadas viram sessões em salas e horários, com validação de conflito; a programação sai pela API pública com cache, e quem vai ao evento</text>
+<text x="20" y="385" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">monta a agenda pessoal. É o que falta para o Marco 3.</text>
+<rect x="10" y="445" width="1080" height="85" rx="9" fill="#FDF1DD" stroke="#B8761E" stroke-width="1.6"/>
+<text x="20" y="464" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Telas prontas no painel</text>
+<text x="20" y="481" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Configurar CFP (A10) · Avaliar propostas com teclado (A11) · Palestrantes: lista, cobertura e detalhe (A12) · no site público: formulário de</text>
+<text x="20" y="495" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">proposta e área do palestrante com entrar pelo GitHub (P03, P11).</text></svg></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 11</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">12 · Fluxo</div>
+    <h1>Dinheiro: patrocínio, fornecedores e finanças</h1>
+    <p class="sub">Patrocínio, fornecedores e ingressos expõem os números por contratos; o Finance só soma. O teste de propriedade confere, em 25 rodadas aleatórias, que a receita bate com os pedidos pagos menos reembolsos.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="30" width="330" height="170" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="20" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Sponsors</text>
+<text x="20" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cotas: valor, vagas, contrapartidas</text>
+<text x="20" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">funil: prospecção → negociando →</text>
+<text x="20" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">fechado → pago · perdido com motivo</text>
+<text x="20" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">fechar acima das vagas exige confirmação</text>
+<text x="20" y="122" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pagamento registrado à mão; cobrir o valor</text>
+<text x="20" y="136" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">passa para pago sozinho</text>
+<text x="20" y="150" font-size="9.6" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">contrapartida vira entrega com prazo</text>
+<rect x="385" y="30" width="330" height="170" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="395" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Suppliers</text>
+<text x="395" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cadastro global DA COMUNIDADE</text>
+<text x="395" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">na edição: a contatar → em orçamento →</text>
+<text x="395" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">contratado · recusado com motivo</text>
+<text x="395" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">orçado = menor orçamento válido</text>
+<text x="395" y="122" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">contato só para quem é de uma edição</text>
+<text x="395" y="136" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">em que ele aparece</text>
+<text x="395" y="150" font-size="9.6" font-weight="600" fill="#2F7D5B" text-anchor="start" font-family="inherit" xml:space="preserve">reaproveitar de edição anterior</text>
+<rect x="760" y="30" width="330" height="170" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="770" y="49" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Ticketing</text>
+<text x="770" y="66" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pedidos pagos e reembolsados com valor</text>
+<text x="770" y="80" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">taxa real (conciliação) ou estimada</text>
+<text x="770" y="94" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pelo percentual da edição</text>
+<text x="770" y="108" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">por conta de recebimento</text>
+<text x="770" y="122" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">(CPF ou CNPJ, inclusive conta trocada)</text>
+<text x="770" y="136" font-size="9.6" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pedido gratuito e importado ficam fora</text>
+<rect x="300" y="270" width="500" height="180" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="310" y="289" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Finance: calculado na hora, nunca guardado</text>
+<text x="310" y="306" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">receita de ingressos = pagos − reembolsos − taxas</text>
+<text x="310" y="320" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">receita total = ingressos líquido + patrocínio recebido</text>
+<text x="310" y="334" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">saldo = receita − despesas pagas</text>
+<text x="310" y="348" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">previsão = saldo + patrocínio a receber − despesas a pagar</text>
+<text x="310" y="362" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">orçamento por categoria × comprometido × pago</text>
+<text x="310" y="376" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">despesas com fornecedor e comprovante por URL assinada</text>
+<text x="310" y="390" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">planilha XLSX (4 abas) e CSV</text>
+<path d="M 175 200 L 400 270" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<text x="287.5" y="233.0" font-size="9.5" font-weight="600" fill="#6B2A14" text-anchor="middle" font-family="inherit" xml:space="preserve">SponsorRevenue</text>
+<path d="M 550 200 L 550 270" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<text x="550.0" y="239.0" font-size="9.5" font-weight="600" fill="#6B2A14" text-anchor="start" font-family="inherit" xml:space="preserve">EditionSuppliers</text>
+<path d="M 925 200 L 700 270" fill="none" stroke="#6B2A14" stroke-width="1.6" marker-end="url(#a-backend)"/>
+<text x="812.5" y="233.0" font-size="9.5" font-weight="600" fill="#6B2A14" text-anchor="middle" font-family="inherit" xml:space="preserve">TicketRevenue</text>
+<rect x="10" y="470" width="1080" height="60" rx="9" fill="#FDECEC" stroke="#C2410C" stroke-width="1.6"/>
+<text x="20" y="489" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">ADR 0009: a plataforma não recebe nem repassa dinheiro</text>
+<text x="20" y="506" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Cada edição cadastra a conta do próprio gateway; a API valida as chaves e um webhook assinado antes de abrir vendas. Credenciais cifradas; a API só mostra os 4 últimos caracteres.</text></svg></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 12</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">13 · Operação</div>
+    <h1>Fila, rotinas agendadas, e-mail e auditoria</h1>
+    <p class="sub">O que roda sem ninguém clicar. Todas as rotinas usam <code>withoutOverlapping()</code> e são idempotentes: rodar duas vezes não muda o resultado.</p>
+  </header>
+  <div class="content"><div class="two"><table class="cmp sched"><thead><tr><th>Quando</th><th>Comando</th><th>Para quê</th></tr></thead><tbody><tr><td><code>* * * * *</code></td><td><code>cfp:sync-status</code></td><td>abre e fecha o CFP pela janela</td></tr><tr><td><code>0 * * * *</code></td><td><code>cfp:confirmation-deadlines</code></td><td>lembra 48 h antes e marca sem resposta</td></tr><tr><td><code>* * * * *</code></td><td><code>ticketing:expire-orders</code></td><td>expira reserva vencida e devolve estoque</td></tr><tr><td><code>* * * * *</code></td><td><code>ticketing:rotate-batches</code></td><td>encerra lote esgotado e abre o próximo</td></tr><tr><td><code>*/5 * * * *</code></td><td><code>ticketing:resume-imports</code></td><td>retoma importação parada</td></tr><tr><td><code>04:00 BRT</code></td><td><code>ticketing:reconcile</code></td><td>confere pedidos com o gateway</td></tr><tr><td><code>* * * * *</code></td><td><code>payments:retry-webhooks</code></td><td>reenfileira webhook com erro (1, 5, 15, 60 min)</td></tr><tr><td><code>03:30</code></td><td><code>audit:prune</code></td><td>apaga trilha além de AUDIT_RETENTION_DAYS</td></tr></tbody></table>
+<div class="side">
+<h3>Fila (Redis + Horizon)</h3>
+<ul>
+<li>Job recebe <code>edition_id</code> explícito e roda em <code>CurrentEdition::run</code>.</li>
+<li><code>afterCommit()</code>: o job só entra na fila se a transação gravou.</li>
+<li>Importação grande: um lote de linhas por job, posição em bytes gravada com o lote, retoma do ponto exato.</li>
+</ul>
+<h3>E-mail (Notifications)</h3>
+<ul>
+<li>Todo e-mail sai por <code>EditionMailer::send</code>: registra em <code>email_deliveries</code> e enfileira com 5 tentativas.</li>
+<li>Modelo editável por edição, variáveis <code>{nome}</code> sem Blade, HTML escapado, layout com o tema publicado.</li>
+<li>Não transacional leva descadastro com link assinado e <code>List-Unsubscribe</code>.</li>
+</ul>
+<h3>Auditoria</h3>
+<ul>
+<li>Evento que implementa <code>Auditable</code> vira linha em <code>audit_logs</code> pelo listener genérico. 21 eventos hoje.</li>
+<li>Segredo removido, dado pessoal mascarado; o model recusa update e delete.</li>
+</ul></div></div></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 13</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">14 · Segurança</div>
+    <h1>Segurança</h1>
+    <p class="sub">As travas que valem para todo módulo. A maioria é verificada por teste.</p>
+  </header>
+  <div class="content"><table class="cmp sec"><thead><tr><th>Tema</th><th>Como está</th></tr></thead><tbody><tr><td>Autenticação</td><td>Sanctum Bearer, um token por dispositivo com expiração (<code>SANCTUM_EXPIRATION_MINUTES</code>); revogar é imediato. Senha mínima de 10 e checagem de vazamento.</td></tr><tr><td>Isolamento</td><td>Escopo global por edição; outra comunidade recebe 404; arch test impede módulo de depender de <code>App\</code> e controller de usar <code>$request-&gt;all()</code>.</td></tr><tr><td>Rate limit</td><td>Limiters nomeados: <code>login</code>, <code>password-reset</code>, <code>checkout</code>, <code>webhooks</code>, configuráveis por <code>.env</code>.</td></tr><tr><td>Headers e CORS</td><td>CSP, HSTS, nosniff, Referrer-Policy, Permissions-Policy. CORS por ambiente e, em <code>/public/*</code>, só a origem do site próprio da edição.</td></tr><tr><td>Dados sensíveis</td><td>Cifrados no banco (CPF, credenciais, acessibilidade, webhooks). Logs JSON com <code>password</code>, <code>token</code>, <code>secret</code> e cartão redigidos automaticamente.</td></tr><tr><td>Arquivos</td><td>Disco privado; download só por URL assinada que expira (10 min), sempre como anexo, com nosniff e CSP sandbox. SVG sanitizado.</td></tr><tr><td>Pagamento</td><td>Sem dado de cartão na API; webhook com assinatura do driver e reconsulta ao gateway; idempotência no banco (<code>unique(edition_id, idempotency_key)</code>).</td></tr><tr><td>Segredos</td><td>ADR 0006: nada de segredo no repositório; <code>APP_PREVIOUS_KEYS</code> para trocar a chave sem perder o que já foi cifrado.</td></tr><tr><td>LGPD</td><td>Encarregado e política por edição, anonimização após o evento (B43 em aberto). Decisão em aberto: comunidade controladora, PHPeste operador.</td></tr></tbody></table></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 14</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">15 · Operação</div>
+    <h1>Desenvolvimento, CI e deploy</h1>
+    <p class="sub">Ambiente local em Docker Compose (ADR 0003); a CI roda o mesmo <code>composer check</code>. O deploy de produção ainda está no plano do Marco 4.</p>
+  </header>
+  <div class="content"><svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="20" width="520" height="270" rx="14" fill="#F1F5F9" fill-opacity="0.5" stroke="#475569" stroke-width="1.4" stroke-dasharray="7 5"/><text x="23" y="38" font-size="11" font-weight="700" fill="#475569" text-anchor="start" font-family="inherit" xml:space="preserve">Desenvolvimento (infra/docker-compose.yml)</text>
+<rect x="25" y="52" width="160" height="64" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="35" y="71" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">backend</text>
+<text x="35" y="88" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Sail PHP 8.4</text>
+<text x="35" y="102" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">porta 8000</text>
+<rect x="195" y="52" width="160" height="64" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="205" y="71" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">horizon</text>
+<text x="205" y="88" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">mesma imagem</text>
+<rect x="365" y="52" width="150" height="64" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="375" y="71" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">scheduler</text>
+<text x="375" y="88" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">mesma imagem</text>
+<rect x="25" y="128" width="160" height="64" rx="9" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6"/>
+<text x="35" y="147" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">MySQL 8</text>
+<text x="35" y="164" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">volume local</text>
+<rect x="195" y="128" width="160" height="64" rx="9" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6"/>
+<text x="205" y="147" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Redis</text>
+<text x="205" y="164" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cache e fila</text>
+<rect x="365" y="128" width="150" height="64" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="375" y="147" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Mailpit</text>
+<text x="375" y="164" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">e-mail em :8025</text>
+<rect x="25" y="204" width="490" height="74" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="35" y="223" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">infra/dev.sh up | down | reset | shell | logs</text>
+<text x="35" y="240" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sobe os seis serviços (cria infra/.env na primeira vez)</text>
+<text x="35" y="254" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">front-admin e front-public rodam com npm run dev</text>
+<rect x="560" y="20" width="530" height="270" rx="14" fill="#F1F5F9" fill-opacity="0.5" stroke="#475569" stroke-width="1.4" stroke-dasharray="7 5"/><text x="573" y="38" font-size="11" font-weight="700" fill="#475569" text-anchor="start" font-family="inherit" xml:space="preserve">CI (GitHub Actions)</text>
+<rect x="575" y="52" width="245" height="105" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="585" y="71" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">backend-ci</text>
+<text x="585" y="88" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Pint (estilo)</text>
+<text x="585" y="102" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Larastan nível 8</text>
+<text x="585" y="116" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Pest (~1040 testes)</text>
+<text x="585" y="130" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">composer audit</text>
+<rect x="830" y="52" width="245" height="105" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="840" y="71" font-size="11" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">front-admin-ci · front-public-ci</text>
+<text x="840" y="88" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">lint, typecheck, testes</text>
+<text x="840" y="102" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">unitários e build; e2e na CI</text>
+<text x="840" y="116" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">do front-public; o do painel</text>
+<text x="840" y="130" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">(82 testes) roda local</text>
+<rect x="575" y="170" width="500" height="108" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="585" y="189" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">composer check (local, antes de abrir PR)</text>
+<text x="585" y="206" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pint + phpstan + rector --dry-run + pest</text>
+<text x="585" y="220" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Teste de concorrência com processos PHP reais (estoque, cupom,</text>
+<text x="585" y="234" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">reembolso, idempotência), SQLite com transaction_mode IMMEDIATE</text>
+<rect x="10" y="310" width="1080" height="220" rx="14" fill="#FFFFFF" fill-opacity="0.5" stroke="#94A3B8" stroke-width="1.4" stroke-dasharray="7 5"/><text x="23" y="328" font-size="11" font-weight="700" fill="#94A3B8" text-anchor="start" font-family="inherit" xml:space="preserve">Produção (planejado, B45)</text>
+<rect x="25" y="342" width="250" height="110" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="35" y="361" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Caddy</text>
+<text x="35" y="378" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">TLS automático do domínio</text>
+<text x="35" y="392" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">da plataforma e on-demand</text>
+<text x="35" y="406" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">para domínios de edição</text>
+<text x="35" y="420" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">(pergunta à API: tls-check)</text>
+<rect x="290" y="342" width="250" height="110" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
+<text x="300" y="361" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">API + Horizon + scheduler</text>
+<text x="300" y="378" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">mesma imagem</text>
+<text x="300" y="392" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">variáveis por ambiente</text>
+<text x="300" y="406" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Sentry com DSN</text>
+<rect x="555" y="342" width="250" height="110" rx="9" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="565" y="361" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">MySQL + Redis</text>
+<text x="565" y="378" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">backup e restauração</text>
+<text x="565" y="392" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ainda a definir</text>
+<rect x="820" y="342" width="255" height="110" rx="9" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.6"/>
+<text x="830" y="361" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Resend + gateways</text>
+<text x="830" y="378" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">RESEND_API_KEY</text>
+<text x="830" y="392" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">contas de produção</text>
+<text x="830" y="406" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">de cada edição</text>
+<rect x="25" y="464" width="1050" height="54" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="35" y="483" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Em aberto para o evento</text>
+<text x="35" y="500" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">teste de carga, backups, runbook do dia do evento (B45) · dados de demonstração e documentação publicada (B46)</text></svg></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 15</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">16 · Telas</div>
+    <h1>Telas: o design do painel</h1>
+    <p class="sub">Referências de design do painel (tema Sertão, cores, tipografia Lexend) que o front-admin segue; o protótipo completo está no link de design do README. O tema é por edição: a comunidade escolhe um preset (Sertão, Maré, Brasa) e ajusta as cores com checagem de contraste AA.</p>
+  </header>
+  <div class="content"><div class="shots two-shots">
+<figure><img src="../../design/admin-visao-geral.png" alt="Design da Visão geral do painel"><figcaption>Design: Visão geral da edição</figcaption></figure>
+<figure><img src="../../design/tema-sertao-tokens.png" alt="Tokens do tema Sertão"><figcaption>Design: tokens do tema Sertão</figcaption></figure>
+</div></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 16</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">17 · Telas</div>
+    <h1>Telas: o painel em uso</h1>
+    <p class="sub">Capturas do front-admin rodando, com a API simulada (<code>front-admin/e2e/capturas-arquitetura.spec.ts</code>). O menu muda pelo papel: o avaliador só vê Visão geral e Avaliar propostas.</p>
+  </header>
+  <div class="content"><div class="shots mosaic">
+<figure class="big"><img src="../telas/painel-visao-geral.png" alt="Visão geral"><figcaption>Organizador: Visão geral, com etapa, indicadores, pendências e meta do Nordeste</figcaption></figure>
+<figure><img src="../telas/painel-avaliacao-cfp.png" alt="Avaliação de propostas"><figcaption>Avaliador: fila de propostas com nota por critério, sem ver o autor</figcaption></figure>
+<figure><img src="../telas/painel-login.png" alt="Login"><figcaption>Entrar com e-mail e senha ou GitHub</figcaption></figure>
+</div></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 17</span></footer>
+</section>
+<section class="page">
+  <header>
+    <div class="kicker">18 · Roadmap</div>
+    <h1>Onde estamos e o que falta</h1>
+    <p class="sub">Os milestones do GitHub e o board <b>PHPeste Platform</b> são a fonte da verdade do andamento; esta página é o retrato no dia da geração.</p>
+  </header>
+  <div class="content"><table class="cmp roadmap"><thead><tr><th>Marco</th><th>Situação</th><th>O que tem</th></tr></thead><tbody><tr><td><b>Marco 0 · Fundação</b></td><td>Concluído</td><td>esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes</td></tr><tr><td><b>Marco 1 · Núcleo e CFP</b></td><td>Backend concluído</td><td>Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03</td></tr><tr><td><b>Marco 2 · Ingressos</b></td><td>Backend quase concluído</td><td>ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças; falta B34 (tarefas) e as telas A14–A23, P04–P06</td></tr><tr><td><b>Marco 3 · Evento pronto</b></td><td>A fazer</td><td>grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)</td></tr><tr><td><b>Marco 4 · Operação</b></td><td>A fazer</td><td>engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)</td></tr></tbody></table></div>
+  
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 18</span></footer>
+</section>
+</body></html>
