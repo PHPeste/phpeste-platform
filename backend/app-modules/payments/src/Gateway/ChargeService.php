@@ -17,9 +17,11 @@ use PHPeste\Payments\Data\StartPayment;
 use PHPeste\Payments\Enums\ChargeStatus;
 use PHPeste\Payments\Enums\GatewayCapability;
 use PHPeste\Payments\Enums\PaymentMethod;
+use PHPeste\Payments\Enums\RefundStatus;
 use PHPeste\Payments\Events\ChargeStatusChanged;
 use PHPeste\Payments\Models\PaymentAccount;
 use PHPeste\Payments\Models\PaymentCharge;
+use PHPeste\Payments\Models\PaymentRefund;
 
 class ChargeService implements PaymentProcessor
 {
@@ -81,6 +83,64 @@ class ChargeService implements PaymentProcessor
         $this->apply($charge, $snapshot);
 
         return $charge->status;
+    }
+
+    public function refresh(PaymentCharge $charge): bool
+    {
+        try {
+            $snapshot = $this->gateways->driver($charge->driver)->fetch($this->accountOf($charge)->gatewayCredentials(), $charge->gateway_charge_id);
+        } catch (GatewayRequestFailed $gatewayRequestFailed) {
+            Log::warning('payments.charge_refresh_failed', ['charge_id' => $charge->id, 'reason' => $gatewayRequestFailed->reason, 'error' => $gatewayRequestFailed->getMessage()]);
+            $charge->update(['checked_at' => now()]);
+
+            return false;
+        }
+
+        $this->apply($charge, $snapshot);
+
+        return true;
+    }
+
+    public function apply(PaymentCharge $charge, ChargeSnapshot $snapshot): void
+    {
+        $from = $charge->status;
+        $to = $snapshot->status;
+        $values = ['checked_at' => now(), 'fee_cents' => $snapshot->feeCents ?? $charge->fee_cents];
+
+        if ($from === $to) {
+            $charge->update($values);
+
+            return;
+        }
+
+        $changed = PaymentCharge::query()->forEdition($charge->edition_id)
+            ->whereKey($charge->id)
+            ->where('status', $from->value)
+            ->update([
+                ...$values,
+                'status' => $to->value,
+                'paid_at' => $to === ChargeStatus::Paid ? ($snapshot->paidAt ?? now()) : $charge->paid_at,
+                'failure_reason' => $to === ChargeStatus::Failed ? new GatewayRequestFailed('', GatewayRequestFailed::DECLINED)->publicMessage() : $charge->failure_reason,
+                'refunded_cents' => $to === ChargeStatus::Refunded ? $charge->amount_cents : $charge->refunded_cents,
+            ]);
+
+        $charge->refresh();
+
+        if ($changed === 1 && $to === ChargeStatus::Refunded) {
+            PaymentRefund::query()->forEdition($charge->edition_id)
+                ->where('payment_charge_id', $charge->id)
+                ->where('status', RefundStatus::Pending->value)
+                ->update(['status' => RefundStatus::Completed->value, 'completed_at' => now(), 'updated_at' => now()]);
+        }
+
+        if ($changed === 1) {
+            event(new ChargeStatusChanged($charge->edition_id, $charge->id, $charge->reference, $from, $to, $charge->amount_cents, $charge->fee_cents));
+        }
+    }
+
+    public function accountOf(PaymentCharge $charge): PaymentAccount
+    {
+        return PaymentAccount::query()->forEdition($charge->edition_id)->findOrFail($charge->payment_account_id);
     }
 
     private function create(PaymentAccount $account, PaymentGateway $gateway, StartPayment $payment): PaymentAttempt
@@ -150,49 +210,6 @@ class ChargeService implements PaymentProcessor
         return $charge->refresh()->toAttempt();
     }
 
-    private function refresh(PaymentCharge $charge): void
-    {
-        try {
-            $snapshot = $this->gateways->driver($charge->driver)->fetch($this->accountOf($charge)->gatewayCredentials(), $charge->gateway_charge_id);
-        } catch (GatewayRequestFailed $gatewayRequestFailed) {
-            Log::warning('payments.charge_refresh_failed', ['charge_id' => $charge->id, 'reason' => $gatewayRequestFailed->reason, 'error' => $gatewayRequestFailed->getMessage()]);
-            $charge->update(['checked_at' => now()]);
-
-            return;
-        }
-
-        $this->apply($charge, $snapshot);
-    }
-
-    private function apply(PaymentCharge $charge, ChargeSnapshot $snapshot): void
-    {
-        $from = $charge->status;
-        $to = $snapshot->status;
-        $values = ['checked_at' => now(), 'fee_cents' => $snapshot->feeCents ?? $charge->fee_cents];
-
-        if ($from === $to) {
-            $charge->update($values);
-
-            return;
-        }
-
-        $changed = PaymentCharge::query()->forEdition($charge->edition_id)
-            ->whereKey($charge->id)
-            ->where('status', $from->value)
-            ->update([
-                ...$values,
-                'status' => $to->value,
-                'paid_at' => $to === ChargeStatus::Paid ? ($snapshot->paidAt ?? now()) : $charge->paid_at,
-                'failure_reason' => $to === ChargeStatus::Failed ? new GatewayRequestFailed('', GatewayRequestFailed::DECLINED)->publicMessage() : $charge->failure_reason,
-            ]);
-
-        $charge->refresh();
-
-        if ($changed === 1) {
-            event(new ChargeStatusChanged($charge->edition_id, $charge->id, $charge->reference, $from, $to, $charge->amount_cents));
-        }
-    }
-
     private function cancel(PaymentCharge $charge): void
     {
         try {
@@ -205,11 +222,6 @@ class ChargeService implements PaymentProcessor
         }
 
         $this->apply($charge, new ChargeSnapshot($charge->gateway_charge_id, ChargeStatus::Cancelled, $charge->amount_cents));
-    }
-
-    private function accountOf(PaymentCharge $charge): PaymentAccount
-    {
-        return PaymentAccount::query()->forEdition($charge->edition_id)->findOrFail($charge->payment_account_id);
     }
 
     private function ensureSupported(PaymentAccount $account, PaymentGateway $gateway, StartPayment $payment): void

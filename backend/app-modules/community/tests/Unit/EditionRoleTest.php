@@ -14,6 +14,7 @@ dataset('matriz de permissões', function (): array {
         EditionPermission::ManageProgram->value => [EditionRole::Organizer],
         EditionPermission::ViewSpeakerPrivateData->value => [EditionRole::Organizer],
         EditionPermission::ViewOrders->value => [EditionRole::Organizer, EditionRole::Finance],
+        EditionPermission::RefundOrders->value => [EditionRole::Organizer, EditionRole::Finance],
         EditionPermission::ManageGateway->value => [EditionRole::Organizer],
         EditionPermission::CheckIn->value => [EditionRole::Organizer, EditionRole::CheckIn],
     ];

@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Route;
 use PHPeste\Ticketing\Http\Controllers\CheckoutOrderController;
 use PHPeste\Ticketing\Http\Controllers\CouponController;
 use PHPeste\Ticketing\Http\Controllers\OrderController;
+use PHPeste\Ticketing\Http\Controllers\OrderRefundController;
 use PHPeste\Ticketing\Http\Controllers\PublicCouponController;
 use PHPeste\Ticketing\Http\Controllers\PublicTicketController;
+use PHPeste\Ticketing\Http\Controllers\ReconciliationController;
 use PHPeste\Ticketing\Http\Controllers\TicketTypeController;
 
 Route::apiV1Edition('ticketing')->group(function (): void {
@@ -28,6 +30,12 @@ Route::apiV1Edition('ticketing')->group(function (): void {
     Route::get('/orders', [OrderController::class, 'index'])->name('ticketing.orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->whereUuid('order')->name('ticketing.orders.show');
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->whereUuid('order')->name('ticketing.orders.cancel');
+    Route::get('/orders/{order}/refunds', [OrderRefundController::class, 'index'])->whereUuid('order')->name('ticketing.orders.refunds.index');
+    Route::post('/orders/{order}/refunds', [OrderRefundController::class, 'store'])->whereUuid('order')->name('ticketing.orders.refunds.store');
+    Route::post('/orders/{order}/refunds/{refund}/settle', [OrderRefundController::class, 'settle'])->whereUuid(['order', 'refund'])->name('ticketing.orders.refunds.settle');
+    Route::get('/reconciliation', [ReconciliationController::class, 'index'])->name('ticketing.reconciliation.index');
+    Route::post('/reconciliation/run', [ReconciliationController::class, 'run'])->name('ticketing.reconciliation.run');
+    Route::post('/reconciliation/{issue}/resolve', [ReconciliationController::class, 'resolve'])->whereUuid('issue')->name('ticketing.reconciliation.resolve');
 });
 
 Route::apiV1PublishedEdition('checkout', 'orders')->group(function (): void {

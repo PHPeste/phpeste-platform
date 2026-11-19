@@ -27,6 +27,8 @@ class FakeGateway implements PaymentGateway
 
     public const string DECLINED_TOKEN = 'tok_declined';
 
+    public const int FEE_BASIS_POINTS = 199;
+
     /**
      * @var list<array{method: string, api_key: string, arguments: array<string, mixed>}>
      */
@@ -37,10 +39,19 @@ class FakeGateway implements PaymentGateway
      */
     public static array $charges = [];
 
+    public static ?string $refundFailure = null;
+
+    /**
+     * @var array<string, int>
+     */
+    public static array $refunded = [];
+
     public static function reset(): void
     {
         self::$calls = [];
         self::$charges = [];
+        self::$refunded = [];
+        self::$refundFailure = null;
     }
 
     public static function sign(string $body, string $secret): string
@@ -51,6 +62,11 @@ class FakeGateway implements PaymentGateway
     public static function pay(string $chargeId): void
     {
         self::$charges[$chargeId]['status'] = ChargeStatus::Paid;
+    }
+
+    public static function fee(int $amountCents): int
+    {
+        return intdiv($amountCents * self::FEE_BASIS_POINTS, 10_000);
     }
 
     public function key(): string
@@ -120,16 +136,26 @@ class FakeGateway implements PaymentGateway
     {
         $charge = $this->charge($credentials, 'fetch', $chargeId);
 
-        return new ChargeSnapshot($chargeId, $charge['status'], $charge['amount']);
+        return new ChargeSnapshot($chargeId, $charge['status'], $charge['amount'], $charge['status'] === ChargeStatus::Pending ? null : self::fee($charge['amount']));
     }
 
     public function refund(GatewayCredentials $credentials, string $chargeId, int $amountCents): RefundResult
     {
         $charge = $this->charge($credentials, 'refund', $chargeId, ['amount' => $amountCents]);
 
-        throw_if($charge['status'] !== ChargeStatus::Paid || $amountCents > $charge['amount'], GatewayRequestFailed::class, 'O gateway não aceitou o reembolso desta cobrança.');
+        if (self::$refundFailure !== null) {
+            throw new GatewayRequestFailed('Falha simulada no estorno.', self::$refundFailure);
+        }
 
-        self::$charges[$chargeId]['status'] = ChargeStatus::Refunded;
+        $refunded = (self::$refunded[$chargeId] ?? 0) + $amountCents;
+
+        throw_if($charge['status'] !== ChargeStatus::Paid || $refunded > $charge['amount'], GatewayRequestFailed::class, 'O gateway não aceitou o reembolso desta cobrança.');
+
+        self::$refunded[$chargeId] = $refunded;
+
+        if ($refunded === $charge['amount']) {
+            self::$charges[$chargeId]['status'] = ChargeStatus::Refunded;
+        }
 
         return new RefundResult('ref_'.Str::lower(Str::random(10)), $amountCents, true);
     }

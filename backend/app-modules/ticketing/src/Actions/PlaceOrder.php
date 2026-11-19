@@ -238,6 +238,7 @@ class PlaceOrder
         }
 
         $already = OrderItem::query()
+            ->whereNull('cancelled_at')
             ->whereHas('order', fn (Builder $query) => $query->whereIn('status', OrderStatus::holding())
                 ->where(fn (Builder $buyer) => $buyer->where('buyer_email', $request->buyerEmail)
                     ->when($documentHash !== null, fn ($either) => $either->orWhere('buyer_document_hash', $documentHash))))

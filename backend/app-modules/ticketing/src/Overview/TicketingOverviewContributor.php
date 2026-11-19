@@ -12,6 +12,7 @@ use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Ticketing\Enums\OrderStatus;
 use PHPeste\Ticketing\Models\Order;
 use PHPeste\Ticketing\Models\OrderItem;
+use PHPeste\Ticketing\Models\ReconciliationIssue;
 use PHPeste\Ticketing\Models\TicketBatch;
 use PHPeste\Ticketing\Models\TicketingSetting;
 use PHPeste\Ticketing\Orders\Split;
@@ -23,13 +24,25 @@ class TicketingOverviewContributor implements EditionOverviewContributor
     public function contribute(string $editionId): OverviewContribution
     {
         $offered = (int) TicketBatch::query()->forEdition($editionId)->sum('quantity');
+        $divergences = ReconciliationIssue::query()->forEdition($editionId)->whereNull('resolved_at')->count();
+        $reconciliation = $divergences === 0 ? [] : [[
+            'key' => 'reconciliation_issues',
+            'title' => sprintf('%d %s na conciliação de pagamentos', $divergences, $divergences === 1 ? 'divergência' : 'divergências'),
+            'tone' => 'warn',
+            'tag' => 'Vendas',
+            'action_label' => 'Conferir',
+            'action_path' => '/pedidos/conciliacao',
+            'priority' => 1,
+            'permission' => EditionPermission::ViewOrders,
+        ]];
 
         if ($offered === 0) {
-            return new OverviewContribution;
+            return new OverviewContribution(pending: $reconciliation);
         }
 
         $settings = TicketingSetting::query()->forEdition($editionId)->first();
         $paid = OrderItem::query()->forEdition($editionId)
+            ->whereNull('cancelled_at')
             ->whereHas('order', fn (Builder $query) => $query->where('status', OrderStatus::Paid->value))
             ->with('order:id,paid_at')
             ->get(['id', 'order_id']);
@@ -58,6 +71,8 @@ class TicketingOverviewContributor implements EditionOverviewContributor
             'priority' => 3,
             'permission' => EditionPermission::ViewOrders,
         ]];
+
+        $pending = [...$reconciliation, ...$pending];
 
         return new OverviewContribution(
             indicators: [

@@ -22,6 +22,10 @@ class SyncOrderWithCharge
 
     public function handle(ChargeStatusChanged $event): void
     {
+        if ($event->feeCents !== null && in_array($event->to, [ChargeStatus::Paid, ChargeStatus::Refunded], true)) {
+            Order::query()->forEdition($event->editionId)->whereKey($event->reference)->update(['gateway_fee_cents' => $event->feeCents]);
+        }
+
         $target = match ($event->to) {
             ChargeStatus::Paid => OrderStatus::Paid,
             ChargeStatus::Refunded => OrderStatus::Refunded,
@@ -49,6 +53,10 @@ class SyncOrderWithCharge
                 ]);
 
                 return;
+            }
+
+            if ($target === OrderStatus::Refunded) {
+                Order::query()->whereKey($order->id)->where('refunded_cents', '<', $order->total_cents)->update(['refunded_cents' => $order->total_cents]);
             }
 
             try {

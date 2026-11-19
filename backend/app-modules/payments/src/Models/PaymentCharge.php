@@ -26,6 +26,7 @@ use PHPeste\Payments\Enums\PaymentMethod;
  * @property ChargeStatus $status
  * @property int $amount_cents
  * @property int|null $fee_cents
+ * @property int $refunded_cents
  * @property int $installments
  * @property string|null $pix_copy_paste
  * @property string|null $pix_qr_code
@@ -38,7 +39,7 @@ use PHPeste\Payments\Enums\PaymentMethod;
  * @property Carbon $updated_at
  * @property-read PaymentAccount $account
  */
-#[Fillable(['edition_id', 'payment_account_id', 'reference', 'driver', 'method', 'gateway_charge_id', 'status', 'amount_cents', 'fee_cents', 'installments', 'pix_copy_paste', 'pix_qr_code', 'checkout_url', 'expires_at', 'paid_at', 'failure_reason', 'checked_at'])]
+#[Fillable(['edition_id', 'payment_account_id', 'reference', 'driver', 'method', 'gateway_charge_id', 'status', 'amount_cents', 'fee_cents', 'refunded_cents', 'installments', 'pix_copy_paste', 'pix_qr_code', 'checkout_url', 'expires_at', 'paid_at', 'failure_reason', 'checked_at'])]
 #[Table(name: 'payment_charges')]
 class PaymentCharge extends Model
 {
@@ -80,6 +81,7 @@ class PaymentCharge extends Model
             'status' => ChargeStatus::class,
             'amount_cents' => 'integer',
             'fee_cents' => 'integer',
+            'refunded_cents' => 'integer',
             'installments' => 'integer',
             'expires_at' => 'datetime',
             'paid_at' => 'datetime',
