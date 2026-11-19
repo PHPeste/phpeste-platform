@@ -34,7 +34,7 @@ export const NAV_ITEMS: NavItem[] = [
   { key: 'schedule', to: '/grade', group: 'content', icon: CalendarDays, roles: ['organizador'] },
   { key: 'tickets', to: '/ingressos', group: 'sales', icon: Ticket, roles: ['organizador', 'financeiro'] },
   { key: 'orders', to: '/pedidos', group: 'sales', icon: Receipt, roles: ['organizador', 'financeiro'] },
-  { key: 'payments', to: '/pagamentos', group: 'sales', icon: CreditCard, roles: ['organizador', 'financeiro'] },
+  { key: 'payments', to: '/pagamentos', group: 'sales', icon: CreditCard, roles: ['organizador'] },
   { key: 'checkin', to: '/participantes', group: 'sales', icon: ScanLine, roles: ['organizador', 'checkin', 'voluntario'] },
   { key: 'sponsors', to: '/patrocinadores', group: 'organization', icon: Star, roles: ['organizador'] },
   { key: 'suppliers', to: '/fornecedores', group: 'organization', icon: Truck, roles: ['organizador'] },
