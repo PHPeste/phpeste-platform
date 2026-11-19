@@ -25,5 +25,7 @@ final readonly class ReceivingAccount
         public int $pixExpirationMinutes,
         public bool $ready,
         public ?string $publicKey = null,
+        public ?string $holderDocumentMasked = null,
+        public bool $retired = false,
     ) {}
 }

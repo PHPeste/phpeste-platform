@@ -15,6 +15,13 @@ class PaymentAccountDirectory implements PaymentAccounts
         return PaymentAccount::query()->forEdition($editionId)->whereNull('retired_at')->latest()->first()?->toReceivingAccount();
     }
 
+    public function all(string $editionId): array
+    {
+        return array_values(PaymentAccount::query()->forEdition($editionId)->oldest()->orderBy('id')->get()
+            ->map(fn (PaymentAccount $account): ReceivingAccount => $account->toReceivingAccount())
+            ->all());
+    }
+
     public function ready(string $editionId): bool
     {
         return $this->active($editionId)->ready ?? false;

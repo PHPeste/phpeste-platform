@@ -11,4 +11,12 @@ interface PaymentAccounts
     public function active(string $editionId): ?ReceivingAccount;
 
     public function ready(string $editionId): bool;
+
+    /**
+     * Todas as contas que a edição já usou, inclusive as trocadas, para a
+     * receita sair separada por quem recebeu.
+     *
+     * @return list<ReceivingAccount>
+     */
+    public function all(string $editionId): array;
 }
