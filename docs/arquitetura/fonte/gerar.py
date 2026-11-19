@@ -562,8 +562,8 @@ pages.append(page(17, "Telas", "Telas: o painel em uso",
 # Cada tela do Marco 2 que fica pronta entra aqui (prints de front-admin/e2e/capturas-arquitetura.spec.ts).
 SALES_SCREENS = [
     ("painel-ingressos.png", "Ingressos: tipos e lotes com o preço, o que a edição recebe depois da taxa do gateway, vendidos e situação. Cupons e regras da venda nas outras abas."),
-    ("painel-pedidos.png", "Pedidos: busca e filtro por situação, e o detalhe com itens, pagamento, reembolsos e histórico (auditoria). Reembolso com aviso de taxa e confirmação explícita; marcar como pago exige justificativa."),
-    ("painel-pagamentos.png", "Pagamentos: só a organização vê. Etapas para abrir vendas (chaves salvas, conexão testada, evento de teste do webhook), endereço do webhook com o último evento, conta com chave mascarada e prévia do recebedor no checkout, eventos do gateway com reprocessar e contas anteriores."),
+    ("painel-pedidos.png", "Pedidos: números da edição no topo (pagos, aguardando, reembolsos, taxa do gateway), busca e filtro por situação, e o detalhe com itens, pagamento, reembolsos e histórico (auditoria). Reembolso com aviso de taxa e confirmação explícita; marcar como pago exige justificativa."),
+    ("painel-pagamentos.png", "Pagamentos (só a organização): gateway da comunidade com chave mascarada, etapas para abrir vendas e Testar conexão, prévia do recebedor no checkout, métodos aceitos, webhook com o último evento e os últimos eventos do gateway com reprocessar."),
 ]
 pages.append(page(18, "Telas", "Telas: vendas e organização",
     "As telas do Marco 2 conforme ficam prontas. Mesma fonte dos outros prints: o painel rodando com a API simulada.",
