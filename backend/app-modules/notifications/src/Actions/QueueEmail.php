@@ -9,6 +9,7 @@ use PHPeste\Notifications\Enums\DeliveryStatus;
 use PHPeste\Notifications\Enums\EmailTemplate;
 use PHPeste\Notifications\Jobs\SendEmailDelivery;
 use PHPeste\Notifications\Models\EmailDelivery;
+use PHPeste\Notifications\Models\EmailSuppression;
 use PHPeste\Notifications\Models\EmailUnsubscribe;
 
 class QueueEmail implements EditionMailer
@@ -33,7 +34,8 @@ class QueueEmail implements EditionMailer
         bool $isTest = false,
     ): EmailDelivery {
         $email = mb_strtolower(mb_trim($email));
-        $suppressed = !$template->isTransactional() && !$isTest && $this->isUnsubscribed($editionId, $email);
+        $blocked = $this->isBlocked($editionId, $email);
+        $suppressed = $blocked || (!$template->isTransactional() && !$isTest && $this->isUnsubscribed($editionId, $email));
 
         $delivery = EmailDelivery::create([
             'edition_id' => $editionId,
@@ -44,6 +46,7 @@ class QueueEmail implements EditionMailer
             'content' => $content,
             'action_url' => $actionUrl,
             'status' => $suppressed ? DeliveryStatus::Suppressed : DeliveryStatus::Queued,
+            'provider_detail' => $blocked ? 'Endereço bloqueado nesta edição por bounce permanente ou spam' : null,
             'is_test' => $isTest,
         ]);
 
@@ -52,6 +55,15 @@ class QueueEmail implements EditionMailer
         }
 
         return $delivery;
+    }
+
+    /**
+     * Bounce permanente ou reclamação: nada sai para o endereço, nem e-mail
+     * transacional, até a organização liberar.
+     */
+    public function isBlocked(string $editionId, string $email): bool
+    {
+        return EmailSuppression::query()->forEdition($editionId)->where('email', $email)->exists();
     }
 
     private function isUnsubscribed(string $editionId, string $email): bool

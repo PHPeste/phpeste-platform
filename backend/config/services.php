@@ -22,6 +22,8 @@ return [
 
     'resend' => [
         'key' => env('RESEND_API_KEY'),
+        // Segredo de assinatura do webhook (whsec_...), em Resend → Webhooks.
+        'webhook_secret' => env('RESEND_WEBHOOK_SECRET'),
     ],
 
     'github' => [
