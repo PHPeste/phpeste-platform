@@ -8,6 +8,7 @@ import overview from '../../../modules/overview/locales/pt-br'
 import identity from '../../../modules/identity/locales/pt-br'
 import team from '../../../modules/team/locales/pt-br'
 import cfpSettings from '../../../modules/cfpSettings/locales/pt-br'
+import tickets from '../../../modules/tickets/locales/pt-br'
 import cfpReview from '../../../modules/cfpReview/locales/pt-br'
 import speakers from '../../../modules/speakers/locales/pt-br'
 import editionSettings from '../../../modules/editionSettings/locales/pt-br'
@@ -28,6 +29,7 @@ export default {
   identity,
   team,
   cfpSettings,
+  tickets,
   cfpReview,
   speakers,
   editionSettings,
