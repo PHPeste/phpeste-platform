@@ -54,6 +54,7 @@ test.describe('Pagamentos', () => {
     await expect(drawer.getByLabel('Segredo do webhook')).toHaveAttribute('type', 'password')
     await expect(drawer.getByTestId('holder-guidance')).toContainText('carnê-leão')
 
+    await expect(drawer.getByRole('button', { name: 'Asaas' })).toHaveAttribute('aria-pressed', 'true')
     await drawer.getByLabel('Chave de API').fill('$aact_hmlg_chave_abcd')
     await drawer.getByLabel('Segredo do webhook').fill('segredo-do-webhook')
     await drawer.getByLabel('Nome exibido no checkout').fill('Fulana de Tal')
@@ -65,6 +66,8 @@ test.describe('Pagamentos', () => {
 
     await expect(page.getByText('Gateway conectado. Agora teste a conexão.')).toBeVisible()
     await expect(page.getByTestId('account')).toContainText('••••abcd')
+    await expect(page.getByTestId('methods')).toContainText('Pix, expira em 30 minutos')
+    await expect(page.getByTestId('methods')).toContainText('Cartão de crédito, até 3x')
     await expect(page.getByTestId('account')).not.toContainText('chave_abcd')
     expect(calls.find((call) => call.method === 'POST')?.body).toMatchObject({ driver: 'asaas', environment: 'sandbox', api_key: '$aact_hmlg_chave_abcd', holder_type: 'individual', methods: ['pix', 'card'], max_installments: 3, confirm: false })
   })
@@ -79,9 +82,9 @@ test.describe('Pagamentos', () => {
       return true
     })
 
-    await expect(page.getByText('Vendas bloqueadas')).toBeVisible()
-    await expect(page.getByTestId('last-event')).toContainText('Nenhum evento recebido ainda.')
-    await expect(page.getByLabel('Endereço do webhook')).toHaveValue('http://localhost/api/v1/webhooks/payments/abc')
+    await expect(page.getByTestId('gateway-status')).toHaveText('Não testado')
+    await expect(page.getByTestId('last-event')).toContainText('Nenhum evento recebido')
+    await expect(page.getByLabel('Cole este endereço no painel do gateway')).toHaveValue('http://localhost/api/v1/webhooks/payments/abc')
 
     await page.getByRole('button', { name: 'Testar conexão' }).click()
     await expect(page.getByRole('alert').filter({ hasText: 'O gateway recusou a chave de API.' })).toBeVisible()
@@ -89,6 +92,7 @@ test.describe('Pagamentos', () => {
     await page.getByRole('button', { name: 'Testar conexão' }).click()
     await expect(page.getByText('Conexão ok: o gateway aceitou as chaves.')).toBeVisible()
     await expect(page.getByTestId('step-verify')).toContainText('O gateway aceitou as chaves')
+    await expect(page.getByTestId('gateway-status')).toHaveText('Falta o evento de teste')
   })
 
   test('trocar de conta com pedidos pagos avisa e pede confirmação', async ({ page, goto }) => {
@@ -101,8 +105,8 @@ test.describe('Pagamentos', () => {
       return true
     })
 
-    await expect(page.getByText('Pronto para vender', { exact: true })).toBeVisible()
-    await expect(page.getByTestId('last-event')).toContainText('Último evento recebido')
+    await expect(page.getByTestId('gateway-status')).toHaveText('Pronto para vender')
+    await expect(page.getByTestId('last-event')).toContainText('Último evento:')
     await page.getByRole('button', { name: 'Trocar conta ou chaves' }).click()
     const drawer = page.getByRole('dialog', { name: 'Trocar conta do gateway' })
     await expect(drawer.getByTestId('replace-warning')).toContainText('pedidos e reembolsos já feitos continuam nela')
@@ -130,7 +134,7 @@ test.describe('Pagamentos', () => {
 
     const events = page.getByTestId('webhook-events')
     await expect(events.getByRole('row', { name: /PAYMENT_RECEIVED/ })).toContainText('Com falha')
-    await events.getByLabel('Situação do evento').selectOption('failed')
+    await page.getByLabel('Situação do evento').selectOption('failed')
     await expect.poll(() => calls.some((call) => call.path.includes('status=failed'))).toBe(true)
 
     await events.getByRole('button', { name: 'Reprocessar o evento evt_9' }).click()

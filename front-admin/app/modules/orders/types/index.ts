@@ -34,6 +34,18 @@ export interface Order {
   createdAt: string
   items: OrderItem[]
   activeTickets: number
+  /** "2× Estudante, 1× Inteira", só com os ingressos válidos. */
+  itemsSummary: string
+}
+
+export interface OrderSummary {
+  paid: number
+  awaiting: number
+  awaitingExpiringToday: number
+  refunds: number
+  refundedCents: number
+  grossCents: number
+  gatewayFeeCents: number
 }
 
 export interface Payment {

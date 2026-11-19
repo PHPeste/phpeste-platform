@@ -16,10 +16,12 @@ const pageModel = computed({ get: () => props.page, set: (value: number) => emit
 
 <template>
   <PhCard :title="locale.events">
-    <div class="flex flex-col gap-3" data-testid="webhook-events">
+    <template #actions>
       <div class="w-56">
         <PhSelect v-model="statusModel" :label="locale.eventsFilter" :options="statusOptions" />
       </div>
+    </template>
+    <div class="flex flex-col gap-3" data-testid="webhook-events">
       <PhSkeleton v-if="state === 'loading'" :lines="4" />
       <PhLoadError v-else-if="state === 'error'" :title="locale.eventsError" @retry="emit('retry')" />
       <PhEmptyState v-else-if="!events.length" :title="status ? locale.noEventsFilter : locale.noEvents" :description="status ? undefined : locale.noEventsHint" />
@@ -30,7 +32,6 @@ const pageModel = computed({ get: () => props.page, set: (value: number) => emit
               <th scope="col">{{ locale.colReceived }}</th>
               <th scope="col">{{ locale.colType }}</th>
               <th scope="col">{{ locale.colCharge }}</th>
-              <th scope="col">{{ locale.colStatus }}</th>
               <th scope="col">{{ locale.colResult }}</th>
               <th scope="col"><span class="sr-only">{{ locale.reprocess }}</span></th>
             </tr>
@@ -43,13 +44,12 @@ const pageModel = computed({ get: () => props.page, set: (value: number) => emit
                 <span class="block text-xs text-(--ph-ink-3)">{{ event.eventId }}</span>
               </td>
               <td class="font-mono text-xs">{{ event.chargeId ?? '—' }}</td>
-              <td>
+              <td class="max-w-96">
                 <PhBadge :status="TONE[event.status]">{{ event.statusLabel }}</PhBadge>
-                <span class="block text-xs text-(--ph-ink-3)">{{ locale.attempts.replace('{n}', String(event.attempts)) }}</span>
-              </td>
-              <td class="max-w-72 text-sm text-(--ph-ink-2)">
-                {{ event.result ?? '' }}
-                <span v-if="event.nextAttemptAt" class="block text-xs text-(--ph-ink-3)">{{ locale.nextAttempt.replace('{data}', formatDateTime(event.nextAttemptAt)) }}</span>
+                <span v-if="event.result" class="block pt-1 text-sm text-(--ph-ink-2)">{{ event.result }}</span>
+                <span class="block text-xs text-(--ph-ink-3)">
+                  {{ locale.attempts.replace('{n}', String(event.attempts)) }}<template v-if="event.nextAttemptAt"> · {{ locale.nextAttempt.replace('{data}', formatDateTime(event.nextAttemptAt)) }}</template>
+                </span>
               </td>
               <td class="text-right">
                 <PhButton v-if="event.canReprocess && !disabled" variant="ghost" :aria-label="locale.reprocessLabel.replace('{id}', event.eventId)" @click="emit('reprocess', event)">{{ locale.reprocess }}</PhButton>

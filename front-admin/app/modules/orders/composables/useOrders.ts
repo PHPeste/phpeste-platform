@@ -1,8 +1,8 @@
 import { computed, ref } from 'vue'
-import ordersService, { type HistoryPayload, type OrderPayload, type PaymentPayload, type RefundPayload } from '../services/ordersService'
+import ordersService, { type HistoryPayload, type OrderPayload, type PaymentPayload, type RefundPayload, type SummaryPayload } from '../services/ordersService'
 import { OrdersError } from '../services/ordersError'
 import locale from '../locales/pt-br'
-import type { HistoryEntry, MutationResult, Order, OrderDetail, Payment, Refund, RefundInput, RefundResult } from '../types'
+import type { HistoryEntry, MutationResult, Order, OrderDetail, OrderSummary, Payment, Refund, RefundInput, RefundResult } from '../types'
 
 export const translateOrder = (payload: OrderPayload): Order => ({
   id: payload.id,
@@ -34,6 +34,25 @@ export const translateOrder = (payload: OrderPayload): Order => ({
     externalCode: item.external_code,
   })),
   activeTickets: payload.items.filter((item) => item.cancelled_at === null).length,
+  itemsSummary: summarizeItems(payload),
+})
+
+function summarizeItems(payload: OrderPayload): string {
+  const counts = new Map<string, number>()
+  for (const item of payload.items) {
+    if (item.cancelled_at === null) counts.set(item.ticket_type_name, (counts.get(item.ticket_type_name) ?? 0) + 1)
+  }
+  return [...counts].map(([name, count]) => `${count}× ${name}`).join(', ')
+}
+
+export const translateSummary = (payload: SummaryPayload): OrderSummary => ({
+  paid: payload.paid,
+  awaiting: payload.awaiting,
+  awaitingExpiringToday: payload.awaiting_expiring_today,
+  refunds: payload.refunds,
+  refundedCents: payload.refunded_cents,
+  grossCents: payload.gross_cents,
+  gatewayFeeCents: payload.gateway_fee_cents,
 })
 
 const translatePayment = (payload: PaymentPayload | null): Payment | null => (payload === null ? null : {
@@ -78,6 +97,7 @@ function failure(error: unknown): { ok: false, message: string, fieldErrors: Rec
 
 export function useOrders(editionId: string) {
   const orders = ref<Order[]>([])
+  const summary = ref<OrderSummary | null>(null)
   const page = ref(1)
   const pageCount = ref(1)
   const total = ref(0)
@@ -96,6 +116,7 @@ export function useOrders(editionId: string) {
       orders.value = response.data.map(translateOrder)
       pageCount.value = Math.max(1, response.meta.last_page)
       total.value = response.meta.total
+      summary.value = response.meta.summary ? translateSummary(response.meta.summary) : null
       state.value = 'ready'
     } catch {
       state.value = 'error'
@@ -185,7 +206,7 @@ export function useOrders(editionId: string) {
     }
   }
 
-  return { orders, page, pageCount, total, status, query, state, filtered, detail, detailState, load, search, goTo, open, close, cancel, markPaid, remind, refund, settle, exportCsv }
+  return { orders, summary, page, pageCount, total, status, query, state, filtered, detail, detailState, load, search, goTo, open, close, cancel, markPaid, remind, refund, settle, exportCsv }
 }
 
 /** Quanto ainda pode voltar: o pago menos o que já foi reembolsado (ou reservado). */

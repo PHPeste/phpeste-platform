@@ -31,6 +31,24 @@ const steps = computed(() => {
   ]
 })
 
+const statusBadge = computed(() => {
+  const account = active.value
+  if (!account) return null
+  if (account.ready) return { tone: 'ok' as const, label: locale.readyBadge }
+  if (account.verifiedAt) return { tone: 'warn' as const, label: locale.waitingWebhookBadge }
+  return { tone: 'warn' as const, label: locale.untestedBadge }
+})
+
+const methodLines = computed(() => {
+  const account = active.value
+  if (!account) return []
+  return account.methods.map((method) => {
+    if (method === 'pix') return locale.pixMethod.replace('{n}', String(account.pixExpirationMinutes))
+    if (method === 'card') return account.maxInstallments > 1 ? locale.cardMethod.replace('{n}', String(account.maxInstallments)) : locale.cardMethodSingle
+    return locale.boletoMethod
+  })
+})
+
 async function verify() {
   verifying.value = true
   verifyError.value = null
@@ -75,7 +93,6 @@ onMounted(() => Promise.all([payments.load(), payments.loadEvents(1, '')]))
         <h1 class="text-3xl leading-tight font-semibold">{{ locale.title }}</h1>
         <p class="text-(--ph-ink-2)">{{ locale.subtitle }}</p>
       </div>
-      <PhButton v-if="active && !readOnly" variant="secondary" @click="formOpen = true">{{ locale.replace }}</PhButton>
     </header>
 
     <p v-if="readOnly" role="status" class="alert alert-info alert-soft text-sm">{{ locale.readOnly }}</p>
@@ -87,54 +104,16 @@ onMounted(() => Promise.all([payments.load(), payments.loadEvents(1, '')]))
     </PhEmptyState>
 
     <template v-else>
-      <div class="grid gap-6 lg:grid-cols-2">
-        <PhCard :title="locale.readiness">
-          <div class="flex flex-col gap-4" data-testid="readiness">
-            <div class="flex flex-wrap items-center gap-2">
-              <PhBadge :status="active.ready ? 'ok' : 'warn'">{{ active.ready ? locale.readyBadge : locale.notReadyBadge }}</PhBadge>
-              <span class="text-sm text-(--ph-ink-2)">{{ active.ready ? locale.readyHint : locale.notReadyHint }}</span>
-            </div>
-            <ol class="flex flex-col gap-3">
-              <li v-for="(step, index) in steps" :key="step.key" class="flex gap-3" :data-testid="`step-${step.key}`">
-                <span
-                  class="flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
-                  :class="step.done ? 'bg-(--ph-ok-bg) text-(--ph-ok)' : 'bg-(--ph-surface-2) text-(--ph-ink-3)'"
-                  aria-hidden="true"
-                >{{ step.done ? '✓' : index + 1 }}</span>
-                <div class="flex flex-col">
-                  <span class="font-medium">{{ step.title }}<span class="sr-only">{{ step.done ? ' (feito)' : ' (pendente)' }}</span></span>
-                  <span class="text-sm text-(--ph-ink-2)">{{ step.detail }}</span>
-                </div>
-              </li>
-            </ol>
-            <div v-if="!readOnly" class="flex flex-col gap-2">
-              <div>
-                <PhButton :variant="active.verifiedAt ? 'secondary' : 'primary'" :loading="verifying" @click="verify">{{ locale.testConnection }}</PhButton>
-              </div>
-              <p v-if="verifyError" role="alert" class="alert alert-error alert-soft text-sm">{{ verifyError }}</p>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium" for="payments-webhook-url">{{ locale.webhookUrl }}</label>
-              <div class="flex gap-2">
-                <input id="payments-webhook-url" class="input w-full font-mono text-xs" :value="active.webhookUrl ?? ''" readonly @focus="($event.target as HTMLInputElement).select()">
-                <PhButton variant="secondary" @click="copyWebhook">{{ locale.copy }}</PhButton>
-              </div>
-              <p class="text-sm text-(--ph-ink-2)" data-testid="last-event">
-                {{ active.lastEventAt ? locale.lastEvent.replace('{data}', formatDateTime(active.lastEventAt)) : locale.noEventYet }}
-                <button type="button" class="link ml-1 text-sm" @click="refresh">{{ locale.refresh }}</button>
-              </p>
-              <p v-if="active.webhookRejections > 0" class="text-sm text-(--ph-warn)">
-                {{ locale.rejections.replace('{n}', String(active.webhookRejections)).replace('{data}', formatDateTime(active.webhookRejectedAt)) }}
-              </p>
-            </div>
-          </div>
-        </PhCard>
-
-        <PhCard :title="locale.account">
+      <div class="grid items-start gap-6 lg:grid-cols-2">
+        <PhCard :title="locale.gateway">
+          <template #actions>
+            <PhBadge v-if="statusBadge" :status="statusBadge.tone" data-testid="gateway-status">{{ statusBadge.label }}</PhBadge>
+          </template>
           <div class="flex flex-col gap-4" data-testid="account">
+            <p class="text-(--ph-ink-2)">{{ locale.gatewayIntro }}</p>
             <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
               <dt class="text-(--ph-ink-3)">{{ locale.driver }}</dt>
-              <dd>{{ active.driverLabel }}</dd>
+              <dd class="font-medium">{{ active.driverLabel }}</dd>
               <dt class="text-(--ph-ink-3)">{{ locale.environment }}</dt>
               <dd><PhBadge :status="active.environment === 'production' ? 'ok' : 'warn'">{{ active.environmentLabel }}</PhBadge></dd>
               <dt class="text-(--ph-ink-3)">{{ locale.apiKeyLabel }}</dt>
@@ -146,23 +125,75 @@ onMounted(() => Promise.all([payments.load(), payments.loadEvents(1, '')]))
               <dd>{{ active.holderName }}<span class="block text-xs text-(--ph-ink-3)">{{ active.holderTypeLabel }}</span></dd>
               <dt class="text-(--ph-ink-3)">{{ locale.document }}</dt>
               <dd class="font-mono">{{ active.holderDocument }}</dd>
-              <dt class="text-(--ph-ink-3)">{{ locale.methods }}</dt>
-              <dd>{{ active.methodLabels.join(', ') }}</dd>
-              <template v-if="active.methods.includes('card')">
-                <dt class="text-(--ph-ink-3)">{{ locale.installments }}</dt>
-                <dd>{{ active.maxInstallments > 1 ? locale.installmentsValue.replace('{n}', String(active.maxInstallments)) : locale.noInstallments }}</dd>
-              </template>
-              <template v-if="active.methods.includes('pix')">
-                <dt class="text-(--ph-ink-3)">{{ locale.pixExpiration }}</dt>
-                <dd>{{ locale.minutes.replace('{n}', String(active.pixExpirationMinutes)) }}</dd>
-              </template>
             </dl>
-            <div v-if="!readOnly">
-              <PhButton variant="secondary" @click="settingsOpen = true">{{ locale.edit }}</PhButton>
+
+            <div class="flex flex-col gap-3 border-t border-(--ph-line) pt-4" data-testid="readiness">
+              <p class="text-sm text-(--ph-ink-2)">{{ active.ready ? locale.readyHint : locale.notReadyHint }}</p>
+              <ol class="flex flex-col gap-3">
+                <li v-for="(step, index) in steps" :key="step.key" class="flex gap-3" :data-testid="`step-${step.key}`">
+                  <span
+                    class="flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
+                    :class="step.done ? 'bg-(--ph-ok-bg) text-(--ph-ok)' : 'bg-(--ph-surface-2) text-(--ph-ink-3)'"
+                    aria-hidden="true"
+                  >{{ step.done ? '✓' : index + 1 }}</span>
+                  <div class="flex flex-col">
+                    <span class="font-medium">{{ step.title }}<span class="sr-only">{{ step.done ? ' (feito)' : ' (pendente)' }}</span></span>
+                    <span class="text-sm text-(--ph-ink-2)">{{ step.detail }}</span>
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            <div v-if="!readOnly" class="flex flex-col gap-2">
+              <div class="flex flex-wrap gap-3">
+                <PhButton :variant="active.verifiedAt ? 'secondary' : 'primary'" :loading="verifying" @click="verify">{{ locale.testConnection }}</PhButton>
+                <PhButton variant="ghost" @click="formOpen = true">{{ locale.replace }}</PhButton>
+              </div>
+              <p v-if="verifyError" role="alert" class="alert alert-error alert-soft text-sm">{{ verifyError }}</p>
             </div>
             <ReceiverPreview :holder-name="active.holderName" :holder-type="active.holderType" :methods="active.methods" :max-installments="active.maxInstallments" :sandbox="active.environment === 'sandbox'" />
           </div>
         </PhCard>
+
+        <div class="flex flex-col gap-6">
+          <PhCard :title="locale.methodsCard">
+            <div class="flex flex-col gap-3" data-testid="methods">
+              <ul class="flex flex-col gap-2">
+                <li v-for="line in methodLines" :key="line" class="flex min-h-9 items-center gap-3">
+                  <span class="flex size-5 items-center justify-center rounded bg-(--ph-ok-bg) text-xs text-(--ph-ok)" aria-hidden="true">✓</span>
+                  <span>{{ line }}</span>
+                </li>
+              </ul>
+              <p v-if="active.methods.includes('card')" class="text-xs text-(--ph-ink-3)">{{ locale.installmentsHint }}</p>
+              <div v-if="!readOnly">
+                <PhButton variant="ghost" @click="settingsOpen = true">{{ locale.edit }}</PhButton>
+              </div>
+            </div>
+          </PhCard>
+
+          <PhCard :title="locale.webhookCard">
+            <div class="flex flex-col gap-3">
+              <label class="text-xs text-(--ph-ink-3)" for="payments-webhook-url">{{ locale.webhookPaste }}</label>
+              <div class="flex gap-2">
+                <input id="payments-webhook-url" class="input w-full font-mono text-xs" :value="active.webhookUrl ?? ''" readonly @focus="($event.target as HTMLInputElement).select()">
+                <PhButton variant="ghost" :aria-label="locale.copyLabel" @click="copyWebhook">{{ locale.copy }}</PhButton>
+              </div>
+              <div class="flex flex-wrap items-center gap-3" data-testid="last-event">
+                <template v-if="active.lastEventAt">
+                  <PhBadge status="ok">{{ locale.lastEventBadge.replace('{data}', formatDateTime(active.lastEventAt)) }}</PhBadge>
+                </template>
+                <template v-else>
+                  <PhBadge status="danger">{{ locale.noEventBadge }}</PhBadge>
+                  <span class="text-xs text-(--ph-ink-3)">{{ locale.noEventHint }}</span>
+                </template>
+                <button type="button" class="link text-sm" @click="refresh">{{ locale.refresh }}</button>
+              </div>
+              <p v-if="active.webhookRejections > 0" class="text-sm text-(--ph-warn)">
+                {{ locale.rejections.replace('{n}', String(active.webhookRejections)).replace('{data}', formatDateTime(active.webhookRejectedAt)) }}
+              </p>
+            </div>
+          </PhCard>
+        </div>
       </div>
 
       <WebhookEvents

@@ -75,9 +75,19 @@ export interface HistoryPayload {
   at: string
 }
 
+export interface SummaryPayload {
+  paid: number
+  awaiting: number
+  awaiting_expiring_today: number
+  refunds: number
+  refunded_cents: number
+  gross_cents: number
+  gateway_fee_cents: number
+}
+
 export interface OrdersPage {
   data: OrderPayload[]
-  meta: { current_page: number, last_page: number, total: number }
+  meta: { current_page: number, last_page: number, total: number, summary?: SummaryPayload }
 }
 
 export interface ListQuery { page: number, status: string, q: string }

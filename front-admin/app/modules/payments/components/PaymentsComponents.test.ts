@@ -27,8 +27,9 @@ describe('AccountForm', () => {
     expect(wrapper.findAll('input[type="password"]')).toHaveLength(2)
     expect(wrapper.find('[data-testid="holder-guidance"]').text()).toContain('carnê-leão')
 
-    const selects = wrapper.findAll('select')
-    await selects[0]!.setValue('mercadopago')
+    const chip = wrapper.findAll('button[aria-pressed]').find((button) => button.text() === 'Mercado Pago')!
+    await chip.trigger('click')
+    expect(chip.attributes('aria-pressed')).toBe('true')
     expect(wrapper.findAll('input[type="password"]')).toHaveLength(3)
 
     await wrapper.findAll('select').find((select) => select.html().includes('company'))!.setValue('company')

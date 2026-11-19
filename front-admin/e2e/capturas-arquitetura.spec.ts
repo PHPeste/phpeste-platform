@@ -132,7 +132,7 @@ test('pedidos', async ({ page, goto }) => {
   const refund = { id: 'r-1', amount: money(15000), status: 'completed', status_label: 'Reembolsado', reason: 'buyer_request', reason_label: 'Pedido de quem comprou', note: 'Bia não vai poder ir', cancelled_item_ids: ['i-2'], failure_reason: null, created_at: '2027-06-11T10:00:00Z', completed_at: '2027-06-11T10:00:00Z' }
   await page.route('**/api/v1/editions/ed-27/ticketing/orders**', (route) => {
     const path = new URL(route.request().url()).pathname
-    if (path.endsWith('/orders')) return route.fulfill({ status: 200, json: { data: list, meta: { current_page: 1, last_page: 9, total: 214 } } })
+    if (path.endsWith('/orders')) return route.fulfill({ status: 200, json: { data: list, meta: { current_page: 1, last_page: 9, total: 214, summary: { paid: 187, awaiting: 9, awaiting_expiring_today: 3, refunds: 4, refunded_cents: 52500, gross_cents: 2805000, gateway_fee_cents: 100980 } } } })
     if (path.endsWith('/history')) return route.fulfill({ status: 200, json: { data: history } })
     if (path.endsWith('/refunds')) return route.fulfill({ status: 200, json: { data: [refund] } })
     return route.fulfill({ status: 200, json: { data: featured, meta: { payment: { method: 'pix', method_label: 'Pix', status: 'paid', status_label: 'Pago', installments: 1, expires_at: null, paid_at: '2027-06-10T12:00:00Z', failure_reason: null } } } })
@@ -140,6 +140,11 @@ test('pedidos', async ({ page, goto }) => {
   await goto('/pedidos', { waitUntil: 'hydration' })
   await page.getByRole('button', { name: 'Abrir pedido 58' }).click()
   await expect(page.getByTestId('order-history')).toContainText('Reembolso de R$ 150,00')
+  // Espera a gaveta terminar de deslizar, senão o print sai com ela cortada.
+  await page.waitForFunction(() => {
+    const box = document.querySelector('dialog[open] .modal-box')?.getBoundingClientRect()
+    return !!box && Math.abs(box.right - window.innerWidth) < 1
+  })
   await page.screenshot({ path: out('painel-pedidos') })
 })
 

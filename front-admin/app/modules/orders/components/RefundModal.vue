@@ -92,6 +92,7 @@ const title = computed(() => ({
     <template v-if="step === 'form'">
       <PhFormErrors :errors="errors" :labels="labels" :field-ids="fieldIds" />
       <form id="refund-form" class="flex flex-col gap-4" novalidate @submit.prevent="review">
+        <p class="text-(--ph-ink-2)" data-testid="refund-summary">{{ locale.refundSummary.replace('{nome}', order.buyerName).replace('{itens}', order.itemsSummary || '—').replace('{valor}', formatCents(order.totalCents)) }}</p>
         <p class="text-sm text-(--ph-ink-2)">{{ locale.refundable.replace('{valor}', formatCents(maxCents)) }}</p>
         <fieldset class="flex flex-col gap-2">
           <legend class="text-sm font-medium">{{ locale.refundKind }}</legend>
@@ -109,6 +110,7 @@ const title = computed(() => ({
         <PhSelect id="refund-reason" v-model="form.reason" :label="locale.reason" :options="reasonOptions" required :error="errors.reason" />
         <PhTextarea id="refund-note" v-model="form.note" :label="locale.note" :hint="locale.noteHint" :rows="2" :error="errors.note" />
         <PhCheckbox v-model="form.cancelTickets" :label="locale.cancelTickets" :hint="locale.cancelTicketsHint" :disabled="!activeItems.length" />
+        <p class="text-sm text-(--ph-ink-2)">{{ locale.refundEmail }}</p>
         <fieldset v-if="form.cancelTickets" class="flex flex-col gap-2 pl-6">
           <legend class="text-sm font-medium">{{ locale.chooseTickets }}</legend>
           <PhCheckbox v-for="item in activeItems" :key="item.id" :model-value="form.itemIds.includes(item.id)" :label="`${item.attendeeName} · ${item.ticketTypeName}`" @update:model-value="toggleItem(item.id, $event)" />

@@ -42,7 +42,6 @@ watch(open, (value) => {
   confirmMessage.value = null
 })
 
-const driverOptions = computed(() => props.drivers.map((driver) => ({ value: driver.key, label: driver.label })))
 const environmentOptions = Object.entries(locale.environments).map(([value, label]) => ({ value, label }))
 const holderOptions = Object.entries(locale.holderTypes).map(([value, label]) => ({ value, label }))
 const installmentOptions = Array.from({ length: 12 }, (_, index) => ({ value: String(index + 1), label: index === 0 ? locale.noInstallments : locale.installmentsValue.replace('{n}', String(index + 1)) }))
@@ -87,10 +86,15 @@ async function submit(confirm = false) {
       <PhFormErrors :errors="errors" :labels="labels" :field-ids="fieldIds" />
       <p v-if="message" role="alert" class="alert alert-error alert-soft text-sm">{{ message }}</p>
 
-      <div class="grid gap-4 sm:grid-cols-2">
-        <PhSelect :id="fieldIds.driver" v-model="form.driver" :label="locale.fieldDriver" :options="driverOptions" :error="errors.driver" />
-        <PhSelect :id="fieldIds.environment" v-model="form.environment" :label="locale.fieldEnvironment" :options="environmentOptions" :error="errors.environment" />
-      </div>
+      <fieldset :id="fieldIds.driver" class="flex flex-col gap-2" tabindex="-1">
+        <legend class="mb-1 text-sm font-medium">{{ locale.fieldDriver }}</legend>
+        <div class="flex flex-wrap gap-2.5">
+          <PhChip v-for="driver in drivers" :key="driver.key" :model-value="form.driver === driver.key" @update:model-value="form.driver = driver.key">{{ driver.label }}</PhChip>
+        </div>
+        <p v-if="errors.driver" class="text-sm text-(--ph-danger)">{{ errors.driver }}</p>
+      </fieldset>
+      <p class="text-sm text-(--ph-ink-2)">{{ locale.gatewayIntro }}</p>
+      <PhSelect :id="fieldIds.environment" v-model="form.environment" :label="locale.fieldEnvironment" :options="environmentOptions" :error="errors.environment" />
       <PhInput :id="fieldIds.apiKey" v-model="form.apiKey" type="password" autocomplete="off" :label="locale.fieldApiKey" :hint="locale.fieldApiKeyHint" :error="errors.apiKey" required />
       <PhInput :id="fieldIds.webhookSecret" v-model="form.webhookSecret" type="password" autocomplete="off" :label="locale.fieldWebhookSecret" :hint="locale.fieldWebhookSecretHint" :error="errors.webhookSecret" required />
       <PhInput v-if="needsPublicKey" :id="fieldIds.publicKey" v-model="form.publicKey" type="password" autocomplete="off" :label="locale.fieldPublicKey" :hint="locale.fieldPublicKeyHint" :error="errors.publicKey" required />
@@ -116,7 +120,7 @@ async function submit(confirm = false) {
         <p v-if="errors.methods" class="text-sm text-(--ph-danger)">{{ errors.methods }}</p>
       </fieldset>
       <div class="grid gap-4 sm:grid-cols-2">
-        <PhSelect v-if="form.methods.includes('card')" :id="fieldIds.maxInstallments" v-model="installments" :label="locale.fieldInstallments" :options="installmentOptions" :error="errors.maxInstallments" />
+        <PhSelect v-if="form.methods.includes('card')" :id="fieldIds.maxInstallments" v-model="installments" :label="locale.fieldInstallments" :options="installmentOptions" :hint="locale.installmentsHint" :error="errors.maxInstallments" />
         <PhInput v-if="form.methods.includes('pix')" :id="fieldIds.pixExpirationMinutes" v-model="pixMinutes" type="number" :label="locale.fieldPixExpiration" :hint="locale.fieldPixExpirationHint" :error="errors.pixExpirationMinutes" />
       </div>
 

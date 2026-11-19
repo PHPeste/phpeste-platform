@@ -53,7 +53,7 @@ async function submit() {
         <PhCheckbox v-for="(name, key) in locale.methodNames" :key="key" :model-value="form.methods.includes(key)" :label="name" @update:model-value="toggleMethod(key, $event)" />
         <p v-if="errors.methods" class="text-sm text-(--ph-danger)">{{ errors.methods }}</p>
       </fieldset>
-      <PhSelect v-if="form.methods.includes('card')" v-model="installments" :label="locale.fieldInstallments" :options="installmentOptions" :error="errors.maxInstallments" />
+      <PhSelect v-if="form.methods.includes('card')" v-model="installments" :label="locale.fieldInstallments" :options="installmentOptions" :hint="locale.installmentsHint" :error="errors.maxInstallments" />
       <PhInput v-if="form.methods.includes('pix')" v-model="pixMinutes" type="number" :label="locale.fieldPixExpiration" :hint="locale.fieldPixExpirationHint" :error="errors.pixExpirationMinutes" />
     </form>
     <template #footer>

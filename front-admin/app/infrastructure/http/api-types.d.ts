@@ -12857,6 +12857,15 @@ export interface operations {
                             to: number | null;
                             /** @description Total number of items being paginated. */
                             total: number;
+                            summary: {
+                                paid: number;
+                                awaiting: number;
+                                awaiting_expiring_today: number;
+                                refunds: number;
+                                refunded_cents: number;
+                                gross_cents: number;
+                                gateway_fee_cents: number;
+                            };
                         };
                     };
                 };
