@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "19/11/2026 · B47 (webhooks do Resend)"
+RETRATO = "19/11/2026 · A14 (tela de ingressos)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -134,7 +134,7 @@ toc = [
     "Ciclo de vida da edição", "Os 15 módulos do backend", "Como os módulos conversam", "Banco de dados por domínio",
     "Papéis e permissões", "Ingresso: da compra ao QR", "CFP: da proposta à grade", "Dinheiro: patrocínio, fornecedores e finanças",
     "Fila, rotinas agendadas, e-mail e auditoria", "Segurança", "Desenvolvimento, CI e deploy", "Telas: design e painel",
-    "Telas: painel em uso", "Onde estamos e o que falta",
+    "Telas: painel em uso", "Telas: vendas e organização", "Onde estamos e o que falta",
 ]
 pages.append(f"""
 <section class="page cover">
@@ -557,15 +557,24 @@ pages.append(page(17, "Telas", "Telas: o painel em uso",
 <figure><img src="../telas/painel-login.png" alt="Login"><figcaption>Entrar com e-mail e senha ou GitHub</figcaption></figure>
 </div>"""))
 
-# ================================================== 18 status
+# ================================================== 18 telas de vendas
+# Cada tela do Marco 2 que fica pronta entra aqui (prints de front-admin/e2e/capturas-arquitetura.spec.ts).
+SALES_SCREENS = [
+    ("painel-ingressos.png", "Ingressos: tipos e lotes com o preço, o que a edição recebe depois da taxa do gateway, vendidos e situação. Cupons e regras da venda nas outras abas."),
+]
+pages.append(page(18, "Telas", "Telas: vendas e organização",
+    "As telas do Marco 2 conforme ficam prontas. Mesma fonte dos outros prints: o painel rodando com a API simulada.",
+    '<div class="shots sales">' + "".join(f'<figure><img src="../telas/{img}" alt=""><figcaption>{escape(caption)}</figcaption></figure>' for img, caption in SALES_SCREENS) + "</div>"))
+
+# ================================================== 19 status
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
     ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend concluído", "ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas; faltam as telas A14–A23 e P04–P06"),
+    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos); faltam A15–A23 e P04–P06"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]
-pages.append(page(18, "Roadmap", "Onde estamos e o que falta",
+pages.append(page(19, "Roadmap", "Onde estamos e o que falta",
     "Os milestones do GitHub e o board <b>PHPeste Platform</b> são a fonte da verdade do andamento; esta página é o retrato no dia da geração.",
     table(["Marco", "Situação", "O que tem"], [(f"<b>{a}</b>", b_, c) for a, b_, c in status], "cmp roadmap")))
 
@@ -623,6 +632,8 @@ table.roadmap td:nth-child(2) { width: 42mm; color: #6B2A14; font-weight: 600; }
 .shots { display: grid; gap: 5mm; width: 100%; height: 100%; align-items: start; }
 .two-shots { grid-template-columns: 1fr 1fr; }
 .mosaic { grid-template-columns: 1.05fr 1fr; grid-template-rows: 1fr 1fr; }
+.sales { grid-template-columns: repeat(2, 1fr); }
+.sales figure img { max-height: 140mm; }
 .mosaic .big { grid-row: span 2; }
 .mosaic figure:not(.big) img { max-height: 64mm; }
 figure { margin: 0; display: flex; flex-direction: column; gap: 1.5mm; min-height: 0; }
