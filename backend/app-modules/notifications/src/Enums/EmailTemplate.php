@@ -9,6 +9,7 @@ enum EmailTemplate: string
     case OrderConfirmed = 'order_confirmed';
     case PixReminder = 'pix_reminder';
     case OrderRefunded = 'order_refunded';
+    case TicketTransferred = 'ticket_transferred';
     case CfpAccepted = 'cfp_accepted';
     case CfpWaitlisted = 'cfp_waitlisted';
     case EventReminder = 'event_reminder';
@@ -23,6 +24,7 @@ enum EmailTemplate: string
             self::OrderConfirmed => 'Confirmação de compra',
             self::PixReminder => 'Lembrete de Pix',
             self::OrderRefunded => 'Reembolso do pedido',
+            self::TicketTransferred => 'Ingresso transferido',
             self::CfpAccepted => 'Resultado do CFP: aprovada',
             self::CfpWaitlisted => 'Resultado do CFP: lista de espera',
             self::EventReminder => 'Antes do evento',
@@ -39,6 +41,7 @@ enum EmailTemplate: string
             self::OrderConfirmed => 'Ao pagar o pedido',
             self::PixReminder => '30 min antes de expirar',
             self::OrderRefunded => 'Ao reembolsar o pedido',
+            self::TicketTransferred => 'Ao receber um ingresso transferido',
             self::CfpAccepted, self::CfpWaitlisted => 'Manual',
             self::EventReminder => '7 dias antes',
             self::TeamInvite => 'Ao convidar alguém para a equipe',
@@ -61,6 +64,7 @@ enum EmailTemplate: string
         return match ($this) {
             self::OrderConfirmed, self::PixReminder => ['nome', 'edicao', 'pedido', 'data'],
             self::OrderRefunded => ['nome', 'edicao', 'pedido', 'valor', 'ingressos'],
+            self::TicketTransferred => ['nome', 'edicao', 'data', 'remetente', 'ingresso'],
             self::CfpAccepted, self::CfpWaitlisted => ['nome', 'edicao', 'proposta', 'data', 'prazo'],
             self::EventReminder => ['nome', 'edicao', 'data'],
             self::TeamInvite => ['nome', 'edicao', 'papel'],
@@ -75,6 +79,7 @@ enum EmailTemplate: string
             self::OrderConfirmed => 'Seu ingresso para o {edicao}',
             self::PixReminder => 'Seu Pix para o {edicao} expira em breve',
             self::OrderRefunded => 'Reembolso do seu pedido no {edicao}',
+            self::TicketTransferred => '{remetente} transferiu um ingresso do {edicao} para você',
             self::CfpAccepted => 'Sua proposta foi aprovada no {edicao}',
             self::CfpWaitlisted => 'Sua proposta está na lista de espera do {edicao}',
             self::EventReminder => 'Falta uma semana para o {edicao}',
@@ -88,9 +93,10 @@ enum EmailTemplate: string
     public function defaultBody(): string
     {
         return match ($this) {
-            self::OrderConfirmed => "Oi, {nome}!\n\nPagamento confirmado. Seu QR code está abaixo, é só mostrar na entrada.",
+            self::OrderConfirmed => "Oi, {nome}!\n\nSeu ingresso para o {edicao} está garantido (pedido {pedido}). Entre com este e-mail para ver o QR code, completar os dados do crachá e, se precisar, transferir o ingresso para outra pessoa. É só mostrar o QR na entrada.",
             self::PixReminder => "Oi, {nome}!\n\nO Pix do pedido {pedido} expira em 30 minutos. Se ainda quiser garantir seu lugar no {edicao}, é só pagar pelo link abaixo.",
             self::OrderRefunded => "Oi, {nome}!\n\nFizemos o reembolso de {valor} do pedido {pedido} no {edicao}. {ingressos}\n\nO valor volta pelo mesmo meio de pagamento: no Pix, na conta de origem; no cartão, pode levar até duas faturas para aparecer.",
+            self::TicketTransferred => "Oi, {nome}!\n\n{remetente} transferiu para você o ingresso {ingresso} do {edicao}, que acontece em {data}. Entre com este e-mail para ver o QR code e completar seus dados de crachá.",
             self::CfpAccepted => "Oi, {nome}!\n\nBoa notícia: a proposta \"{proposta}\" foi aprovada para o {edicao}, em {data}. Confirme sua participação pelo link abaixo até {prazo}.",
             self::CfpWaitlisted => "Oi, {nome}!\n\nA proposta \"{proposta}\" ficou na lista de espera do {edicao}. Se abrir uma vaga na grade, avisamos por aqui.",
             self::EventReminder => "Oi, {nome}!\n\nO {edicao} acontece em {data}. Confira a programação e monte sua agenda.",
@@ -107,6 +113,7 @@ enum EmailTemplate: string
             self::OrderConfirmed => 'Ver meu ingresso',
             self::PixReminder => 'Pagar com Pix',
             self::OrderRefunded => 'Ver meu pedido',
+            self::TicketTransferred => 'Ver meu ingresso',
             self::CfpAccepted => 'Confirmar participação',
             self::CfpWaitlisted => 'Ver minha proposta',
             self::EventReminder => 'Ver programação',
@@ -126,6 +133,8 @@ enum EmailTemplate: string
             'pedido' => '#PH-0042',
             'valor' => 'R$ 150,00',
             'ingressos' => 'Seus ingressos continuam valendo.',
+            'remetente' => 'Grace Hopper',
+            'ingresso' => 'K7QM-4XTD',
             'proposta' => 'Laravel no sertão: filas sem drama',
             'papel' => 'organizador',
             'prazo' => '20 de maio',

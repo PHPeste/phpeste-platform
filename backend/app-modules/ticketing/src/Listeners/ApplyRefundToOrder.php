@@ -12,9 +12,11 @@ use PHPeste\Payments\Events\RefundAccepted;
 use PHPeste\Ticketing\Actions\ReleaseTickets;
 use PHPeste\Ticketing\Data\Allocation;
 use PHPeste\Ticketing\Enums\OrderStatus;
+use PHPeste\Ticketing\Enums\TicketStatus;
 use PHPeste\Ticketing\Events\OrderRefunded;
 use PHPeste\Ticketing\Models\Order;
 use PHPeste\Ticketing\Models\OrderItem;
+use PHPeste\Ticketing\Models\Ticket;
 
 class ApplyRefundToOrder
 {
@@ -54,6 +56,11 @@ class ApplyRefundToOrder
                         $count += $changed;
                     }
                 }
+
+                Ticket::query()->where('order_id', $order->id)
+                    ->whereIn('order_item_id', OrderItem::query()->where('refund_id', $event->refundId)->select('id'))
+                    ->where('status', TicketStatus::Active->value)
+                    ->update(['status' => TicketStatus::Cancelled->value, 'cancelled_at' => now(), 'updated_at' => now()]);
 
                 return $count;
             });

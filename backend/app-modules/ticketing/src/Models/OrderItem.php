@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use PHPeste\Community\Tenancy\BelongsToEdition;
 
@@ -32,6 +33,7 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Order $order
+ * @property-read Ticket|null $ticket
  */
 #[Fillable(['edition_id', 'order_id', 'ticket_type_id', 'ticket_batch_id', 'ticket_type_name', 'batch_name', 'unit_price_cents', 'discount_cents', 'fee_cents', 'total_cents', 'attendee_name', 'attendee_email', 'answers', 'cancelled_at', 'refund_id'])]
 #[Table(name: 'order_items')]
@@ -46,6 +48,14 @@ class OrderItem extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * @return HasOne<Ticket, $this>
+     */
+    public function ticket(): HasOne
+    {
+        return $this->hasOne(Ticket::class);
     }
 
     /**
