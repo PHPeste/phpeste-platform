@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use PHPeste\Ticketing\Http\Controllers\AttendeeTicketController;
 use PHPeste\Ticketing\Http\Controllers\CheckoutOrderController;
 use PHPeste\Ticketing\Http\Controllers\CouponController;
 use PHPeste\Ticketing\Http\Controllers\OrderController;
@@ -10,6 +11,7 @@ use PHPeste\Ticketing\Http\Controllers\OrderRefundController;
 use PHPeste\Ticketing\Http\Controllers\PublicCouponController;
 use PHPeste\Ticketing\Http\Controllers\PublicTicketController;
 use PHPeste\Ticketing\Http\Controllers\ReconciliationController;
+use PHPeste\Ticketing\Http\Controllers\TicketController;
 use PHPeste\Ticketing\Http\Controllers\TicketTypeController;
 
 Route::apiV1Edition('ticketing')->group(function (): void {
@@ -33,6 +35,11 @@ Route::apiV1Edition('ticketing')->group(function (): void {
     Route::get('/orders/{order}/refunds', [OrderRefundController::class, 'index'])->whereUuid('order')->name('ticketing.orders.refunds.index');
     Route::post('/orders/{order}/refunds', [OrderRefundController::class, 'store'])->whereUuid('order')->name('ticketing.orders.refunds.store');
     Route::post('/orders/{order}/refunds/{refund}/settle', [OrderRefundController::class, 'settle'])->whereUuid(['order', 'refund'])->name('ticketing.orders.refunds.settle');
+    Route::get('/tickets', [TicketController::class, 'index'])->name('ticketing.tickets.index');
+    Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->whereUuid('ticket')->name('ticketing.tickets.show');
+    Route::patch('/tickets/{ticket}', [TicketController::class, 'update'])->whereUuid('ticket')->name('ticketing.tickets.update');
+    Route::post('/tickets/{ticket}/transfer', [TicketController::class, 'transfer'])->whereUuid('ticket')->name('ticketing.tickets.transfer');
+    Route::post('/tickets/{ticket}/resend', [TicketController::class, 'resend'])->whereUuid('ticket')->middleware('throttle:6,1')->name('ticketing.tickets.resend');
     Route::get('/reconciliation', [ReconciliationController::class, 'index'])->name('ticketing.reconciliation.index');
     Route::post('/reconciliation/run', [ReconciliationController::class, 'run'])->name('ticketing.reconciliation.run');
     Route::post('/reconciliation/{issue}/resolve', [ReconciliationController::class, 'resolve'])->whereUuid('issue')->name('ticketing.reconciliation.resolve');
@@ -54,3 +61,11 @@ Route::apiV1('public')->post('/editions/{edition}/coupons/check', PublicCouponCo
 Route::apiV1('public')->get('/editions/{edition}/tickets', PublicTicketController::class)
     ->whereUuid('edition')
     ->name('ticketing.public.tickets');
+
+Route::apiV1PublishedEdition('attendee', 'tickets', ['auth:sanctum'])->group(function (): void {
+    Route::get('/', [AttendeeTicketController::class, 'index'])->name('ticketing.attendee.tickets.index');
+    Route::get('/{ticket}', [AttendeeTicketController::class, 'show'])->whereUuid('ticket')->name('ticketing.attendee.tickets.show');
+    Route::patch('/{ticket}', [AttendeeTicketController::class, 'update'])->whereUuid('ticket')->name('ticketing.attendee.tickets.update');
+    Route::post('/{ticket}/transfer', [AttendeeTicketController::class, 'transfer'])->whereUuid('ticket')->middleware('throttle:6,1')->name('ticketing.attendee.tickets.transfer');
+    Route::post('/{ticket}/resend', [AttendeeTicketController::class, 'resend'])->whereUuid('ticket')->middleware('throttle:3,1')->name('ticketing.attendee.tickets.resend');
+});
