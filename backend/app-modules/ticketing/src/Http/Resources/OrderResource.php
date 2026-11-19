@@ -29,6 +29,8 @@ class OrderResource extends ApiResource
             'number' => $order->number,
             'status' => $order->status->value,
             'status_label' => $order->status->label(),
+            'source' => $order->source->value,
+            'external' => $order->external() ? ['platform' => $order->external_platform, 'reference' => $order->external_reference] : null,
             'buyer' => ['name' => $order->buyer_name, 'email' => $order->buyer_email, 'document' => $order->maskedDocument()],
             'subtotal' => $this->money($order->subtotal_cents),
             'discount' => $this->money($order->discount_cents),
@@ -54,6 +56,7 @@ class OrderResource extends ApiResource
                 'attendee' => ['name' => $item->attendee_name, 'email' => $item->attendee_email],
                 'answers' => $item->answers ?? (object) [],
                 'cancelled_at' => $this->isoDate($item->cancelled_at),
+                'external_code' => $item->external_code,
             ])->all(),
             ...($this->withToken ? ['access_token' => $order->access_token] : []),
         ];

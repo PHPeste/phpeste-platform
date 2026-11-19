@@ -30,9 +30,12 @@ class IssueTickets
     }
 
     /**
+     * Com `$notify = false` (importação de outra plataforma) o ingresso é
+     * emitido sem e-mail; o envio fica para quando a organização confirmar.
+     *
      * @return list<Ticket>
      */
-    public function handle(Order $order): array
+    public function handle(Order $order, bool $notify = true): array
     {
         $items = OrderItem::query()->forEdition($order->edition_id)
             ->where('order_id', $order->id)
@@ -48,7 +51,10 @@ class IssueTickets
 
             if ($ticket instanceof Ticket) {
                 $issued[] = $ticket;
-                $this->mail->issued($order, $ticket);
+
+                if ($notify) {
+                    $this->mail->issued($order, $ticket);
+                }
             }
         }
 

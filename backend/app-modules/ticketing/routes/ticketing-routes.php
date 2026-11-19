@@ -12,6 +12,7 @@ use PHPeste\Ticketing\Http\Controllers\PublicCouponController;
 use PHPeste\Ticketing\Http\Controllers\PublicTicketController;
 use PHPeste\Ticketing\Http\Controllers\ReconciliationController;
 use PHPeste\Ticketing\Http\Controllers\TicketController;
+use PHPeste\Ticketing\Http\Controllers\TicketImportController;
 use PHPeste\Ticketing\Http\Controllers\TicketTypeController;
 
 Route::apiV1Edition('ticketing')->group(function (): void {
@@ -42,6 +43,16 @@ Route::apiV1Edition('ticketing')->group(function (): void {
     Route::post('/tickets/{ticket}/resend', [TicketController::class, 'resend'])->whereUuid('ticket')->middleware('throttle:6,1')->name('ticketing.tickets.resend');
     Route::get('/reconciliation', [ReconciliationController::class, 'index'])->name('ticketing.reconciliation.index');
     Route::post('/reconciliation/run', [ReconciliationController::class, 'run'])->name('ticketing.reconciliation.run');
+    Route::get('/imports', [TicketImportController::class, 'index'])->name('ticketing.imports.index');
+    Route::post('/imports', [TicketImportController::class, 'store'])->name('ticketing.imports.store');
+    Route::get('/imports/{import}', [TicketImportController::class, 'show'])->whereUuid('import')->name('ticketing.imports.show');
+    Route::put('/imports/{import}/mapping', [TicketImportController::class, 'map'])->whereUuid('import')->name('ticketing.imports.map');
+    Route::post('/imports/{import}/start', [TicketImportController::class, 'start'])->whereUuid('import')->name('ticketing.imports.start');
+    Route::post('/imports/{import}/resume', [TicketImportController::class, 'resume'])->whereUuid('import')->name('ticketing.imports.resume');
+    Route::delete('/imports/{import}', [TicketImportController::class, 'destroy'])->whereUuid('import')->name('ticketing.imports.destroy');
+    Route::get('/imports/{import}/rejections', [TicketImportController::class, 'rejections'])->whereUuid('import')->name('ticketing.imports.rejections');
+    Route::get('/imports/{import}/rejections.csv', [TicketImportController::class, 'rejectionsCsv'])->whereUuid('import')->name('ticketing.imports.rejections.csv');
+    Route::post('/imports/{import}/email', [TicketImportController::class, 'email'])->whereUuid('import')->middleware('throttle:6,1')->name('ticketing.imports.email');
     Route::post('/reconciliation/{issue}/resolve', [ReconciliationController::class, 'resolve'])->whereUuid('issue')->name('ticketing.reconciliation.resolve');
 });
 

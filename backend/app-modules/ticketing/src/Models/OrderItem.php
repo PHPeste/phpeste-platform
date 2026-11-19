@@ -18,7 +18,7 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property string $edition_id
  * @property string $order_id
  * @property string $ticket_type_id
- * @property string $ticket_batch_id
+ * @property string|null $ticket_batch_id
  * @property string $ticket_type_name
  * @property string $batch_name
  * @property int $unit_price_cents
@@ -30,12 +30,13 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property array<string, string|bool>|null $answers
  * @property Carbon|null $cancelled_at
  * @property string|null $refund_id
+ * @property string|null $external_code
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Order $order
  * @property-read Ticket|null $ticket
  */
-#[Fillable(['edition_id', 'order_id', 'ticket_type_id', 'ticket_batch_id', 'ticket_type_name', 'batch_name', 'unit_price_cents', 'discount_cents', 'fee_cents', 'total_cents', 'attendee_name', 'attendee_email', 'answers', 'cancelled_at', 'refund_id'])]
+#[Fillable(['edition_id', 'order_id', 'ticket_type_id', 'ticket_batch_id', 'ticket_type_name', 'batch_name', 'unit_price_cents', 'discount_cents', 'fee_cents', 'total_cents', 'attendee_name', 'attendee_email', 'answers', 'cancelled_at', 'refund_id', 'external_code'])]
 #[Table(name: 'order_items')]
 class OrderItem extends Model
 {
