@@ -66,6 +66,23 @@ class ChargeService implements PaymentProcessor
         }
     }
 
+    public function sync(string $editionId, string $accountId, string $gatewayChargeId): ?ChargeStatus
+    {
+        $charge = PaymentCharge::query()->forEdition($editionId)
+            ->where('payment_account_id', $accountId)
+            ->where('gateway_charge_id', $gatewayChargeId)
+            ->first();
+
+        if (!$charge instanceof PaymentCharge) {
+            return null;
+        }
+
+        $snapshot = $this->gateways->driver($charge->driver)->fetch($this->accountOf($charge)->gatewayCredentials(), $charge->gateway_charge_id);
+        $this->apply($charge, $snapshot);
+
+        return $charge->status;
+    }
+
     private function create(PaymentAccount $account, PaymentGateway $gateway, StartPayment $payment): PaymentAttempt
     {
         $existing = PaymentCharge::query()->forEdition($payment->editionId)
