@@ -21,6 +21,8 @@ class StartOrderPaymentRequest extends FormRequest
             'method' => ['required', Rule::enum(PaymentMethod::class)],
             'installments' => ['sometimes', 'integer', 'between:1,21'],
             'card_token' => ['sometimes', 'nullable', 'string', 'max:200'],
+            'card_brand' => ['sometimes', 'nullable', 'string', 'max:40', 'alpha_dash'],
+            'card_issuer' => ['sometimes', 'nullable', 'string', 'max:20', 'alpha_num'],
         ];
 
         foreach (self::CARD_FIELDS as $field) {

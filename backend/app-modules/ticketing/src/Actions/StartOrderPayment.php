@@ -24,7 +24,7 @@ class StartOrderPayment
         private readonly EditionSites $sites,
     ) {}
 
-    public function handle(Order $order, PaymentMethod $method, int $installments, ?string $cardToken, ?string $remoteIp): PaymentAttempt
+    public function handle(Order $order, PaymentMethod $method, int $installments, ?string $cardToken, ?string $remoteIp, ?string $cardBrand = null, ?string $cardIssuer = null): PaymentAttempt
     {
         if (!in_array($order->status, [OrderStatus::Created, OrderStatus::AwaitingPayment], true)) {
             throw ValidationException::withMessages(['payment' => sprintf('Este pedido está %s e não aceita pagamento.', mb_strtolower($order->status->label()))]);
@@ -53,6 +53,8 @@ class StartOrderPayment
             returnUrl: mb_rtrim($this->sites->url($order->edition_id), '/')."/checkout/pedido/{$order->id}",
             cardToken: $cardToken,
             remoteIp: $remoteIp,
+            cardBrand: $cardBrand,
+            cardIssuer: $cardIssuer,
         ));
 
         if ($order->refresh()->status === OrderStatus::Created) {
