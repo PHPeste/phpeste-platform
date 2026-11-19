@@ -9,6 +9,7 @@ import identity from '../../../modules/identity/locales/pt-br'
 import team from '../../../modules/team/locales/pt-br'
 import cfpSettings from '../../../modules/cfpSettings/locales/pt-br'
 import tickets from '../../../modules/tickets/locales/pt-br'
+import orders from '../../../modules/orders/locales/pt-br'
 import cfpReview from '../../../modules/cfpReview/locales/pt-br'
 import speakers from '../../../modules/speakers/locales/pt-br'
 import editionSettings from '../../../modules/editionSettings/locales/pt-br'
@@ -30,6 +31,7 @@ export default {
   team,
   cfpSettings,
   tickets,
+  orders,
   cfpReview,
   speakers,
   editionSettings,
