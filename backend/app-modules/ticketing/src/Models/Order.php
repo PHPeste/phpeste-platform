@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use PHPeste\Community\Tenancy\BelongsToEdition;
+use PHPeste\Ticketing\Enums\OrderSource;
 use PHPeste\Ticketing\Enums\OrderStatus;
 
 /**
@@ -43,11 +44,15 @@ use PHPeste\Ticketing\Enums\OrderStatus;
  * @property Carbon|null $refunded_at
  * @property int $refunded_cents
  * @property int|null $gateway_fee_cents
+ * @property OrderSource $source
+ * @property string|null $external_platform
+ * @property string|null $external_reference
+ * @property string|null $ticket_import_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Collection<int, OrderItem> $items
  */
-#[Fillable(['edition_id', 'number', 'status', 'user_id', 'buyer_name', 'buyer_email', 'buyer_document', 'buyer_document_hash', 'subtotal_cents', 'discount_cents', 'fee_cents', 'total_cents', 'coupon_id', 'coupon_code', 'coupon_redemption_id', 'payment_account_id', 'access_token', 'idempotency_key', 'request_hash', 'expires_at', 'paid_at', 'expired_at', 'cancelled_at', 'refunded_at', 'refunded_cents', 'gateway_fee_cents'])]
+#[Fillable(['edition_id', 'number', 'status', 'user_id', 'buyer_name', 'buyer_email', 'buyer_document', 'buyer_document_hash', 'subtotal_cents', 'discount_cents', 'fee_cents', 'total_cents', 'coupon_id', 'coupon_code', 'coupon_redemption_id', 'payment_account_id', 'access_token', 'idempotency_key', 'request_hash', 'expires_at', 'paid_at', 'expired_at', 'cancelled_at', 'refunded_at', 'refunded_cents', 'gateway_fee_cents', 'source', 'external_platform', 'external_reference', 'ticket_import_id'])]
 #[Hidden(['buyer_document', 'buyer_document_hash', 'access_token', 'request_hash'])]
 #[Table(name: 'orders')]
 class Order extends Model
@@ -56,11 +61,21 @@ class Order extends Model
     use HasUuids;
 
     /**
+     * @var array<string, mixed>
+     */
+    protected $attributes = ['source' => 'checkout'];
+
+    /**
      * @return HasMany<OrderItem, $this>
      */
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class)->oldest()->orderBy('id');
+    }
+
+    public function external(): bool
+    {
+        return $this->source === OrderSource::Import;
     }
 
     public function maskedDocument(): ?string
@@ -79,6 +94,7 @@ class Order extends Model
     {
         return [
             'status' => OrderStatus::class,
+            'source' => OrderSource::class,
             'number' => 'integer',
             'buyer_document' => 'encrypted',
             'subtotal_cents' => 'integer',
