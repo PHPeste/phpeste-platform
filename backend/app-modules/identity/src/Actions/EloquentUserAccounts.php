@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\NewAccessToken;
 use Laravel\Sanctum\PersonalAccessToken;
 use PHPeste\Identity\Contracts\UserAccounts;
+use PHPeste\Identity\Enums\NotificationTopic;
 use PHPeste\Identity\Models\User;
 
 class EloquentUserAccounts implements UserAccounts
@@ -88,6 +89,11 @@ class EloquentUserAccounts implements UserAccounts
         $hash = User::query()->find($userId)?->password;
 
         return $hash !== null && Hash::check($password, $hash);
+    }
+
+    public function wantsNotification(string $userId, NotificationTopic $topic): bool
+    {
+        return User::query()->find($userId)?->wantsNotification($topic) ?? false;
     }
 
     public function issueToken(string $userId, string $deviceName): NewAccessToken

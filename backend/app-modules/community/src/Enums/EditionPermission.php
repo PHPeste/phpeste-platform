@@ -18,6 +18,7 @@ enum EditionPermission: string
     case ManageSponsors = 'sponsors.manage';
     case ManageSuppliers = 'suppliers.manage';
     case ManageFinance = 'finance.manage';
+    case ManageTasks = 'tasks.manage';
 
     public function label(): string
     {
@@ -34,6 +35,7 @@ enum EditionPermission: string
             self::ManageSponsors => 'Gerenciar patrocinadores',
             self::ManageSuppliers => 'Gerenciar fornecedores',
             self::ManageFinance => 'Ver e editar finanças',
+            self::ManageTasks => 'Gerenciar tarefas da organização',
         };
     }
 }

@@ -76,7 +76,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
       <ol>
         <li><b>Monorepo com três partes.</b> <code>backend/</code> (Laravel 13, API), <code>front-admin/</code> (Nuxt SPA da organização) e <code>front-public/</code> (Nuxt SSR do site da edição, resolvido pelo domínio).</li>
         <li><b>A edição é o tenant</b> (ADR 0007). Um banco só; escopo global por <code>edition_id</code> e a edição no contexto só durante a requisição ou o job.</li>
-        <li><b>15 módulos</b> (<code>internachi/modular</code>) que só conversam por contratos e eventos. 12 já têm lógica; Program, CheckIn, Tasks e Engagement ainda são casca.</li>
+        <li><b>15 módulos</b> (<code>internachi/modular</code>) que só conversam por contratos e eventos. 13 já têm lógica; Program, CheckIn e Engagement ainda são casca.</li>
         <li><b>A plataforma não toca no dinheiro</b> (ADR 0009). Cada edição usa a conta do próprio gateway (Asaas ou Mercado Pago); a receita é calculada dos pedidos, nunca guardada.</li>
         <li><b>Toda ação sensível vira trilha de auditoria</b> por evento, com segredo removido e dado pessoal mascarado.</li>
       </ol>
@@ -106,7 +106,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="70" y="92" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">chamada ou dependência</text>
 <path d="M 265 88 L 315 88" fill="none" stroke="#475569" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-infra)"/>
 <text x="325" y="92" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">assíncrono (evento, fila, webhook)</text></svg></div>
-  <footer><span>Fonte: código da main, backend/CLAUDE.md, docs/produto.md e ADRs 0001–0009.</span><span>19/11/2026 · main em b4293b3 · página 1</span></footer>
+  <footer><span>Fonte: código da main, backend/CLAUDE.md, docs/produto.md e ADRs 0001–0009.</span><span>19/11/2026 · B34 (tarefas) · página 1</span></footer>
 </section>
 <section class="page">
   <header>
@@ -158,8 +158,8 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="455" y="179" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">15 módulos (app-modules/)</text>
 <text x="455" y="196" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Identity · Community · Branding · Cfp · Ticketing</text>
 <text x="455" y="210" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Payments · Notifications · Audit · Sponsors</text>
-<text x="455" y="224" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Suppliers · Finance</text>
-<text x="455" y="238" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">casca: Program · CheckIn · Tasks · Engagement</text>
+<text x="455" y="224" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Suppliers · Finance · Tasks</text>
+<text x="455" y="238" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">casca: Program · CheckIn · Engagement</text>
 <rect x="445" y="270" width="170" height="112" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
 <text x="455" y="289" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Horizon (fila)</text>
 <text x="455" y="306" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">e-mail, webhooks,</text>
@@ -171,8 +171,8 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="635" y="306" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">cfp:sync-status</text>
 <text x="635" y="320" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticketing:expire-orders</text>
 <text x="635" y="334" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticketing:reconcile</text>
-<text x="635" y="348" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">payments:retry-webhooks</text>
-<text x="635" y="362" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">…8 rotinas</text>
+<text x="635" y="348" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">tasks:due-reminders</text>
+<text x="635" y="362" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">…9 rotinas</text>
 <rect x="445" y="394" width="350" height="122" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
 <text x="455" y="413" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Regras que valem para todo módulo</text>
 <text x="455" y="430" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Tenancy por edição (BelongsToEdition)</text>
@@ -183,7 +183,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <path d="M 395 275 L 430 275" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#a-infra)"/>
 <rect x="845" y="40" width="245" height="70" rx="9" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6"/>
 <text x="855" y="59" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">MySQL 8</text>
-<text x="855" y="76" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">um banco · 65 tabelas</text>
+<text x="855" y="76" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">um banco · 67 tabelas</text>
 <text x="855" y="90" font-size="10" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">UUID em toda tabela</text>
 <rect x="845" y="122" width="245" height="70" rx="9" fill="#FFF6E5" stroke="#C98A12" stroke-width="1.6"/>
 <text x="855" y="141" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Redis</text>
@@ -213,7 +213,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <path d="M 810 447 L 845 447" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/>
 <path d="M 810 507 L 845 507" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/></svg></div>
   <ul class="notes"><li>Painel e site são projetos separados (decisão: <code>front-admin</code> SPA, <code>front-public</code> SSR). O token é Bearer do Sanctum nos dois (ADR 0005).</li><li>Fila e agendador rodam a mesma imagem do backend (<code>horizon</code> e <code>scheduler</code> no <code>infra/docker-compose.yml</code>).</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 2</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 2</span></footer>
 </section>
 <section class="page">
   <header>
@@ -273,7 +273,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="405" y="329" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Organização</text>
 <text x="405" y="346" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">sponsors · sponsorships · sponsor_tiers</text>
 <text x="405" y="360" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">edition_suppliers · supplier_quotes</text>
-<text x="405" y="374" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">expenses</text>
+<text x="405" y="374" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">expenses · task_columns · tasks</text>
 <rect x="745" y="310" width="330" height="96" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
 <text x="755" y="329" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Comunicação e operação</text>
 <text x="755" y="346" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">email_deliveries · email_unsubscribes</text>
@@ -288,7 +288,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <path d="M 335 278 L 365 278 L 365 112 L 395 112" fill="none" stroke="#3B6FD8" stroke-width="1.6" marker-end="url(#a-global)"/>
 <text x="370" y="200" font-size="9.5" font-weight="600" fill="#3B6FD8" text-anchor="start" font-family="inherit" xml:space="preserve">community_id</text></svg></div>
   <ul class="notes"><li>Por que não um banco por comunidade: a mesma pessoa palestra no PHPeste de um ano e compra ingresso no outro, e o perfil dela é um só.</li><li>Dado de edição que vai para a próxima ("criar edição a partir da anterior") é copiado por um <code>EditionCloner</code> de cada módulo, nunca dado de pessoa.</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 3</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 3</span></footer>
 </section>
 <section class="page">
   <header>
@@ -356,7 +356,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="20" y="486" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">O site chama /public/resolve com o host da requisição, recebe edition_id e o domínio principal e redireciona se for preciso (ADR 0008).</text>
 <text x="20" y="500" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">O host é normalizado (minúsculas, sem porta, IDN em punycode) e nunca é usado para montar URL sem passar pela tabela edition_domains.</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 4</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 4</span></footer>
 </section>
 <section class="page">
   <header>
@@ -422,13 +422,13 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="40" y="470" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">palestrantes, patrocínio, fornecedores), pendências com caminho e filtro (propostas sem revisor, divergência na conciliação, entregas e despesas</text>
 <text x="40" y="484" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">vencidas) e marcos. O Community filtra cada pendência pela permissão de quem vê: o voluntário não vê pendência de finanças.</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 5</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 5</span></footer>
 </section>
 <section class="page">
   <header>
     <div class="kicker">06 · Backend</div>
     <h1>Os 15 módulos do backend</h1>
-    <p class="sub">Cada módulo é um pacote Composer real em <code>backend/app-modules/&lt;nome&gt;</code> (ADR 0002), com namespace <code>PHPeste\&lt;Nome&gt;</code>: Models, Actions, Contracts, Events, Http, Jobs. 247 rotas na API.</p>
+    <p class="sub">Cada módulo é um pacote Composer real em <code>backend/app-modules/&lt;nome&gt;</code> (ADR 0002), com namespace <code>PHPeste\&lt;Nome&gt;</code>: Models, Actions, Contracts, Events, Http, Jobs. 257 rotas na API.</p>
   </header>
   <div class="content"><svg viewBox="0 0 1100 545" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="20" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
 <text x="20" y="39" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Identity</text>
@@ -508,24 +508,26 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="20" y="472" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">leitura de QR, entrada, modo offline (B38–B39)</text>
 <rect x="313" y="442" width="40" height="16" rx="8" fill="#94A3B8"/>
 <text x="333.0" y="454" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">casca</text>
-<rect x="375" y="436" width="350" height="94" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
+<rect x="375" y="436" width="350" height="94" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
 <text x="385" y="455" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Tasks</text>
-<text x="385" y="472" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">kanban da organização (B34)</text>
-<rect x="678" y="442" width="40" height="16" rx="8" fill="#94A3B8"/>
-<text x="698.0" y="454" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">casca</text>
+<text x="385" y="472" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">quadro kanban com colunas configuráveis,</text>
+<text x="385" y="486" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">movimento seguro em paralelo, prazo, lembrete,</text>
+<text x="385" y="500" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">vínculo a fornecedor e patrocinador</text>
+<rect x="660" y="442" width="58" height="16" rx="8" fill="#6B2A14"/>
+<text x="689.0" y="454" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">10 rotas</text>
 <rect x="740" y="436" width="350" height="94" rx="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="6 4"/>
 <text x="750" y="455" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Engagement</text>
 <text x="750" y="472" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">feedback, certificados, sorteio (B42)</text>
 <rect x="1043" y="442" width="40" height="16" rx="8" fill="#94A3B8"/>
 <text x="1063.0" y="454" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">casca</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 6</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 6</span></footer>
 </section>
 <section class="page">
   <header>
     <div class="kicker">07 · Backend</div>
     <h1>Como os módulos conversam</h1>
-    <p class="sub">Módulo nunca usa model de outro: ou chama um contrato (interface em <code>Contracts/</code>, ligada no service provider) ou escuta um evento. 24 contratos hoje. O arch test barra dependência de <code>App\</code>.</p>
+    <p class="sub">Módulo nunca usa model de outro: ou chama um contrato (interface em <code>Contracts/</code>, ligada no service provider) ou escuta um evento. 25 contratos hoje. O arch test barra dependência de <code>App\</code>.</p>
   </header>
   <div class="content"><svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="430" y="20" width="240" height="96" rx="9" fill="#F7E9E1" stroke="#6B2A14" stroke-width="1.6"/>
 <text x="550.0" y="39" font-size="12" font-weight="700" fill="#2B1408" text-anchor="middle" font-family="inherit" xml:space="preserve">Community</text>
@@ -584,16 +586,16 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="770" y="445" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">pelo listener genérico RecordAuditableEvent</text>
 <text x="770" y="459" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">EditionMailer::send(...): todo e-mail</text>
 <text x="770" y="473" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">passa por aqui, com tema da edição</text></svg></div>
-  <ul class="notes"><li>Ponto de extensão é registrado com <code>$app-&gt;tag([...], Contrato::TAG)</code>: o Community não conhece os módulos, só a tag. Módulo novo aparece na Visão geral e na clonagem sem mexer no Community.</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 7</span></footer>
+  <ul class="notes"><li>Ponto de extensão é registrado com <code>$app-&gt;tag([...], Contrato::TAG)</code>: o Community não conhece os módulos, só a tag. Módulo novo aparece na Visão geral e na clonagem sem mexer no Community. O mesmo vale para <code>TaskLinkProvider</code> (Tasks): Suppliers e Sponsors registram o que uma tarefa pode apontar, e o Program vai registrar a sessão.</li></ul>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 7</span></footer>
 </section>
 <section class="page">
   <header>
     <div class="kicker">08 · Dados</div>
     <h1>Banco de dados por domínio</h1>
-    <p class="sub">MySQL 8, 65 tabelas, todas com UUID como chave. Verde é da edição (tem <code>edition_id</code>); azul é global. ● em Suppliers: global da comunidade (<code>community_id</code>).</p>
+    <p class="sub">MySQL 8, 67 tabelas, todas com UUID como chave. Verde é da edição (tem <code>edition_id</code>); azul é global. ● em Suppliers: global da comunidade (<code>community_id</code>).</p>
   </header>
-  <div class="content"><svg viewBox="0 0 1100 436" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="12" width="260" height="108" rx="9" fill="#E8F0FB" stroke="#3B6FD8" stroke-width="1.6"/>
+  <div class="content"><svg viewBox="0 0 1100 472" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="a-client" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B8761E"/></marker><marker id="a-backend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B2A14"/></marker><marker id="a-edition" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2F7D5B"/></marker><marker id="a-global" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FD8"/></marker><marker id="a-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C98A12"/></marker><marker id="a-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/></marker><marker id="a-infra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker><marker id="a-todo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94A3B8"/></marker><marker id="a-alert" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C2410C"/></marker></defs><rect x="10" y="12" width="260" height="108" rx="9" fill="#E8F0FB" stroke="#3B6FD8" stroke-width="1.6"/>
 <text x="20" y="31" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Identity · 5</text>
 <text x="20" y="48" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">users</text>
 <text x="20" y="62" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">social_accounts</text>
@@ -673,23 +675,27 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="845" y="285" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Finance · 2</text>
 <text x="845" y="302" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">finance_categories</text>
 <text x="845" y="316" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">expenses</text>
-<rect x="560" y="308" width="260" height="108" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
-<text x="570" y="327" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Laravel · 7</text>
-<text x="570" y="344" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">personal_access_tokens</text>
-<text x="570" y="358" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">jobs · job_batches</text>
-<text x="570" y="372" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">failed_jobs</text>
-<text x="570" y="386" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">cache · cache_locks</text>
-<text x="570" y="400" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sessions</text></svg></div>
+<rect x="560" y="308" width="260" height="66" rx="9" fill="#E6F2EC" stroke="#2F7D5B" stroke-width="1.6"/>
+<text x="570" y="327" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Tasks · 2</text>
+<text x="570" y="344" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">task_columns</text>
+<text x="570" y="358" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">tasks</text>
+<rect x="835" y="344" width="260" height="108" rx="9" fill="#F1F5F9" stroke="#475569" stroke-width="1.6"/>
+<text x="845" y="363" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Laravel · 7</text>
+<text x="845" y="380" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">personal_access_tokens</text>
+<text x="845" y="394" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">jobs · job_batches</text>
+<text x="845" y="408" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">failed_jobs</text>
+<text x="845" y="422" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">cache · cache_locks</text>
+<text x="845" y="436" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sessions</text></svg></div>
   <ul class="notes"><li>Dinheiro sempre em centavos (inteiro). Dado sensível cifrado no banco: CPF de quem compra, credenciais do gateway, acessibilidade, corpo de webhook, linhas de importação. <code>APP_PREVIOUS_KEYS</code> + comandos <code>*:reencrypt-*</code> para trocar a chave.</li><li>Estoque e cupom nunca são lidos e depois gravados: <code>UPDATE … WHERE allocated + q &lt;= quantity</code>. Testes com 12 processos simultâneos provam que não vende além do lote.</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 8</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 8</span></footer>
 </section>
 <section class="page">
   <header>
     <div class="kicker">09 · Acesso</div>
     <h1>Papéis e permissões</h1>
-    <p class="sub">Cinco papéis por edição e doze permissões. O organizador tem todas.</p>
+    <p class="sub">Cinco papéis por edição e treze permissões. O organizador tem todas.</p>
   </header>
-  <div class="content"><div class="two"><table class="cmp perms"><thead><tr><th>Permissão</th><th>O que libera</th><th>Organizador</th><th>Financeiro</th><th>Avaliador</th><th>Check-in</th><th>Voluntário</th></tr></thead><tbody><tr><td><code>edition.manage</code></td><td>Configurar edição e identidade</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>edition.team</code></td><td>Gerenciar equipe e convites</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>cfp.review</code></td><td>Avaliar propostas</td><td>●</td><td></td><td>●</td><td></td><td></td></tr><tr><td><code>program.manage</code></td><td>Gerenciar palestrantes e grade</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>speakers.private</code></td><td>Ver acessibilidade e alimentação</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>orders.view</code></td><td>Ver pedidos e pagamentos</td><td>●</td><td>●</td><td></td><td></td><td></td></tr><tr><td><code>orders.refund</code></td><td>Reembolsar pedidos</td><td>●</td><td>●</td><td></td><td></td><td></td></tr><tr><td><code>payments.gateway</code></td><td>Editar chaves do gateway</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>checkin.scan</code></td><td>Fazer check-in</td><td>●</td><td></td><td></td><td>●</td><td></td></tr><tr><td><code>sponsors.manage</code></td><td>Gerenciar patrocinadores</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>suppliers.manage</code></td><td>Gerenciar fornecedores</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>finance.manage</code></td><td>Ver e editar finanças</td><td>●</td><td>●</td><td></td><td></td><td></td></tr></tbody></table>
+  <div class="content"><div class="two"><table class="cmp perms"><thead><tr><th>Permissão</th><th>O que libera</th><th>Organizador</th><th>Financeiro</th><th>Avaliador</th><th>Check-in</th><th>Voluntário</th></tr></thead><tbody><tr><td><code>edition.manage</code></td><td>Configurar edição e identidade</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>edition.team</code></td><td>Gerenciar equipe e convites</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>cfp.review</code></td><td>Avaliar propostas</td><td>●</td><td></td><td>●</td><td></td><td></td></tr><tr><td><code>program.manage</code></td><td>Gerenciar palestrantes e grade</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>speakers.private</code></td><td>Ver acessibilidade e alimentação</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>orders.view</code></td><td>Ver pedidos e pagamentos</td><td>●</td><td>●</td><td></td><td></td><td></td></tr><tr><td><code>orders.refund</code></td><td>Reembolsar pedidos</td><td>●</td><td>●</td><td></td><td></td><td></td></tr><tr><td><code>payments.gateway</code></td><td>Editar chaves do gateway</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>checkin.scan</code></td><td>Fazer check-in</td><td>●</td><td></td><td></td><td>●</td><td></td></tr><tr><td><code>sponsors.manage</code></td><td>Gerenciar patrocinadores</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>suppliers.manage</code></td><td>Gerenciar fornecedores</td><td>●</td><td></td><td></td><td></td><td></td></tr><tr><td><code>finance.manage</code></td><td>Ver e editar finanças</td><td>●</td><td>●</td><td></td><td></td><td></td></tr><tr><td><code>tasks.manage</code></td><td>Gerenciar tarefas (a equipe vê o quadro e move as próprias)</td><td>●</td><td></td><td></td><td></td><td></td></tr></tbody></table>
 <div class="side">
 <h3>Como funciona</h3>
 <ul>
@@ -702,7 +708,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <li>Palestrante e participante não têm papel: entram pelas rotas de edição publicada.</li>
 </ul></div></div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 9</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 9</span></footer>
 </section>
 <section class="page">
   <header>
@@ -776,7 +782,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="40" y="494" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticketing:expire-orders (1/min) devolve estoque de reserva vencida · ticketing:rotate-batches abre o próximo lote</text>
 <text x="40" y="508" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">payments:retry-webhooks (1, 5, 15, 60 min) · ticketing:reconcile (diário) grava divergência com o gateway</text></svg></div>
   <ul class="notes"><li>Reembolso: <code>PaymentLedger::refund</code> reserva o valor antes de chamar o gateway (dois reembolsos ao mesmo tempo nunca passam do pago). Pedido importado de outra plataforma entra pago, sem cobrança, e não passa por reembolso nem conciliação.</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 10</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 10</span></footer>
 </section>
 <section class="page">
   <header>
@@ -852,7 +858,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="20" y="481" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Configurar CFP (A10) · Avaliar propostas com teclado (A11) · Palestrantes: lista, cobertura e detalhe (A12) · no site público: formulário de</text>
 <text x="20" y="495" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">proposta e área do palestrante com entrar pelo GitHub (P03, P11).</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 11</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 11</span></footer>
 </section>
 <section class="page">
   <header>
@@ -905,7 +911,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="20" y="489" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">ADR 0009: a plataforma não recebe nem repassa dinheiro</text>
 <text x="20" y="506" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Cada edição cadastra a conta do próprio gateway; a API valida as chaves e um webhook assinado antes de abrir vendas. Credenciais cifradas; a API só mostra os 4 últimos caracteres.</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 12</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 12</span></footer>
 </section>
 <section class="page">
   <header>
@@ -913,7 +919,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
     <h1>Fila, rotinas agendadas, e-mail e auditoria</h1>
     <p class="sub">O que roda sem ninguém clicar. Todas as rotinas usam <code>withoutOverlapping()</code> e são idempotentes: rodar duas vezes não muda o resultado.</p>
   </header>
-  <div class="content"><div class="two"><table class="cmp sched"><thead><tr><th>Quando</th><th>Comando</th><th>Para quê</th></tr></thead><tbody><tr><td><code>* * * * *</code></td><td><code>cfp:sync-status</code></td><td>abre e fecha o CFP pela janela</td></tr><tr><td><code>0 * * * *</code></td><td><code>cfp:confirmation-deadlines</code></td><td>lembra 48 h antes e marca sem resposta</td></tr><tr><td><code>* * * * *</code></td><td><code>ticketing:expire-orders</code></td><td>expira reserva vencida e devolve estoque</td></tr><tr><td><code>* * * * *</code></td><td><code>ticketing:rotate-batches</code></td><td>encerra lote esgotado e abre o próximo</td></tr><tr><td><code>*/5 * * * *</code></td><td><code>ticketing:resume-imports</code></td><td>retoma importação parada</td></tr><tr><td><code>04:00 BRT</code></td><td><code>ticketing:reconcile</code></td><td>confere pedidos com o gateway</td></tr><tr><td><code>* * * * *</code></td><td><code>payments:retry-webhooks</code></td><td>reenfileira webhook com erro (1, 5, 15, 60 min)</td></tr><tr><td><code>03:30</code></td><td><code>audit:prune</code></td><td>apaga trilha além de AUDIT_RETENTION_DAYS</td></tr></tbody></table>
+  <div class="content"><div class="two"><table class="cmp sched"><thead><tr><th>Quando</th><th>Comando</th><th>Para quê</th></tr></thead><tbody><tr><td><code>* * * * *</code></td><td><code>cfp:sync-status</code></td><td>abre e fecha o CFP pela janela</td></tr><tr><td><code>0 * * * *</code></td><td><code>cfp:confirmation-deadlines</code></td><td>lembra 48 h antes e marca sem resposta</td></tr><tr><td><code>* * * * *</code></td><td><code>ticketing:expire-orders</code></td><td>expira reserva vencida e devolve estoque</td></tr><tr><td><code>* * * * *</code></td><td><code>ticketing:rotate-batches</code></td><td>encerra lote esgotado e abre o próximo</td></tr><tr><td><code>*/5 * * * *</code></td><td><code>ticketing:resume-imports</code></td><td>retoma importação parada</td></tr><tr><td><code>04:00 BRT</code></td><td><code>ticketing:reconcile</code></td><td>confere pedidos com o gateway</td></tr><tr><td><code>* * * * *</code></td><td><code>payments:retry-webhooks</code></td><td>reenfileira webhook com erro (1, 5, 15, 60 min)</td></tr><tr><td><code>08:00 BRT</code></td><td><code>tasks:due-reminders</code></td><td>avisa o responsável da tarefa que vence até amanhã</td></tr><tr><td><code>03:30</code></td><td><code>audit:prune</code></td><td>apaga trilha além de AUDIT_RETENTION_DAYS</td></tr></tbody></table>
 <div class="side">
 <h3>Fila (Redis + Horizon)</h3>
 <ul>
@@ -933,7 +939,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <li>Segredo removido, dado pessoal mascarado; o model recusa update e delete.</li>
 </ul></div></div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 13</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 13</span></footer>
 </section>
 <section class="page">
   <header>
@@ -943,7 +949,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
   </header>
   <div class="content"><table class="cmp sec"><thead><tr><th>Tema</th><th>Como está</th></tr></thead><tbody><tr><td>Autenticação</td><td>Sanctum Bearer, um token por dispositivo com expiração (<code>SANCTUM_EXPIRATION_MINUTES</code>); revogar é imediato. Senha mínima de 10 e checagem de vazamento.</td></tr><tr><td>Isolamento</td><td>Escopo global por edição; outra comunidade recebe 404; arch test impede módulo de depender de <code>App\</code> e controller de usar <code>$request-&gt;all()</code>.</td></tr><tr><td>Rate limit</td><td>Limiters nomeados: <code>login</code>, <code>password-reset</code>, <code>checkout</code>, <code>webhooks</code>, configuráveis por <code>.env</code>.</td></tr><tr><td>Headers e CORS</td><td>CSP, HSTS, nosniff, Referrer-Policy, Permissions-Policy. CORS por ambiente e, em <code>/public/*</code>, só a origem do site próprio da edição.</td></tr><tr><td>Dados sensíveis</td><td>Cifrados no banco (CPF, credenciais, acessibilidade, webhooks). Logs JSON com <code>password</code>, <code>token</code>, <code>secret</code> e cartão redigidos automaticamente.</td></tr><tr><td>Arquivos</td><td>Disco privado; download só por URL assinada que expira (10 min), sempre como anexo, com nosniff e CSP sandbox. SVG sanitizado.</td></tr><tr><td>Pagamento</td><td>Sem dado de cartão na API; webhook com assinatura do driver e reconsulta ao gateway; idempotência no banco (<code>unique(edition_id, idempotency_key)</code>).</td></tr><tr><td>Segredos</td><td>ADR 0006: nada de segredo no repositório; <code>APP_PREVIOUS_KEYS</code> para trocar a chave sem perder o que já foi cifrado.</td></tr><tr><td>LGPD</td><td>Encarregado e política por edição, anonimização após o evento (B43 em aberto). Decisão em aberto: comunidade controladora, PHPeste operador.</td></tr></tbody></table></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 14</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 14</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1018,7 +1024,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="35" y="483" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Em aberto para o evento</text>
 <text x="35" y="500" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">teste de carga, backups, runbook do dia do evento (B45) · dados de demonstração e documentação publicada (B46)</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 15</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 15</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1031,7 +1037,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <figure><img src="../../design/tema-sertao-tokens.png" alt="Tokens do tema Sertão"><figcaption>Design: tokens do tema Sertão</figcaption></figure>
 </div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 16</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 16</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1045,7 +1051,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <figure><img src="../telas/painel-login.png" alt="Login"><figcaption>Entrar com e-mail e senha ou GitHub</figcaption></figure>
 </div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 17</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 17</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1053,8 +1059,8 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
     <h1>Onde estamos e o que falta</h1>
     <p class="sub">Os milestones do GitHub e o board <b>PHPeste Platform</b> são a fonte da verdade do andamento; esta página é o retrato no dia da geração.</p>
   </header>
-  <div class="content"><table class="cmp roadmap"><thead><tr><th>Marco</th><th>Situação</th><th>O que tem</th></tr></thead><tbody><tr><td><b>Marco 0 · Fundação</b></td><td>Concluído</td><td>esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes</td></tr><tr><td><b>Marco 1 · Núcleo e CFP</b></td><td>Backend concluído</td><td>Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03</td></tr><tr><td><b>Marco 2 · Ingressos</b></td><td>Backend quase concluído</td><td>ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças; falta B34 (tarefas) e as telas A14–A23, P04–P06</td></tr><tr><td><b>Marco 3 · Evento pronto</b></td><td>A fazer</td><td>grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)</td></tr><tr><td><b>Marco 4 · Operação</b></td><td>A fazer</td><td>engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)</td></tr></tbody></table></div>
+  <div class="content"><table class="cmp roadmap"><thead><tr><th>Marco</th><th>Situação</th><th>O que tem</th></tr></thead><tbody><tr><td><b>Marco 0 · Fundação</b></td><td>Concluído</td><td>esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes</td></tr><tr><td><b>Marco 1 · Núcleo e CFP</b></td><td>Backend concluído</td><td>Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03</td></tr><tr><td><b>Marco 2 · Ingressos</b></td><td>Backend concluído</td><td>ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas; faltam as telas A14–A23 e P04–P06</td></tr><tr><td><b>Marco 3 · Evento pronto</b></td><td>A fazer</td><td>grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)</td></tr><tr><td><b>Marco 4 · Operação</b></td><td>A fazer</td><td>engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)</td></tr></tbody></table></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · main em b4293b3 · página 18</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>19/11/2026 · B34 (tarefas) · página 18</span></footer>
 </section>
 </body></html>
