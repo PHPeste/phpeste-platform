@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "19/11/2026 · A14 (tela de ingressos)"
+RETRATO = "19/11/2026 · A15 (tela de pedidos)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -320,16 +320,16 @@ for i, (name, what) in enumerate(ext):
     b.append(arrow([(550, 116), (x + 127, 150)], "edition", dashed=True))
 pairs = [
     (20, 240, "Cfp", ["→ UserAccounts, SpeakerProfiles (Identity)", "→ EditionMailer (Notifications)", "→ EditionSites (Branding)", "ReviewLedger ← quem conta avaliações"]),
-    (390, 240, "Ticketing", ["→ PaymentProcessor, PaymentLedger", "→ PaymentAccounts (Payments)", "AccountUsage, TicketVerifier,", "TicketRevenue ← Payments, CheckIn, Finance"]),
+    (390, 240, "Ticketing", ["→ PaymentProcessor, PaymentLedger", "→ PaymentAccounts (Payments), AuditTrail", "AccountUsage, TicketVerifier,", "TicketRevenue ← Payments, CheckIn, Finance"]),
     (760, 240, "Payments", ["→ PaymentGateway (driver Asaas/MP)", "ChargeStatusChanged → Ticketing", "RefundAccepted → Ticketing", "sem acesso a pedidos: só referência"]),
     (20, 395, "Finance", ["→ TicketRevenue (Ticketing)", "→ SponsorRevenue (Sponsors)", "→ PaymentAccounts::all (Payments)", "→ EditionSuppliers (Suppliers)"]),
     (390, 395, "Sponsors · Suppliers", ["→ EditionMemberships (responsável)", "→ UserAccounts (nomes)", "Suppliers → EditionDirectory::communityId", "para não vazar entre comunidades"]),
-    (760, 395, "Audit · Notifications", ["Auditable: qualquer evento vira registro", "pelo listener genérico RecordAuditableEvent", "EditionMailer::send(...): todo e-mail", "passa por aqui, com tema da edição"]),
+    (760, 395, "Audit · Notifications", ["Auditable: qualquer evento vira registro", "pelo listener genérico RecordAuditableEvent", "AuditTrail: histórico de um registro", "EditionMailer::send(...): todo e-mail,", "com o tema da edição"]),
 ]
 for x, y, title, lines in pairs:
     b.append(box(x, y, 340, 130, title, lines, "backend", size=9.8))
 pages.append(page(7, "Backend", "Como os módulos conversam",
-    "Módulo nunca usa model de outro: ou chama um contrato (interface em <code>Contracts/</code>, ligada no service provider) ou escuta um evento. 25 contratos hoje. O arch test barra dependência de <code>App\\</code>.",
+    "Módulo nunca usa model de outro: ou chama um contrato (interface em <code>Contracts/</code>, ligada no service provider) ou escuta um evento. 26 contratos hoje. O arch test barra dependência de <code>App\\</code>.",
     svg("\n".join(b), h=540),
     ["Ponto de extensão é registrado com <code>$app-&gt;tag([...], Contrato::TAG)</code>: o Community não conhece os módulos, só a tag. Módulo novo aparece na Visão geral e na clonagem sem mexer no Community. O mesmo vale para <code>TaskLinkProvider</code> (Tasks): Suppliers e Sponsors registram o que uma tarefa pode apontar, e o Program vai registrar a sessão."]))
 
@@ -428,7 +428,7 @@ b.append(box(30, 458, 600, 70, "Rotinas que fecham as pontas", ["ticketing:expir
 pages.append(page(10, "Fluxo", "Ingresso: da compra ao QR",
     "O pedido nasce reservando estoque; o pagamento só confirma quando a API consulta o gateway. Evento falso, repetido ou fora de ordem não muda pedido.",
     svg("\n".join(b), h=540),
-    ["Reembolso: <code>PaymentLedger::refund</code> reserva o valor antes de chamar o gateway (dois reembolsos ao mesmo tempo nunca passam do pago). Pedido importado de outra plataforma entra pago, sem cobrança, e não passa por reembolso nem conciliação."]))
+    ["Reembolso: <code>PaymentLedger::refund</code> reserva o valor antes de chamar o gateway (dois reembolsos ao mesmo tempo nunca passam do pago). Pedido importado de outra plataforma entra pago, sem cobrança, e não passa por reembolso nem conciliação. Pagamento recebido fora do gateway é marcado à mão pela organização (<code>MarkOrderPaid</code>), com justificativa na auditoria, emissão dos ingressos e cancelamento da cobrança aberta."]))
 
 # ================================================== 11 CFP
 b = []
@@ -497,7 +497,8 @@ content = '<div class="two">' + table(["Quando", "Comando", "Para quê"], [(f"<c
 </ul>
 <h3>Auditoria</h3>
 <ul>
-<li>Evento que implementa <code>Auditable</code> vira linha em <code>audit_logs</code> pelo listener genérico. 22 eventos hoje.</li>
+<li>Evento que implementa <code>Auditable</code> vira linha em <code>audit_logs</code> pelo listener genérico. 23 eventos hoje.</li>
+<li>Tela que mostra histórico (ex.: o pedido) lê pelo contrato <code>AuditTrail::forSubject</code>, sem consultar a tabela de outro módulo.</li>
 <li>Segredo removido, dado pessoal mascarado; o model recusa update e delete.</li>
 </ul></div></div>"""
 pages.append(page(13, "Operação", "Fila, rotinas agendadas, e-mail e auditoria", "O que roda sem ninguém clicar. Todas as rotinas usam <code>withoutOverlapping()</code> e são idempotentes: rodar duas vezes não muda o resultado.", content))
@@ -527,7 +528,7 @@ b.append(box(195, 128, 160, 64, "Redis", ["cache e fila"], "data"))
 b.append(box(365, 128, 150, 64, "Mailpit", ["e-mail em :8025"], "external"))
 b.append(box(25, 204, 490, 74, "infra/dev.sh up | down | reset | shell | logs", ["sobe os seis serviços (cria infra/.env na primeira vez)", "front-admin e front-public rodam com npm run dev"], "infra"))
 b.append(group(560, 20, 530, 270, "CI (GitHub Actions)", "infra"))
-b.append(box(575, 52, 245, 105, "backend-ci", ["Pint (estilo)", "Larastan nível 8", "Pest (~1040 testes)", "composer audit"], "infra"))
+b.append(box(575, 52, 245, 105, "backend-ci", ["Pint (estilo)", "Larastan nível 8", "Pest (~1070 testes)", "composer audit"], "infra"))
 b.append(box(830, 52, 245, 105, "front-admin-ci · front-public-ci", ["lint, typecheck, testes", "unitários e build; e2e na CI", "do front-public; o do painel", "(82 testes) roda local"], "infra", title_size=11))
 b.append(box(575, 170, 500, 108, "composer check (local, antes de abrir PR)", ["pint + phpstan + rector --dry-run + pest", "Teste de concorrência com processos PHP reais (estoque, cupom,", "reembolso, idempotência), SQLite com transaction_mode IMMEDIATE"], "infra", size=9.8))
 b.append(group(10, 310, 1080, 220, "Produção (planejado, B45)", "todo"))
@@ -561,6 +562,7 @@ pages.append(page(17, "Telas", "Telas: o painel em uso",
 # Cada tela do Marco 2 que fica pronta entra aqui (prints de front-admin/e2e/capturas-arquitetura.spec.ts).
 SALES_SCREENS = [
     ("painel-ingressos.png", "Ingressos: tipos e lotes com o preço, o que a edição recebe depois da taxa do gateway, vendidos e situação. Cupons e regras da venda nas outras abas."),
+    ("painel-pedidos.png", "Pedidos: busca e filtro por situação, e o detalhe com itens, pagamento, reembolsos e histórico (auditoria). Reembolso com aviso de taxa e confirmação explícita; marcar como pago exige justificativa."),
 ]
 pages.append(page(18, "Telas", "Telas: vendas e organização",
     "As telas do Marco 2 conforme ficam prontas. Mesma fonte dos outros prints: o painel rodando com a API simulada.",
@@ -570,7 +572,7 @@ pages.append(page(18, "Telas", "Telas: vendas e organização",
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
     ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos); faltam A15–A23 e P04–P06"),
+    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso); faltam A16–A23 e P04–P06"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]

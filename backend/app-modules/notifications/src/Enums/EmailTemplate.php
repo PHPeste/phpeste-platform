@@ -24,7 +24,7 @@ enum EmailTemplate: string
     {
         return match ($this) {
             self::OrderConfirmed => 'Confirmação de compra',
-            self::PixReminder => 'Lembrete de Pix',
+            self::PixReminder => 'Lembrete de pagamento',
             self::OrderRefunded => 'Reembolso do pedido',
             self::TicketTransferred => 'Ingresso transferido',
             self::CfpAccepted => 'Resultado do CFP: aprovada',
@@ -43,7 +43,7 @@ enum EmailTemplate: string
     {
         return match ($this) {
             self::OrderConfirmed => 'Ao pagar o pedido',
-            self::PixReminder => '30 min antes de expirar',
+            self::PixReminder => 'Quando a organização reenvia a cobrança',
             self::OrderRefunded => 'Ao reembolsar o pedido',
             self::TicketTransferred => 'Ao receber um ingresso transferido',
             self::CfpAccepted, self::CfpWaitlisted => 'Manual',
@@ -84,7 +84,7 @@ enum EmailTemplate: string
     {
         return match ($this) {
             self::OrderConfirmed => 'Seu ingresso para o {edicao}',
-            self::PixReminder => 'Seu Pix para o {edicao} expira em breve',
+            self::PixReminder => 'Seu pedido no {edicao} está esperando pagamento',
             self::OrderRefunded => 'Reembolso do seu pedido no {edicao}',
             self::TicketTransferred => '{remetente} transferiu um ingresso do {edicao} para você',
             self::CfpAccepted => 'Sua proposta foi aprovada no {edicao}',
@@ -103,7 +103,7 @@ enum EmailTemplate: string
     {
         return match ($this) {
             self::OrderConfirmed => "Oi, {nome}!\n\nSeu ingresso para o {edicao} está garantido (pedido {pedido}). Entre com este e-mail para ver o QR code, completar os dados do crachá e, se precisar, transferir o ingresso para outra pessoa. É só mostrar o QR na entrada.",
-            self::PixReminder => "Oi, {nome}!\n\nO Pix do pedido {pedido} expira em 30 minutos. Se ainda quiser garantir seu lugar no {edicao}, é só pagar pelo link abaixo.",
+            self::PixReminder => "Oi, {nome}!\n\nO pedido {pedido} ainda não foi pago. Se ainda quiser garantir seu lugar no {edicao}, é só pagar pelo link abaixo antes de a reserva expirar.",
             self::OrderRefunded => "Oi, {nome}!\n\nFizemos o reembolso de {valor} do pedido {pedido} no {edicao}. {ingressos}\n\nO valor volta pelo mesmo meio de pagamento: no Pix, na conta de origem; no cartão, pode levar até duas faturas para aparecer.",
             self::TicketTransferred => "Oi, {nome}!\n\n{remetente} transferiu para você o ingresso {ingresso} do {edicao}, que acontece em {data}. Entre com este e-mail para ver o QR code e completar seus dados de crachá.",
             self::CfpAccepted => "Oi, {nome}!\n\nBoa notícia: a proposta \"{proposta}\" foi aprovada para o {edicao}, em {data}. Confirme sua participação pelo link abaixo até {prazo}.",
@@ -122,7 +122,7 @@ enum EmailTemplate: string
     {
         return match ($this) {
             self::OrderConfirmed => 'Ver meu ingresso',
-            self::PixReminder => 'Pagar com Pix',
+            self::PixReminder => 'Pagar o pedido',
             self::OrderRefunded => 'Ver meu pedido',
             self::TicketTransferred => 'Ver meu ingresso',
             self::CfpAccepted => 'Confirmar participação',

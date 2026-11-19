@@ -7,10 +7,15 @@ namespace PHPeste\Audit\Providers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use PHPeste\Audit\Console\PruneAuditLogsCommand;
+use PHPeste\Audit\Contracts\AuditTrail;
+use PHPeste\Audit\Support\DatabaseAuditTrail;
 
 class AuditServiceProvider extends ServiceProvider
 {
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->app->singleton(AuditTrail::class, DatabaseAuditTrail::class);
+    }
 
     public function boot(): void
     {

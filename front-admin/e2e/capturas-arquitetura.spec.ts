@@ -103,3 +103,42 @@ test('ingressos', async ({ page, goto }) => {
   await expect(page.getByRole('heading', { name: 'Ingressos', level: 1 })).toBeVisible()
   await page.screenshot({ path: out('painel-ingressos') })
 })
+
+test('pedidos', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await signedIn(page)
+  const money = (amount: number) => ({ amount, currency: 'BRL' })
+  const item = (id: string, name: string, cancelled: string | null = null) => ({ id, ticket_type_id: 'tt-1', ticket_type_name: 'Inteira', batch_name: '2º lote', unit_price: money(15000), discount: money(0), fee: money(0), total: money(15000), attendee: { name, email: 'x@exemplo.com' }, cancelled_at: cancelled, external_code: null })
+  const order = (number: number, name: string, email: string, status: string, label: string, total: number, extra: Record<string, unknown> = {}) => ({
+    id: `0e1c6d1a-0000-4000-8000-0000000000${number}`, number, status, status_label: label, source: 'checkout', external: null, buyer: { name, email, document: '***.982.247-**' },
+    subtotal: money(total), discount: money(0), fee: money(0), total: money(total), refunded: money(0), gateway_fee: money(Math.ceil(total * 0.0499)), requires_payment: true, coupon_code: null,
+    expires_at: null, paid_at: '2027-06-10T12:00:00Z', created_at: `2027-06-${String(10 - (number % 7)).padStart(2, '0')}T14:${String(number % 60).padStart(2, '0')}:00Z`, items: [item('i-1', name)], ...extra,
+  })
+  const featured = order(58, 'Ana Souza', 'ana@exemplo.com', 'paid', 'Pago', 30000, { refunded: money(15000), items: [item('i-1', 'Ana Souza'), item('i-2', 'Bia Lima', '2027-06-11T10:00:00Z')] })
+  const list = [
+    order(61, 'Caio Reis', 'caio@exemplo.com', 'awaiting_payment', 'Aguardando pagamento', 15000),
+    order(60, 'Duda Martins', 'duda@exemplo.com', 'paid', 'Pago', 15000),
+    order(59, 'Edu Farias', 'edu@exemplo.com', 'expired', 'Expirado', 30000),
+    featured,
+    order(57, 'Fabi Nunes', 'fabi@exemplo.com', 'paid', 'Pago', 7500),
+    order(56, 'Gil Andrade', 'gil@exemplo.com', 'cancelled', 'Cancelado', 15000),
+  ]
+  const history = [
+    { id: 'h0', kind: 'created', title: 'Pedido criado', detail: null, actor: null, at: '2027-06-10T11:50:00Z' },
+    { id: 'h1', kind: 'payment_started', title: 'Pagamento iniciado', detail: 'Pix', actor: null, at: '2027-06-10T11:51:00Z' },
+    { id: 'h2', kind: 'paid', title: 'Pagamento confirmado', detail: null, actor: null, at: '2027-06-10T12:00:00Z' },
+    { id: 'h3', kind: 'refunded', title: 'Reembolso de R$ 150,00', detail: 'Pedido de quem comprou · 1 ingresso(s) cancelado(s)', actor: { id: 'u-me', name: 'Rita Organiza' }, at: '2027-06-11T10:00:00Z' },
+  ]
+  const refund = { id: 'r-1', amount: money(15000), status: 'completed', status_label: 'Reembolsado', reason: 'buyer_request', reason_label: 'Pedido de quem comprou', note: 'Bia não vai poder ir', cancelled_item_ids: ['i-2'], failure_reason: null, created_at: '2027-06-11T10:00:00Z', completed_at: '2027-06-11T10:00:00Z' }
+  await page.route('**/api/v1/editions/ed-27/ticketing/orders**', (route) => {
+    const path = new URL(route.request().url()).pathname
+    if (path.endsWith('/orders')) return route.fulfill({ status: 200, json: { data: list, meta: { current_page: 1, last_page: 9, total: 214 } } })
+    if (path.endsWith('/history')) return route.fulfill({ status: 200, json: { data: history } })
+    if (path.endsWith('/refunds')) return route.fulfill({ status: 200, json: { data: [refund] } })
+    return route.fulfill({ status: 200, json: { data: featured, meta: { payment: { method: 'pix', method_label: 'Pix', status: 'paid', status_label: 'Pago', installments: 1, expires_at: null, paid_at: '2027-06-10T12:00:00Z', failure_reason: null } } } })
+  })
+  await goto('/pedidos', { waitUntil: 'hydration' })
+  await page.getByRole('button', { name: 'Abrir pedido 58' }).click()
+  await expect(page.getByTestId('order-history')).toContainText('Reembolso de R$ 150,00')
+  await page.screenshot({ path: out('painel-pedidos') })
+})
