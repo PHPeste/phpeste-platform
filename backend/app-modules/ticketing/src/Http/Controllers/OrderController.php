@@ -32,11 +32,14 @@ class OrderController
      * Pedidos da edição, do mais novo para o mais antigo. `status` filtra pela
      * situação; `q` procura no nome, no e-mail ou no número (com ou sem #).
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request, EditionDirectory $editions, CurrentEdition $currentEdition): AnonymousResourceCollection
     {
         Gate::authorize(EditionPermission::ViewOrders->value);
 
-        return OrderResource::collection($this->filtered($request)->with('items')->paginate(25));
+        $timezone = $editions->summary((string) $currentEdition->id())['timezone'] ?? 'America/Fortaleza';
+
+        return OrderResource::collection($this->filtered($request)->with('items')->paginate(25))
+            ->additional(['meta' => ['summary' => $this->summary($timezone)]]);
     }
 
     /**
@@ -123,6 +126,29 @@ class OrderController
         Gate::authorize(EditionPermission::ManageEdition->value);
 
         return response()->json(['data' => ['delivery_id' => $reminder->handle($this->order($request), $this->actor($request))]], 202);
+    }
+
+    /**
+     * Números da edição inteira para o topo da lista (não seguem o filtro):
+     * pagos, aguardando (e quantos vencem até o fim do dia), reembolsos e a
+     * taxa do gateway sobre o bruto recebido.
+     *
+     * @return array{paid: int, awaiting: int, awaiting_expiring_today: int, refunds: int, refunded_cents: int, gross_cents: int, gateway_fee_cents: int}
+     */
+    private function summary(string $timezone): array
+    {
+        $received = [OrderStatus::Paid->value, OrderStatus::Refunded->value];
+        $endOfDay = now($timezone)->endOfDay()->utc();
+
+        return [
+            'paid' => Order::query()->where('status', OrderStatus::Paid->value)->count(),
+            'awaiting' => Order::query()->where('status', OrderStatus::AwaitingPayment->value)->count(),
+            'awaiting_expiring_today' => Order::query()->where('status', OrderStatus::AwaitingPayment->value)->where('expires_at', '<=', $endOfDay)->count(),
+            'refunds' => Order::query()->where('refunded_cents', '>', 0)->count(),
+            'refunded_cents' => (int) Order::query()->sum('refunded_cents'),
+            'gross_cents' => (int) Order::query()->whereIn('status', $received)->sum('total_cents'),
+            'gateway_fee_cents' => (int) Order::query()->whereIn('status', $received)->sum('gateway_fee_cents'),
+        ];
     }
 
     /**

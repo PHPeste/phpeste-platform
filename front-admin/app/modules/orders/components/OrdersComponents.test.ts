@@ -12,6 +12,7 @@ const order: Order = {
     { id: 'i-2', ticketTypeName: 'Inteira', batchName: '1º lote', totalCents: 15000, attendeeName: 'Bia Lima', attendeeEmail: 'bia@exemplo.com', cancelled: false, externalCode: null },
   ],
   activeTickets: 2,
+  itemsSummary: '2× Inteira',
 }
 const flat = (text: string) => text.replace(/\s/g, ' ')
 

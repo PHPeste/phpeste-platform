@@ -132,7 +132,7 @@ test('pedidos', async ({ page, goto }) => {
   const refund = { id: 'r-1', amount: money(15000), status: 'completed', status_label: 'Reembolsado', reason: 'buyer_request', reason_label: 'Pedido de quem comprou', note: 'Bia não vai poder ir', cancelled_item_ids: ['i-2'], failure_reason: null, created_at: '2027-06-11T10:00:00Z', completed_at: '2027-06-11T10:00:00Z' }
   await page.route('**/api/v1/editions/ed-27/ticketing/orders**', (route) => {
     const path = new URL(route.request().url()).pathname
-    if (path.endsWith('/orders')) return route.fulfill({ status: 200, json: { data: list, meta: { current_page: 1, last_page: 9, total: 214 } } })
+    if (path.endsWith('/orders')) return route.fulfill({ status: 200, json: { data: list, meta: { current_page: 1, last_page: 9, total: 214, summary: { paid: 187, awaiting: 9, awaiting_expiring_today: 3, refunds: 4, refunded_cents: 52500, gross_cents: 2805000, gateway_fee_cents: 100980 } } } })
     if (path.endsWith('/history')) return route.fulfill({ status: 200, json: { data: history } })
     if (path.endsWith('/refunds')) return route.fulfill({ status: 200, json: { data: [refund] } })
     return route.fulfill({ status: 200, json: { data: featured, meta: { payment: { method: 'pix', method_label: 'Pix', status: 'paid', status_label: 'Pago', installments: 1, expires_at: null, paid_at: '2027-06-10T12:00:00Z', failure_reason: null } } } })
@@ -140,5 +140,41 @@ test('pedidos', async ({ page, goto }) => {
   await goto('/pedidos', { waitUntil: 'hydration' })
   await page.getByRole('button', { name: 'Abrir pedido 58' }).click()
   await expect(page.getByTestId('order-history')).toContainText('Reembolso de R$ 150,00')
+  // Espera a gaveta terminar de deslizar, senão o print sai com ela cortada.
+  await page.waitForFunction(() => {
+    const box = document.querySelector('dialog[open] .modal-box')?.getBoundingClientRect()
+    return !!box && Math.abs(box.right - window.innerWidth) < 1
+  })
   await page.screenshot({ path: out('painel-pedidos') })
+})
+
+test('pagamentos', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1530 })
+  await signedIn(page)
+  const active = {
+    id: 'a-2', driver: 'asaas', environment: 'production', environment_label: 'Produção', credentials_hint: '••••x9Qa',
+    holder: { type: 'company', type_label: 'Pessoa jurídica (CNPJ)', name: 'Associação PHP Paraíba', document: '11.222.***/0001-**' },
+    methods: [{ key: 'pix', label: 'Pix' }, { key: 'card', label: 'Cartão de crédito' }], max_installments: 3, pix_expiration_minutes: 30,
+    active: true, ready: true, verified_at: '2027-05-20T13:10:00Z', webhook_verified_at: '2027-05-20T13:14:00Z', webhook_rejections: { count: 0, last_at: null },
+    retired_at: null, created_at: '2027-05-20T13:00:00Z', webhook_url: 'https://api.phpeste.dev/api/v1/webhooks/payments/Hk2…', last_event_at: '2027-06-10T12:00:00Z',
+  }
+  const previous = { ...active, id: 'a-1', environment: 'sandbox', environment_label: 'Sandbox (testes)', credentials_hint: '••••abcd', holder: { ...active.holder, type: 'individual', name: 'Fulana de Tal' }, active: false, ready: false, retired_at: '2027-05-20T13:00:00Z', webhook_url: null, last_event_at: null }
+  const event = (id: string, type: string, status: string, label: string, minutes: number, extra: Record<string, unknown> = {}) => ({
+    id, payment_account_id: 'a-2', driver: 'asaas', event_id: `evt_${id}`, type, gateway_charge_id: `pay_${id}`, status, status_label: label, result: null, attempts: 1, can_reprocess: false, next_attempt_at: null, processed_at: null,
+    received_at: new Date(Date.UTC(2027, 5, 10, 12, 0) - minutes * 60_000).toISOString(), ...extra,
+  })
+  const events = [
+    event('481', 'PAYMENT_RECEIVED', 'processed', 'Processado', 0, { result: 'Pedido #58 pago' }),
+    event('480', 'PAYMENT_CREATED', 'ignored', 'Ignorado', 9, { result: 'Evento sem efeito no pedido', can_reprocess: true }),
+    event('479', 'PAYMENT_RECEIVED', 'failed', 'Com falha', 42, { result: 'Cobrança não encontrada', attempts: 5, can_reprocess: true }),
+    event('478', 'PAYMENT_REFUNDED', 'processed', 'Processado', 95, { result: 'Reembolso do pedido #41 confirmado' }),
+  ]
+  await page.route('**/api/v1/editions/ed-27/payments/**', (route) => {
+    const path = new URL(route.request().url()).pathname
+    if (path.endsWith('/webhook-events')) return route.fulfill({ status: 200, json: { data: events, meta: { current_page: 1, last_page: 1, total: 4 } } })
+    return route.fulfill({ status: 200, json: { data: { active, previous: [previous], drivers: [{ key: 'asaas', label: 'Asaas', needs_public_key: false }, { key: 'mercadopago', label: 'Mercado Pago', needs_public_key: true }] } } })
+  })
+  await goto('/pagamentos', { waitUntil: 'hydration' })
+  await expect(page.getByTestId('webhook-events')).toContainText('PAYMENT_REFUNDED')
+  await page.screenshot({ path: out('painel-pagamentos') })
 })

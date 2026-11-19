@@ -22,7 +22,7 @@ describe('navegação do painel', () => {
   })
 
   it.each([
-    ['financeiro', ['overview', 'tickets', 'orders', 'payments', 'finance']],
+    ['financeiro', ['overview', 'tickets', 'orders', 'finance']],
     ['avaliador', ['overview', 'review']],
     ['checkin', ['overview', 'checkin']],
     ['voluntario', ['overview', 'checkin']],

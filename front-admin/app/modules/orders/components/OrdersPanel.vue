@@ -10,7 +10,7 @@ import locale from '../locales/pt-br'
 const props = defineProps<{ editionId: string, readOnly: boolean, canManage: boolean, canRefund: boolean }>()
 
 const orders = useOrders(props.editionId)
-const { orders: list, page, pageCount, total, state, filtered, detail, detailState } = orders
+const { orders: list, summary, page, pageCount, total, state, filtered, detail, detailState } = orders
 const toast = useToast()
 
 const statusInput = ref('')
@@ -18,7 +18,14 @@ const queryInput = ref('')
 const drawerOpen = ref(false)
 const exporting = ref(false)
 
-const statusOptions = [{ value: '', label: locale.allStatuses }, ...Object.entries(locale.statuses).map(([value, label]) => ({ value, label }))]
+const chips = Object.entries(locale.chips).map(([value, label]) => ({ value, label }))
+const percent = new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 })
+const feeShare = computed(() => (summary.value && summary.value.grossCents > 0 ? locale.kpiFeeShare.replace('{p}', percent.format(summary.value.gatewayFeeCents / summary.value.grossCents)) : undefined))
+
+function pickStatus(value: string) {
+  statusInput.value = value
+  applyFilters()
+}
 const currentPage = computed({ get: () => page.value, set: (value: number) => orders.goTo(value) })
 
 function applyFilters() {
@@ -68,49 +75,55 @@ onMounted(() => orders.load())
 
     <p v-if="readOnly" role="status" class="alert alert-info alert-soft text-sm">{{ locale.readOnly }}</p>
 
-    <form class="flex flex-wrap items-end gap-3" role="search" @submit.prevent="applyFilters">
-      <div class="min-w-64 grow">
-        <PhInput v-model="queryInput" type="search" :label="locale.search" :placeholder="locale.searchPlaceholder" />
-      </div>
-      <div class="w-56">
-        <PhSelect v-model="statusInput" :label="locale.statusFilter" :options="statusOptions" @update:model-value="applyFilters" />
-      </div>
-      <PhButton type="submit" variant="secondary">{{ locale.search }}</PhButton>
-    </form>
+    <div v-if="summary" class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4" data-testid="orders-summary">
+      <PhKpi :label="locale.kpiPaid" :value="summary.paid" />
+      <PhKpi :label="locale.kpiAwaiting" :value="summary.awaiting" :hint="summary.awaitingExpiringToday ? locale.kpiExpiringToday.replace('{n}', String(summary.awaitingExpiringToday)) : undefined" />
+      <PhKpi :label="locale.kpiRefunds" :value="summary.refunds" :hint="summary.refundedCents ? formatCents(summary.refundedCents) : undefined" />
+      <PhKpi :label="locale.kpiFee" :value="formatCents(summary.gatewayFeeCents)" :hint="feeShare" />
+    </div>
 
-    <PhPageSkeleton v-if="state === 'loading'" :cards="1" :lines="8" />
-    <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="orders.load" />
-    <PhEmptyState v-else-if="!list.length && filtered" :title="locale.noMatches" :description="locale.noMatchesHint">
-      <PhButton variant="secondary" @click="clearFilters">{{ locale.clearFilters }}</PhButton>
-    </PhEmptyState>
-    <PhEmptyState v-else-if="!list.length" :title="locale.noOrders" :description="locale.noOrdersHint">
-      <PhButton variant="secondary" to="/ingressos">{{ locale.goTickets }}</PhButton>
-    </PhEmptyState>
+    <section class="card overflow-hidden border border-base-300 bg-base-100">
+      <div class="flex flex-wrap items-center gap-2.5 border-b border-(--ph-line) px-5 py-4">
+        <form class="w-full max-w-75" role="search" @submit.prevent="applyFilters">
+          <input v-model="queryInput" type="search" class="input w-full" :placeholder="locale.searchPlaceholder" :aria-label="locale.searchLabel">
+        </form>
+        <div class="flex flex-wrap gap-2.5" role="group" :aria-label="locale.filterLabel">
+          <PhChip v-for="chip in chips" :key="chip.value" :model-value="statusInput === chip.value" @update:model-value="pickStatus(chip.value)">{{ chip.label }}</PhChip>
+        </div>
+      </div>
 
-    <PhCard v-else>
-      <div class="flex flex-col gap-3">
-        <p class="text-sm text-(--ph-ink-3) tabular-nums">{{ locale.total.replace('{n}', String(total)) }}</p>
+      <div v-if="state !== 'ready' || !list.length" class="p-5">
+        <PhPageSkeleton v-if="state === 'loading'" :cards="1" :lines="8" />
+        <PhLoadError v-else-if="state === 'error'" :title="locale.loadError" @retry="orders.load" />
+        <PhEmptyState v-else-if="filtered" :title="locale.noMatches" :description="locale.noMatchesHint">
+          <PhButton variant="secondary" @click="clearFilters">{{ locale.clearFilters }}</PhButton>
+        </PhEmptyState>
+        <PhEmptyState v-else :title="locale.noOrders" :description="locale.noOrdersHint">
+          <PhButton variant="secondary" to="/ingressos">{{ locale.goTickets }}</PhButton>
+        </PhEmptyState>
+      </div>
+
+      <template v-else>
         <PhTable :caption="locale.tableCaption">
           <thead>
             <tr>
               <th scope="col">{{ locale.colNumber }}</th>
               <th scope="col">{{ locale.colBuyer }}</th>
-              <th scope="col" class="text-right">{{ locale.colTickets }}</th>
+              <th scope="col">{{ locale.colItems }}</th>
               <th scope="col" class="text-right">{{ locale.colTotal }}</th>
               <th scope="col">{{ locale.colStatus }}</th>
               <th scope="col">{{ locale.colDate }}</th>
+              <th scope="col"><span class="sr-only">{{ locale.openButton }}</span></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="order in list" :key="order.id" class="hover">
-              <td>
-                <button type="button" class="link font-medium tabular-nums" :aria-label="locale.open.replace('{n}', String(order.number))" @click="openOrder(order.id)">#{{ order.number }}</button>
-              </td>
+              <td class="font-medium tabular-nums">#{{ order.number }}</td>
               <td>
                 <span class="block font-medium">{{ order.buyerName }}</span>
                 <span class="block text-xs text-(--ph-ink-3)">{{ order.buyerEmail }}</span>
               </td>
-              <td class="text-right tabular-nums">{{ order.activeTickets }}</td>
+              <td class="text-sm">{{ order.itemsSummary || '—' }}</td>
               <td class="text-right tabular-nums">
                 {{ formatCents(order.totalCents) }}
                 <span v-if="order.refundedCents > 0" class="block text-xs text-(--ph-ink-3)">{{ locale.refundedPart.replace('{valor}', formatCents(order.refundedCents)) }}</span>
@@ -120,14 +133,18 @@ onMounted(() => orders.load())
                 <span v-if="order.externalPlatform" class="block text-xs text-(--ph-ink-3)">{{ locale.imported.replace('{plataforma}', order.externalPlatform) }}</span>
               </td>
               <td class="text-sm tabular-nums">{{ formatDateTime(order.createdAt) }}</td>
+              <td class="text-right">
+                <button type="button" class="btn btn-ghost btn-sm border-base-300" :aria-label="locale.open.replace('{n}', String(order.number))" @click="openOrder(order.id)">{{ locale.openButton }}</button>
+              </td>
             </tr>
           </tbody>
         </PhTable>
-        <div v-if="pageCount > 1" class="flex justify-end">
-          <PhPagination v-model:page="currentPage" :page-count="pageCount" />
+        <div class="flex flex-wrap items-center justify-between gap-3 border-t border-(--ph-line) px-5 py-3.5">
+          <span class="text-xs text-(--ph-ink-3) tabular-nums">{{ locale.showing.replace('{n}', String(list.length)).replace('{total}', String(total)) }}</span>
+          <PhPagination v-if="pageCount > 1" v-model:page="currentPage" :page-count="pageCount" />
         </div>
-      </div>
-    </PhCard>
+      </template>
+    </section>
 
     <OrderDrawer
       v-model="drawerOpen"

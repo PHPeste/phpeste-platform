@@ -53,6 +53,7 @@ app/
     palestrantes/[id].vue          # módulo speakers: perfil, palestras, viagem e hospedagem e confirmação
     ingressos/index.vue            # módulo tickets: tipos e lotes com valor líquido e prévia do checkout, cupons e regras da venda
     pedidos/index.vue              # módulo orders: lista com busca e filtro, detalhe com pagamento e histórico, reembolso, marcar como pago, reenviar cobrança, CSV
+    pagamentos/index.vue           # módulo payments (só organização): conectar/trocar gateway, testar conexão, webhook e último evento, prévia do recebedor, eventos com reprocessar
     configuracoes.vue              # módulo editionSettings: dados e etapa da edição, domínio e site próprio, privacidade e auditoria
     meu-perfil.vue                 # módulo myProfile: conta, senha, sessões ativas e notificações
     index.vue

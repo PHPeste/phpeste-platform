@@ -120,6 +120,22 @@ it('valida as chaves no gateway e fica pronta só depois de receber o webhook as
         ->assertJsonPath('data', ['driver' => 'fake', 'public_key' => null, 'holder_name' => 'Fulana de Tal, responsável financeira da PHPeste 2027', 'holder_type' => 'individual', 'methods' => ['pix', 'card'], 'max_installments' => 3, 'pix_expiration_minutes' => 30, 'sandbox' => true, 'ready' => true]);
 });
 
+it('mostra quando chegou o último evento do webhook da conta ativa', function (): void {
+    $id = $this->postJson($this->base, accountPayload())->json('data.id');
+    $this->getJson($this->base)->assertJsonPath('data.active.last_event_at', null);
+
+    $url = parse_url((string) $this->getJson($this->base)->json('data.active.webhook_url'), PHP_URL_PATH);
+    $this->travel(5)->minutes();
+    webhook($this, $url, '{"id":"evt_1","type":"ping"}')->assertOk();
+
+    $this->getJson($this->base)
+        ->assertJsonPath('data.active.id', $id)
+        ->assertJsonPath('data.active.last_event_at', now()->utc()->toIso8601ZuluString());
+
+    $this->postJson($this->base, accountPayload(['api_key' => 'nova_chave_3333']))->assertCreated();
+    $this->getJson($this->base)->assertJsonPath('data.active.last_event_at', null)->assertJsonPath('data.previous.0.last_event_at', null);
+});
+
 it('trocar a conta cria uma nova, guarda a antiga só para consulta e audita sem expor a chave', function (): void {
     $old = $this->postJson($this->base, accountPayload())->json('data.id');
     $new = $this->postJson($this->base, accountPayload(['api_key' => 'nova_chave_produção_wxyz', 'environment' => 'production', 'holder_type' => 'company', 'holder_name' => 'Associação PHP Paraíba', 'holder_document' => '11.222.333/0001-81']))

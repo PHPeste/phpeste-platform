@@ -38,7 +38,7 @@ async function open(page: Page, goto: (url: string, options: { waitUntil: 'hydra
     if (await handle(route, call)) return
     const order = call.path.includes(awaitingOrder.id) ? awaitingOrder : paidOrder
     if (call.path === '' && url.searchParams.get('status') === 'expired') return route.fulfill({ status: 200, json: { data: [], meta: { current_page: 1, last_page: 1, total: 0 } } })
-    if (call.path === '') return route.fulfill({ status: 200, json: { data: [paidOrder, awaitingOrder], meta: { current_page: 1, last_page: 1, total: 2 } } })
+    if (call.path === '') return route.fulfill({ status: 200, json: { data: [paidOrder, awaitingOrder], meta: { current_page: 1, last_page: 1, total: 2, summary: { paid: 1, awaiting: 1, awaiting_expiring_today: 1, refunds: 0, refunded_cents: 0, gross_cents: 30000, gateway_fee_cents: 1497 } } } })
     if (call.path === '/export') return route.fulfill({ status: 200, headers: { 'Content-Type': 'text/csv' }, body: '﻿Pedido;Situação\n#42;Pago\n' })
     if (call.path.endsWith('/history')) return route.fulfill({ status: 200, json: { data: history } })
     if (call.path.endsWith('/refunds') && call.method === 'GET') return route.fulfill({ status: 200, json: { data: [] } })
@@ -59,9 +59,15 @@ test.describe('Pedidos', () => {
 
     await expect(page.getByRole('row', { name: /Ana Souza/ })).toContainText('R$ 300,00')
     await expect(page.getByRole('row', { name: /Caio Reis/ })).toContainText('Aguardando pagamento')
-    await expect(page.getByText('2 pedido(s)')).toBeVisible()
+    await expect(page.getByRole('row', { name: /Ana Souza/ })).toContainText('2× Inteira')
+    await expect(page.getByText('Mostrando 2 de 2 pedidos')).toBeVisible()
+    const summary = page.getByTestId('orders-summary')
+    await expect(summary).toContainText('Aguardando pagamento')
+    await expect(summary).toContainText('1 expiram hoje')
+    await expect(summary).toContainText('R$ 14,97')
+    await expect(summary).toContainText('5,0% do bruto')
 
-    await page.getByLabel('Situação').selectOption('expired')
+    await page.getByRole('group', { name: 'Filtrar pela situação' }).getByRole('button', { name: 'Expirados' }).click()
     await expect(page.getByText('Nenhum pedido com esse filtro')).toBeVisible()
     expect(calls.some((call) => call.path === '' && call.query.includes('status=expired'))).toBe(true)
 
@@ -82,7 +88,8 @@ test.describe('Pedidos', () => {
     await expect(drawer.getByRole('button', { name: 'Marcar como pago' })).toHaveCount(0)
     await drawer.getByRole('button', { name: 'Reembolsar' }).click()
 
-    const modal = page.getByRole('dialog', { name: 'Reembolsar o pedido #42' })
+    const modal = page.getByRole('dialog', { name: 'Reembolsar pedido #42' })
+    await expect(modal.getByTestId('refund-summary')).toContainText('Ana Souza · 2× Inteira · R$ 300,00 pagos')
     await expect(modal.getByTestId('refund-fee-warning')).toContainText('R$ 14,97')
     await modal.getByLabel('Parcial').check()
     await modal.getByLabel('Valor a devolver').fill('50,00')
