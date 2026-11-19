@@ -41,11 +41,13 @@ use PHPeste\Ticketing\Enums\OrderStatus;
  * @property Carbon|null $expired_at
  * @property Carbon|null $cancelled_at
  * @property Carbon|null $refunded_at
+ * @property int $refunded_cents
+ * @property int|null $gateway_fee_cents
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Collection<int, OrderItem> $items
  */
-#[Fillable(['edition_id', 'number', 'status', 'user_id', 'buyer_name', 'buyer_email', 'buyer_document', 'buyer_document_hash', 'subtotal_cents', 'discount_cents', 'fee_cents', 'total_cents', 'coupon_id', 'coupon_code', 'coupon_redemption_id', 'payment_account_id', 'access_token', 'idempotency_key', 'request_hash', 'expires_at', 'paid_at', 'expired_at', 'cancelled_at', 'refunded_at'])]
+#[Fillable(['edition_id', 'number', 'status', 'user_id', 'buyer_name', 'buyer_email', 'buyer_document', 'buyer_document_hash', 'subtotal_cents', 'discount_cents', 'fee_cents', 'total_cents', 'coupon_id', 'coupon_code', 'coupon_redemption_id', 'payment_account_id', 'access_token', 'idempotency_key', 'request_hash', 'expires_at', 'paid_at', 'expired_at', 'cancelled_at', 'refunded_at', 'refunded_cents', 'gateway_fee_cents'])]
 #[Hidden(['buyer_document', 'buyer_document_hash', 'access_token', 'request_hash'])]
 #[Table(name: 'orders')]
 class Order extends Model
@@ -83,6 +85,8 @@ class Order extends Model
             'discount_cents' => 'integer',
             'fee_cents' => 'integer',
             'total_cents' => 'integer',
+            'refunded_cents' => 'integer',
+            'gateway_fee_cents' => 'integer',
             'access_token' => 'encrypted',
             'expires_at' => 'datetime',
             'paid_at' => 'datetime',

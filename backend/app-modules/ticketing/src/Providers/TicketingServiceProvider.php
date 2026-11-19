@@ -15,6 +15,7 @@ use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Payments\Contracts\AccountUsage;
 use PHPeste\Ticketing\Cloning\TicketingCloner;
 use PHPeste\Ticketing\Console\ExpireOrdersCommand;
+use PHPeste\Ticketing\Console\ReconcileOrdersCommand;
 use PHPeste\Ticketing\Console\ReencryptOrders;
 use PHPeste\Ticketing\Console\RotateTicketBatches;
 use PHPeste\Ticketing\Orders\OrderLedger;
@@ -36,12 +37,13 @@ class TicketingServiceProvider extends ServiceProvider
         Gate::define('ticketing.view', fn (Authenticatable $user): bool => Gate::forUser($user)->any([EditionPermission::ManageEdition->value, EditionPermission::ViewOrders->value]));
 
         if ($this->app->runningInConsole()) {
-            $this->commands([RotateTicketBatches::class, ExpireOrdersCommand::class, ReencryptOrders::class]);
+            $this->commands([RotateTicketBatches::class, ExpireOrdersCommand::class, ReencryptOrders::class, ReconcileOrdersCommand::class]);
         }
 
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
             $schedule->command('ticketing:rotate-batches')->everyMinute()->withoutOverlapping();
             $schedule->command('ticketing:expire-orders')->everyMinute()->withoutOverlapping();
+            $schedule->command('ticketing:reconcile')->dailyAt('04:00')->timezone('America/Sao_Paulo')->withoutOverlapping();
         });
     }
 }

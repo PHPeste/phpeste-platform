@@ -34,6 +34,8 @@ class OrderResource extends ApiResource
             'discount' => $this->money($order->discount_cents),
             'fee' => $this->money($order->fee_cents),
             'total' => $this->money($order->total_cents),
+            'refunded' => $this->money($order->refunded_cents),
+            'gateway_fee' => $this->money($order->gateway_fee_cents),
             'requires_payment' => $order->total_cents > 0,
             'coupon_code' => $order->coupon_code,
             'payment_account_id' => $order->payment_account_id,
@@ -51,6 +53,7 @@ class OrderResource extends ApiResource
                 'total' => $this->money($item->total_cents),
                 'attendee' => ['name' => $item->attendee_name, 'email' => $item->attendee_email],
                 'answers' => $item->answers ?? (object) [],
+                'cancelled_at' => $this->isoDate($item->cancelled_at),
             ])->all(),
             ...($this->withToken ? ['access_token' => $order->access_token] : []),
         ];

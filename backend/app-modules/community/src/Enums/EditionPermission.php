@@ -12,6 +12,7 @@ enum EditionPermission: string
     case ManageProgram = 'program.manage';
     case ViewSpeakerPrivateData = 'speakers.private';
     case ViewOrders = 'orders.view';
+    case RefundOrders = 'orders.refund';
     case ManageGateway = 'payments.gateway';
     case CheckIn = 'checkin.scan';
 
@@ -24,6 +25,7 @@ enum EditionPermission: string
             self::ManageProgram => 'Gerenciar palestrantes e grade',
             self::ViewSpeakerPrivateData => 'Ver acessibilidade e alimentação dos palestrantes',
             self::ViewOrders => 'Ver pedidos e pagamentos',
+            self::RefundOrders => 'Reembolsar pedidos',
             self::ManageGateway => 'Editar chaves do gateway',
             self::CheckIn => 'Fazer check-in',
         };

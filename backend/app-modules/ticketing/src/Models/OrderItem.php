@@ -27,11 +27,13 @@ use PHPeste\Community\Tenancy\BelongsToEdition;
  * @property string $attendee_name
  * @property string $attendee_email
  * @property array<string, string|bool>|null $answers
+ * @property Carbon|null $cancelled_at
+ * @property string|null $refund_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Order $order
  */
-#[Fillable(['edition_id', 'order_id', 'ticket_type_id', 'ticket_batch_id', 'ticket_type_name', 'batch_name', 'unit_price_cents', 'discount_cents', 'fee_cents', 'total_cents', 'attendee_name', 'attendee_email', 'answers'])]
+#[Fillable(['edition_id', 'order_id', 'ticket_type_id', 'ticket_batch_id', 'ticket_type_name', 'batch_name', 'unit_price_cents', 'discount_cents', 'fee_cents', 'total_cents', 'attendee_name', 'attendee_email', 'answers', 'cancelled_at', 'refund_id'])]
 #[Table(name: 'order_items')]
 class OrderItem extends Model
 {
@@ -57,6 +59,7 @@ class OrderItem extends Model
             'fee_cents' => 'integer',
             'total_cents' => 'integer',
             'answers' => 'array',
+            'cancelled_at' => 'datetime',
         ];
     }
 }
