@@ -68,6 +68,8 @@ class CheckoutOrderController
             $request->integer('installments', 1),
             is_string($token) && $token !== '' ? $token : null,
             $request->ip(),
+            $request->filled('card_brand') ? (string) $request->string('card_brand') : null,
+            $request->filled('card_issuer') ? (string) $request->string('card_issuer') : null,
         );
 
         return response()->json(['data' => $this->payment($attempt, $order->refresh())]);

@@ -17,7 +17,7 @@ class CreatePaymentAccount
     public function __construct(private readonly AccountUsage $usage) {}
 
     /**
-     * @param  array{driver: string, environment: string, api_key: string, webhook_secret: string, holder_type: string, holder_name: string, holder_document: string, methods: list<string>, max_installments: int, pix_expiration_minutes: int}  $data
+     * @param  array{driver: string, environment: string, api_key: string, webhook_secret: string, public_key: string|null, holder_type: string, holder_name: string, holder_document: string, methods: list<string>, max_installments: int, pix_expiration_minutes: int}  $data
      */
     public function handle(string $editionId, array $data, bool $confirmed, ?string $actorId): PaymentAccount
     {
@@ -41,7 +41,7 @@ class CreatePaymentAccount
                 'edition_id' => $editionId,
                 'driver' => $data['driver'],
                 'environment' => $data['environment'],
-                'credentials' => ['api_key' => $data['api_key'], 'webhook_secret' => $data['webhook_secret']],
+                'credentials' => array_filter(['api_key' => $data['api_key'], 'webhook_secret' => $data['webhook_secret'], 'public_key' => $data['public_key'] ?? null], fn (?string $value): bool => $value !== null),
                 'credentials_hint' => mb_substr($data['api_key'], -4),
                 'holder_type' => $data['holder_type'],
                 'holder_name' => $data['holder_name'],

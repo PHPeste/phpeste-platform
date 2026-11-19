@@ -22,7 +22,7 @@ use PHPeste\Payments\Enums\PaymentMethod;
  * @property string $edition_id
  * @property string $driver
  * @property GatewayEnvironment $environment
- * @property array{api_key: string, webhook_secret: string} $credentials
+ * @property array{api_key: string, webhook_secret: string, public_key?: string} $credentials
  * @property string $credentials_hint
  * @property HolderType $holder_type
  * @property string $holder_name
@@ -84,6 +84,7 @@ class PaymentAccount extends Model
             $this->max_installments,
             $this->pix_expiration_minutes,
             $this->isReady(),
+            is_string($this->credentials['public_key'] ?? null) ? $this->credentials['public_key'] : null,
         );
     }
 

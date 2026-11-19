@@ -24,5 +24,7 @@ final readonly class StartPayment
         #[SensitiveParameter]
         public ?string $cardToken = null,
         public ?string $remoteIp = null,
+        public ?string $cardBrand = null,
+        public ?string $cardIssuer = null,
     ) {}
 }

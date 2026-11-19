@@ -120,7 +120,7 @@ class ChargeService implements PaymentProcessor
                 ...$values,
                 'status' => $to->value,
                 'paid_at' => $to === ChargeStatus::Paid ? ($snapshot->paidAt ?? now()) : $charge->paid_at,
-                'failure_reason' => $to === ChargeStatus::Failed ? new GatewayRequestFailed('', GatewayRequestFailed::DECLINED)->publicMessage() : $charge->failure_reason,
+                'failure_reason' => $to === ChargeStatus::Failed ? ($snapshot->failureReason ?? new GatewayRequestFailed('', GatewayRequestFailed::DECLINED)->publicMessage()) : $charge->failure_reason,
                 'refunded_cents' => $to === ChargeStatus::Refunded ? $charge->amount_cents : $charge->refunded_cents,
             ]);
 
@@ -177,11 +177,11 @@ class ChargeService implements PaymentProcessor
                 $pix = $gateway->createPixCharge($credentials, $request);
                 $attributes += ['gateway_charge_id' => $pix->chargeId, 'status' => ChargeStatus::Pending, 'pix_copy_paste' => $pix->copyPaste, 'pix_qr_code' => $pix->qrCodeBase64];
             } elseif ($payment->cardToken !== null && in_array(GatewayCapability::CardToken, $gateway->capabilities(), true)) {
-                $snapshot = $gateway->chargeCard($credentials, $request, new CardPayment($payment->cardToken, $payment->installments, $payment->remoteIp));
+                $snapshot = $gateway->chargeCard($credentials, $request, new CardPayment($payment->cardToken, $payment->installments, $payment->remoteIp, $payment->cardBrand, $payment->cardIssuer));
                 $attributes += [
                     'gateway_charge_id' => $snapshot->chargeId,
                     'status' => ChargeStatus::Pending,
-                    'failure_reason' => $snapshot->status === ChargeStatus::Failed ? new GatewayRequestFailed('', GatewayRequestFailed::DECLINED)->publicMessage() : null,
+                    'failure_reason' => $snapshot->status === ChargeStatus::Failed ? ($snapshot->failureReason ?? new GatewayRequestFailed('', GatewayRequestFailed::DECLINED)->publicMessage()) : null,
                 ];
             } else {
                 $checkout = $gateway->createHostedCheckout($credentials, $request, $payment->method, $payment->installments, $payment->returnUrl);
@@ -232,6 +232,10 @@ class ChargeService implements PaymentProcessor
             PaymentMethod::Card => in_array(GatewayCapability::HostedCard, $capabilities, true) || ($payment->cardToken !== null && in_array(GatewayCapability::CardToken, $capabilities, true)),
             PaymentMethod::Boleto => in_array(GatewayCapability::HostedBoleto, $capabilities, true),
         };
+
+        if ($payment->method === PaymentMethod::Card && $payment->cardToken === null && !in_array(GatewayCapability::HostedCard, $capabilities, true) && in_array(GatewayCapability::CardToken, $capabilities, true)) {
+            throw ValidationException::withMessages(['card_token' => 'Os dados do cartão não chegaram. Preencha o cartão de novo.']);
+        }
 
         if (!$supported || !in_array($payment->method, $account->paymentMethods(), true)) {
             throw ValidationException::withMessages(['method' => sprintf('%s não está disponível nesta edição.', $payment->method->label())]);

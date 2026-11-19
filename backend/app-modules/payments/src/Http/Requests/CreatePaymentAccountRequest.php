@@ -37,6 +37,7 @@ class CreatePaymentAccountRequest extends FormRequest
             'environment' => ['required', Rule::enum(GatewayEnvironment::class)],
             'api_key' => ['required', 'string', 'min:8', 'max:500'],
             'webhook_secret' => ['required', 'string', 'min:8', 'max:500'],
+            'public_key' => [Rule::requiredIf(fn (): bool => resolve(GatewayRegistry::class)->needsPublicKey((string) $this->input('driver'))), 'nullable', 'string', 'min:8', 'max:200'],
             'holder_type' => ['required', Rule::enum(HolderType::class)],
             'holder_name' => ['required', 'string', 'min:3', 'max:120'],
             'holder_document' => ['required', 'string', new TaxDocument(HolderType::tryFrom((string) $this->input('holder_type')))],
@@ -50,11 +51,11 @@ class CreatePaymentAccountRequest extends FormRequest
      */
     public function messages(): array
     {
-        return ['methods.required' => 'Escolha pelo menos um método de pagamento.', 'methods.min' => 'Escolha pelo menos um método de pagamento.'];
+        return ['public_key.required' => 'Informe a chave pública: o formulário de cartão do gateway usa essa chave no navegador.', 'methods.required' => 'Escolha pelo menos um método de pagamento.', 'methods.min' => 'Escolha pelo menos um método de pagamento.'];
     }
 
     /**
-     * @return array{driver: string, environment: string, api_key: string, webhook_secret: string, holder_type: string, holder_name: string, holder_document: string, methods: list<string>, max_installments: int, pix_expiration_minutes: int}
+     * @return array{driver: string, environment: string, api_key: string, webhook_secret: string, public_key: string|null, holder_type: string, holder_name: string, holder_document: string, methods: list<string>, max_installments: int, pix_expiration_minutes: int}
      */
     public function account(): array
     {
@@ -63,6 +64,7 @@ class CreatePaymentAccountRequest extends FormRequest
             'environment' => $this->string('environment')->toString(),
             'api_key' => $this->string('api_key')->trim()->toString(),
             'webhook_secret' => $this->string('webhook_secret')->trim()->toString(),
+            'public_key' => $this->filled('public_key') ? $this->string('public_key')->trim()->toString() : null,
             'holder_type' => $this->string('holder_type')->toString(),
             'holder_name' => $this->string('holder_name')->trim()->toString(),
             'holder_document' => TaxDocument::digits($this->string('holder_document')->toString()),
