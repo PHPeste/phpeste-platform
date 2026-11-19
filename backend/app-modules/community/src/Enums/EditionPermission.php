@@ -17,6 +17,7 @@ enum EditionPermission: string
     case CheckIn = 'checkin.scan';
     case ManageSponsors = 'sponsors.manage';
     case ManageSuppliers = 'suppliers.manage';
+    case ManageFinance = 'finance.manage';
 
     public function label(): string
     {
@@ -32,6 +33,7 @@ enum EditionPermission: string
             self::CheckIn => 'Fazer check-in',
             self::ManageSponsors => 'Gerenciar patrocinadores',
             self::ManageSuppliers => 'Gerenciar fornecedores',
+            self::ManageFinance => 'Ver e editar finanças',
         };
     }
 }

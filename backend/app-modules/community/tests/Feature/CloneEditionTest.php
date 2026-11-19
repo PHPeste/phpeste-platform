@@ -51,7 +51,7 @@ function cloneEdition(object $test, array $parts, string $slug = '2028'): TestRe
 it('lista o que pode ser copiado e o que nunca é', function (): void {
     $this->getJson("{$this->base}/clone-options")
         ->assertOk()
-        ->assertJsonPath('data.parts', fn (array $parts): bool => collect($parts)->pluck('id')->sort()->values()->all() === ['cfp', 'emails', 'identity', 'sponsor_tiers', 'suppliers', 'team', 'ticketing'])
+        ->assertJsonPath('data.parts', fn (array $parts): bool => collect($parts)->pluck('id')->sort()->values()->all() === ['cfp', 'emails', 'finance', 'identity', 'sponsor_tiers', 'suppliers', 'team', 'ticketing'])
         ->assertJsonPath('data.never_copied', fn (array $items): bool => in_array('Propostas', $items, true) && in_array('Participantes', $items, true));
 });
 

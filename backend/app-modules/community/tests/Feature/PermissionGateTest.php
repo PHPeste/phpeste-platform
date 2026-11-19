@@ -31,6 +31,6 @@ it('lista papéis e permissões para a tabela do painel', function (): void {
     $this->getJson('/api/v1/roles')
         ->assertOk()
         ->assertJsonPath('data.roles.1.label', 'Financeiro')
-        ->assertJsonPath('data.roles.1.permissions', ['orders.view', 'orders.refund'])
+        ->assertJsonPath('data.roles.1.permissions', ['orders.view', 'orders.refund', 'finance.manage'])
         ->assertJsonPath('data.permissions.0', ['id' => 'edition.manage', 'label' => 'Configurar edição e identidade']);
 });
