@@ -16,6 +16,7 @@ enum EditionPermission: string
     case ManageGateway = 'payments.gateway';
     case CheckIn = 'checkin.scan';
     case ManageSponsors = 'sponsors.manage';
+    case ManageSuppliers = 'suppliers.manage';
 
     public function label(): string
     {
@@ -30,6 +31,7 @@ enum EditionPermission: string
             self::ManageGateway => 'Editar chaves do gateway',
             self::CheckIn => 'Fazer check-in',
             self::ManageSponsors => 'Gerenciar patrocinadores',
+            self::ManageSuppliers => 'Gerenciar fornecedores',
         };
     }
 }

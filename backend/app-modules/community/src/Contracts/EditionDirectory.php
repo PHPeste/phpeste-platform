@@ -17,4 +17,16 @@ interface EditionDirectory
      * @return array{mode: string, external_url: string|null}
      */
     public function site(string $editionId): array;
+
+    /**
+     * Comunidade dona da edição: o que é "global" para outro módulo (ex.:
+     * fornecedores) é global dentro da comunidade, nunca entre comunidades.
+     */
+    public function communityId(string $editionId): ?string;
+
+    /**
+     * @param  list<string>  $editionIds
+     * @return array<string, array{id: string, name: string, starts_on: string|null}>
+     */
+    public function names(array $editionIds): array;
 }
