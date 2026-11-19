@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "19/11/2026 · B34 (tarefas)"
+RETRATO = "19/11/2026 · A14 (tela de ingressos)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -134,7 +134,7 @@ toc = [
     "Ciclo de vida da edição", "Os 15 módulos do backend", "Como os módulos conversam", "Banco de dados por domínio",
     "Papéis e permissões", "Ingresso: da compra ao QR", "CFP: da proposta à grade", "Dinheiro: patrocínio, fornecedores e finanças",
     "Fila, rotinas agendadas, e-mail e auditoria", "Segurança", "Desenvolvimento, CI e deploy", "Telas: design e painel",
-    "Telas: painel em uso", "Onde estamos e o que falta",
+    "Telas: painel em uso", "Telas: vendas e organização", "Onde estamos e o que falta",
 ]
 pages.append(f"""
 <section class="page cover">
@@ -186,11 +186,11 @@ b.append(box(625, 270, 170, 112, "Scheduler", ["cfp:sync-status", "ticketing:exp
 b.append(box(445, 394, 350, 122, "Regras que valem para todo módulo", ["Tenancy por edição (BelongsToEdition)", "Mutação só em Action · validação em FormRequest", "Módulo não usa model de outro (arch test)", "Ação sensível → evento Auditable", "Logs JSON com segredo redigido · Sentry opcional"], "backend", size=9.5))
 b.append(arrow([(395, 275), (430, 275)], "infra"))
 
-b.append(box(845, 40, 245, 70, "MySQL 8", ["um banco · 67 tabelas", "UUID em toda tabela"], "data"))
+b.append(box(845, 40, 245, 70, "MySQL 8", ["um banco · 69 tabelas", "UUID em toda tabela"], "data"))
 b.append(box(845, 122, 245, 70, "Redis", ["cache, filas, locks,", "rate limit"], "data"))
 b.append(box(845, 204, 245, 70, "Disco privado", ["CSV de importação, anexos,", "comprovantes (URL assinada)"], "data"))
 b.append(box(845, 292, 245, 56, "Asaas · Mercado Pago", ["conta de cada edição (ADR 0009)"], "external"))
-b.append(box(845, 360, 245, 50, "Resend (e-mail)", ["Mailpit no dev"], "external"))
+b.append(box(845, 360, 245, 50, "Resend (e-mail)", ["webhook de entrega · Mailpit no dev"], "external"))
 b.append(box(845, 422, 245, 50, "GitHub OAuth", ["login de palestrante"], "external"))
 b.append(box(845, 484, 245, 46, "Sentry", ["opcional, sem DSN fica desligado"], "external"))
 for y in (75, 157, 239):
@@ -244,7 +244,7 @@ for i, (title, lines, kind) in enumerate(steps):
     if i < len(steps) - 1:
         b.append(arrow([(x + 168, 71), (x + 182, 71)], "backend"))
 b.append(box(10, 140, 530, 140, "Rotas de quem não é da equipe", ["Route::apiV1PublishedEdition('speaker', 'proposals', ['auth:sanctum'])", "→ /api/v1/speaker/editions/{edition}/proposals", "só aceita edição publicada (rascunho = 404) e liga a edição no contexto", "sem exigir papel. Usado por palestrante, participante e checkout.", "A posse do dado é conferida na Action (a proposta é dela?)."], "edition", size=9.8))
-b.append(box(560, 140, 530, 140, "Rotas públicas e de máquina", ["/api/v1/public/resolve?host=…  site descobre a edição pelo domínio", "/api/v1/public/editions/{id}/theme  tema publicado com ETag", "/api/v1/webhooks/payments/{token}  assinatura do gateway", "/api/v1/sponsors/attachments/{id}/download  URL assinada", "CORS: só a origem do site próprio da edição, só em /public/*"], "infra", size=9.8))
+b.append(box(560, 140, 530, 140, "Rotas públicas e de máquina", ["/api/v1/public/resolve?host=…  site descobre a edição pelo domínio", "/api/v1/public/editions/{id}/theme  tema publicado com ETag", "/api/v1/webhooks/payments/{token} e /webhooks/resend  assinados", "/api/v1/sponsors/attachments/{id}/download  URL assinada", "CORS: só a origem do site próprio da edição, só em /public/*"], "infra", size=9.8))
 b.append(box(10, 305, 530, 120, "Job e listener", ["recebem edition_id explícito no construtor e rodam dentro de", "resolve(CurrentEdition::class)->run($editionId, fn () => …)", "nunca herdam a edição de quem disparou: a fila roda depois,", "em outro processo, e a edição do contexto já não existe."], "backend", size=9.8))
 b.append(box(560, 305, 530, 120, "Evento de domínio", ["carrega ids e enums, nunca Model de outro módulo", "ex.: EditionStatusChanged(editionId, from, to)", "ShouldDispatchAfterCommit: só sai se a transação gravou", "evento Auditable vira registro em audit_logs"], "backend", size=9.8))
 b.append(box(10, 450, 1080, 80, "Front-public: a edição vem do host", ["O site chama /public/resolve com o host da requisição, recebe edition_id e o domínio principal e redireciona se for preciso (ADR 0008).", "O host é normalizado (minúsculas, sem porta, IDN em punycode) e nunca é usado para montar URL sem passar pela tabela edition_domains."], "client", size=9.8))
@@ -283,7 +283,7 @@ mods = [
     ("Cfp", "chamada, trilhas, critérios, propostas, avaliação cega, decisão, cota do Nordeste, confirmação", 52, "backend"),
     ("Ticketing", "tipos, lotes, cupons, pedidos, estoque atômico, ingressos com QR, transferência, importação, conciliação", 50, "backend"),
     ("Payments", "contas de gateway por edição, drivers Asaas e Mercado Pago, cobranças, webhooks, reembolsos", 8, "backend"),
-    ("Notifications", "e-mail transacional por edição com modelos editáveis, descadastro, Resend", 9, "backend"),
+    ("Notifications", "e-mail transacional por edição com modelos editáveis, descadastro, Resend com bounce e spam", 12, "backend"),
     ("Audit", "trilha append-only das ações sensíveis, com redação de segredos", 1, "backend"),
     ("Sponsors", "cotas, funil, vagas, pagamentos, entregas, anexos por URL assinada", 28, "backend"),
     ("Suppliers", "cadastro da comunidade, orçamentos, contratação, anexos, reaproveitamento", 19, "backend"),
@@ -307,7 +307,7 @@ for i, (name, desc, routes, kind) in enumerate(mods):
     lines.append(cur)
     b.append(box(x, y, 350, 94, name, lines[:3], kind, dashed=kind == "todo", badge=(f"{routes} rotas", "backend") if routes else ("casca", "todo"), size=9.8))
 pages.append(page(6, "Backend", "Os 15 módulos do backend",
-    "Cada módulo é um pacote Composer real em <code>backend/app-modules/&lt;nome&gt;</code> (ADR 0002), com namespace <code>PHPeste\\&lt;Nome&gt;</code>: Models, Actions, Contracts, Events, Http, Jobs. 257 rotas na API.",
+    "Cada módulo é um pacote Composer real em <code>backend/app-modules/&lt;nome&gt;</code> (ADR 0002), com namespace <code>PHPeste\\&lt;Nome&gt;</code>: Models, Actions, Contracts, Events, Http, Jobs. 260 rotas na API.",
     svg("\n".join(b), h=545)))
 
 # ================================================= 7 como conversam
@@ -341,7 +341,7 @@ dom = [
     ("Cfp", ["cfp_settings", "cfp_tracks", "cfp_criteria", "proposals", "proposal_speakers", "review_assignments", "reviews", "review_scores", "speaker_confirmations", "speaker_logistics"], "edition"),
     ("Ticketing", ["ticketing_settings", "ticket_types", "ticket_batches", "coupons", "coupon_redemptions", "orders", "order_items", "tickets", "ticket_transfers", "reconciliation_issues", "ticket_imports", "ticket_import_rejections"], "edition"),
     ("Payments", ["payment_accounts", "payment_charges", "webhook_events", "payment_refunds"], "edition"),
-    ("Notifications", ["email_templates", "email_deliveries", "email_unsubscribes"], "edition"),
+    ("Notifications", ["email_templates", "email_deliveries", "email_unsubscribes", "email_suppressions", "email_webhook_events ●"], "edition"),
     ("Audit", ["audit_logs"], "infra"),
     ("Sponsors", ["sponsor_settings", "sponsor_tiers", "sponsors", "sponsorships", "sponsorship_payments", "sponsor_deliverables", "sponsor_contacts", "sponsor_attachments"], "edition"),
     ("Suppliers", ["suppliers ●", "supplier_contacts ●", "edition_suppliers", "supplier_quotes", "supplier_attachments", "supplier_activities"], "edition"),
@@ -359,7 +359,7 @@ for name, tables, kind in dom:
     b.append(box(cols[col], 12 + heights[col], 260, h, f"{name} · {count}", tables, kind, mono=True, size=9.5, line_h=14))
     heights[col] += h + 12
 pages.append(page(8, "Dados", "Banco de dados por domínio",
-    "MySQL 8, 67 tabelas, todas com UUID como chave. Verde é da edição (tem <code>edition_id</code>); azul é global. ● em Suppliers: global da comunidade (<code>community_id</code>).",
+    "MySQL 8, 69 tabelas, todas com UUID como chave. Verde é da edição (tem <code>edition_id</code>); azul é global. ● em Suppliers: global da comunidade (<code>community_id</code>); em Notifications: global, a edição vem do envio.",
     svg("\n".join(b), h=max(heights) + 20),
     ["Dinheiro sempre em centavos (inteiro). Dado sensível cifrado no banco: CPF de quem compra, credenciais do gateway, acessibilidade, corpo de webhook, linhas de importação. <code>APP_PREVIOUS_KEYS</code> + comandos <code>*:reencrypt-*</code> para trocar a chave.",
      "Estoque e cupom nunca são lidos e depois gravados: <code>UPDATE … WHERE allocated + q &lt;= quantity</code>. Testes com 12 processos simultâneos provam que não vende além do lote."]))
@@ -493,10 +493,11 @@ content = '<div class="two">' + table(["Quando", "Comando", "Para quê"], [(f"<c
 <li>Todo e-mail sai por <code>EditionMailer::send</code>: registra em <code>email_deliveries</code> e enfileira com 5 tentativas.</li>
 <li>Modelo editável por edição, variáveis <code>{nome}</code> sem Blade, HTML escapado, layout com o tema publicado.</li>
 <li>Não transacional leva descadastro com link assinado e <code>List-Unsubscribe</code>.</li>
+<li>Webhook do Resend (assinatura Svix): entregue, bounce e spam. Bounce permanente ou spam bloqueia o endereço na edição, até para transacional, até a organização liberar.</li>
 </ul>
 <h3>Auditoria</h3>
 <ul>
-<li>Evento que implementa <code>Auditable</code> vira linha em <code>audit_logs</code> pelo listener genérico. 21 eventos hoje.</li>
+<li>Evento que implementa <code>Auditable</code> vira linha em <code>audit_logs</code> pelo listener genérico. 22 eventos hoje.</li>
 <li>Segredo removido, dado pessoal mascarado; o model recusa update e delete.</li>
 </ul></div></div>"""
 pages.append(page(13, "Operação", "Fila, rotinas agendadas, e-mail e auditoria", "O que roda sem ninguém clicar. Todas as rotinas usam <code>withoutOverlapping()</code> e são idempotentes: rodar duas vezes não muda o resultado.", content))
@@ -556,15 +557,24 @@ pages.append(page(17, "Telas", "Telas: o painel em uso",
 <figure><img src="../telas/painel-login.png" alt="Login"><figcaption>Entrar com e-mail e senha ou GitHub</figcaption></figure>
 </div>"""))
 
-# ================================================== 18 status
+# ================================================== 18 telas de vendas
+# Cada tela do Marco 2 que fica pronta entra aqui (prints de front-admin/e2e/capturas-arquitetura.spec.ts).
+SALES_SCREENS = [
+    ("painel-ingressos.png", "Ingressos: tipos e lotes com o preço, o que a edição recebe depois da taxa do gateway, vendidos e situação. Cupons e regras da venda nas outras abas."),
+]
+pages.append(page(18, "Telas", "Telas: vendas e organização",
+    "As telas do Marco 2 conforme ficam prontas. Mesma fonte dos outros prints: o painel rodando com a API simulada.",
+    '<div class="shots sales">' + "".join(f'<figure><img src="../telas/{img}" alt=""><figcaption>{escape(caption)}</figcaption></figure>' for img, caption in SALES_SCREENS) + "</div>"))
+
+# ================================================== 19 status
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
     ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend concluído", "ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas; faltam as telas A14–A23 e P04–P06"),
+    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos); faltam A15–A23 e P04–P06"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]
-pages.append(page(18, "Roadmap", "Onde estamos e o que falta",
+pages.append(page(19, "Roadmap", "Onde estamos e o que falta",
     "Os milestones do GitHub e o board <b>PHPeste Platform</b> são a fonte da verdade do andamento; esta página é o retrato no dia da geração.",
     table(["Marco", "Situação", "O que tem"], [(f"<b>{a}</b>", b_, c) for a, b_, c in status], "cmp roadmap")))
 
@@ -622,6 +632,8 @@ table.roadmap td:nth-child(2) { width: 42mm; color: #6B2A14; font-weight: 600; }
 .shots { display: grid; gap: 5mm; width: 100%; height: 100%; align-items: start; }
 .two-shots { grid-template-columns: 1fr 1fr; }
 .mosaic { grid-template-columns: 1.05fr 1fr; grid-template-rows: 1fr 1fr; }
+.sales { grid-template-columns: repeat(2, 1fr); }
+.sales figure img { max-height: 140mm; }
 .mosaic .big { grid-row: span 2; }
 .mosaic figure:not(.big) img { max-height: 64mm; }
 figure { margin: 0; display: flex; flex-direction: column; gap: 1.5mm; min-height: 0; }

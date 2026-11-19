@@ -85,3 +85,21 @@ test('catálogo de componentes', async ({ page, goto }) => {
   await goto('/_dev/componentes', { waitUntil: 'hydration' })
   await page.screenshot({ path: out('painel-componentes') })
 })
+
+test('ingressos', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await signedIn(page)
+  const batch = (id: string, name: string, cents: number, sold: number, status: string, label: string) => ({ id, ticket_type_id: 'tt-1', name, position: 0, price: { amount: cents, currency: 'BRL' }, quantity: 150, allocated: sold, remaining: 150 - sold, starts_at: null, ends_at: '2027-06-30T23:59:00Z', on_sell_out: 'next', status, status_label: label })
+  const types = [
+    { id: 'tt-1', name: 'Inteira', description: 'Acesso aos dois dias', visibility: 'public', visibility_label: 'Qualquer pessoa', access_code: null, min_per_order: 1, max_per_order: 10, show_remaining: true, pass_fee_to_buyer: false, questions: [], position: 0, allocated: 188, quantity: 300, current_batch_id: 'b-2', batches: [batch('b-1', '1º lote', 12000, 150, 'sold_out', 'Esgotado'), batch('b-2', '2º lote', 15000, 38, 'on_sale', 'À venda')] },
+    { id: 'tt-2', name: 'Estudante', description: null, visibility: 'code', visibility_label: 'Quem tem o código', access_code: 'UFPB2027', min_per_order: 1, max_per_order: 1, show_remaining: false, pass_fee_to_buyer: true, questions: [], position: 1, allocated: 41, quantity: 100, current_batch_id: 'b-3', batches: [{ ...batch('b-3', 'Lote único', 7500, 41, 'on_sale', 'À venda'), ticket_type_id: 'tt-2', quantity: 100, remaining: 59 }] },
+  ]
+  await page.route('**/api/v1/editions/ed-27/ticketing/**', (route) => {
+    const path = new URL(route.request().url()).pathname
+    if (path.endsWith('/ticket-types')) return route.fulfill({ status: 200, json: { data: types, meta: { gateway_ready: true, capacity: 400, allocated: 229, remaining: 171, reservation_minutes: 30, max_tickets_per_buyer: 4, gateway_fee_basis_points: 499 } } })
+    return route.fulfill({ status: 200, json: { data: [] } })
+  })
+  await goto('/ingressos', { waitUntil: 'hydration' })
+  await expect(page.getByRole('heading', { name: 'Ingressos', level: 1 })).toBeVisible()
+  await page.screenshot({ path: out('painel-ingressos') })
+})

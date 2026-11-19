@@ -1,6 +1,6 @@
 # Arquitetura da PHPeste Platform
 
-**[PHPeste_Arquitetura.pdf](PHPeste_Arquitetura.pdf)** (18 páginas, A4 paisagem). O mesmo conteúdo, para abrir no navegador: [`fonte/arquitetura.html`](fonte/arquitetura.html).
+**[PHPeste_Arquitetura.pdf](PHPeste_Arquitetura.pdf)** (19 páginas, A4 paisagem). O mesmo conteúdo, para abrir no navegador: [`fonte/arquitetura.html`](fonte/arquitetura.html).
 
 | Página | Conteúdo |
 |--------|----------|
@@ -11,7 +11,7 @@
 | 5 | Ciclo de vida da edição, transições, clonagem e Visão geral |
 | 6 | Os 15 módulos do backend |
 | 7 | Como os módulos conversam: contratos e pontos de extensão |
-| 8 | Banco de dados por domínio (67 tabelas) |
+| 8 | Banco de dados por domínio (69 tabelas) |
 | 9 | Papéis e permissões |
 | 10 | Ingresso: da compra ao QR |
 | 11 | CFP: da proposta à grade |
@@ -21,9 +21,10 @@
 | 15 | Desenvolvimento, CI e deploy |
 | 16 | Telas: o design do painel (`docs/design/`) |
 | 17 | Telas: o painel em uso (capturas do front-admin) |
-| 18 | Onde estamos e o que falta |
+| 18 | Telas: vendas e organização (cresce a cada tela do Marco 2) |
+| 19 | Onde estamos e o que falta |
 
-Retrato de 19/11/2026, com a B34 (tarefas).
+Retrato de 19/11/2026, com a A14 (tela de ingressos).
 
 ## Como atualizar
 

@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use PHPeste\Community\Enums\EditionPermission;
 use PHPeste\Community\Tenancy\CurrentEdition;
+use PHPeste\Payments\Contracts\PaymentAccounts;
 use PHPeste\Ticketing\Actions\DeleteTicketBatch;
 use PHPeste\Ticketing\Actions\DeleteTicketType;
 use PHPeste\Ticketing\Actions\SaveTicketBatch;
@@ -119,11 +120,13 @@ class TicketTypeController
     }
 
     /**
-     * @return array<string, int|null>
+     * @return array<string, bool|int|null>
      */
     private function settings(TicketingSetting $settings): array
     {
         return [
+            // Lote pago só vende com a conta do gateway pronta (chaves e webhook testados).
+            'gateway_ready' => resolve(PaymentAccounts::class)->ready($settings->edition_id),
             'capacity' => $settings->capacity,
             'allocated' => $settings->allocated,
             'remaining' => $settings->capacity === null ? null : max(0, $settings->capacity - $settings->allocated),

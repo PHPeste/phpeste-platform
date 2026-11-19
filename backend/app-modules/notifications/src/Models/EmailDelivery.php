@@ -28,10 +28,14 @@ use PHPeste\Notifications\Enums\EmailTemplate;
  * @property string|null $provider_message_id
  * @property bool $is_test
  * @property Carbon|null $sent_at
+ * @property Carbon|null $delivered_at
+ * @property Carbon|null $bounced_at
+ * @property Carbon|null $complained_at
+ * @property string|null $provider_detail
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-#[Fillable(['edition_id', 'template', 'to_email', 'to_name', 'variables', 'content', 'action_url', 'status', 'attempts', 'last_error', 'provider_message_id', 'is_test', 'sent_at'])]
+#[Fillable(['edition_id', 'template', 'to_email', 'to_name', 'variables', 'content', 'action_url', 'status', 'attempts', 'last_error', 'provider_message_id', 'is_test', 'sent_at', 'delivered_at', 'bounced_at', 'complained_at', 'provider_detail'])]
 #[Table(name: 'email_deliveries')]
 class EmailDelivery extends Model
 {
@@ -51,6 +55,9 @@ class EmailDelivery extends Model
             'attempts' => 'integer',
             'is_test' => 'boolean',
             'sent_at' => 'datetime',
+            'delivered_at' => 'datetime',
+            'bounced_at' => 'datetime',
+            'complained_at' => 'datetime',
         ];
     }
 }

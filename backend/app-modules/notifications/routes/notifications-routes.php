@@ -5,7 +5,9 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use PHPeste\Notifications\Enums\EmailTemplate;
 use PHPeste\Notifications\Http\Controllers\EmailDeliveryController;
+use PHPeste\Notifications\Http\Controllers\EmailSuppressionController;
 use PHPeste\Notifications\Http\Controllers\EmailTemplateController;
+use PHPeste\Notifications\Http\Controllers\ResendWebhookController;
 use PHPeste\Notifications\Http\Controllers\UnsubscribeController;
 
 Route::apiV1Edition('emails')->group(function (): void {
@@ -33,7 +35,16 @@ Route::apiV1Edition('emails')->group(function (): void {
     Route::post('/deliveries/{delivery}/resend', [EmailDeliveryController::class, 'resend'])
         ->whereUuid('delivery')
         ->name('notifications.deliveries.resend');
+
+    Route::get('/suppressions', [EmailSuppressionController::class, 'index'])->name('notifications.suppressions.index');
+    Route::delete('/suppressions/{suppression}', [EmailSuppressionController::class, 'destroy'])
+        ->whereUuid('suppression')
+        ->name('notifications.suppressions.destroy');
 });
+
+Route::apiV1('webhooks')->post('/resend', ResendWebhookController::class)
+    ->middleware('throttle:webhooks')
+    ->name('notifications.webhooks.resend');
 
 Route::apiV1('public')->match(['get', 'post'], '/editions/{edition}/unsubscribe', UnsubscribeController::class)
     ->whereUuid('edition')

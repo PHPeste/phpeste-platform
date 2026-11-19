@@ -51,6 +51,7 @@ app/
     cfp/avaliacao.vue              # módulo cfpReview: fila do revisor com atalhos, quadro e atribuição da organização
     palestrantes/index.vue         # módulo speakers: confirmações, cobertura dos nove estados e lista de espera
     palestrantes/[id].vue          # módulo speakers: perfil, palestras, viagem e hospedagem e confirmação
+    ingressos/index.vue            # módulo tickets: tipos e lotes com valor líquido e prévia do checkout, cupons e regras da venda
     configuracoes.vue              # módulo editionSettings: dados e etapa da edição, domínio e site próprio, privacidade e auditoria
     meu-perfil.vue                 # módulo myProfile: conta, senha, sessões ativas e notificações
     index.vue

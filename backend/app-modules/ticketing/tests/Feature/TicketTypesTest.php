@@ -56,7 +56,8 @@ it('cria tipo com perguntas do checkout e lotes, e lista com status, estoque e l
         ->assertJsonPath('data.0.batches.0.price', ['amount' => 15_000, 'currency' => 'BRL'])
         ->assertJsonPath('data.0.batches.1.status', 'scheduled')
         ->assertJsonPath('data.0.batches.1.status_label', 'Agendado')
-        ->assertJsonPath('meta.capacity', null);
+        ->assertJsonPath('meta.capacity', null)
+        ->assertJsonPath('meta.gateway_ready', false);
 });
 
 it('valida código de acesso, mínimo e máximo, janela e nome repetido', function (): void {
