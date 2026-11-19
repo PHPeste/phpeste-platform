@@ -19,5 +19,6 @@ class ChargeStatusChanged implements ShouldDispatchAfterCommit
         public readonly ChargeStatus $from,
         public readonly ChargeStatus $to,
         public readonly int $amountCents,
+        public readonly ?int $feeCents = null,
     ) {}
 }

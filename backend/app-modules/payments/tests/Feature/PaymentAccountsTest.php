@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Laravel\Sanctum\Sanctum;
 use PHPeste\Audit\Models\AuditLog;
@@ -11,15 +12,19 @@ use PHPeste\Community\Enums\EditionStatus;
 use PHPeste\Community\Models\Edition;
 use PHPeste\Community\Models\EditionMember;
 use PHPeste\Identity\Models\User;
-use PHPeste\Payments\Actions\RefundCharge;
 use PHPeste\Payments\Contracts\AccountUsage;
 use PHPeste\Payments\Contracts\PaymentAccounts;
+use PHPeste\Payments\Contracts\PaymentLedger;
 use PHPeste\Payments\Data\CardPayment;
 use PHPeste\Payments\Data\ChargeRequest;
 use PHPeste\Payments\Data\Payer;
+use PHPeste\Payments\Data\RefundRequest;
 use PHPeste\Payments\Drivers\FakeGateway;
+use PHPeste\Payments\Enums\RefundReason;
+use PHPeste\Payments\Enums\RefundStatus;
 use PHPeste\Payments\Gateway\GatewayRegistry;
 use PHPeste\Payments\Models\PaymentAccount;
+use PHPeste\Payments\Models\PaymentCharge;
 
 const API_KEY = '$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjUxZmE1abcd';
 const WEBHOOK_SECRET = 'whsec_super_secreto_123';
@@ -158,13 +163,15 @@ it('trocar a conta que já recebeu pedidos pagos exige confirmação', function 
 it('reembolso de cobrança paga na conta antiga continua funcionando depois da troca', function (): void {
     $old = PaymentAccount::query()->forEdition($this->edition->id)->findOrFail($this->postJson($this->base, accountPayload())->json('data.id'));
     $gateway = resolve(GatewayRegistry::class)->driver('fake');
-    $charge = $gateway->chargeCard($old->gatewayCredentials(), new ChargeRequest('pedido-1', 15_000, 'PHPeste 2027', new Payer('Ana', 'ana@exemplo.com', '52998224725'), now()->addMinutes(30)), new CardPayment('tok_ok', 1));
+    $reference = (string) Str::uuid();
+    $charge = $gateway->chargeCard($old->gatewayCredentials(), new ChargeRequest($reference, 15_000, 'PHPeste 2027', new Payer('Ana', 'ana@exemplo.com', '52998224725'), now()->addMinutes(30)), new CardPayment('tok_ok', 1));
+    PaymentCharge::create(['edition_id' => $this->edition->id, 'payment_account_id' => $old->id, 'reference' => $reference, 'driver' => 'fake', 'method' => 'card', 'gateway_charge_id' => $charge->chargeId, 'status' => 'paid', 'amount_cents' => 15_000, 'installments' => 1, 'paid_at' => now()]);
 
     $this->postJson($this->base, accountPayload(['api_key' => 'nova_chave_2222']))->assertCreated();
 
-    $refund = resolve(RefundCharge::class)->handle($this->edition->id, $old->id, $charge->chargeId, 15_000);
+    $refund = resolve(PaymentLedger::class)->refund(new RefundRequest($this->edition->id, $reference, 15_000, RefundReason::BuyerRequest, null, null));
 
-    expect($refund->completed)->toBeTrue()
+    expect($refund->status)->toBe(RefundStatus::Completed)
         ->and(collect(FakeGateway::$calls)->firstWhere('method', 'refund')['api_key'])->toBe(API_KEY);
 });
 

@@ -12,10 +12,12 @@ use PHPeste\Payments\Console\ReencryptCredentials;
 use PHPeste\Payments\Console\RetryWebhooksCommand;
 use PHPeste\Payments\Contracts\PaymentAccounts;
 use PHPeste\Payments\Contracts\PaymentGateway;
+use PHPeste\Payments\Contracts\PaymentLedger;
 use PHPeste\Payments\Contracts\PaymentProcessor;
 use PHPeste\Payments\Gateway\ChargeService;
 use PHPeste\Payments\Gateway\GatewayRegistry;
 use PHPeste\Payments\Gateway\PaymentAccountDirectory;
+use PHPeste\Payments\Gateway\PaymentLedgerService;
 use PHPeste\Payments\Overview\PaymentsOverviewContributor;
 
 class PaymentsServiceProvider extends ServiceProvider
@@ -33,6 +35,7 @@ class PaymentsServiceProvider extends ServiceProvider
 
         $this->app->bind(PaymentAccounts::class, PaymentAccountDirectory::class);
         $this->app->bind(PaymentProcessor::class, ChargeService::class);
+        $this->app->bind(PaymentLedger::class, PaymentLedgerService::class);
         $this->app->tag([PaymentsOverviewContributor::class], EditionOverviewContributor::TAG);
     }
 
