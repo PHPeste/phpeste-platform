@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "19/11/2026 · main em b4293b3"
+RETRATO = "19/11/2026 · B34 (tarefas)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -151,7 +151,7 @@ pages.append(f"""
       <ol>
         <li><b>Monorepo com três partes.</b> <code>backend/</code> (Laravel 13, API), <code>front-admin/</code> (Nuxt SPA da organização) e <code>front-public/</code> (Nuxt SSR do site da edição, resolvido pelo domínio).</li>
         <li><b>A edição é o tenant</b> (ADR 0007). Um banco só; escopo global por <code>edition_id</code> e a edição no contexto só durante a requisição ou o job.</li>
-        <li><b>15 módulos</b> (<code>internachi/modular</code>) que só conversam por contratos e eventos. 12 já têm lógica; Program, CheckIn, Tasks e Engagement ainda são casca.</li>
+        <li><b>15 módulos</b> (<code>internachi/modular</code>) que só conversam por contratos e eventos. 13 já têm lógica; Program, CheckIn e Engagement ainda são casca.</li>
         <li><b>A plataforma não toca no dinheiro</b> (ADR 0009). Cada edição usa a conta do próprio gateway (Asaas ou Mercado Pago); a receita é calculada dos pedidos, nunca guardada.</li>
         <li><b>Toda ação sensível vira trilha de auditoria</b> por evento, com segredo removido e dado pessoal mascarado.</li>
       </ol>
@@ -180,13 +180,13 @@ for y in (108, 220, 325, 487):
 
 b.append(group(430, 30, 380, 500, "API · Laravel 13 · PHP 8.4 · /api/v1", "backend", dashed=False))
 b.append(box(445, 62, 350, 86, "Rotas por tipo", ["/editions/{id}/…  painel (Sanctum + papel na edição)", "/speaker, /attendee, /checkout/editions/{id}/…  publicada", "/public/…  site, tema, ingressos (cache + ETag)", "/webhooks/payments/{token}  assinado"], "backend", mono=False, size=9.5))
-b.append(box(445, 160, 350, 98, "15 módulos (app-modules/)", ["Identity · Community · Branding · Cfp · Ticketing", "Payments · Notifications · Audit · Sponsors", "Suppliers · Finance", "casca: Program · CheckIn · Tasks · Engagement"], "backend", size=9.5))
+b.append(box(445, 160, 350, 98, "15 módulos (app-modules/)", ["Identity · Community · Branding · Cfp · Ticketing", "Payments · Notifications · Audit · Sponsors", "Suppliers · Finance · Tasks", "casca: Program · CheckIn · Engagement"], "backend", size=9.5))
 b.append(box(445, 270, 170, 112, "Horizon (fila)", ["e-mail, webhooks,", "importação, clonagem", "de edição, emissão", "de ingressos"], "backend"))
-b.append(box(625, 270, 170, 112, "Scheduler", ["cfp:sync-status", "ticketing:expire-orders", "ticketing:reconcile", "payments:retry-webhooks", "…8 rotinas"], "backend", size=9.5))
+b.append(box(625, 270, 170, 112, "Scheduler", ["cfp:sync-status", "ticketing:expire-orders", "ticketing:reconcile", "tasks:due-reminders", "…9 rotinas"], "backend", size=9.5))
 b.append(box(445, 394, 350, 122, "Regras que valem para todo módulo", ["Tenancy por edição (BelongsToEdition)", "Mutação só em Action · validação em FormRequest", "Módulo não usa model de outro (arch test)", "Ação sensível → evento Auditable", "Logs JSON com segredo redigido · Sentry opcional"], "backend", size=9.5))
 b.append(arrow([(395, 275), (430, 275)], "infra"))
 
-b.append(box(845, 40, 245, 70, "MySQL 8", ["um banco · 65 tabelas", "UUID em toda tabela"], "data"))
+b.append(box(845, 40, 245, 70, "MySQL 8", ["um banco · 67 tabelas", "UUID em toda tabela"], "data"))
 b.append(box(845, 122, 245, 70, "Redis", ["cache, filas, locks,", "rate limit"], "data"))
 b.append(box(845, 204, 245, 70, "Disco privado", ["CSV de importação, anexos,", "comprovantes (URL assinada)"], "data"))
 b.append(box(845, 292, 245, 56, "Asaas · Mercado Pago", ["conta de cada edição (ADR 0009)"], "external"))
@@ -217,7 +217,7 @@ b.append(box(395, 52, 230, 120, "editions", ["community_id · status (máquina",
 b.append(box(640, 52, 435, 120, "Equipe e configuração", ["edition_members (papel na edição) · edition_invitations", "edition_settings (tema) · edition_domains", "cfp_settings · ticketing_settings · sponsor_settings", "email_templates · finance_categories"], "edition", size=9.8))
 b.append(box(395, 186, 335, 110, "Conteúdo", ["cfp_tracks · cfp_criteria · proposals", "proposal_speakers · review_assignments", "reviews · speaker_confirmations · speaker_logistics"], "edition", size=9.8))
 b.append(box(745, 186, 330, 110, "Vendas", ["ticket_types · ticket_batches · coupons", "orders · order_items · tickets", "payment_accounts · payment_charges", "webhook_events · payment_refunds"], "edition", size=9.8))
-b.append(box(395, 310, 335, 96, "Organização", ["sponsors · sponsorships · sponsor_tiers", "edition_suppliers · supplier_quotes", "expenses"], "edition", size=9.8))
+b.append(box(395, 310, 335, 96, "Organização", ["sponsors · sponsorships · sponsor_tiers", "edition_suppliers · supplier_quotes", "expenses · task_columns · tasks"], "edition", size=9.8))
 b.append(box(745, 310, 330, 96, "Comunicação e operação", ["email_deliveries · email_unsubscribes", "ticket_imports · reconciliation_issues", "edition_clones"], "edition", size=9.8))
 b.append(box(395, 420, 680, 108, "Como o isolamento é garantido", ["Model de edição usa o trait BelongsToEdition: liga o EditionScope e preenche edition_id ao criar.", "Sem edição no contexto, a consulta não devolve nada e criar sem edition_id lança LogicException.", "Ler outra edição de propósito exige ->forEdition($id) explícito (clonagem, rotinas agendadas).", "Comunidade A nunca vê edição, fornecedor ou dado da comunidade B."], "edition", size=9.8))
 b.append(arrow([(335, 278), (365, 278), (365, 112), (395, 112)], "global"))
@@ -290,7 +290,7 @@ mods = [
     ("Finance", "despesas, orçamento por categoria, receita calculada, saldo, planilha", 14, "backend"),
     ("Program", "salas, sessões e grade (B35–B37)", 0, "todo"),
     ("CheckIn", "leitura de QR, entrada, modo offline (B38–B39)", 0, "todo"),
-    ("Tasks", "kanban da organização (B34)", 0, "todo"),
+    ("Tasks", "quadro kanban com colunas configuráveis, movimento seguro em paralelo, prazo, lembrete, vínculo a fornecedor e patrocinador", 10, "backend"),
     ("Engagement", "feedback, certificados, sorteio (B42)", 0, "todo"),
 ]
 b = []
@@ -307,7 +307,7 @@ for i, (name, desc, routes, kind) in enumerate(mods):
     lines.append(cur)
     b.append(box(x, y, 350, 94, name, lines[:3], kind, dashed=kind == "todo", badge=(f"{routes} rotas", "backend") if routes else ("casca", "todo"), size=9.8))
 pages.append(page(6, "Backend", "Os 15 módulos do backend",
-    "Cada módulo é um pacote Composer real em <code>backend/app-modules/&lt;nome&gt;</code> (ADR 0002), com namespace <code>PHPeste\\&lt;Nome&gt;</code>: Models, Actions, Contracts, Events, Http, Jobs. 247 rotas na API.",
+    "Cada módulo é um pacote Composer real em <code>backend/app-modules/&lt;nome&gt;</code> (ADR 0002), com namespace <code>PHPeste\\&lt;Nome&gt;</code>: Models, Actions, Contracts, Events, Http, Jobs. 257 rotas na API.",
     svg("\n".join(b), h=545)))
 
 # ================================================= 7 como conversam
@@ -329,9 +329,9 @@ pairs = [
 for x, y, title, lines in pairs:
     b.append(box(x, y, 340, 130, title, lines, "backend", size=9.8))
 pages.append(page(7, "Backend", "Como os módulos conversam",
-    "Módulo nunca usa model de outro: ou chama um contrato (interface em <code>Contracts/</code>, ligada no service provider) ou escuta um evento. 24 contratos hoje. O arch test barra dependência de <code>App\\</code>.",
+    "Módulo nunca usa model de outro: ou chama um contrato (interface em <code>Contracts/</code>, ligada no service provider) ou escuta um evento. 25 contratos hoje. O arch test barra dependência de <code>App\\</code>.",
     svg("\n".join(b), h=540),
-    ["Ponto de extensão é registrado com <code>$app-&gt;tag([...], Contrato::TAG)</code>: o Community não conhece os módulos, só a tag. Módulo novo aparece na Visão geral e na clonagem sem mexer no Community."]))
+    ["Ponto de extensão é registrado com <code>$app-&gt;tag([...], Contrato::TAG)</code>: o Community não conhece os módulos, só a tag. Módulo novo aparece na Visão geral e na clonagem sem mexer no Community. O mesmo vale para <code>TaskLinkProvider</code> (Tasks): Suppliers e Sponsors registram o que uma tarefa pode apontar, e o Program vai registrar a sessão."]))
 
 # ====================================================== 8 banco
 dom = [
@@ -346,6 +346,7 @@ dom = [
     ("Sponsors", ["sponsor_settings", "sponsor_tiers", "sponsors", "sponsorships", "sponsorship_payments", "sponsor_deliverables", "sponsor_contacts", "sponsor_attachments"], "edition"),
     ("Suppliers", ["suppliers ●", "supplier_contacts ●", "edition_suppliers", "supplier_quotes", "supplier_attachments", "supplier_activities"], "edition"),
     ("Finance", ["finance_categories", "expenses"], "edition"),
+    ("Tasks", ["task_columns", "tasks"], "edition"),
     ("Laravel", ["personal_access_tokens", "jobs · job_batches", "failed_jobs", "cache · cache_locks", "sessions"], "infra"),
 ]
 b = []
@@ -358,7 +359,7 @@ for name, tables, kind in dom:
     b.append(box(cols[col], 12 + heights[col], 260, h, f"{name} · {count}", tables, kind, mono=True, size=9.5, line_h=14))
     heights[col] += h + 12
 pages.append(page(8, "Dados", "Banco de dados por domínio",
-    "MySQL 8, 65 tabelas, todas com UUID como chave. Verde é da edição (tem <code>edition_id</code>); azul é global. ● em Suppliers: global da comunidade (<code>community_id</code>).",
+    "MySQL 8, 67 tabelas, todas com UUID como chave. Verde é da edição (tem <code>edition_id</code>); azul é global. ● em Suppliers: global da comunidade (<code>community_id</code>).",
     svg("\n".join(b), h=max(heights) + 20),
     ["Dinheiro sempre em centavos (inteiro). Dado sensível cifrado no banco: CPF de quem compra, credenciais do gateway, acessibilidade, corpo de webhook, linhas de importação. <code>APP_PREVIOUS_KEYS</code> + comandos <code>*:reencrypt-*</code> para trocar a chave.",
      "Estoque e cupom nunca são lidos e depois gravados: <code>UPDATE … WHERE allocated + q &lt;= quantity</code>. Testes com 12 processos simultâneos provam que não vende além do lote."]))
@@ -377,6 +378,7 @@ perms = [
     ("sponsors.manage", "Gerenciar patrocinadores", "●", "", "", "", ""),
     ("suppliers.manage", "Gerenciar fornecedores", "●", "", "", "", ""),
     ("finance.manage", "Ver e editar finanças", "●", "●", "", "", ""),
+    ("tasks.manage", "Gerenciar tarefas (a equipe vê o quadro e move as próprias)", "●", "", "", "", ""),
 ]
 content = '<div class="two">' + table(["Permissão", "O que libera", "Organizador", "Financeiro", "Avaliador", "Check-in", "Voluntário"], [(f"<code>{p}</code>", d, *r) for p, d, *r in perms], "cmp perms") + """
 <div class="side">
@@ -390,7 +392,7 @@ content = '<div class="two">' + table(["Permissão", "O que libera", "Organizado
 <li>O painel lê a tabela em <code>GET /roles</code> e monta o menu por papel.</li>
 <li>Palestrante e participante não têm papel: entram pelas rotas de edição publicada.</li>
 </ul></div></div>"""
-pages.append(page(9, "Acesso", "Papéis e permissões", "Cinco papéis por edição e doze permissões. O organizador tem todas.", content))
+pages.append(page(9, "Acesso", "Papéis e permissões", "Cinco papéis por edição e treze permissões. O organizador tem todas.", content))
 
 # ============================================= 10 ingresso: compra ao QR
 b = []
@@ -475,6 +477,7 @@ sched = [
     ("*/5 * * * *", "ticketing:resume-imports", "retoma importação parada"),
     ("04:00 BRT", "ticketing:reconcile", "confere pedidos com o gateway"),
     ("* * * * *", "payments:retry-webhooks", "reenfileira webhook com erro (1, 5, 15, 60 min)"),
+    ("08:00 BRT", "tasks:due-reminders", "avisa o responsável da tarefa que vence até amanhã"),
     ("03:30", "audit:prune", "apaga trilha além de AUDIT_RETENTION_DAYS"),
 ]
 content = '<div class="two">' + table(["Quando", "Comando", "Para quê"], [(f"<code>{a}</code>", f"<code>{c}</code>", d) for a, c, d in sched], "cmp sched") + """
@@ -557,7 +560,7 @@ pages.append(page(17, "Telas", "Telas: o painel em uso",
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
     ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend quase concluído", "ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças; falta B34 (tarefas) e as telas A14–A23, P04–P06"),
+    ("Marco 2 · Ingressos", "Backend concluído", "ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas; faltam as telas A14–A23 e P04–P06"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]
