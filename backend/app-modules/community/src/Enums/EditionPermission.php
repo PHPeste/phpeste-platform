@@ -15,6 +15,7 @@ enum EditionPermission: string
     case RefundOrders = 'orders.refund';
     case ManageGateway = 'payments.gateway';
     case CheckIn = 'checkin.scan';
+    case ManageSponsors = 'sponsors.manage';
 
     public function label(): string
     {
@@ -28,6 +29,7 @@ enum EditionPermission: string
             self::RefundOrders => 'Reembolsar pedidos',
             self::ManageGateway => 'Editar chaves do gateway',
             self::CheckIn => 'Fazer check-in',
+            self::ManageSponsors => 'Gerenciar patrocinadores',
         };
     }
 }
