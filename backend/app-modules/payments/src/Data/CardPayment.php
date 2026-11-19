@@ -13,5 +13,7 @@ final readonly class CardPayment
         public string $token,
         public int $installments,
         public ?string $remoteIp = null,
+        public ?string $paymentMethodId = null,
+        public ?string $issuerId = null,
     ) {}
 }

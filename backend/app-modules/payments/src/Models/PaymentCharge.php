@@ -47,6 +47,11 @@ class PaymentCharge extends Model
     use HasUuids;
 
     /**
+     * @var array<string, int>
+     */
+    protected $attributes = ['refunded_cents' => 0];
+
+    /**
      * @return BelongsTo<PaymentAccount, $this>
      */
     public function account(): BelongsTo

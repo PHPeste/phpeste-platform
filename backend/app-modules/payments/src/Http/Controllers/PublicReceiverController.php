@@ -19,6 +19,8 @@ class PublicReceiverController
         $account = $accounts->active($edition);
 
         return response()->json(['data' => $account instanceof ReceivingAccount ? [
+            'driver' => $account->driver,
+            'public_key' => $account->publicKey,
             'holder_name' => $account->holderName,
             'holder_type' => $account->holderType->value,
             'methods' => array_map(fn (PaymentMethod $method): string => $method->value, $account->methods),

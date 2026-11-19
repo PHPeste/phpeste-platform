@@ -24,5 +24,6 @@ final readonly class ReceivingAccount
         public int $maxInstallments,
         public int $pixExpirationMinutes,
         public bool $ready,
+        public ?string $publicKey = null,
     ) {}
 }

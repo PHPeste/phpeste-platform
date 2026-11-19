@@ -7,6 +7,7 @@ namespace PHPeste\Payments\Gateway;
 use Illuminate\Contracts\Container\Container;
 use InvalidArgumentException;
 use PHPeste\Payments\Contracts\PaymentGateway;
+use PHPeste\Payments\Enums\GatewayCapability;
 
 class GatewayRegistry
 {
@@ -43,10 +44,15 @@ class GatewayRegistry
     }
 
     /**
-     * @return list<array{key: string, label: string}>
+     * @return list<array{key: string, label: string, needs_public_key: bool}>
      */
     public function available(): array
     {
-        return array_map(fn (string $key): array => ['key' => $key, 'label' => $this->driver($key)->label()], $this->keys());
+        return array_map(fn (string $key): array => ['key' => $key, 'label' => $this->driver($key)->label(), 'needs_public_key' => $this->needsPublicKey($key)], $this->keys());
+    }
+
+    public function needsPublicKey(string $key): bool
+    {
+        return $this->has($key) && in_array(GatewayCapability::CardToken, $this->driver($key)->capabilities(), true) && !in_array(GatewayCapability::HostedCard, $this->driver($key)->capabilities(), true);
     }
 }

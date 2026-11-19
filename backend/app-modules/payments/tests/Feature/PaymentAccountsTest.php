@@ -67,7 +67,7 @@ it('cadastra a conta com titular CPF e nunca devolve as credenciais em texto', f
         ->assertJsonPath('data.ready', false)
         ->assertJsonPath('data.methods.0.key', 'pix');
 
-    $list = $this->getJson($this->base)->assertOk()->assertJsonPath('data.drivers', [['key' => 'asaas', 'label' => 'Asaas'], ['key' => 'fake', 'label' => 'Gateway de teste']]);
+    $list = $this->getJson($this->base)->assertOk()->assertJsonPath('data.drivers', [['key' => 'asaas', 'label' => 'Asaas', 'needs_public_key' => false], ['key' => 'mercadopago', 'label' => 'Mercado Pago', 'needs_public_key' => true], ['key' => 'fake', 'label' => 'Gateway de teste', 'needs_public_key' => false]]);
 
     foreach ([$response->getContent(), $list->getContent()] as $body) {
         expect($body)->not->toContain(API_KEY)
@@ -117,7 +117,7 @@ it('valida as chaves no gateway e fica pronta só depois de receber o webhook as
 
     $this->getJson("/api/v1/public/editions/{$this->edition->id}/payments/receiver")
         ->assertOk()
-        ->assertJsonPath('data', ['holder_name' => 'Fulana de Tal, responsável financeira da PHPeste 2027', 'holder_type' => 'individual', 'methods' => ['pix', 'card'], 'max_installments' => 3, 'pix_expiration_minutes' => 30, 'sandbox' => true, 'ready' => true]);
+        ->assertJsonPath('data', ['driver' => 'fake', 'public_key' => null, 'holder_name' => 'Fulana de Tal, responsável financeira da PHPeste 2027', 'holder_type' => 'individual', 'methods' => ['pix', 'card'], 'max_installments' => 3, 'pix_expiration_minutes' => 30, 'sandbox' => true, 'ready' => true]);
 });
 
 it('trocar a conta cria uma nova, guarda a antiga só para consulta e audita sem expor a chave', function (): void {
