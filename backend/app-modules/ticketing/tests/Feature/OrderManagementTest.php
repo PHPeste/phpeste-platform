@@ -162,6 +162,28 @@ it('exporta os pedidos com os filtros da lista, valores em reais e sem deixar vi
     expect($all)->toHaveCount(2)->and($all[1])->toContain('Caio Reis');
 });
 
+it('a lista traz o resumo da edição inteira, sem seguir o filtro', function (): void {
+    $paid = awaitingOrder($this, 'Ana Souza', 'pedido-1');
+    awaitingOrder($this, 'Caio Reis', 'pedido-2');
+    Sanctum::actingAs($this->organizer);
+    $this->postJson("{$this->api}/{$paid->id}/mark-paid", ['justification' => 'Recebido em dinheiro na secretaria'])->assertOk();
+    Order::query()->forEdition($this->edition->id)->whereKey($paid->id)->update(['gateway_fee_cents' => 1_497, 'refunded_cents' => 5_000]);
+
+    $this->getJson("{$this->api}?status=paid")
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('meta.total', 1)
+        ->assertJsonPath('meta.summary', [
+            'paid' => 1,
+            'awaiting' => 1,
+            'awaiting_expiring_today' => 1,
+            'refunds' => 1,
+            'refunded_cents' => 5_000,
+            'gross_cents' => 30_000,
+            'gateway_fee_cents' => 1_497,
+        ]);
+});
+
 it('outra edição não enxerga pedido nem histórico', function (): void {
     $order = awaitingOrder($this);
     $other = Edition::factory()->status(EditionStatus::SalesOpen)->create();
