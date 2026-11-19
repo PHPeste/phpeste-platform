@@ -1,0 +1,1 @@
+{"object":"list","hasMore":false,"totalCount":1,"limit":1,"offset":0,"data":[{"object":"customer","id":"cus_000005219613","dateCreated":"2027-06-01","name":"Ana Souza","email":"ana@exemplo.com","cpfCnpj":"52998224725","personType":"FISICA","deleted":false,"notificationDisabled":true}]}

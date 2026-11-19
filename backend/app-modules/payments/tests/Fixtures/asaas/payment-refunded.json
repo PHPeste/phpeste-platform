@@ -1,0 +1,1 @@
+{"object":"payment","id":"pay_080225913252","value":155.40,"netValue":154.41,"billingType":"PIX","status":"REFUNDED","deleted":false,"refunds":[{"id":"8c3c9d1a-8b26-4b6b-9b8e-6a0a21f6b001","dateCreated":"2027-06-12 10:00:00","status":"DONE","value":155.40,"description":null}]}

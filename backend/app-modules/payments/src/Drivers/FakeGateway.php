@@ -10,11 +10,14 @@ use PHPeste\Payments\Data\CardPayment;
 use PHPeste\Payments\Data\ChargeRequest;
 use PHPeste\Payments\Data\ChargeSnapshot;
 use PHPeste\Payments\Data\GatewayCredentials;
+use PHPeste\Payments\Data\HostedCheckout;
 use PHPeste\Payments\Data\PixCharge;
 use PHPeste\Payments\Data\RefundResult;
 use PHPeste\Payments\Data\VerificationResult;
 use PHPeste\Payments\Data\WebhookEvent;
 use PHPeste\Payments\Enums\ChargeStatus;
+use PHPeste\Payments\Enums\GatewayCapability;
+use PHPeste\Payments\Enums\PaymentMethod;
 use PHPeste\Payments\Gateway\GatewayRequestFailed;
 use PHPeste\Payments\Gateway\InvalidWebhookSignature;
 
@@ -45,6 +48,11 @@ class FakeGateway implements PaymentGateway
         return hash_hmac('sha256', $body, $secret);
     }
 
+    public static function pay(string $chargeId): void
+    {
+        self::$charges[$chargeId]['status'] = ChargeStatus::Paid;
+    }
+
     public function key(): string
     {
         return 'fake';
@@ -53,6 +61,11 @@ class FakeGateway implements PaymentGateway
     public function label(): string
     {
         return 'Gateway de teste';
+    }
+
+    public function capabilities(): array
+    {
+        return GatewayCapability::cases();
     }
 
     public function verify(GatewayCredentials $credentials): VerificationResult
@@ -83,6 +96,24 @@ class FakeGateway implements PaymentGateway
         self::$charges[$id] = ['amount' => $charge->amountCents, 'status' => $declined ? ChargeStatus::Failed : ChargeStatus::Paid, 'api_key' => $credentials->apiKey];
 
         return new ChargeSnapshot($id, self::$charges[$id]['status'], $charge->amountCents, null, $declined ? null : now(), $declined ? 'Cartão recusado pelo emissor.' : null);
+    }
+
+    public function createHostedCheckout(GatewayCredentials $credentials, ChargeRequest $charge, PaymentMethod $method, int $installments, string $returnUrl): HostedCheckout
+    {
+        $this->record('createHostedCheckout', $credentials, ['reference' => $charge->reference, 'amount' => $charge->amountCents, 'method' => $method->value, 'installments' => $installments, 'return_url' => $returnUrl]);
+        $id = 'inv_'.Str::lower(Str::random(10));
+        self::$charges[$id] = ['amount' => $charge->amountCents, 'status' => ChargeStatus::Pending, 'api_key' => $credentials->apiKey];
+
+        return new HostedCheckout($id, "https://fake-gateway.test/i/{$id}");
+    }
+
+    public function cancel(GatewayCredentials $credentials, string $chargeId): void
+    {
+        $charge = $this->charge($credentials, 'cancel', $chargeId);
+
+        throw_if($charge['status'] !== ChargeStatus::Pending, GatewayRequestFailed::class, 'Só cobrança pendente pode ser cancelada.');
+
+        self::$charges[$chargeId]['status'] = ChargeStatus::Cancelled;
     }
 
     public function fetch(GatewayCredentials $credentials, string $chargeId): ChargeSnapshot

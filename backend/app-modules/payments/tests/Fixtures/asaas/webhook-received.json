@@ -1,0 +1,1 @@
+{"id":"evt_05b708f961d739ea7eba7e4db318f621&368604920","event":"PAYMENT_RECEIVED","dateCreated":"2027-06-10 15:42:00","payment":{"object":"payment","id":"pay_080225913252","customer":"cus_000005219999","value":155.40,"netValue":154.41,"billingType":"PIX","status":"RECEIVED","externalReference":"01a1f07d-0000-7000-8000-000000000001"}}

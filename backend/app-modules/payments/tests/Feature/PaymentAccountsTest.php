@@ -62,7 +62,7 @@ it('cadastra a conta com titular CPF e nunca devolve as credenciais em texto', f
         ->assertJsonPath('data.ready', false)
         ->assertJsonPath('data.methods.0.key', 'pix');
 
-    $list = $this->getJson($this->base)->assertOk()->assertJsonPath('data.drivers', [['key' => 'fake', 'label' => 'Gateway de teste']]);
+    $list = $this->getJson($this->base)->assertOk()->assertJsonPath('data.drivers', [['key' => 'asaas', 'label' => 'Asaas'], ['key' => 'fake', 'label' => 'Gateway de teste']]);
 
     foreach ([$response->getContent(), $list->getContent()] as $body) {
         expect($body)->not->toContain(API_KEY)
