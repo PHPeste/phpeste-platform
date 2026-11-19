@@ -19,9 +19,11 @@ use PHPeste\Ticketing\Console\ReconcileOrdersCommand;
 use PHPeste\Ticketing\Console\ReencryptOrders;
 use PHPeste\Ticketing\Console\ResumeStalledImports;
 use PHPeste\Ticketing\Console\RotateTicketBatches;
+use PHPeste\Ticketing\Contracts\TicketRevenue;
 use PHPeste\Ticketing\Contracts\TicketVerifier;
 use PHPeste\Ticketing\Orders\OrderLedger;
 use PHPeste\Ticketing\Orders\SalesReadinessGuard;
+use PHPeste\Ticketing\Orders\TicketRevenueReport;
 use PHPeste\Ticketing\Overview\TicketingOverviewContributor;
 use PHPeste\Ticketing\Tickets\TicketPasses;
 
@@ -31,6 +33,7 @@ class TicketingServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../../config/ticketing.php', 'ticketing');
         $this->app->bind(TicketVerifier::class, TicketPasses::class);
+        $this->app->bind(TicketRevenue::class, TicketRevenueReport::class);
         $this->app->tag([TicketingCloner::class], EditionCloner::TAG);
         $this->app->tag([TicketingOverviewContributor::class], EditionOverviewContributor::TAG);
         $this->app->tag([SalesReadinessGuard::class], EditionTransitionGuard::TAG);

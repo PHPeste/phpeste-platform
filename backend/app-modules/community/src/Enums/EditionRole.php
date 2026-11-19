@@ -41,7 +41,7 @@ enum EditionRole: string
     {
         return match ($this) {
             self::Organizer => EditionPermission::cases(),
-            self::Finance => [EditionPermission::ViewOrders, EditionPermission::RefundOrders],
+            self::Finance => [EditionPermission::ViewOrders, EditionPermission::RefundOrders, EditionPermission::ManageFinance],
             self::Reviewer => [EditionPermission::ReviewProposals],
             self::CheckIn => [EditionPermission::CheckIn],
             self::Volunteer => [],

@@ -8,7 +8,9 @@ use Illuminate\Support\ServiceProvider;
 use PHPeste\Community\Contracts\EditionCloner;
 use PHPeste\Community\Contracts\EditionOverviewContributor;
 use PHPeste\Sponsors\Cloning\SponsorTiersCloner;
+use PHPeste\Sponsors\Contracts\SponsorRevenue;
 use PHPeste\Sponsors\Http\People;
+use PHPeste\Sponsors\Overview\SponsorRevenueReport;
 use PHPeste\Sponsors\Overview\SponsorsOverviewContributor;
 
 class SponsorsServiceProvider extends ServiceProvider
@@ -17,6 +19,7 @@ class SponsorsServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../../config/sponsors.php', 'sponsors');
         $this->app->scoped(People::class);
+        $this->app->bind(SponsorRevenue::class, SponsorRevenueReport::class);
         $this->app->tag([SponsorsOverviewContributor::class], EditionOverviewContributor::TAG);
         $this->app->tag([SponsorTiersCloner::class], EditionCloner::TAG);
     }

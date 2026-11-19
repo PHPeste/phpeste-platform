@@ -85,6 +85,8 @@ class PaymentAccount extends Model
             $this->pix_expiration_minutes,
             $this->isReady(),
             is_string($this->credentials['public_key'] ?? null) ? $this->credentials['public_key'] : null,
+            $this->holder_document_masked,
+            $this->retired_at !== null,
         );
     }
 
