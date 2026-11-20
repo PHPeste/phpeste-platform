@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "19/11/2026 · A16 (tela de pagamentos)"
+RETRATO = "20/11/2026 · A17 (tela de participantes)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -281,7 +281,7 @@ mods = [
     ("Community", "comunidades, edições, estados, equipe, convites, tenancy, Visão geral, clonagem", 26, "backend"),
     ("Branding", "tema por edição (rascunho/publicado), presets, contraste AA, logos, domínios e TLS", 17, "backend"),
     ("Cfp", "chamada, trilhas, critérios, propostas, avaliação cega, decisão, cota do Nordeste, confirmação", 52, "backend"),
-    ("Ticketing", "tipos, lotes, cupons, pedidos, estoque atômico, ingressos com QR, transferência, importação, conciliação", 50, "backend"),
+    ("Ticketing", "tipos, lotes, cupons, pedidos, estoque atômico, ingressos com QR, participantes, transferência, importação, conciliação", 50, "backend"),
     ("Payments", "contas de gateway por edição, drivers Asaas e Mercado Pago, cobranças, webhooks, reembolsos", 8, "backend"),
     ("Notifications", "e-mail transacional por edição com modelos editáveis, descadastro, Resend com bounce e spam", 12, "backend"),
     ("Audit", "trilha append-only das ações sensíveis, com redação de segredos", 1, "backend"),
@@ -320,11 +320,11 @@ for i, (name, what) in enumerate(ext):
     b.append(arrow([(550, 116), (x + 127, 150)], "edition", dashed=True))
 pairs = [
     (20, 240, "Cfp", ["→ UserAccounts, SpeakerProfiles (Identity)", "→ EditionMailer (Notifications)", "→ EditionSites (Branding)", "ReviewLedger ← quem conta avaliações"]),
-    (390, 240, "Ticketing", ["→ PaymentProcessor, PaymentLedger", "→ PaymentAccounts (Payments), AuditTrail", "AccountUsage, TicketVerifier,", "TicketRevenue ← Payments, CheckIn, Finance"]),
+    (390, 240, "Ticketing", ["→ PaymentProcessor, PaymentLedger", "→ PaymentAccounts (Payments), AuditTrail, EditionMailer", "AccountUsage, TicketVerifier,", "TicketRevenue ← Payments, CheckIn, Finance"]),
     (760, 240, "Payments", ["→ PaymentGateway (driver Asaas/MP)", "ChargeStatusChanged → Ticketing", "RefundAccepted → Ticketing", "sem acesso a pedidos: só referência"]),
     (20, 395, "Finance", ["→ TicketRevenue (Ticketing)", "→ SponsorRevenue (Sponsors)", "→ PaymentAccounts::all (Payments)", "→ EditionSuppliers (Suppliers)"]),
     (390, 395, "Sponsors · Suppliers", ["→ EditionMemberships (responsável)", "→ UserAccounts (nomes)", "Suppliers → EditionDirectory::communityId", "para não vazar entre comunidades"]),
-    (760, 395, "Audit · Notifications", ["Auditable: qualquer evento vira registro", "pelo listener genérico RecordAuditableEvent", "AuditTrail: histórico de um registro", "EditionMailer::send(...): todo e-mail,", "com o tema da edição"]),
+    (760, 395, "Audit · Notifications", ["Auditable: qualquer evento vira registro", "pelo listener genérico RecordAuditableEvent", "AuditTrail: histórico de um registro", "EditionMailer::send(...): todo e-mail,", "com o tema; ::preview mostra sem enviar"]),
 ]
 for x, y, title, lines in pairs:
     b.append(box(x, y, 340, 130, title, lines, "backend", size=9.8))
@@ -490,14 +490,14 @@ content = '<div class="two">' + table(["Quando", "Comando", "Para quê"], [(f"<c
 </ul>
 <h3>E-mail (Notifications)</h3>
 <ul>
-<li>Todo e-mail sai por <code>EditionMailer::send</code>: registra em <code>email_deliveries</code> e enfileira com 5 tentativas.</li>
+<li>Todo e-mail sai por <code>EditionMailer::send</code>: registra em <code>email_deliveries</code> e enfileira com 5 tentativas. <code>EditionMailer::preview</code> devolve o e-mail pronto, com o tema e o texto da edição, sem enviar (prévia da cobrança de dados dos participantes).</li>
 <li>Modelo editável por edição, variáveis <code>{nome}</code> sem Blade, HTML escapado, layout com o tema publicado.</li>
 <li>Não transacional leva descadastro com link assinado e <code>List-Unsubscribe</code>.</li>
 <li>Webhook do Resend (assinatura Svix): entregue, bounce e spam. Bounce permanente ou spam bloqueia o endereço na edição, até para transacional, até a organização liberar.</li>
 </ul>
 <h3>Auditoria</h3>
 <ul>
-<li>Evento que implementa <code>Auditable</code> vira linha em <code>audit_logs</code> pelo listener genérico. 23 eventos hoje.</li>
+<li>Evento que implementa <code>Auditable</code> vira linha em <code>audit_logs</code> pelo listener genérico. 25 eventos hoje.</li>
 <li>Tela que mostra histórico (ex.: o pedido) lê pelo contrato <code>AuditTrail::forSubject</code>, sem consultar a tabela de outro módulo.</li>
 <li>Segredo removido, dado pessoal mascarado; o model recusa update e delete.</li>
 </ul></div></div>"""
@@ -564,6 +564,7 @@ SALES_SCREENS = [
     ("painel-ingressos.png", "Ingressos: tipos e lotes com o preço, o que a edição recebe depois da taxa do gateway, vendidos e situação. Cupons e regras da venda nas outras abas."),
     ("painel-pedidos.png", "Pedidos: números da edição no topo (pagos, aguardando, reembolsos, taxa do gateway), busca e filtro por situação, e o detalhe com itens, pagamento, reembolsos e histórico (auditoria). Reembolso com aviso de taxa e confirmação explícita; marcar como pago exige justificativa."),
     ("painel-pagamentos.png", "Pagamentos (só a organização): gateway da comunidade com chave mascarada, etapas para abrir vendas e Testar conexão, prévia do recebedor no checkout, métodos aceitos, webhook com o último evento e os últimos eventos do gateway com reprocessar."),
+    ("painel-participantes.png", "Participantes (só a organização): uma linha por ingresso com crachá, acessibilidade (só a organização vê) e camiseta, filtros de dados faltando e transferidos, edição registrada na auditoria, cobrança de dados com prévia do e-mail e CSV dos crachás."),
 ]
 pages.append(page(18, "Telas", "Telas: vendas e organização",
     "As telas do Marco 2 conforme ficam prontas. Mesma fonte dos outros prints: o painel rodando com a API simulada.",
@@ -573,7 +574,7 @@ pages.append(page(18, "Telas", "Telas: vendas e organização",
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
     ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway); faltam A17–A23 e P04–P06"),
+    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes); faltam A18–A23 e P04–P06"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]
