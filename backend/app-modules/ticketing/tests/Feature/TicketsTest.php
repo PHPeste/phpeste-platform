@@ -223,3 +223,94 @@ it('reembolso cancelando o ingresso derruba o QR', function (): void {
     $this->getJson($this->mine)->assertJsonPath('data.0.status', 'cancelled')->assertJsonMissingPath('data.0.qr');
     $this->postJson("{$this->mine}/{$ticket->id}/transfer", ['name' => 'Xavier', 'email' => 'x@exemplo.com'])->assertStatus(422)->assertJsonPath('errors.ticket.0', 'Ingresso cancelado não pode ser transferido.');
 });
+
+it('participantes: filtra quem está com dados faltando e quem recebeu por transferência, com o resumo da edição', function (): void {
+    Sanctum::actingAs($this->organizer);
+    $ana = ticketOf($this->edition->id, 'ana@exemplo.com');
+    $bia = ticketOf($this->edition->id, 'bia@exemplo.com');
+    $this->patchJson("{$this->admin}/{$ana->id}", ['badge_name' => 'Aninha', 'tshirt_size' => 'M', 'accessibility' => 'Intérprete de Libras'])->assertOk();
+    $this->postJson("{$this->admin}/{$bia->id}/transfer", ['name' => 'Carla Dias', 'email' => 'carla@exemplo.com'])->assertOk();
+
+    $this->getJson($this->admin)
+        ->assertOk()
+        ->assertJsonPath('meta.summary', ['participants' => 2, 'complete' => 1, 'missing' => 1, 'accessibility' => 1, 'transferred' => 1]);
+
+    $this->getJson("{$this->admin}?missing=1")
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.holder.name', 'Carla Dias')
+        ->assertJsonPath('data.0.missing', ['badge_name', 'tshirt_size'])
+        ->assertJsonPath('data.0.transferred_from', 'Bia Lima')
+        ->assertJsonPath('meta.summary.participants', 2);
+    $this->getJson("{$this->admin}?transferred=1")->assertJsonCount(1, 'data')->assertJsonPath('data.0.holder.email', 'carla@exemplo.com');
+    $this->getJson("{$this->admin}?q=aninha")->assertJsonCount(1, 'data')->assertJsonPath('data.0.missing', [])->assertJsonPath('data.0.transferred_from', null);
+
+    $finance = User::factory()->create();
+    EditionMember::factory()->for($this->edition)->create(['user_id' => $finance->id, 'role' => EditionRole::Finance]);
+    Sanctum::actingAs($finance);
+    $this->getJson($this->admin)->assertJsonPath('meta.summary.accessibility', null);
+});
+
+it('a edição do nome do crachá fica registrada com quem mudou, de quê para quê, sem guardar o texto da acessibilidade', function (): void {
+    Sanctum::actingAs($this->organizer);
+    $ticket = ticketOf($this->edition->id, 'ana@exemplo.com');
+
+    $this->patchJson("{$this->admin}/{$ticket->id}", ['badge_name' => 'Aninha', 'accessibility' => 'Cadeira de rodas'])
+        ->assertOk()
+        ->assertJsonPath('data.edits.0.changes.0', ['field' => 'badge_name', 'label' => 'Nome no crachá', 'from' => null, 'to' => 'Aninha'])
+        ->assertJsonPath('data.edits.0.changes.1', ['field' => 'accessibility', 'label' => 'Acessibilidade', 'from' => null, 'to' => null])
+        ->assertJsonPath('data.edits.0.actor.id', $this->organizer->id);
+    $this->patchJson("{$this->admin}/{$ticket->id}", ['badge_name' => 'Ana S.'])->assertOk();
+    $this->patchJson("{$this->admin}/{$ticket->id}", ['badge_name' => 'Ana S.'])->assertOk();
+
+    $logs = AuditLog::query()->where('action', 'ticketing.ticket_attendee_updated')->orderBy('id')->get();
+    expect($logs)->toHaveCount(2)
+        ->and($logs[1]->before)->toBe(['badge_name' => 'Aninha'])
+        ->and($logs[1]->after)->toBe(['badge_name' => 'Ana S.'])
+        ->and(json_encode($logs[0]->after))->not->toContain('Cadeira');
+
+    $this->getJson("{$this->admin}/{$ticket->id}")
+        ->assertJsonCount(2, 'data.edits')
+        ->assertJsonPath('data.edits.1.changes.0.from', 'Aninha')
+        ->assertJsonPath('data.edits.1.changes.0.to', 'Ana S.');
+
+    Sanctum::actingAs($this->ana);
+    $this->patchJson("{$this->mine}/{$ticket->id}", ['tshirt_size' => 'G'])->assertOk();
+    expect(AuditLog::query()->where('action', 'ticketing.ticket_attendee_updated')->orderByDesc('id')->first()->actor_id)->toBe($this->ana->id);
+});
+
+it('cobra os dados faltando por e-mail, uma vez por pessoa, só depois de confirmar o número da prévia', function (): void {
+    Sanctum::actingAs($this->organizer);
+    $ana = ticketOf($this->edition->id, 'ana@exemplo.com');
+    $this->patchJson("{$this->admin}/{$ana->id}", ['badge_name' => 'Aninha', 'tshirt_size' => 'M'])->assertOk();
+
+    $preview = $this->getJson("{$this->admin}/data-reminder")->assertOk();
+    $preview->assertJsonPath('data.recipients', 1)->assertJsonPath('data.email.subject', 'Complete seus dados para o crachá do PHPeste 2027');
+    expect($preview->json('data.email.text'))->toContain('Oi, Bia Lima!')->toContain('/ingressos')
+        ->and(emails($this->edition->id, EmailTemplate::AttendeeDataReminder))->toBe([]);
+
+    $this->postJson("{$this->admin}/data-reminder", ['confirm' => true, 'recipients' => 2])->assertStatus(422)->assertJsonPath('errors.confirm.0', 'Confirme a cobrança por e-mail para 1 pessoa.');
+    $this->postJson("{$this->admin}/data-reminder", ['confirm' => true, 'recipients' => 1])->assertStatus(202)->assertJsonPath('data.recipients', 1);
+
+    expect(emails($this->edition->id, EmailTemplate::AttendeeDataReminder))->toBe(['bia@exemplo.com'])
+        ->and(AuditLog::query()->where('action', 'ticketing.attendee_data_reminder_sent')->sole()->after)->toBe(['recipients' => 1]);
+
+    $finance = User::factory()->create();
+    EditionMember::factory()->for($this->edition)->create(['user_id' => $finance->id, 'role' => EditionRole::Finance]);
+    Sanctum::actingAs($finance);
+    $this->getJson("{$this->admin}/data-reminder")->assertForbidden();
+    $this->postJson("{$this->admin}/data-reminder", ['confirm' => true, 'recipients' => 1])->assertForbidden();
+});
+
+it('exporta os crachás dos ingressos válidos, sem e-mail nem acessibilidade e sem virar fórmula', function (): void {
+    Sanctum::actingAs($this->organizer);
+    $ana = ticketOf($this->edition->id, 'ana@exemplo.com');
+    $this->patchJson("{$this->admin}/{$ana->id}", ['badge_name' => '=Aninha', 'company' => 'PHP-PB', 'tshirt_size' => 'BL-M', 'accessibility' => 'Rampa'])->assertOk();
+
+    $csv = $this->get("{$this->admin}/badges")->assertOk()->assertHeader('Content-Type', 'text/csv; charset=UTF-8')->streamedContent();
+
+    expect($csv)->toStartWith("\u{FEFF}Código;\"Nome no crachá\";\"Nome completo\";Empresa;Ingresso;Camiseta")
+        ->toContain("{$ana->code};'=Aninha;\"Ana Souza\";PHP-PB;Geral;BL-M")
+        ->toContain(';"Bia Lima";"Bia Lima";;Geral;')
+        ->not->toContain('exemplo.com')
+        ->not->toContain('Rampa');
+});

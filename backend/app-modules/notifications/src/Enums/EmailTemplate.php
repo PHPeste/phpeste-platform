@@ -19,6 +19,7 @@ enum EmailTemplate: string
     case SpeakerInvited = 'speaker_invited';
     case TaskAssigned = 'task_assigned';
     case TaskDueSoon = 'task_due_soon';
+    case AttendeeDataReminder = 'attendee_data_reminder';
 
     public function label(): string
     {
@@ -36,6 +37,7 @@ enum EmailTemplate: string
             self::SpeakerInvited => 'Convite para palestrar',
             self::TaskAssigned => 'Tarefa atribuída',
             self::TaskDueSoon => 'Prazo de tarefa chegando',
+            self::AttendeeDataReminder => 'Dados do crachá faltando',
         };
     }
 
@@ -54,6 +56,7 @@ enum EmailTemplate: string
             self::SpeakerInvited => 'Ao convidar alguém direto para palestrar',
             self::TaskAssigned => 'Ao virar responsável por uma tarefa',
             self::TaskDueSoon => '1 dia antes do prazo da tarefa',
+            self::AttendeeDataReminder => 'Quando a organização cobra os dados faltando',
         };
     }
 
@@ -72,7 +75,7 @@ enum EmailTemplate: string
             self::OrderRefunded => ['nome', 'edicao', 'pedido', 'valor', 'ingressos'],
             self::TicketTransferred => ['nome', 'edicao', 'data', 'remetente', 'ingresso'],
             self::CfpAccepted, self::CfpWaitlisted => ['nome', 'edicao', 'proposta', 'data', 'prazo'],
-            self::EventReminder => ['nome', 'edicao', 'data'],
+            self::EventReminder, self::AttendeeDataReminder => ['nome', 'edicao', 'data'],
             self::TeamInvite => ['nome', 'edicao', 'papel'],
             self::ProposalReceived => ['nome', 'edicao', 'proposta', 'data'],
             self::SpeakerConfirmationReminder, self::SpeakerInvited => ['nome', 'edicao', 'proposta', 'prazo'],
@@ -96,6 +99,7 @@ enum EmailTemplate: string
             self::SpeakerInvited => 'Convite para palestrar no {edicao}',
             self::TaskAssigned => 'Nova tarefa para você no {edicao}: {tarefa}',
             self::TaskDueSoon => 'O prazo de "{tarefa}" é {prazo}',
+            self::AttendeeDataReminder => 'Complete seus dados para o crachá do {edicao}',
         };
     }
 
@@ -114,7 +118,8 @@ enum EmailTemplate: string
             self::SpeakerConfirmationReminder => "Oi, {nome}!\n\nAinda não recebemos sua confirmação para a palestra \"{proposta}\" no {edicao}. O prazo vai até {prazo}; depois disso a vaga pode ir para a lista de espera.",
             self::SpeakerInvited => "Oi, {nome}!\n\nA organização do {edicao} convidou você para apresentar \"{proposta}\". Confirme sua participação pelo link abaixo até {prazo}.\n\nPara entrar, use este e-mail: se ainda não tem senha na plataforma, entre pelo GitHub ou peça uma senha em \"Esqueci minha senha\".",
             self::TaskAssigned => "Oi, {nome}!\n\nVocê é responsável pela tarefa \"{tarefa}\" no {edicao}. Prazo: {prazo}.",
-            self::TaskDueSoon => "Oi, {nome}!\n\nA tarefa \"{tarefa}\" do {edicao}, que está com você, vence {prazo}. Se já terminou, mova para a coluna de concluídas no painel."
+            self::TaskDueSoon => "Oi, {nome}!\n\nA tarefa \"{tarefa}\" do {edicao}, que está com você, vence {prazo}. Se já terminou, mova para a coluna de concluídas no painel.",
+            self::AttendeeDataReminder => "Oi, {nome}!\n\nAinda faltam dados do seu ingresso para o {edicao}, em {data}: o nome que vai no crachá e o tamanho da camiseta. Leva um minuto: entre com este e-mail pelo link abaixo e complete.",
         };
     }
 
@@ -132,6 +137,7 @@ enum EmailTemplate: string
             self::ProposalReceived => 'Ver minha proposta',
             self::SpeakerConfirmationReminder, self::SpeakerInvited => 'Confirmar participação',
             self::TaskAssigned, self::TaskDueSoon => 'Ver tarefa',
+            self::AttendeeDataReminder => 'Completar meus dados',
         };
     }
 
