@@ -8,6 +8,7 @@ use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
 use PHPeste\Ticketing\Models\Ticket;
 use PHPeste\Ticketing\Models\TicketTransfer;
+use PHPeste\Ticketing\Tickets\AttendeeData;
 use PHPeste\Ticketing\Tickets\TicketPasses;
 
 class TicketResource extends ApiResource
@@ -17,6 +18,11 @@ class TicketResource extends ApiResource
     public bool $withAccessibility = false;
 
     public bool $withHistory = false;
+
+    /**
+     * @var list<array<string, mixed>>|null
+     */
+    public ?array $edits = null;
 
     /**
      * @return array<string, mixed>
@@ -47,6 +53,8 @@ class TicketResource extends ApiResource
                 'tshirt_size' => $ticket->tshirt_size?->value,
                 ...($this->withAccessibility ? ['accessibility' => $ticket->accessibility] : []),
             ],
+            'missing' => resolve(AttendeeData::class)->missingFields($ticket),
+            'transferred_from' => is_string($ticket->getAttribute('transferred_from')) ? $ticket->getAttribute('transferred_from') : null,
             'issued_at' => $this->isoDate($ticket->issued_at),
             'cancelled_at' => $this->isoDate($ticket->cancelled_at),
             'last_sent_at' => $this->isoDate($ticket->last_sent_at),
@@ -58,6 +66,7 @@ class TicketResource extends ApiResource
                 'transferred_by' => $transfer->transferred_by,
                 'at' => $this->isoDate($transfer->created_at),
             ])->all()] : []),
+            ...($this->edits === null ? [] : ['edits' => $this->edits]),
         ];
     }
 }

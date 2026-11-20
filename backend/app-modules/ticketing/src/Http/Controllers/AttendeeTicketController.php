@@ -49,7 +49,7 @@ class AttendeeTicketController
         /** @var array<string, mixed> $data */
         $data = $request->validated();
 
-        return $this->present($update->handle($this->ticket($request), $data)->load(['item', 'order']));
+        return $this->present($update->handle($this->ticket($request), $data, (string) $this->user($request)->getAuthIdentifier())->load(['item', 'order']));
     }
 
     public function transfer(TransferTicketRequest $request, TransferTicket $transfer): TicketResource

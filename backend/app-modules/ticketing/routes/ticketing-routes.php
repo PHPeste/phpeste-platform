@@ -41,6 +41,9 @@ Route::apiV1Edition('ticketing')->group(function (): void {
     Route::post('/orders/{order}/refunds', [OrderRefundController::class, 'store'])->whereUuid('order')->name('ticketing.orders.refunds.store');
     Route::post('/orders/{order}/refunds/{refund}/settle', [OrderRefundController::class, 'settle'])->whereUuid(['order', 'refund'])->name('ticketing.orders.refunds.settle');
     Route::get('/tickets', [TicketController::class, 'index'])->name('ticketing.tickets.index');
+    Route::get('/tickets/badges', [TicketController::class, 'badges'])->name('ticketing.tickets.badges');
+    Route::get('/tickets/data-reminder', [TicketController::class, 'reminderPreview'])->name('ticketing.tickets.data-reminder.preview');
+    Route::post('/tickets/data-reminder', [TicketController::class, 'remind'])->middleware('throttle:6,1')->name('ticketing.tickets.data-reminder');
     Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->whereUuid('ticket')->name('ticketing.tickets.show');
     Route::patch('/tickets/{ticket}', [TicketController::class, 'update'])->whereUuid('ticket')->name('ticketing.tickets.update');
     Route::post('/tickets/{ticket}/transfer', [TicketController::class, 'transfer'])->whereUuid('ticket')->name('ticketing.tickets.transfer');

@@ -8,12 +8,22 @@ use PHPeste\Notifications\Contracts\EditionMailer;
 use PHPeste\Notifications\Enums\DeliveryStatus;
 use PHPeste\Notifications\Enums\EmailTemplate;
 use PHPeste\Notifications\Jobs\SendEmailDelivery;
+use PHPeste\Notifications\Mail\EmailComposer;
 use PHPeste\Notifications\Models\EmailDelivery;
 use PHPeste\Notifications\Models\EmailSuppression;
 use PHPeste\Notifications\Models\EmailUnsubscribe;
 
 class QueueEmail implements EditionMailer
 {
+    public function __construct(private readonly EmailComposer $composer) {}
+
+    public function preview(string $editionId, EmailTemplate $template, string $email, array $variables = [], ?string $actionUrl = null): array
+    {
+        $rendered = $this->composer->compose($editionId, $template, $email, $variables, $actionUrl);
+
+        return ['subject' => $rendered->subject, 'html' => $rendered->html, 'text' => $rendered->text];
+    }
+
     public function send(string $editionId, EmailTemplate $template, string $email, string $name, array $variables = [], ?string $actionUrl = null): string
     {
         return $this->queue($editionId, $template, $email, $name, $variables, $actionUrl)->id;
