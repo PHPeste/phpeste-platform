@@ -54,6 +54,8 @@ app/
     ingressos/index.vue            # módulo tickets: tipos e lotes com valor líquido e prévia do checkout, cupons e regras da venda
     pedidos/index.vue              # módulo orders: lista com busca e filtro, detalhe com pagamento e histórico, reembolso, marcar como pago, reenviar cobrança, CSV
     participantes/index.vue        # módulo attendees (só organização): uma linha por ingresso, filtros de dados faltando, acessibilidade e transferidos, detalhe com edição registrada, cobrança de dados com prévia do e-mail, CSV dos crachás
+    patrocinadores/index.vue       # módulo sponsors (só organização): indicadores da meta, funil arrastável com desfazer no erro e confirmação de cota sem vaga, perdidos, cotas
+    patrocinadores/[id].vue        # módulo sponsors: contato e acordo, pagamentos, entregas, anexos por URL assinada, histórico de contato
     pagamentos/index.vue           # módulo payments (só organização): conectar/trocar gateway, testar conexão, webhook e último evento, prévia do recebedor, eventos com reprocessar
     configuracoes.vue              # módulo editionSettings: dados e etapa da edição, domínio e site próprio, privacidade e auditoria
     meu-perfil.vue                 # módulo myProfile: conta, senha, sessões ativas e notificações

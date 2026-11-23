@@ -203,3 +203,35 @@ test('participantes', async ({ page, goto }) => {
   await expect(page.getByRole('row', { name: /Bruno Teles/ })).toContainText('Transferido de Camila Rocha')
   await page.screenshot({ path: out('painel-participantes') })
 })
+
+test('patrocinadores', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await signedIn(page)
+  const money = (amount: number) => ({ amount, currency: 'BRL' })
+  const card = (id: string, name: string, stage: string, tier: string, value: number, extra: Record<string, unknown> = {}) => ({
+    id, sponsor: { id: `s-${id}`, name }, tier: { id: `t-${tier}`, name: tier }, stage, stage_label: stage, value: money(value), received: money(0), outstanding: money(value),
+    owner: null, lost_reason: null, position: 0, closed_at: null, paid_at: null, lost_at: null, created_at: '2027-03-01T12:00:00Z', last_contact: null, ...extra,
+  })
+  const contact = (summary: string) => ({ last_contact: { channel: 'email', channel_label: 'E-mail', summary, happened_at: '2027-03-05T12:00:00Z' } })
+  const columns = [
+    { stage: 'prospecting', label: 'Prospecção', count: 2, value: money(1_200_000), cards: [card('1', 'Hospedagem Norte', 'prospecting', 'Ouro', 800_000, contact('Contato feito')), card('2', 'Banco Digital X', 'prospecting', 'Prata', 400_000, contact('Aguardando resposta'))] },
+    { stage: 'negotiating', label: 'Negociando', count: 1, value: money(400_000), cards: [card('3', 'Loja de Cursos Y', 'negotiating', 'Prata', 400_000, contact('Proposta enviada'))] },
+    { stage: 'closed', label: 'Fechado', count: 2, value: money(900_000), cards: [card('4', 'Cloud Sul', 'closed', 'Ouro', 800_000, contact('Contrato assinado')), card('5', 'Revista Dev Z', 'closed', 'Apoio', 100_000, contact('Contrato assinado'))] },
+    { stage: 'paid', label: 'Pago', count: 1, value: money(150_000), cards: [card('6', 'Café do Sertão', 'paid', 'Apoio', 150_000, { paid_at: '2027-10-12T12:00:00Z' })] },
+    { stage: 'lost', label: 'Perdido', count: 0, value: money(0), cards: [] },
+  ]
+  await page.route('**/api/v1/editions/ed-27/team', (route) => route.fulfill({ status: 200, json: { data: { members: [], invitations: [], summary: {} } } }))
+  await page.route('**/api/v1/editions/ed-27/sponsors/board', (route) => route.fulfill({
+    status: 200, json: { data: { indicators: { goal: money(6_000_000), committed: money(1_050_000), received: money(150_000), pipeline: money(1_600_000), deliverables_overdue: 0 }, columns } },
+  }))
+  await page.route('**/api/v1/editions/ed-27/sponsors/tiers', (route) => route.fulfill({
+    status: 200, json: { data: [
+      { id: 't-Ouro', name: 'Ouro', price: money(800_000), slots: 3, slots_taken: 1, slots_left: 2, benefits: ['Palco', 'estande', '6 ingressos'], position: 0 },
+      { id: 't-Prata', name: 'Prata', price: money(400_000), slots: 5, slots_taken: 0, slots_left: 5, benefits: ['Logo no site', '3 ingressos'], position: 1 },
+      { id: 't-Apoio', name: 'Apoio', price: money(150_000), slots: 10, slots_taken: 2, slots_left: 8, benefits: ['Logo no site', '1 ingresso'], position: 2 },
+    ] },
+  }))
+  await goto('/patrocinadores', { waitUntil: 'hydration' })
+  await expect(page.getByTestId('sponsor-card').filter({ hasText: 'Café do Sertão' })).toBeVisible()
+  await page.screenshot({ path: out('painel-patrocinadores') })
+})
