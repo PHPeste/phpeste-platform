@@ -9,6 +9,7 @@ import identity from '../../../modules/identity/locales/pt-br'
 import team from '../../../modules/team/locales/pt-br'
 import cfpSettings from '../../../modules/cfpSettings/locales/pt-br'
 import tickets from '../../../modules/tickets/locales/pt-br'
+import attendees from '../../../modules/attendees/locales/pt-br'
 import orders from '../../../modules/orders/locales/pt-br'
 import payments from '../../../modules/payments/locales/pt-br'
 import cfpReview from '../../../modules/cfpReview/locales/pt-br'
@@ -32,6 +33,7 @@ export default {
   team,
   cfpSettings,
   tickets,
+  attendees,
   orders,
   payments,
   cfpReview,

@@ -178,3 +178,28 @@ test('pagamentos', async ({ page, goto }) => {
   await expect(page.getByTestId('webhook-events')).toContainText('PAYMENT_REFUNDED')
   await page.screenshot({ path: out('painel-pagamentos') })
 })
+
+test('participantes', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await signedIn(page)
+  const people: Array<[string, string, string | null, string | null, string | null, string | null, string | null]> = [
+    ['Marina Alves', 'Geral', 'Marina', 'Empresa A', 'M', null, null],
+    ['Diego Costa', 'Estudante', 'Diego', 'Universidade B', 'G', 'Intérprete de Libras', null],
+    ['Luana Pires', 'Apoiador', 'Luana', 'PHP-PB', 'BL-P', null, null],
+    ['Bruno Teles', 'Geral', null, null, null, 'Acesso para cadeira de rodas', 'Camila Rocha'],
+    ['Aline Duarte', 'Estudante', 'Aline', 'Universidade B', 'BL-M', null, null],
+    ['Rafael Nunes', 'Geral', 'Rafa', null, null, null, null],
+    ['Tânia Melo', 'Geral', 'Tânia', 'Comunidade PHP-CE', 'P', null, null],
+  ]
+  const data = people.map(([name, type, badge, company, size, accessibility, from], index) => ({
+    id: `t-${index}`, code: `K7QM-${1000 + index}`, status: 'active', status_label: 'Válido', order_id: 'o-1', order_number: 40 + index, ticket_type_id: 'tt-1', ticket_type_name: type, batch_name: '1º lote',
+    holder: { name, email: `${name.split(' ')[0]!.toLowerCase().normalize('NFD').replace(/[^a-z]/g, '')}@exemplo.dev`, badge_name: badge, company, tshirt_size: size, accessibility },
+    missing: [...(badge ? [] : ['badge_name']), ...(size ? [] : ['tshirt_size'])], transferred_from: from, issued_at: null, cancelled_at: null, last_sent_at: null,
+  }))
+  await page.route('**/api/v1/editions/ed-27/ticketing/tickets**', (route) => route.fulfill({
+    status: 200, json: { data, meta: { current_page: 1, last_page: 3, total: 128, summary: { participants: 128, complete: 109, missing: 19, accessibility: 4, transferred: 3 } } },
+  }))
+  await goto('/participantes', { waitUntil: 'hydration' })
+  await expect(page.getByRole('row', { name: /Bruno Teles/ })).toContainText('Transferido de Camila Rocha')
+  await page.screenshot({ path: out('painel-participantes') })
+})

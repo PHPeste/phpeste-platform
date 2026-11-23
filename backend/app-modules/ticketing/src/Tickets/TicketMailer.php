@@ -27,6 +27,26 @@ class TicketMailer
         $this->send($ticket, EmailTemplate::TicketTransferred, ['remetente' => $fromName, 'ingresso' => $ticket->code]);
     }
 
+    public function dataReminder(Ticket $ticket): void
+    {
+        $this->mailer->send($ticket->edition_id, EmailTemplate::AttendeeDataReminder, $ticket->holder_email, $ticket->holder_name, ['nome' => $ticket->holder_name], $this->ticketsUrl($ticket->edition_id));
+    }
+
+    /**
+     * A cobrança de dados como a pessoa vai receber, sem enviar.
+     *
+     * @return array{subject: string, html: string, text: string}
+     */
+    public function previewDataReminder(string $editionId, string $email, string $name): array
+    {
+        return $this->mailer->preview($editionId, EmailTemplate::AttendeeDataReminder, $email, ['nome' => $name], $this->ticketsUrl($editionId));
+    }
+
+    private function ticketsUrl(string $editionId): string
+    {
+        return mb_rtrim($this->sites->url($editionId), '/').'/ingressos';
+    }
+
     /**
      * @param  array<string, string>  $variables
      */
@@ -35,7 +55,7 @@ class TicketMailer
         $this->mailer->send($ticket->edition_id, $template, $ticket->holder_email, $ticket->holder_name, [
             'nome' => $ticket->holder_name,
             ...$variables,
-        ], mb_rtrim($this->sites->url($ticket->edition_id), '/').'/ingressos');
+        ], $this->ticketsUrl($ticket->edition_id));
 
         Ticket::query()->forEdition($ticket->edition_id)->whereKey($ticket->id)->update(['last_sent_at' => now()]);
     }

@@ -2962,9 +2962,50 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Uma linha por ingresso. Filtros: `status`, `tshirt_size`,
+         *     `ticket_type_id`, `q` (nome, crachá, e-mail ou código), `missing`
+         *     (sem crachá ou camiseta), `transferred` e `accessibility` (só a
+         *     organização). `meta.summary` traz os números da edição inteira
+         */
         get: operations["ticketing.tickets.index"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/tickets/badges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** CSV dos ingressos válidos para imprimir os crachás */
+        get: operations["ticketing.tickets.badges"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/editions/{edition}/ticketing/tickets/data-reminder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Quantas pessoas vão receber a cobrança de dados e o e-mail como sai */
+        get: operations["ticketing.tickets.data-reminder.preview"];
+        put?: never;
+        /** Manda a cobrança. `recipients` precisa bater com o número da prévia */
+        post: operations["ticketing.tickets.data-reminder"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3625,7 +3666,7 @@ export interface components {
         EmailDeliveryResource: {
             id: string;
             /** @enum {string} */
-            template: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon";
+            template: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon" | "attendee_data_reminder";
             to_email: string;
             to_name: string;
             /** @enum {string} */
@@ -3651,15 +3692,15 @@ export interface components {
          * EmailTemplate
          * @enum {string}
          */
-        EmailTemplate: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon";
+        EmailTemplate: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon" | "attendee_data_reminder";
         /** EmailTemplateResource */
         EmailTemplateResource: {
             /** @enum {string} */
-            id: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon";
+            id: "order_confirmed" | "pix_reminder" | "order_refunded" | "ticket_transferred" | "cfp_accepted" | "cfp_waitlisted" | "event_reminder" | "team_invite" | "proposal_received" | "speaker_confirmation_reminder" | "speaker_invited" | "task_assigned" | "task_due_soon" | "attendee_data_reminder";
             /** @enum {string} */
-            label: "Confirmação de compra" | "Lembrete de pagamento" | "Reembolso do pedido" | "Ingresso transferido" | "Resultado do CFP: aprovada" | "Resultado do CFP: lista de espera" | "Antes do evento" | "Convite para a equipe" | "Proposta recebida" | "Lembrete de confirmação do palestrante" | "Convite para palestrar" | "Tarefa atribuída" | "Prazo de tarefa chegando";
+            label: "Confirmação de compra" | "Lembrete de pagamento" | "Reembolso do pedido" | "Ingresso transferido" | "Resultado do CFP: aprovada" | "Resultado do CFP: lista de espera" | "Antes do evento" | "Convite para a equipe" | "Proposta recebida" | "Lembrete de confirmação do palestrante" | "Convite para palestrar" | "Tarefa atribuída" | "Prazo de tarefa chegando" | "Dados do crachá faltando";
             /** @enum {string} */
-            trigger: "Ao pagar o pedido" | "Quando a organização reenvia a cobrança" | "Ao reembolsar o pedido" | "Ao receber um ingresso transferido" | "Manual" | "7 dias antes" | "Ao convidar alguém para a equipe" | "Ao enviar uma proposta" | "2 dias antes do prazo de confirmação" | "Ao convidar alguém direto para palestrar" | "Ao virar responsável por uma tarefa" | "1 dia antes do prazo da tarefa";
+            trigger: "Ao pagar o pedido" | "Quando a organização reenvia a cobrança" | "Ao reembolsar o pedido" | "Ao receber um ingresso transferido" | "Manual" | "7 dias antes" | "Ao convidar alguém para a equipe" | "Ao enviar uma proposta" | "2 dias antes do prazo de confirmação" | "Ao convidar alguém direto para palestrar" | "Ao virar responsável por uma tarefa" | "1 dia antes do prazo da tarefa" | "Quando a organização cobra os dados faltando";
             transactional: boolean;
             variables: [
                 "nome",
@@ -3709,7 +3750,7 @@ export interface components {
                 "prazo"
             ];
             /** @enum {string} */
-            action_label: "Ver meu ingresso" | "Pagar o pedido" | "Ver meu pedido" | "Confirmar participação" | "Ver minha proposta" | "Ver programação" | "Aceitar convite" | "Ver tarefa";
+            action_label: "Ver meu ingresso" | "Pagar o pedido" | "Ver meu pedido" | "Confirmar participação" | "Ver minha proposta" | "Ver programação" | "Aceitar convite" | "Ver tarefa" | "Completar meus dados";
             subject: string;
             body: string;
             customized: boolean;
@@ -4150,6 +4191,11 @@ export interface components {
             email: string;
             password: string;
             password_confirmation: string;
+        };
+        /** RemindAttendeeDataRequest */
+        RemindAttendeeDataRequest: {
+            confirm: boolean;
+            recipients: number;
         };
         /** RemindSpeakersRequest */
         RemindSpeakersRequest: {
@@ -4685,6 +4731,8 @@ export interface components {
             } & {
                 [key: string]: unknown;
             }) | unknown;
+            missing: string | unknown;
+            transferred_from: unknown;
             issued_at: (string | null) | unknown;
             cancelled_at: (string | null) | unknown;
             last_sent_at: (string | null) | unknown;
@@ -13162,6 +13210,8 @@ export interface operations {
         parameters: {
             query?: {
                 ticket_type_id?: string;
+                missing?: boolean;
+                transferred?: boolean;
             };
             header?: never;
             path: {
@@ -13203,12 +13253,107 @@ export interface operations {
                             to: number | null;
                             /** @description Total number of items being paginated. */
                             total: number;
+                            summary: {
+                                participants: number;
+                                complete: number;
+                                missing: number;
+                                accessibility: number | null;
+                                transferred: number;
+                            };
                         };
                     };
                 };
             };
             401: components["responses"]["AuthenticationException"];
             403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.tickets.badges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "Transfer-Encoding": "chunked";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv; charset=UTF-8": string;
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.tickets.data-reminder.preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            recipients: number;
+                            email: {
+                                subject: string;
+                                html: string;
+                                text: string;
+                            } | null;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+        };
+    };
+    "ticketing.tickets.data-reminder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                edition: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RemindAttendeeDataRequest"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            recipients: number;
+                        };
+                    };
+                };
+            };
+            401: components["responses"]["AuthenticationException"];
+            403: components["responses"]["AuthorizationException"];
+            422: components["responses"]["ValidationException"];
         };
     };
     "ticketing.tickets.show": {
