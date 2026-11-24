@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "23/11/2026 · A19 (tela de patrocinadores)"
+RETRATO = "24/11/2026 · A20 (tela de fornecedores)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -566,6 +566,7 @@ SALES_SCREENS = [
     ("painel-pagamentos.png", "Pagamentos (só a organização): gateway da comunidade com chave mascarada, etapas para abrir vendas e Testar conexão, prévia do recebedor no checkout, métodos aceitos, webhook com o último evento e os últimos eventos do gateway com reprocessar."),
     ("painel-participantes.png", "Participantes (só a organização): uma linha por ingresso com crachá, acessibilidade (só a organização vê) e camiseta, filtros de dados faltando e transferidos, edição registrada na auditoria, cobrança de dados com prévia do e-mail e CSV dos crachás."),
     ("painel-patrocinadores.png", "Patrocinadores (só a organização): meta, fechado, pago e em negociação, funil com o último contato de cada empresa, mover que desfaz se a API recusa e pede confirmação de cota sem vaga, e as cotas. O detalhe tem acordo, pagamentos, entregas, histórico e anexos por URL assinada."),
+    ("painel-fornecedores.png", "Fornecedores (só a organização): orçado e contratado da lista filtrada, que batem com o total no pé da tabela, filtros, contato restrito e trazer de outra edição da comunidade. O detalhe tem orçamentos, contratar e recusar, anexos e histórico."),
 ]
 pages.append(page(18, "Telas", "Telas: vendas e organização",
     "As telas do Marco 2 conforme ficam prontas. Mesma fonte dos outros prints: o painel rodando com a API simulada.",
@@ -575,7 +576,7 @@ pages.append(page(18, "Telas", "Telas: vendas e organização",
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
     ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores); faltam A18, A20–A23 e P04–P06"),
+    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores); faltam A18, A21–A23 e P04–P06"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]
