@@ -123,7 +123,7 @@ it('dados de um fornecedor não vazam para outra comunidade', function (): void 
     $this->getJson("{$this->api}/{$link['id']}")->assertForbidden();
 });
 
-it('orçamentos: o primeiro passa para em orçamento e o orçado é o menor que ainda vale', function (): void {
+it('orçamentos: o primeiro passa para em orçamento e o orçado é o aceito ou, sem ele, o menor que ainda vale', function (): void {
     $link = supplier($this)['id'];
     $high = quote($this, $link, 900_000);
 
@@ -131,6 +131,12 @@ it('orçamentos: o primeiro passa para em orçamento e o orçado é o menor que 
 
     $low = quote($this, $link, 700_000, 'Coffee + almoço');
     $this->getJson("{$this->api}/{$link}")->assertJsonPath('data.quoted.amount', 700_000)->assertJsonPath('data.quotes_count', 2);
+
+    $this->postJson("{$this->api}/{$link}/status", ['status' => 'hired', 'quote_id' => $high['id']])->assertOk();
+    $this->getJson("{$this->api}/{$link}")->assertJsonPath('data.quoted.amount', 900_000)->assertJsonPath('data.contracted.amount', 900_000);
+    $this->getJson($this->api)->assertJsonPath('totals.quoted.amount', 900_000);
+    $this->postJson("{$this->api}/{$link}/status", ['status' => 'quoting'])->assertOk();
+    $this->getJson("{$this->api}/{$link}")->assertJsonPath('data.quoted.amount', 700_000);
 
     $this->postJson("{$this->api}/{$link}/quotes/{$low['id']}/reject")->assertOk()->assertJsonPath('data.status', 'rejected');
     $this->getJson("{$this->api}/{$link}")->assertJsonPath('data.quoted.amount', 900_000);
