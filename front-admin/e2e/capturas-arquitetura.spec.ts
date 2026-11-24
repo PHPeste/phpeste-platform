@@ -235,3 +235,33 @@ test('patrocinadores', async ({ page, goto }) => {
   await expect(page.getByTestId('sponsor-card').filter({ hasText: 'Café do Sertão' })).toBeVisible()
   await page.screenshot({ path: out('painel-patrocinadores') })
 })
+
+test('fornecedores', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await signedIn(page)
+  const money = (amount: number) => ({ amount, currency: 'BRL' })
+  const rows: Array<[string, string, string, string, number, number | null, boolean]> = [
+    ['Espaço Mar Azul', 'venue', 'Local', 'hired', 1_800_000, 1_800_000, true],
+    ['Buffet Sabor da Terra', 'catering', 'Alimentação', 'quoting', 960_000, null, true],
+    ['Som e Luz JP', 'audio_visual', 'Som, luz e vídeo', 'quoting', 650_000, null, true],
+    ['Gráfica Rápida', 'printing', 'Gráfica', 'to_contact', 230_000, null, false],
+    ['Camisetas Nordeste', 'merch', 'Brindes e camisetas', 'hired', 480_000, 480_000, true],
+  ]
+  const labels: Record<string, string> = { hired: 'Contratado', quoting: 'Em orçamento', to_contact: 'A contatar', declined: 'Recusado' }
+  const data = rows.map(([name, service, serviceLabel, status, quoted, contracted, visible], index) => ({
+    id: `l-${index}`,
+    supplier: {
+      id: `s-${index}`, name, service, service_label: serviceLabel, description: null, document: null, website: null, city: 'João Pessoa', state: 'PB',
+      contacts_visible: visible, contacts: visible ? [{ id: `c-${index}`, name: 'Contato', role: null, email: null, phone: `(83) 90000-000${index + 1}` }] : null,
+    },
+    status, status_label: labels[status], owner: null, quoted: money(quoted), contracted: contracted === null ? null : money(contracted),
+    accepted_quote_id: null, decline_reason: null, hired_at: null, declined_at: null, quotes_count: 1,
+  }))
+  await page.route('**/api/v1/editions/ed-27/team', (route) => route.fulfill({ status: 200, json: { data: { members: [], invitations: [], summary: {} } } }))
+  await page.route('**/api/v1/editions/ed-27/suppliers', (route) => route.fulfill({
+    status: 200, json: { data, totals: { count: 5, quoted: money(4_120_000), contracted: money(2_280_000), by_status: { to_contact: 1, quoting: 2, hired: 2, declined: 0 } } },
+  }))
+  await goto('/fornecedores', { waitUntil: 'hydration' })
+  await expect(page.getByTestId('suppliers-list-total')).toContainText('R$ 41.200')
+  await page.screenshot({ path: out('painel-fornecedores') })
+})

@@ -56,6 +56,8 @@ app/
     participantes/index.vue        # módulo attendees (só organização): uma linha por ingresso, filtros de dados faltando, acessibilidade e transferidos, detalhe com edição registrada, cobrança de dados com prévia do e-mail, CSV dos crachás
     patrocinadores/index.vue       # módulo sponsors (só organização): indicadores da meta, funil arrastável com desfazer no erro e confirmação de cota sem vaga, perdidos, cotas
     patrocinadores/[id].vue        # módulo sponsors: contato e acordo, pagamentos, entregas, anexos por URL assinada, histórico de contato
+    fornecedores/index.vue         # módulo suppliers (só organização): totais de orçado e contratado da lista filtrada, filtros por status e serviço, novo fornecedor, trazer de outra edição da comunidade
+    fornecedores/[id].vue          # módulo suppliers: orçamentos, contratar e recusar, dados e contatos do cadastro da comunidade, anexos por URL assinada, histórico
     pagamentos/index.vue           # módulo payments (só organização): conectar/trocar gateway, testar conexão, webhook e último evento, prévia do recebedor, eventos com reprocessar
     configuracoes.vue              # módulo editionSettings: dados e etapa da edição, domínio e site próprio, privacidade e auditoria
     meu-perfil.vue                 # módulo myProfile: conta, senha, sessões ativas e notificações
