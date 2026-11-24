@@ -12,6 +12,7 @@ use PHPeste\Sponsors\Enums\SponsorshipStage;
 use PHPeste\Sponsors\Http\People;
 use PHPeste\Sponsors\Http\Requests\UpdateSponsorSettingsRequest;
 use PHPeste\Sponsors\Http\Resources\SponsorshipResource;
+use PHPeste\Sponsors\Models\SponsorContact;
 use PHPeste\Sponsors\Models\Sponsorship;
 use PHPeste\Sponsors\Overview\SponsorTotals;
 
@@ -32,6 +33,12 @@ class SponsorBoardController
             ->orderBy('position')->oldest()->orderBy('id')
             ->get();
         $people->load($deals->pluck('owner_id')->all());
+        $lastContacts = SponsorContact::query()
+            ->whereIn('sponsor_id', $deals->pluck('sponsor_id')->unique()->values()->all())
+            ->latest('happened_at')->orderByDesc('id')
+            ->get()
+            ->unique('sponsor_id')
+            ->keyBy('sponsor_id');
         $summary = $totals->of((string) $edition->id());
 
         return response()->json(['data' => [
@@ -47,7 +54,10 @@ class SponsorBoardController
                 'label' => $stage->label(),
                 'count' => $summary['stages'][$stage->value]['count'],
                 'value' => $this->money($summary['stages'][$stage->value]['value']),
-                'cards' => $deals->where('stage', $stage)->values()->map(fn (Sponsorship $deal): array => new SponsorshipResource($deal)->toArray($request))->all(),
+                'cards' => $deals->where('stage', $stage)->values()->map(fn (Sponsorship $deal): array => [
+                    ...new SponsorshipResource($deal)->toArray($request),
+                    'last_contact' => $this->lastContact($lastContacts->get($deal->sponsor_id)),
+                ])->all(),
             ], SponsorshipStage::cases()),
         ]]);
     }
@@ -59,6 +69,19 @@ class SponsorBoardController
         $settings = $update->handle((string) $edition->id(), $request->filled('goal_cents') ? $request->integer('goal_cents') : null);
 
         return response()->json(['data' => ['goal' => $this->money($settings->goal_cents)]]);
+    }
+
+    /**
+     * @return array{channel: string, channel_label: string, summary: string, happened_at: string}|null
+     */
+    private function lastContact(?SponsorContact $contact): ?array
+    {
+        return $contact instanceof SponsorContact ? [
+            'channel' => $contact->channel->value,
+            'channel_label' => $contact->channel->label(),
+            'summary' => $contact->summary,
+            'happened_at' => $contact->happened_at->clone()->utc()->toIso8601ZuluString(),
+        ] : null;
     }
 
     /**

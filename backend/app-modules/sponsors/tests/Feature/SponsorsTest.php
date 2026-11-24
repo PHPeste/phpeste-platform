@@ -230,6 +230,14 @@ it('guarda o histórico de contatos com a empresa', function (): void {
         ->and($detail['contacts'][1]['channel_label'])->toBe('Reunião')
         ->and($detail['contacts'][0]['author']['name'])->toBe('Rita Organiza');
 
+    deal($this, $acme['id'], ['value_cents' => 100_000]);
+    deal($this, company($this, 'Beta')['id'], ['value_cents' => 100_000]);
+    $cards = $this->getJson("{$this->api}/board")->assertOk()->json('data.columns.0.cards');
+
+    expect(array_column(array_column($cards, 'sponsor'), 'name'))->toBe(['Acme', 'Beta'])
+        ->and($cards[0]['last_contact'])->toMatchArray(['channel' => 'email', 'channel_label' => 'E-mail', 'summary' => 'Mandei a proposta'])
+        ->and($cards[1]['last_contact'])->toBeNull();
+
     $this->postJson($contacts, ['channel' => 'email', 'happened_at' => '2027-12-01', 'summary' => 'Futuro'])->assertUnprocessable();
 });
 

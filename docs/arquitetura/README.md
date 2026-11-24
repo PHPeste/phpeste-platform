@@ -24,7 +24,7 @@
 | 18 | Telas: vendas e organização (cresce a cada tela do Marco 2) |
 | 19 | Onde estamos e o que falta |
 
-Retrato de 19/11/2026, com a A14 (tela de ingressos).
+Retrato de 23/11/2026, com a A19 (tela de patrocinadores).
 
 ## Como atualizar
 

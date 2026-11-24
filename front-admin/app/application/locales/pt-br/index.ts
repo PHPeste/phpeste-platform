@@ -12,6 +12,7 @@ import tickets from '../../../modules/tickets/locales/pt-br'
 import attendees from '../../../modules/attendees/locales/pt-br'
 import orders from '../../../modules/orders/locales/pt-br'
 import payments from '../../../modules/payments/locales/pt-br'
+import sponsors from '../../../modules/sponsors/locales/pt-br'
 import cfpReview from '../../../modules/cfpReview/locales/pt-br'
 import speakers from '../../../modules/speakers/locales/pt-br'
 import editionSettings from '../../../modules/editionSettings/locales/pt-br'
@@ -36,6 +37,7 @@ export default {
   attendees,
   orders,
   payments,
+  sponsors,
   cfpReview,
   speakers,
   editionSettings,
