@@ -1,6 +1,6 @@
 # Arquitetura da PHPeste Platform
 
-**[PHPeste_Arquitetura.pdf](PHPeste_Arquitetura.pdf)** (19 páginas, A4 paisagem). O mesmo conteúdo, para abrir no navegador: [`fonte/arquitetura.html`](fonte/arquitetura.html).
+**[PHPeste_Arquitetura.pdf](PHPeste_Arquitetura.pdf)** (20 páginas, A4 paisagem). O mesmo conteúdo, para abrir no navegador: [`fonte/arquitetura.html`](fonte/arquitetura.html).
 
 | Página | Conteúdo |
 |--------|----------|
@@ -21,10 +21,11 @@
 | 15 | Desenvolvimento, CI e deploy |
 | 16 | Telas: o design do painel (`docs/design/`) |
 | 17 | Telas: o painel em uso (capturas do front-admin) |
-| 18 | Telas: vendas e organização (cresce a cada tela do Marco 2) |
-| 19 | Onde estamos e o que falta |
+| 18 | Telas: vendas (ingressos, pedidos, pagamentos, participantes) |
+| 19 | Telas: organização (patrocinadores, fornecedores, finanças; cresce a cada tela do Marco 2) |
+| 20 | Onde estamos e o que falta |
 
-Retrato de 24/11/2026, com a A20 (tela de fornecedores).
+Retrato de 24/11/2026, com a A21 (tela de finanças).
 
 ## Como atualizar
 

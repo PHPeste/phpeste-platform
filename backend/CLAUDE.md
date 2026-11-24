@@ -85,7 +85,7 @@ Policy ou Gate de outro módulo confere permissão, nunca papel: `EditionMembers
 
 ## Documento de arquitetura
 
-`../docs/arquitetura/` tem o documento visual de como tudo se encaixa (PDF de 18 páginas gerado por `docs/arquitetura/fonte/gerar.py`). **Todo PR que muda a arquitetura atualiza o documento no mesmo PR**: módulo novo ou que deixa de ser casca, tabela, contrato ou ponto de extensão novo, papel ou permissão, rotina agendada, serviço externo, ou mudança de fluxo (compra, CFP, dinheiro, tenancy). Edite o `gerar.py` (os números estão escritos lá), atualize `RETRATO`, rode `python3 docs/arquitetura/fonte/gerar.py && node docs/arquitetura/fonte/imprimir.mjs` na raiz e confira as páginas com `imprimir.mjs <pasta>`. Ver `docs/arquitetura/README.md`.
+`../docs/arquitetura/` tem o documento visual de como tudo se encaixa (PDF de 20 páginas gerado por `docs/arquitetura/fonte/gerar.py`). **Todo PR que muda a arquitetura atualiza o documento no mesmo PR**: módulo novo ou que deixa de ser casca, tabela, contrato ou ponto de extensão novo, papel ou permissão, rotina agendada, serviço externo, ou mudança de fluxo (compra, CFP, dinheiro, tenancy). Edite o `gerar.py` (os números estão escritos lá), atualize `RETRATO`, rode `python3 docs/arquitetura/fonte/gerar.py && node docs/arquitetura/fonte/imprimir.mjs` na raiz e confira as páginas com `imprimir.mjs <pasta>`. Ver `docs/arquitetura/README.md`.
 
 ## Comandos
 
