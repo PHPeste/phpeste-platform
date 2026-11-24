@@ -24,7 +24,7 @@
 | 18 | Telas: vendas e organização (cresce a cada tela do Marco 2) |
 | 19 | Onde estamos e o que falta |
 
-Retrato de 23/11/2026, com a A19 (tela de patrocinadores).
+Retrato de 24/11/2026, com a A20 (tela de fornecedores).
 
 ## Como atualizar
 

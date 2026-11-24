@@ -76,11 +76,17 @@ class EditionSupplier extends Model
     }
 
     /**
-     * Menor orçamento que ainda vale (recebido ou aceito). É o "orçado" da
-     * lista e dos totais.
+     * O "orçado" da lista e dos totais: o orçamento aceito no contrato ou,
+     * sem ele, o menor que ainda vale.
      */
     public function bestQuoteCents(): ?int
     {
+        $accepted = $this->quotes->first(fn (SupplierQuote $quote): bool => $quote->status === QuoteStatus::Accepted);
+
+        if ($accepted instanceof SupplierQuote) {
+            return $accepted->amount_cents;
+        }
+
         $amounts = $this->quotes->filter(fn (SupplierQuote $quote): bool => $quote->status !== QuoteStatus::Rejected)->pluck('amount_cents');
 
         return $amounts->isEmpty() ? null : (int) $amounts->min();
