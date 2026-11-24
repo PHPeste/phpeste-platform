@@ -265,3 +265,50 @@ test('fornecedores', async ({ page, goto }) => {
   await expect(page.getByTestId('suppliers-list-total')).toContainText('R$ 41.200')
   await page.screenshot({ path: out('painel-fornecedores') })
 })
+
+test('finanças', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await signedIn(page)
+  const categories: Array<[string, number | null, number]> = [
+    ['Local', 1_800_000, 900_000], ['Alimentação', 960_000, 0], ['Som, luz e vídeo', 650_000, 0], ['Gráfica e brindes', 480_000, 240_000], ['Viagem de palestrantes', 720_000, 0],
+  ]
+  const summary = {
+    revenue: {
+      tickets: {
+        gross: 1_990_000, refunded: 0, fees: 70_000, net: 1_920_000,
+        by_account: [{ account: { id: 'acc-1', driver: 'asaas', holder_type: 'cnpj', holder_name: 'Associação PHP-PB', holder_document: '**.***.***/0001-90', retired: false }, orders: 128, gross: 1_990_000, refunded: 0, fees: 70_000, net: 1_920_000, estimated_fees: 0 }],
+      },
+      sponsors: { received: 150_000, outstanding: 900_000 },
+      total: 2_070_000,
+    },
+    expenses: { paid: 1_140_000, pending: 1_850_000, overdue: 0 },
+    balance: 930_000,
+    forecast: -20_000,
+    budget: {
+      categories: categories.map(([name, budget, committed], index) => ({
+        id: `cat-${index}`, name, budget, committed, paid: committed, remaining: budget === null ? null : budget - committed,
+        percent_used: budget ? Math.floor(committed * 100 / budget) : null, over_budget: false,
+      })),
+      budgeted: 4_610_000, committed: 1_140_000, paid: 1_140_000,
+    },
+  }
+  const expenses: Array<[string, string, string | null, number, string, string]> = [
+    ['Sinal do espaço', 'Local', 'Espaço Mar Azul', 900_000, '2027-07-10', 'paid'],
+    ['Camisetas, 50%', 'Gráfica e brindes', 'Camisetas Nordeste', 240_000, '2027-07-20', 'paid'],
+    ['Buffet, sinal', 'Alimentação', 'Buffet Sabor da Terra', 480_000, '2027-08-15', 'pending'],
+    ['Som e luz', 'Som, luz e vídeo', 'Som e Luz JP', 650_000, '2027-10-01', 'pending'],
+    ['Passagens de palestrantes', 'Viagem de palestrantes', null, 720_000, '2027-09-15', 'pending'],
+  ]
+  const data = expenses.map(([description, category, supplier, amount, due, status], index) => ({
+    id: `e-${index}`, description, category: { id: `c-${index}`, name: category }, supplier: supplier ? { id: `s-${index}`, name: supplier } : null, amount, due_on: due,
+    paid_on: status === 'paid' ? due : null, status, status_label: status === 'paid' ? 'Paga' : 'A pagar', overdue: false, notes: null,
+    receipt: status === 'paid' ? { name: 'comprovante.pdf', mime_type: 'application/pdf', size_bytes: 2048 } : null,
+  }))
+  await page.route('**/api/v1/editions/ed-27/finance/summary', (route) => route.fulfill({ status: 200, json: { data: summary } }))
+  await page.route('**/api/v1/editions/ed-27/finance/categories', (route) => route.fulfill({ status: 200, json: { data: [] } }))
+  await page.route('**/api/v1/editions/ed-27/finance/suppliers', (route) => route.fulfill({ status: 200, json: { data: [] } }))
+  await page.route('**/api/v1/editions/ed-27/finance/expenses', (route) => route.fulfill({ status: 200, json: { data, totals: { count: 5, amount: 2_990_000, paid: 1_140_000, pending: 1_850_000 } } }))
+  await goto('/financas', { waitUntil: 'hydration' })
+  await expect(page.getByTestId('finance-kpis')).toContainText('R$ 20.700')
+  await page.screenshot({ path: out('painel-financas') })
+})
