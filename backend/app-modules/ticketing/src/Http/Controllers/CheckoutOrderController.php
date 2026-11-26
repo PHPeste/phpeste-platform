@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace PHPeste\Ticketing\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use PHPeste\Community\Tenancy\CurrentEdition;
 use PHPeste\Payments\Contracts\PaymentProcessor;
 use PHPeste\Payments\Data\PaymentAttempt;
@@ -17,7 +19,9 @@ use PHPeste\Ticketing\Enums\OrderStatus;
 use PHPeste\Ticketing\Http\Requests\PlaceOrderRequest;
 use PHPeste\Ticketing\Http\Requests\StartOrderPaymentRequest;
 use PHPeste\Ticketing\Http\Resources\OrderResource;
+use PHPeste\Ticketing\Http\Resources\TicketResource;
 use PHPeste\Ticketing\Models\Order;
+use PHPeste\Ticketing\Models\Ticket;
 
 class CheckoutOrderController
 {
@@ -48,6 +52,25 @@ class CheckoutOrderController
     public function show(Request $request): OrderResource
     {
         return new OrderResource($this->order($request));
+    }
+
+    public function tickets(Request $request): AnonymousResourceCollection
+    {
+        $order = $this->order($request);
+
+        $tickets = $order->status === OrderStatus::Paid
+            ? Ticket::query()->with('item')->where('order_id', $order->id)->whereNull('cancelled_at')->oldest('issued_at')->oldest('id')->get()
+            : new Collection;
+
+        $collection = TicketResource::collection($tickets);
+
+        foreach ($collection->collection ?? [] as $resource) {
+            if ($resource instanceof TicketResource) {
+                $resource->withQr = true;
+            }
+        }
+
+        return $collection;
     }
 
     public function cancel(Request $request, TransitionOrder $transition): OrderResource
