@@ -58,6 +58,7 @@ app/
     patrocinadores/[id].vue        # módulo sponsors: contato e acordo, pagamentos, entregas, anexos por URL assinada, histórico de contato
     fornecedores/index.vue         # módulo suppliers (só organização): totais de orçado e contratado da lista filtrada, filtros por status e serviço, novo fornecedor, trazer de outra edição da comunidade
     fornecedores/[id].vue          # módulo suppliers: orçamentos, contratar e recusar, dados e contatos do cadastro da comunidade, anexos por URL assinada, histórico
+    financas/index.vue             # módulo finance (organização e financeiro): receita, despesas pagas, saldo e previsão, orçamento por categoria com barra e texto, receita por origem e por conta, despesas com comprovante, exportar planilha e CSV
     pagamentos/index.vue           # módulo payments (só organização): conectar/trocar gateway, testar conexão, webhook e último evento, prévia do recebedor, eventos com reprocessar
     configuracoes.vue              # módulo editionSettings: dados e etapa da edição, domínio e site próprio, privacidade e auditoria
     meu-perfil.vue                 # módulo myProfile: conta, senha, sessões ativas e notificações
