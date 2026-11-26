@@ -60,6 +60,7 @@ app/
     fornecedores/[id].vue          # módulo suppliers: orçamentos, contratar e recusar, dados e contatos do cadastro da comunidade, anexos por URL assinada, histórico
     financas/index.vue             # módulo finance (organização e financeiro): receita, despesas pagas, saldo e previsão, orçamento por categoria com barra e texto, receita por origem e por conta, despesas com comprovante, exportar planilha e CSV
     tarefas/index.vue              # módulo tasks (toda a equipe vê; organização cria e edita; o responsável move a própria): quadro com contagem, filtros todas, minhas e atrasadas, mover com mouse ou Alt + setas, anunciado e desfeito no erro
+    comunicacao/index.vue          # módulo communication (só organização): modelos de e-mail com gatilho e último envio, assunto e mensagem com variáveis validadas como no backend, prévia gerada pelo backend com o tema e os dados de exemplo, teste para si, restaurar padrão
     pagamentos/index.vue           # módulo payments (só organização): conectar/trocar gateway, testar conexão, webhook e último evento, prévia do recebedor, eventos com reprocessar
     configuracoes.vue              # módulo editionSettings: dados e etapa da edição, domínio e site próprio, privacidade e auditoria
     meu-perfil.vue                 # módulo myProfile: conta, senha, sessões ativas e notificações
