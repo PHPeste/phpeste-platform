@@ -25,7 +25,7 @@
 | 19 | Telas: organização (patrocinadores, fornecedores, finanças, tarefas, comunicação; cresce a cada tela do Marco 2) |
 | 20 | Onde estamos e o que falta |
 
-Retrato de 26/11/2026, com a A23 (modelos de e-mail).
+Retrato de 26/11/2026, com a P04 (checkout: escolha de ingressos e dados).
 
 ## Como atualizar
 

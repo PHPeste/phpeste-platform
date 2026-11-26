@@ -11,7 +11,8 @@ const { edition } = useCurrentEdition()
     <h1 class="text-4xl leading-tight font-semibold">{{ edition?.name }}</h1>
     <p class="max-w-xl text-(--ph-ink-2)">{{ locale.homeText }}</p>
     <div class="flex flex-wrap gap-3">
-      <NuxtLink to="/cfp" class="btn btn-primary">{{ locale.homeCfp }}</NuxtLink>
+      <NuxtLink to="/ingressos" class="btn btn-primary">{{ locale.homeTickets }}</NuxtLink>
+      <NuxtLink to="/cfp" class="btn btn-secondary">{{ locale.homeCfp }}</NuxtLink>
       <NuxtLink to="/palestrante/propostas" class="btn btn-ghost">{{ locale.homeMine }}</NuxtLink>
     </div>
   </section>

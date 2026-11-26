@@ -28,6 +28,8 @@ describe('route', () => {
     expect(route(external, '/programacao')).toMatchObject({ kind: 'redirect' })
     expect(route(external, '/cfp')).toEqual({ kind: 'render' })
     expect(route(external, '/palestrante/propostas/abc')).toEqual({ kind: 'render' })
+    expect(route(external, '/ingressos')).toEqual({ kind: 'render' })
+    expect(route(external, '/checkout/pedido/abc')).toEqual({ kind: 'render' })
   })
 
   it('no site da plataforma, renderiza tudo', () => {
