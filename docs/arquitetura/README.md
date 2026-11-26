@@ -22,10 +22,10 @@
 | 16 | Telas: o design do painel (`docs/design/`) |
 | 17 | Telas: o painel em uso (capturas do front-admin) |
 | 18 | Telas: vendas (ingressos, pedidos, pagamentos, participantes) |
-| 19 | Telas: organização (patrocinadores, fornecedores, finanças; cresce a cada tela do Marco 2) |
+| 19 | Telas: organização (patrocinadores, fornecedores, finanças, tarefas; cresce a cada tela do Marco 2) |
 | 20 | Onde estamos e o que falta |
 
-Retrato de 24/11/2026, com a A21 (tela de finanças).
+Retrato de 26/11/2026, com a A22 (quadro de tarefas).
 
 ## Como atualizar
 

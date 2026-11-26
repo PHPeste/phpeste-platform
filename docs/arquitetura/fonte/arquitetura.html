@@ -108,7 +108,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="70" y="92" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">chamada ou dependência</text>
 <path d="M 265 88 L 315 88" fill="none" stroke="#475569" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-infra)"/>
 <text x="325" y="92" font-size="12" font-weight="400" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">assíncrono (evento, fila, webhook)</text></svg></div>
-  <footer><span>Fonte: código da main, backend/CLAUDE.md, docs/produto.md e ADRs 0001–0009.</span><span>24/11/2026 · A21 (tela de finanças) · página 1</span></footer>
+  <footer><span>Fonte: código da main, backend/CLAUDE.md, docs/produto.md e ADRs 0001–0009.</span><span>26/11/2026 · A22 (quadro de tarefas) · página 1</span></footer>
 </section>
 <section class="page">
   <header>
@@ -215,7 +215,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <path d="M 810 447 L 845 447" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/>
 <path d="M 810 507 L 845 507" fill="none" stroke="#6B7280" stroke-width="1.6" marker-end="url(#a-external)"/></svg></div>
   <ul class="notes"><li>Painel e site são projetos separados (decisão: <code>front-admin</code> SPA, <code>front-public</code> SSR). O token é Bearer do Sanctum nos dois (ADR 0005).</li><li>Fila e agendador rodam a mesma imagem do backend (<code>horizon</code> e <code>scheduler</code> no <code>infra/docker-compose.yml</code>).</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 2</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 2</span></footer>
 </section>
 <section class="page">
   <header>
@@ -290,7 +290,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <path d="M 335 278 L 365 278 L 365 112 L 395 112" fill="none" stroke="#3B6FD8" stroke-width="1.6" marker-end="url(#a-global)"/>
 <text x="370" y="200" font-size="9.5" font-weight="600" fill="#3B6FD8" text-anchor="start" font-family="inherit" xml:space="preserve">community_id</text></svg></div>
   <ul class="notes"><li>Por que não um banco por comunidade: a mesma pessoa palestra no PHPeste de um ano e compra ingresso no outro, e o perfil dela é um só.</li><li>Dado de edição que vai para a próxima ("criar edição a partir da anterior") é copiado por um <code>EditionCloner</code> de cada módulo, nunca dado de pessoa.</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 3</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 3</span></footer>
 </section>
 <section class="page">
   <header>
@@ -358,7 +358,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="20" y="486" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">O site chama /public/resolve com o host da requisição, recebe edition_id e o domínio principal e redireciona se for preciso (ADR 0008).</text>
 <text x="20" y="500" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">O host é normalizado (minúsculas, sem porta, IDN em punycode) e nunca é usado para montar URL sem passar pela tabela edition_domains.</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 4</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 4</span></footer>
 </section>
 <section class="page">
   <header>
@@ -424,7 +424,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="40" y="470" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">palestrantes, patrocínio, fornecedores), pendências com caminho e filtro (propostas sem revisor, divergência na conciliação, entregas e despesas</text>
 <text x="40" y="484" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">vencidas) e marcos. O Community filtra cada pendência pela permissão de quem vê: o voluntário não vê pendência de finanças.</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 5</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 5</span></footer>
 </section>
 <section class="page">
   <header>
@@ -523,7 +523,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <rect x="1043" y="442" width="40" height="16" rx="8" fill="#94A3B8"/>
 <text x="1063.0" y="454" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle" font-family="inherit" xml:space="preserve">casca</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 6</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 6</span></footer>
 </section>
 <section class="page">
   <header>
@@ -590,7 +590,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="770" y="473" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">EditionMailer::send(...): todo e-mail,</text>
 <text x="770" y="487" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">com o tema; ::preview mostra sem enviar</text></svg></div>
   <ul class="notes"><li>Ponto de extensão é registrado com <code>$app-&gt;tag([...], Contrato::TAG)</code>: o Community não conhece os módulos, só a tag. Módulo novo aparece na Visão geral e na clonagem sem mexer no Community. O mesmo vale para <code>TaskLinkProvider</code> (Tasks): Suppliers e Sponsors registram o que uma tarefa pode apontar, e o Program vai registrar a sessão.</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 7</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 7</span></footer>
 </section>
 <section class="page">
   <header>
@@ -692,7 +692,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="845" y="422" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">cache · cache_locks</text>
 <text x="845" y="436" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="'JetBrains Mono','SF Mono',Menlo,monospace" xml:space="preserve">sessions</text></svg></div>
   <ul class="notes"><li>Dinheiro sempre em centavos (inteiro). Dado sensível cifrado no banco: CPF de quem compra, credenciais do gateway, acessibilidade, corpo de webhook, linhas de importação. <code>APP_PREVIOUS_KEYS</code> + comandos <code>*:reencrypt-*</code> para trocar a chave.</li><li>Estoque e cupom nunca são lidos e depois gravados: <code>UPDATE … WHERE allocated + q &lt;= quantity</code>. Testes com 12 processos simultâneos provam que não vende além do lote.</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 8</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 8</span></footer>
 </section>
 <section class="page">
   <header>
@@ -713,7 +713,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <li>Palestrante e participante não têm papel: entram pelas rotas de edição publicada.</li>
 </ul></div></div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 9</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 9</span></footer>
 </section>
 <section class="page">
   <header>
@@ -787,7 +787,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="40" y="494" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">ticketing:expire-orders (1/min) devolve estoque de reserva vencida · ticketing:rotate-batches abre o próximo lote</text>
 <text x="40" y="508" font-size="9.5" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">payments:retry-webhooks (1, 5, 15, 60 min) · ticketing:reconcile (diário) grava divergência com o gateway</text></svg></div>
   <ul class="notes"><li>Reembolso: <code>PaymentLedger::refund</code> reserva o valor antes de chamar o gateway (dois reembolsos ao mesmo tempo nunca passam do pago). Pedido importado de outra plataforma entra pago, sem cobrança, e não passa por reembolso nem conciliação. Pagamento recebido fora do gateway é marcado à mão pela organização (<code>MarkOrderPaid</code>), com justificativa na auditoria, emissão dos ingressos e cancelamento da cobrança aberta.</li></ul>
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 10</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 10</span></footer>
 </section>
 <section class="page">
   <header>
@@ -863,7 +863,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="20" y="481" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Configurar CFP (A10) · Avaliar propostas com teclado (A11) · Palestrantes: lista, cobertura e detalhe (A12) · no site público: formulário de</text>
 <text x="20" y="495" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">proposta e área do palestrante com entrar pelo GitHub (P03, P11).</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 11</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 11</span></footer>
 </section>
 <section class="page">
   <header>
@@ -916,7 +916,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="20" y="489" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">ADR 0009: a plataforma não recebe nem repassa dinheiro</text>
 <text x="20" y="506" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">Cada edição cadastra a conta do próprio gateway; a API valida as chaves e um webhook assinado antes de abrir vendas. Credenciais cifradas; a API só mostra os 4 últimos caracteres.</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 12</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 12</span></footer>
 </section>
 <section class="page">
   <header>
@@ -946,7 +946,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <li>Segredo removido, dado pessoal mascarado; o model recusa update e delete.</li>
 </ul></div></div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 13</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 13</span></footer>
 </section>
 <section class="page">
   <header>
@@ -956,7 +956,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
   </header>
   <div class="content"><table class="cmp sec"><thead><tr><th>Tema</th><th>Como está</th></tr></thead><tbody><tr><td>Autenticação</td><td>Sanctum Bearer, um token por dispositivo com expiração (<code>SANCTUM_EXPIRATION_MINUTES</code>); revogar é imediato. Senha mínima de 10 e checagem de vazamento.</td></tr><tr><td>Isolamento</td><td>Escopo global por edição; outra comunidade recebe 404; arch test impede módulo de depender de <code>App\</code> e controller de usar <code>$request-&gt;all()</code>.</td></tr><tr><td>Rate limit</td><td>Limiters nomeados: <code>login</code>, <code>password-reset</code>, <code>checkout</code>, <code>webhooks</code>, configuráveis por <code>.env</code>.</td></tr><tr><td>Headers e CORS</td><td>CSP, HSTS, nosniff, Referrer-Policy, Permissions-Policy. CORS por ambiente e, em <code>/public/*</code>, só a origem do site próprio da edição.</td></tr><tr><td>Dados sensíveis</td><td>Cifrados no banco (CPF, credenciais, acessibilidade, webhooks). Logs JSON com <code>password</code>, <code>token</code>, <code>secret</code> e cartão redigidos automaticamente.</td></tr><tr><td>Arquivos</td><td>Disco privado; download só por URL assinada que expira (10 min), sempre como anexo, com nosniff e CSP sandbox. SVG sanitizado.</td></tr><tr><td>Pagamento</td><td>Sem dado de cartão na API; webhook com assinatura do driver e reconsulta ao gateway; idempotência no banco (<code>unique(edition_id, idempotency_key)</code>).</td></tr><tr><td>Segredos</td><td>ADR 0006: nada de segredo no repositório; <code>APP_PREVIOUS_KEYS</code> para trocar a chave sem perder o que já foi cifrado.</td></tr><tr><td>LGPD</td><td>Encarregado e política por edição, anonimização após o evento (B43 em aberto). Decisão em aberto: comunidade controladora, PHPeste operador.</td></tr></tbody></table></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 14</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 14</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1031,7 +1031,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <text x="35" y="483" font-size="12" font-weight="700" fill="#2B1408" text-anchor="start" font-family="inherit" xml:space="preserve">Em aberto para o evento</text>
 <text x="35" y="500" font-size="9.8" font-weight="400" fill="#5B4636" text-anchor="start" font-family="inherit" xml:space="preserve">teste de carga, backups, runbook do dia do evento (B45) · dados de demonstração e documentação publicada (B46)</text></svg></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 15</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 15</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1044,7 +1044,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <figure><img src="../../design/tema-sertao-tokens.png" alt="Tokens do tema Sertão"><figcaption>Design: tokens do tema Sertão</figcaption></figure>
 </div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 16</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 16</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1058,7 +1058,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
 <figure><img src="../telas/painel-login.png" alt="Login"><figcaption>Entrar com e-mail e senha ou GitHub</figcaption></figure>
 </div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 17</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 17</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1068,7 +1068,7 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
   </header>
   <div class="content"><div class="shots sales"><figure><img src="../telas/painel-ingressos.png" alt=""><figcaption>Ingressos: tipos e lotes com o preço, o que a edição recebe depois da taxa do gateway, vendidos e situação. Cupons e regras da venda nas outras abas.</figcaption></figure><figure><img src="../telas/painel-pedidos.png" alt=""><figcaption>Pedidos: números da edição no topo (pagos, aguardando, reembolsos, taxa do gateway), busca e filtro por situação, e o detalhe com itens, pagamento, reembolsos e histórico (auditoria). Reembolso com aviso de taxa e confirmação explícita; marcar como pago exige justificativa.</figcaption></figure><figure><img src="../telas/painel-pagamentos.png" alt=""><figcaption>Pagamentos (só a organização): gateway da comunidade com chave mascarada, etapas para abrir vendas e Testar conexão, prévia do recebedor no checkout, métodos aceitos, webhook com o último evento e os últimos eventos do gateway com reprocessar.</figcaption></figure><figure><img src="../telas/painel-participantes.png" alt=""><figcaption>Participantes (só a organização): uma linha por ingresso com crachá, acessibilidade (só a organização vê) e camiseta, filtros de dados faltando e transferidos, edição registrada na auditoria, cobrança de dados com prévia do e-mail e CSV dos crachás.</figcaption></figure></div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 18</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 18</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1076,9 +1076,9 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
     <h1>Telas: organização</h1>
     <p class="sub">Patrocínio, fornecedores e dinheiro da edição, conforme as telas do Marco 2 ficam prontas. Mesma fonte: o painel com a API simulada.</p>
   </header>
-  <div class="content"><div class="shots sales"><figure><img src="../telas/painel-patrocinadores.png" alt=""><figcaption>Patrocinadores (só a organização): meta, fechado, pago e em negociação, funil com o último contato de cada empresa, mover que desfaz se a API recusa e pede confirmação de cota sem vaga, e as cotas. O detalhe tem acordo, pagamentos, entregas, histórico e anexos por URL assinada.</figcaption></figure><figure><img src="../telas/painel-fornecedores.png" alt=""><figcaption>Fornecedores (só a organização): orçado e contratado da lista filtrada, que batem com o total no pé da tabela, filtros, contato restrito e trazer de outra edição da comunidade. O detalhe tem orçamentos, contratar e recusar, anexos e histórico.</figcaption></figure><figure><img src="../telas/painel-financas.png" alt=""><figcaption>Finanças (organização e financeiro): receita, despesas pagas, saldo e previsão, orçamento por categoria com barra e texto equivalente, receita por origem e por conta com as taxas do gateway, despesas com comprovante por URL assinada e exportação em planilha.</figcaption></figure></div></div>
+  <div class="content"><div class="shots sales"><figure><img src="../telas/painel-patrocinadores.png" alt=""><figcaption>Patrocinadores (só a organização): meta, fechado, pago e em negociação, funil com o último contato de cada empresa, mover que desfaz se a API recusa e pede confirmação de cota sem vaga, e as cotas. O detalhe tem acordo, pagamentos, entregas, histórico e anexos por URL assinada.</figcaption></figure><figure><img src="../telas/painel-fornecedores.png" alt=""><figcaption>Fornecedores (só a organização): orçado e contratado da lista filtrada, que batem com o total no pé da tabela, filtros, contato restrito e trazer de outra edição da comunidade. O detalhe tem orçamentos, contratar e recusar, anexos e histórico.</figcaption></figure><figure><img src="../telas/painel-financas.png" alt=""><figcaption>Finanças (organização e financeiro): receita, despesas pagas, saldo e previsão, orçamento por categoria com barra e texto equivalente, receita por origem e por conta com as taxas do gateway, despesas com comprovante por URL assinada e exportação em planilha.</figcaption></figure><figure><img src="../telas/painel-tarefas.png" alt=""><figcaption>Tarefas (toda a equipe vê; o responsável move a própria): colunas com contagem, filtros, atrasada em destaque e mover com o mouse ou Alt + setas, anunciado e desfeito se a API recusa.</figcaption></figure></div></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 19</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 19</span></footer>
 </section>
 <section class="page">
   <header>
@@ -1086,8 +1086,8 @@ figcaption { font-size: 8.8pt; color: #5B4636; }
     <h1>Onde estamos e o que falta</h1>
     <p class="sub">Os milestones do GitHub e o board <b>PHPeste Platform</b> são a fonte da verdade do andamento; esta página é o retrato no dia da geração.</p>
   </header>
-  <div class="content"><table class="cmp roadmap"><thead><tr><th>Marco</th><th>Situação</th><th>O que tem</th></tr></thead><tbody><tr><td><b>Marco 0 · Fundação</b></td><td>Concluído</td><td>esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes</td></tr><tr><td><b>Marco 1 · Núcleo e CFP</b></td><td>Backend concluído</td><td>Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03</td></tr><tr><td><b>Marco 2 · Ingressos</b></td><td>Backend concluído, telas em andamento</td><td>backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças); faltam A18, A22, A23 e P04–P06</td></tr><tr><td><b>Marco 3 · Evento pronto</b></td><td>A fazer</td><td>grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)</td></tr><tr><td><b>Marco 4 · Operação</b></td><td>A fazer</td><td>engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)</td></tr></tbody></table></div>
+  <div class="content"><table class="cmp roadmap"><thead><tr><th>Marco</th><th>Situação</th><th>O que tem</th></tr></thead><tbody><tr><td><b>Marco 0 · Fundação</b></td><td>Concluído</td><td>esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes</td></tr><tr><td><b>Marco 1 · Núcleo e CFP</b></td><td>Backend concluído</td><td>Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03</td></tr><tr><td><b>Marco 2 · Ingressos</b></td><td>Backend concluído, telas em andamento</td><td>backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças), A22 (tarefas); faltam A18, A23 e P04–P06</td></tr><tr><td><b>Marco 3 · Evento pronto</b></td><td>A fazer</td><td>grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)</td></tr><tr><td><b>Marco 4 · Operação</b></td><td>A fazer</td><td>engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)</td></tr></tbody></table></div>
   
-  <footer><span>PHPeste Platform · Arquitetura</span><span>24/11/2026 · A21 (tela de finanças) · página 20</span></footer>
+  <footer><span>PHPeste Platform · Arquitetura</span><span>26/11/2026 · A22 (quadro de tarefas) · página 20</span></footer>
 </section>
 </body></html>
