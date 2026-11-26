@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "26/11/2026 · A23 (modelos de e-mail)"
+RETRATO = "26/11/2026 · P04 (checkout: escolha e dados)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -402,7 +402,7 @@ for i, (label, kind) in enumerate(lanes):
     b.append(f'<rect x="10" y="{y}" width="1080" height="96" rx="10" fill="{K[kind][0]}" fill-opacity="0.45" stroke="{K[kind][1]}" stroke-width="1" stroke-dasharray="5 4"/>')
     b.append(t(20, y + 16, label, size=10.5, weight=700, color=K[kind][1]))
 flow = [
-    (0, 30, "Escolhe ingressos", ["tipo, lote, cupom,", "participantes"]),
+    (0, 30, "/ingressos", ["lote, cupom na hora,", "quem vai e perguntas"]),
     (1, 180, "PlaceOrder", ["reserva estoque e cupom", "numa transação", "Idempotency-Key"]),
     (0, 330, "Pix ou cartão", ["sem dado de cartão", "na nossa API"]),
     (2, 330, "ChargeService", ["cobrança na conta da", "edição · trava clique duplo"]),
@@ -428,7 +428,8 @@ b.append(box(30, 458, 600, 70, "Rotinas que fecham as pontas", ["ticketing:expir
 pages.append(page(10, "Fluxo", "Ingresso: da compra ao QR",
     "O pedido nasce reservando estoque; o pagamento só confirma quando a API consulta o gateway. Evento falso, repetido ou fora de ordem não muda pedido.",
     svg("\n".join(b), h=540),
-    ["Reembolso: <code>PaymentLedger::refund</code> reserva o valor antes de chamar o gateway (dois reembolsos ao mesmo tempo nunca passam do pago). Pedido importado de outra plataforma entra pago, sem cobrança, e não passa por reembolso nem conciliação. Pagamento recebido fora do gateway é marcado à mão pela organização (<code>MarkOrderPaid</code>), com justificativa na auditoria, emissão dos ingressos e cancelamento da cobrança aberta."]))
+    ["No site, <code>/ingressos</code> confere o cupom na hora e valida os dados de cada participante antes de reservar; a mesma tentativa repete a mesma <code>Idempotency-Key</code>. A reserva aparece em <code>/checkout/pedido/{id}</code> com contagem regressiva (o token do pedido fica só no navegador de quem comprou); ao expirar, volta para a escolha com a mensagem e a escolha anterior.",
+     "Reembolso: <code>PaymentLedger::refund</code> reserva o valor antes de chamar o gateway (dois reembolsos ao mesmo tempo nunca passam do pago). Pedido importado de outra plataforma entra pago, sem cobrança, e não passa por reembolso nem conciliação. Pagamento recebido fora do gateway é marcado à mão pela organização (<code>MarkOrderPaid</code>), com justificativa na auditoria, emissão dos ingressos e cancelamento da cobrança aberta."]))
 
 # ================================================== 11 CFP
 b = []
@@ -585,7 +586,7 @@ pages.append(page(19, "Telas", "Telas: organização",
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
     ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças), A22 (tarefas), A23 (modelos de e-mail); faltam A18 e P04–P06"),
+    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças), A22 (tarefas), A23 (modelos de e-mail); no site, P04 (escolha de ingressos e dados); faltam A18, P05 e P06"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]
