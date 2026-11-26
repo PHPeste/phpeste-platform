@@ -342,3 +342,33 @@ test('tarefas', async ({ page, goto }) => {
   await expect(page.getByTestId('task-card').first()).toBeVisible()
   await page.screenshot({ path: out('painel-tarefas') })
 })
+
+test('comunicacao', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await signedIn(page)
+  const sentAt = (hoursAgo: number) => new Date(Date.now() - hoursAgo * 3_600_000).toISOString()
+  const template = (id: string, label: string, trigger: string, lastSent: string | null, extra: Record<string, unknown> = {}) => ({
+    id, label, trigger, transactional: true, variables: ['nome', 'edicao', 'pedido', 'data'], action_label: 'Ver meu ingresso',
+    subject: 'Seu ingresso para o {edicao}', body: 'Oi, {nome}!\n\nPagamento confirmado (pedido {pedido}). Seu QR code está na sua conta: é só mostrar na entrada.', customized: false, last_sent_at: lastSent, ...extra,
+  })
+  const templates = [
+    template('order_confirmed', 'Confirmação de compra', 'Ao pagar o pedido', sentAt(0.2), { customized: true }),
+    template('pix_reminder', 'Lembrete de pagamento', 'Quando a organização reenvia a cobrança', sentAt(1.5)),
+    template('cfp_accepted', 'Resultado do CFP: aprovada', 'Manual', null),
+    template('cfp_waitlisted', 'Resultado do CFP: lista de espera', 'Manual', null),
+    template('event_reminder', 'Antes do evento', '7 dias antes', null, { transactional: false }),
+    template('team_invite', 'Convite para a equipe', 'Ao convidar alguém para a equipe', sentAt(30)),
+  ]
+  const html = `<!doctype html><html><body style="margin:0;background:#FBF4E4;font-family:Lexend,system-ui,sans-serif;color:#3A1607">
+<div style="max-width:560px;margin:24px auto;background:#FFFBF2;border:1px solid #E4D3AB;border-radius:14px;overflow:hidden">
+<div style="height:8px;background:repeating-linear-gradient(90deg,#E8B544 0 16px,#B4532A 16px 32px)"></div>
+<div style="padding:24px"><h1 style="font-size:20px;margin:0 0 12px">Seu ingresso para o PHPeste 2027</h1>
+<p>Oi, Ada Lovelace!</p><p>Pagamento confirmado (pedido #PH-0042). Seu QR code está na sua conta: é só mostrar na entrada.</p>
+<a style="display:inline-block;margin-top:8px;padding:12px 18px;border-radius:10px;background:#6B2A12;color:#FFF8E8;text-decoration:none">Ver meu ingresso</a>
+<p style="font-size:12px;color:#7F5A47;margin-top:20px">PHPeste 2027 · 8 e 9 de outubro de 2027 · João Pessoa</p></div></div></body></html>`
+  await page.route('**/api/v1/editions/ed-27/emails/templates', (route) => route.fulfill({ status: 200, json: { data: templates } }))
+  await page.route('**/api/v1/editions/ed-27/emails/templates/*/preview', (route) => route.fulfill({ status: 200, json: { data: { subject: 'Seu ingresso para o PHPeste 2027', html, text: '' } } }))
+  await goto('/comunicacao', { waitUntil: 'hydration' })
+  await expect(page.getByTestId('preview-subject')).toBeVisible()
+  await page.screenshot({ path: out('painel-comunicacao') })
+})

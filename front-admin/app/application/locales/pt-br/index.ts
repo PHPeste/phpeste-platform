@@ -16,6 +16,7 @@ import sponsors from '../../../modules/sponsors/locales/pt-br'
 import suppliers from '../../../modules/suppliers/locales/pt-br'
 import finance from '../../../modules/finance/locales/pt-br'
 import tasks from '../../../modules/tasks/locales/pt-br'
+import communication from '../../../modules/communication/locales/pt-br'
 import cfpReview from '../../../modules/cfpReview/locales/pt-br'
 import speakers from '../../../modules/speakers/locales/pt-br'
 import editionSettings from '../../../modules/editionSettings/locales/pt-br'
@@ -44,6 +45,7 @@ export default {
   suppliers,
   finance,
   tasks,
+  communication,
   cfpReview,
   speakers,
   editionSettings,
