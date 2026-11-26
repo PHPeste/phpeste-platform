@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "26/11/2026 · P04 (checkout: escolha e dados)"
+RETRATO = "26/11/2026 · P05 (checkout: pagamento)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -404,14 +404,14 @@ for i, (label, kind) in enumerate(lanes):
 flow = [
     (0, 30, "/ingressos", ["lote, cupom na hora,", "quem vai e perguntas"]),
     (1, 180, "PlaceOrder", ["reserva estoque e cupom", "numa transação", "Idempotency-Key"]),
-    (0, 330, "Pix ou cartão", ["sem dado de cartão", "na nossa API"]),
+    (0, 330, "Pix ou cartão", ["cartão no gateway ou", "token do Mercado Pago"]),
     (2, 330, "ChargeService", ["cobrança na conta da", "edição · trava clique duplo"]),
     (3, 480, "Asaas / Mercado Pago", ["Pix com QR, cartão", "na fatura ou token"]),
     (3, 680, "Webhook assinado", ["→ /webhooks/payments/{t}"]),
     (2, 680, "webhook_events", ["caixa de entrada, 2xx", "antes de processar"]),
     (4, 880, "ProcessWebhookEvent", ["consulta o gateway:", "não confia no corpo"]),
     (1, 860, "Pedido pago", ["TransitionOrder", "IssueTicketsWhenPaid"]),
-    (0, 860, "E-mail + QR", ["QR assinado (HMAC)", "/ingressos no site"]),
+    (0, 860, "E-mail + QR", ["QR assinado (HMAC) no e-mail", "e na tela de sucesso"]),
 ]
 for lane, x, title, lines in flow:
     b.append(box(x, 18 + lane * 104 + 24, 170 if x < 860 or lane == 4 else 210, 66, title, lines, lanes[lane][1], size=9.5, title_size=11))
@@ -428,7 +428,7 @@ b.append(box(30, 458, 600, 70, "Rotinas que fecham as pontas", ["ticketing:expir
 pages.append(page(10, "Fluxo", "Ingresso: da compra ao QR",
     "O pedido nasce reservando estoque; o pagamento só confirma quando a API consulta o gateway. Evento falso, repetido ou fora de ordem não muda pedido.",
     svg("\n".join(b), h=540),
-    ["No site, <code>/ingressos</code> confere o cupom na hora e valida os dados de cada participante antes de reservar; a mesma tentativa repete a mesma <code>Idempotency-Key</code>. A reserva aparece em <code>/checkout/pedido/{id}</code> com contagem regressiva (o token do pedido fica só no navegador de quem comprou); ao expirar, volta para a escolha com a mensagem e a escolha anterior.",
+    ["No site, <code>/ingressos</code> confere o cupom na hora e valida os dados de cada participante antes de reservar; a mesma tentativa repete a mesma <code>Idempotency-Key</code>. A reserva aparece em <code>/checkout/pedido/{id}</code> com contagem regressiva (o token do pedido fica só no navegador de quem comprou); ao expirar, volta para a escolha com a mensagem e a escolha anterior. O pagamento mostra quem recebe, gera o Pix (QR, copia e cola, validade) ou leva o cartão para a página do gateway; no Mercado Pago o cartão é digitado nos campos do próprio SDK e só o token chega à API. O status é consultado com espera crescente e, pago, a tela mostra os ingressos com QR (<code>GET …/orders/{id}/tickets</code>, com o token do pedido).",
      "Reembolso: <code>PaymentLedger::refund</code> reserva o valor antes de chamar o gateway (dois reembolsos ao mesmo tempo nunca passam do pago). Pedido importado de outra plataforma entra pago, sem cobrança, e não passa por reembolso nem conciliação. Pagamento recebido fora do gateway é marcado à mão pela organização (<code>MarkOrderPaid</code>), com justificativa na auditoria, emissão dos ingressos e cancelamento da cobrança aberta."]))
 
 # ================================================== 11 CFP
@@ -586,7 +586,7 @@ pages.append(page(19, "Telas", "Telas: organização",
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
     ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças), A22 (tarefas), A23 (modelos de e-mail); no site, P04 (escolha de ingressos e dados); faltam A18, P05 e P06"),
+    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças), A22 (tarefas), A23 (modelos de e-mail); no site, P04 e P05 (checkout com Pix e cartão); faltam A18 e P06"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]
