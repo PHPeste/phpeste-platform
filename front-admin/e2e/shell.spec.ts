@@ -57,7 +57,8 @@ test.describe('Layout base do painel', () => {
 
     await expect(page).toHaveURL(/\/$/)
     await expect(page.getByRole('button', { name: 'Trocar de edição' })).toContainText('PHPeste 2026')
-    await expect(nav.getByRole('link')).toHaveCount(4)
+    await expect(nav.getByRole('link')).toHaveCount(5)
+    await expect(nav.getByRole('link', { name: 'Tarefas' })).toHaveCount(1)
     await expect(nav.getByRole('link', { name: 'Configurar CFP' })).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Menu do usuário' })).toContainText('Financeiro')
   })

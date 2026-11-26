@@ -312,3 +312,33 @@ test('finanças', async ({ page, goto }) => {
   await expect(page.getByTestId('finance-kpis')).toContainText('R$ 20.700')
   await page.screenshot({ path: out('painel-financas') })
 })
+
+test('tarefas', async ({ page, goto }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await signedIn(page)
+  const card = (id: string, column: string, title: string, who: string, due: string | null, extra: Record<string, unknown> = {}) => ({
+    id, column_id: column, position: 0, title, description: null, assignee: { id: `u-${who}`, name: who }, due_on: due, overdue: false, done: false, link: null, updated_at: '2027-03-01T12:00:00Z', ...extra,
+  })
+  const columns = [
+    { id: 'c-1', name: 'A fazer', position: 0, is_done: false, count: 3, tasks: [
+      card('t-1', 'c-1', 'Fechar contrato do buffet', 'Lívia Ferraz', '2099-08-15', { link: { type: 'supplier', type_label: 'Fornecedor', id: 'l-1', name: 'Buffet Sabor da Terra' } }),
+      card('t-2', 'c-1', 'Pedir arte dos crachás', 'Mariana Sales', '2099-09-01'),
+      card('t-3', 'c-1', 'Criar página de patrocinadores', 'João Pedro', '2099-08-30'),
+    ] },
+    { id: 'c-2', name: 'Fazendo', position: 1, is_done: false, count: 2, tasks: [
+      card('t-4', 'c-2', 'Convidar palestrantes de AL e SE', 'João Pedro', new Date(Date.now() - 3 * 86_400_000).toISOString().slice(0, 10), { overdue: true }),
+      card('t-5', 'c-2', 'Testar webhook do Asaas', 'Lívia Ferraz', '2099-11-10'),
+    ] },
+    { id: 'c-3', name: 'Aguardando', position: 2, is_done: false, count: 1, tasks: [card('t-6', 'c-3', 'Texto do e-mail de resultado do CFP', 'Mariana Sales', '2099-04-20')] },
+    { id: 'c-4', name: 'Feito', position: 3, is_done: true, count: 2, tasks: [
+      card('t-7', 'c-4', 'Reservar o espaço', 'Rita Organiza', null, { done: true }),
+      card('t-8', 'c-4', 'Definir identidade visual', 'Rita Organiza', null, { done: true }),
+    ] },
+  ]
+  await page.route('**/api/v1/editions/ed-27/team', (route) => route.fulfill({ status: 200, json: { data: { members: [], invitations: [], summary: {} } } }))
+  await page.route('**/api/v1/editions/ed-27/tasks/link-options', (route) => route.fulfill({ status: 200, json: { data: [] } }))
+  await page.route('**/api/v1/editions/ed-27/tasks/board**', (route) => route.fulfill({ status: 200, json: { data: { filter: 'all', can_manage: true, columns, totals: { tasks: 8, overdue: 1 } } } }))
+  await goto('/tarefas', { waitUntil: 'hydration' })
+  await expect(page.getByTestId('task-card').first()).toBeVisible()
+  await page.screenshot({ path: out('painel-tarefas') })
+})

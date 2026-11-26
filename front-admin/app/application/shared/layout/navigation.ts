@@ -39,7 +39,7 @@ export const NAV_ITEMS: NavItem[] = [
   { key: 'sponsors', to: '/patrocinadores', group: 'organization', icon: Star, roles: ['organizador'] },
   { key: 'suppliers', to: '/fornecedores', group: 'organization', icon: Truck, roles: ['organizador'] },
   { key: 'finance', to: '/financas', group: 'organization', icon: Wallet, roles: ['organizador', 'financeiro'] },
-  { key: 'tasks', to: '/tarefas', group: 'organization', icon: Columns3, roles: ['organizador'] },
+  { key: 'tasks', to: '/tarefas', group: 'organization', icon: Columns3, roles: ALL },
   { key: 'comms', to: '/comunicacao', group: 'system', icon: Mail, roles: ['organizador'] },
   { key: 'settings', to: '/configuracoes', group: 'system', icon: SlidersHorizontal, roles: ['organizador'] },
 ]
