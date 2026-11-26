@@ -48,7 +48,7 @@ export function useOrder(editionId: string, orderId: string, clock: () => number
       state.value = 'not_found'
       return
     }
-    state.value = 'loading'
+    if (!order.value) state.value = 'loading'
     try {
       order.value = translateOrder((await checkoutService.order(editionId, orderId, token)).data)
       tick()

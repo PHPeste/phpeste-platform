@@ -48,3 +48,35 @@ export interface Order {
   expiresAt: string | null
   items: OrderItem[]
 }
+
+export interface Receiver {
+  driver: string
+  publicKey: string | null
+  holderName: string
+  holderType: 'individual' | 'company'
+  methods: Array<'pix' | 'card'>
+  maxInstallments: number
+  sandbox: boolean
+  ready: boolean
+  /** Mercado Pago: cartão tokenizado no navegador. Os outros: cartão na página do gateway. */
+  cardInBrowser: boolean
+}
+
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled' | 'refunded' | 'disputed'
+
+export interface Payment {
+  id: string
+  method: 'pix' | 'card' | 'boleto'
+  status: PaymentStatus
+  amountCents: number
+  installments: number
+  pix: { copyPaste: string, qrImage: string | null } | null
+  checkoutUrl: string | null
+  expiresAt: string | null
+  failureReason: string | null
+  orderStatus: OrderStatus
+}
+
+export interface CardDetails { token: string, brand: string | null, issuer: string | null, installments: number }
+
+export interface IssuedTicket { id: string, code: string, typeName: string | null, holderName: string, qr: string | null }
