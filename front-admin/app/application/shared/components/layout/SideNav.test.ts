@@ -33,7 +33,7 @@ describe('SideNav', () => {
     await asRole('financeiro')
     const wrapper = await mountSuspended(SideNav)
     const labels = wrapper.findAll('nav a').map((a) => a.text())
-    expect(labels).toEqual(['Visão geral', 'Ingressos', 'Pedidos', 'Finanças'])
+    expect(labels).toEqual(['Visão geral', 'Ingressos', 'Pedidos', 'Finanças', 'Tarefas'])
     expect(wrapper.text()).not.toContain('Configurar CFP')
     expect(wrapper.findAll('nav h2').map((h) => h.text())).toEqual(['Edição', 'Vendas', 'Organização'])
   })

@@ -22,10 +22,10 @@ describe('navegação do painel', () => {
   })
 
   it.each([
-    ['financeiro', ['overview', 'tickets', 'orders', 'finance']],
-    ['avaliador', ['overview', 'review']],
-    ['checkin', ['overview', 'checkin']],
-    ['voluntario', ['overview', 'checkin']],
+    ['financeiro', ['overview', 'tickets', 'orders', 'finance', 'tasks']],
+    ['avaliador', ['overview', 'review', 'tasks']],
+    ['checkin', ['overview', 'checkin', 'tasks']],
+    ['voluntario', ['overview', 'checkin', 'tasks']],
   ] as const)('papel %s só vê os itens permitidos', (role, keys) => {
     expect(NAV_ITEMS.filter((i) => canSee(i, role)).map((i) => i.key)).toEqual(keys)
   })
