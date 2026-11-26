@@ -25,6 +25,13 @@ HTML nunca fica em cache (o mesmo caminho serve edições diferentes por host).
 | `/palestrante/propostas` | Propostas da pessoa na edição, com status, decisão e confirmação |
 | `/palestrante/propostas/{id}` | Detalhe (link dos e-mails de aprovação, lembrete e convite): confirmar ou recusar a participação, editar ou retirar enquanto o CFP está aberto |
 
+## Checkout (`app/modules/checkout/`)
+
+| Página | O quê |
+| --- | --- |
+| `/ingressos` | Passo 1: tipos com preço, lote, quanto resta e próximo lote; quantidade entre o mínimo e o máximo do tipo; cupom conferido na hora (`POST /public/editions/{id}/coupons/check`) e de novo quando a quantidade muda; resumo com subtotal, desconto e taxa "calculada ao reservar" nos tipos com `pass_fee_to_buyer`. Passo 2: quem paga (CPF só quando há valor, com máscara e dígitos conferidos) e um bloco por ingresso com as perguntas do tipo; erros num resumo com links para o campo, inclusive os 422 do backend (`items.{i}.attendees.{j}.…`). Reservar manda `Idempotency-Key`, repetida enquanto o corpo for o mesmo. `?reserva=expirada` ou `cancelada` mostra o aviso e recupera a última escolha (`phpeste.checkout.cart.{edição}`) |
+| `/checkout/pedido/{id}` | O mesmo caminho que o backend usa na volta do gateway e no lembrete de Pix. Lê o pedido com o token guardado no navegador na reserva (`phpeste.checkout.order.{id}`, header `X-Order-Token`); sem ele, mostra "não encontramos este pedido neste navegador". Contagem regressiva (`role="timer"`, aviso falado com 5 e com 1 minuto), itens, desconto, taxa e total do backend, desistir da reserva. Reserva expirada (no backend ou com o tempo zerado na tela) ou cancelada volta para `/ingressos` |
+
 Componente que depende da sessão observa `isAuthenticated` em vez de esperar um evento do `AuthPanel`: o painel some assim que a sessão existe, e um evento emitido depois disso se perde. Páginas de conta, palestrante e checkout rodam só no navegador (`routeRules`).
 
 ## Comandos

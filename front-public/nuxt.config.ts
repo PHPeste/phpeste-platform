@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     '/conta/**': { ssr: false },
     '/ingressos/**': { ssr: false },
     '/pedidos/**': { ssr: false },
+    '/checkout/**': { ssr: false },
     '/**': { headers: { 'Cache-Control': 'private, no-store' } },
   },
   vite: {

@@ -17,7 +17,7 @@ export interface ResolvedEdition {
   theme: EditionTheme | null
 }
 
-export const AREA_PREFIXES = ['/cfp', '/palestrante', '/entrar', '/login', '/conta', '/ingressos', '/pedidos', '/redefinir-senha']
+export const AREA_PREFIXES = ['/cfp', '/palestrante', '/entrar', '/login', '/conta', '/ingressos', '/pedidos', '/checkout', '/redefinir-senha']
 
 const TOKEN_NAMES: Record<string, string> = { support: 'terra' }
 const COLOR = /^#[0-9a-fA-F]{6}$/

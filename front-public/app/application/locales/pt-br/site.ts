@@ -13,6 +13,7 @@ export default {
   retry: 'Tentar de novo',
   homeLead: 'Área de palestrantes e participantes',
   homeText: 'Envie e acompanhe suas propostas, confirme sua palestra e cuide da sua viagem.',
+  homeTickets: 'Comprar ingresso',
   homeCfp: 'Enviar proposta',
   homeMine: 'Minhas propostas',
 }
