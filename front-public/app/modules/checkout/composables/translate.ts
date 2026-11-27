@@ -1,5 +1,5 @@
-import type { OrderPayload, QuotePayload, TicketTypePayload } from '../services/checkoutService'
-import type { Order, Quote, TicketOption } from '../types'
+import type { OrderPayload, PaymentPayload, QuotePayload, ReceiverPayload, TicketPayload, TicketTypePayload } from '../services/checkoutService'
+import type { IssuedTicket, Order, Payment, Quote, Receiver, TicketOption } from '../types'
 
 export const translateTicket = (payload: TicketTypePayload): TicketOption => ({
   id: payload.id,
@@ -48,4 +48,37 @@ export const translateOrder = (payload: OrderPayload): Order => ({
     totalCents: item.total.amount,
     attendee: { name: item.attendee.name, email: item.attendee.email },
   })),
+})
+
+export const translateReceiver = (payload: ReceiverPayload): Receiver => ({
+  driver: payload.driver,
+  publicKey: payload.public_key,
+  holderName: payload.holder_name,
+  holderType: payload.holder_type,
+  methods: payload.methods.filter((method): method is 'pix' | 'card' => method === 'pix' || method === 'card'),
+  maxInstallments: Math.max(1, payload.max_installments),
+  sandbox: payload.sandbox,
+  ready: payload.ready,
+  cardInBrowser: payload.driver === 'mercadopago' && !!payload.public_key,
+})
+
+export const translatePayment = (payload: PaymentPayload): Payment => ({
+  id: payload.id,
+  method: payload.method,
+  status: payload.status,
+  amountCents: payload.amount.amount,
+  installments: payload.installments,
+  pix: payload.pix ? { copyPaste: payload.pix.copy_paste, qrImage: payload.pix.qr_code_base64 } : null,
+  checkoutUrl: payload.checkout_url,
+  expiresAt: payload.expires_at,
+  failureReason: payload.failure_reason,
+  orderStatus: payload.order_status,
+})
+
+export const translateIssuedTicket = (payload: TicketPayload): IssuedTicket => ({
+  id: payload.id,
+  code: payload.code,
+  typeName: payload.ticket_type_name,
+  holderName: payload.holder.name,
+  qr: payload.qr ?? null,
 })

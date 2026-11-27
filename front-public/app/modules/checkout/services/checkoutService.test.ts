@@ -36,6 +36,21 @@ describe('checkoutService', () => {
     expect(httpClient.post).toHaveBeenCalledWith('/checkout/editions/ed-1/orders/o-1/cancel', { headers: { 'X-Order-Token': 'tok' } })
   })
 
+  it('pagamento: quem recebe, iniciar com a chave de idempotência, consultar e ingressos, sempre com o token do pedido', async () => {
+    vi.mocked(httpClient.get).mockResolvedValue({ data: {} })
+    vi.mocked(httpClient.post).mockResolvedValue({ data: {} })
+
+    await checkoutService.receiver('ed-1')
+    await checkoutService.startPayment('ed-1', 'o-1', 'tok', { method: 'pix', installments: 1 }, 'key-9')
+    await checkoutService.payment('ed-1', 'o-1', 'tok')
+    await checkoutService.tickets('ed-1', 'o-1', 'tok')
+
+    expect(httpClient.get).toHaveBeenCalledWith('/public/editions/ed-1/payments/receiver')
+    expect(httpClient.post).toHaveBeenCalledWith('/checkout/editions/ed-1/orders/o-1/payment', { body: { method: 'pix', installments: 1 }, headers: { 'X-Order-Token': 'tok', 'Idempotency-Key': 'key-9' } })
+    expect(httpClient.get).toHaveBeenCalledWith('/checkout/editions/ed-1/orders/o-1/payment', { headers: { 'X-Order-Token': 'tok' } })
+    expect(httpClient.get).toHaveBeenCalledWith('/checkout/editions/ed-1/orders/o-1/tickets', { headers: { 'X-Order-Token': 'tok' } })
+  })
+
   it('troca o erro HTTP pelo erro do módulo', async () => {
     vi.mocked(httpClient.post).mockRejectedValue(new HttpClientError('x', 422, { coupon: ['Cupom não encontrado.'] }))
     await expect(checkoutService.checkCoupon('ed-1', 'X', [])).rejects.toMatchObject({ name: 'CheckoutError', statusCode: 422, fieldErrors: { coupon: ['Cupom não encontrado.'] } })

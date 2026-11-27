@@ -1,4 +1,4 @@
-import type { OrderPayload, TicketTypePayload } from '../services/checkoutService'
+import type { OrderPayload, PaymentPayload, ReceiverPayload, TicketTypePayload } from '../services/checkoutService'
 
 const money = (amount: number) => ({ amount, currency: 'BRL' })
 
@@ -42,4 +42,13 @@ export const orderPayload = (extra: Partial<OrderPayload> = {}): OrderPayload =>
     { id: 'i-2', ticket_type_id: 't-1', ticket_type_name: 'Inteira', batch_name: '1º lote', unit_price: money(15000), discount: money(1500), fee: money(540), total: money(14040), attendee: { name: 'Grace Hopper', email: 'grace@x.dev' } },
   ],
   ...extra,
+})
+
+export const receiverPayload = (extra: Partial<ReceiverPayload> = {}): ReceiverPayload => ({
+  driver: 'asaas', public_key: null, holder_name: 'Fulana de Tal', holder_type: 'individual', methods: ['pix', 'card'], max_installments: 3, pix_expiration_minutes: 30, sandbox: false, ready: true, ...extra,
+})
+
+export const paymentPayload = (extra: Partial<PaymentPayload> = {}): PaymentPayload => ({
+  id: 'c-1', method: 'pix', status: 'pending', status_label: 'Pendente', amount: money(28080), installments: 1,
+  pix: { copy_paste: '00020126pix-copia-e-cola', qr_code_base64: 'iVBORw0KGgo=' }, checkout_url: null, expires_at: '2027-03-10T12:30:00Z', paid_at: null, failure_reason: null, order_status: 'awaiting_payment', ...extra,
 })

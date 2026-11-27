@@ -68,6 +68,7 @@ Route::apiV1PublishedEdition('checkout', 'orders')->group(function (): void {
     Route::get('/{order}', [CheckoutOrderController::class, 'show'])->whereUuid('order')->name('ticketing.checkout.orders.show');
     Route::post('/{order}/payment', [CheckoutOrderController::class, 'startPayment'])->whereUuid('order')->middleware('throttle:checkout')->name('ticketing.checkout.orders.payment.start');
     Route::get('/{order}/payment', [CheckoutOrderController::class, 'showPayment'])->whereUuid('order')->name('ticketing.checkout.orders.payment.show');
+    Route::get('/{order}/tickets', [CheckoutOrderController::class, 'tickets'])->whereUuid('order')->name('ticketing.checkout.orders.tickets');
     Route::post('/{order}/cancel', [CheckoutOrderController::class, 'cancel'])->whereUuid('order')->middleware('throttle:checkout')->name('ticketing.checkout.orders.cancel');
 });
 

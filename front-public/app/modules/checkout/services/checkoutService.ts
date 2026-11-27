@@ -54,6 +54,50 @@ export interface PlaceOrderBody {
   items: Array<{ ticket_type_id: string, attendees: Array<{ name: string, email: string, answers: Record<string, string | boolean> }> }>
 }
 
+export interface ReceiverPayload {
+  driver: string
+  public_key: string | null
+  holder_name: string
+  holder_type: 'individual' | 'company'
+  methods: Array<'pix' | 'card' | 'boleto'>
+  max_installments: number
+  pix_expiration_minutes: number
+  sandbox: boolean
+  ready: boolean
+}
+
+export interface PaymentPayload {
+  id: string
+  method: 'pix' | 'card' | 'boleto'
+  status: 'pending' | 'paid' | 'failed' | 'expired' | 'cancelled' | 'refunded' | 'disputed'
+  status_label: string
+  amount: Money
+  installments: number
+  pix: { copy_paste: string, qr_code_base64: string | null } | null
+  checkout_url: string | null
+  expires_at: string | null
+  paid_at: string | null
+  failure_reason: string | null
+  order_status: OrderPayload['status']
+}
+
+export interface StartPaymentBody {
+  method: 'pix' | 'card'
+  installments: number
+  card_token?: string
+  card_brand?: string
+  card_issuer?: string
+}
+
+export interface TicketPayload {
+  id: string
+  code: string
+  ticket_type_name: string | null
+  batch_name: string | null
+  holder: { name: string, email: string }
+  qr?: string
+}
+
 async function call<T>(request: () => Promise<T>): Promise<T> {
   try {
     return await request()
@@ -75,6 +119,13 @@ export default {
     call(() => httpClient.post<{ data: OrderPayload }>(orders(editionId), { body, headers: { 'Idempotency-Key': idempotencyKey } })),
   order: (editionId: string, orderId: string, token: string) =>
     call(() => httpClient.get<{ data: OrderPayload }>(`${orders(editionId)}/${orderId}`, { headers: { 'X-Order-Token': token } })),
+  receiver: (editionId: string) => call(() => httpClient.get<{ data: ReceiverPayload | null }>(`/public/editions/${editionId}/payments/receiver`)),
+  payment: (editionId: string, orderId: string, token: string) =>
+    call(() => httpClient.get<{ data: PaymentPayload | null }>(`${orders(editionId)}/${orderId}/payment`, { headers: { 'X-Order-Token': token } })),
+  startPayment: (editionId: string, orderId: string, token: string, body: StartPaymentBody, idempotencyKey: string) =>
+    call(() => httpClient.post<{ data: PaymentPayload }>(`${orders(editionId)}/${orderId}/payment`, { body, headers: { 'X-Order-Token': token, 'Idempotency-Key': idempotencyKey } })),
+  tickets: (editionId: string, orderId: string, token: string) =>
+    call(() => httpClient.get<{ data: TicketPayload[] }>(`${orders(editionId)}/${orderId}/tickets`, { headers: { 'X-Order-Token': token } })),
   cancel: (editionId: string, orderId: string, token: string) =>
     call(() => httpClient.post<{ data: OrderPayload }>(`${orders(editionId)}/${orderId}/cancel`, { headers: { 'X-Order-Token': token } })),
 }
