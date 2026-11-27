@@ -44,7 +44,7 @@ class TicketMailer
 
     private function ticketsUrl(string $editionId): string
     {
-        return mb_rtrim($this->sites->url($editionId), '/').'/ingressos';
+        return mb_rtrim($this->sites->url($editionId), '/').'/conta/ingressos';
     }
 
     /**

@@ -25,7 +25,7 @@
 | 19 | Telas: organização (patrocinadores, fornecedores, finanças, tarefas, comunicação; cresce a cada tela do Marco 2) |
 | 20 | Onde estamos e o que falta |
 
-Retrato de 26/11/2026, com a P05 (checkout: pagamento por Pix e cartão).
+Retrato de 27/11/2026, com a P06 (conta do participante: ingressos, crachá, transferência e pedidos).
 
 ## Como atualizar
 

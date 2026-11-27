@@ -2,14 +2,14 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import AboutTalkStep from './AboutTalkStep.vue'
 import AboutYouStep from './AboutYouStep.vue'
-import AuthPanel from './AuthPanel.vue'
+import AuthPanel from '@/application/shared/components/AuthPanel.vue'
 import CfpNotice from './CfpNotice.vue'
 import ReviewStep from './ReviewStep.vue'
 import WizardProgress from './WizardProgress.vue'
 import { longDate } from '../composables/translate'
 import { useCfp } from '../composables/useCfp'
 import { useProposalWizard } from '../composables/useProposalWizard'
-import { useSpeakerAuth } from '../composables/useSpeakerAuth'
+import { useSiteAuth } from '@/application/shared/composables/useSiteAuth'
 import locale from '../locales/pt-br'
 
 const props = defineProps<{ editionId: string, editId: string | null }>()
@@ -17,7 +17,7 @@ const props = defineProps<{ editionId: string, editId: string | null }>()
 const { cfp, state: cfpState, load: loadCfp } = useCfp(props.editionId)
 const wizard = useProposalWizard(props.editionId, props.editId)
 const { step, profile, talk, saveState, savedAt, errors, message, busy, submitted, loaded, missing, isEditingSubmitted } = wizard
-const { user, isAuthenticated } = useSpeakerAuth()
+const { user, isAuthenticated } = useSiteAuth()
 const heading = ref<HTMLElement | null>(null)
 
 onMounted(async () => {

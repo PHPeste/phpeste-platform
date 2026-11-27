@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import TextField from './TextField.vue'
-import { useSpeakerAuth } from '../composables/useSpeakerAuth'
-import locale from '../locales/pt-br'
+import { useSiteAuth } from '../composables/useSiteAuth'
+import locale from '@/application/locales/pt-br/auth'
 
 defineProps<{ title: string, text?: string }>()
 
-const { login, register } = useSpeakerAuth()
+const { login, register } = useSiteAuth()
 const forgotUrl = `${String(useRuntimeConfig().public.adminUrl).replace(/\/$/, '')}/esqueci-senha`
 const mode = ref<'login' | 'register'>('login')
 const form = reactive({ name: '', email: '', password: '', passwordConfirmation: '' })

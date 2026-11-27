@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores/authStore'
 import authService from '../services/authService'
+import { forgetAccountData } from '../accountStorage'
 
 /**
  * Reused by every piece of navigation chrome (sidebar, navbar, mobile top
@@ -19,6 +20,7 @@ export function useLogout() {
     }
 
     authStore.clearSession()
+    forgetAccountData()
     await navigateTo('/login')
   }
 

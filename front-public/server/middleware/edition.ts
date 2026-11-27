@@ -1,7 +1,7 @@
 import { getRequestHost, sendRedirect, setResponseStatus } from 'h3'
 import { normalizeHost, route } from '#shared/edition'
 
-const SKIP = /^\/(_nuxt|__nuxt|api|_ipx|favicon\.ico|robots\.txt)/
+const SKIP = /^\/(_nuxt|__nuxt|api|_ipx|favicon\.ico|robots\.txt|sw\.js)/
 
 export default defineEventHandler(async (event) => {
   if (SKIP.test(event.path)) return

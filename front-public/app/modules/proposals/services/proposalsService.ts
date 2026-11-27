@@ -85,9 +85,6 @@ async function call<T>(request: () => Promise<T>): Promise<T> {
 
 export default {
   cfp: (editionId: string) => call(() => httpClient.get<PublicCfpPayload>(`/public/editions/${editionId}/cfp`)),
-  register: (body: { name: string, email: string, password: string, password_confirmation: string }) => call(() => httpClient.post<{ data: unknown }>('/auth/register', { body })),
-  login: (body: { email: string, password: string }) =>
-    call(() => httpClient.post<{ user: { id: string, name: string, email: string, avatar_url: string | null, created_at: string }, token: string }>('/auth/login', { body: { ...body, device_name: 'Área do palestrante' } })),
   profile: () => call(() => httpClient.get<SpeakerProfilePayload>('/me/speaker-profile')),
   saveProfile: (body: ProfileBody) => call(() => httpClient.put<SpeakerProfilePayload>('/me/speaker-profile', { body })),
   list: (editionId: string) => call(() => httpClient.get<{ data: ProposalPayload[] }>(speakerUrl(editionId))),
