@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use PHPeste\Ticketing\Http\Controllers\AttendeeOrderController;
 use PHPeste\Ticketing\Http\Controllers\AttendeeTicketController;
 use PHPeste\Ticketing\Http\Controllers\CheckoutOrderController;
 use PHPeste\Ticketing\Http\Controllers\CouponController;
@@ -88,3 +89,7 @@ Route::apiV1PublishedEdition('attendee', 'tickets', ['auth:sanctum'])->group(fun
     Route::post('/{ticket}/transfer', [AttendeeTicketController::class, 'transfer'])->whereUuid('ticket')->middleware('throttle:6,1')->name('ticketing.attendee.tickets.transfer');
     Route::post('/{ticket}/resend', [AttendeeTicketController::class, 'resend'])->whereUuid('ticket')->middleware('throttle:3,1')->name('ticketing.attendee.tickets.resend');
 });
+
+Route::apiV1PublishedEdition('attendee', 'orders', ['auth:sanctum'])
+    ->get('/', [AttendeeOrderController::class, 'index'])
+    ->name('ticketing.attendee.orders.index');

@@ -66,7 +66,7 @@ it('pagamento confirmado emite um ingresso nominal por participante e manda cada
         ->and($tickets->pluck('holder_email')->all())->toBe(['ana@exemplo.com', 'bia@exemplo.com'])
         ->and($tickets->first()->code)->toMatch('/^[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}$/')
         ->and(emails($this->edition->id, EmailTemplate::OrderConfirmed))->toBe(['ana@exemplo.com', 'bia@exemplo.com'])
-        ->and(EmailDelivery::query()->forEdition($this->edition->id)->where('template', EmailTemplate::OrderConfirmed->value)->first()->action_url)->toEndWith('/ingressos');
+        ->and(EmailDelivery::query()->forEdition($this->edition->id)->where('template', EmailTemplate::OrderConfirmed->value)->first()->action_url)->toEndWith('/conta/ingressos');
 
     expect(resolve(IssueTickets::class)->handle($this->order))->toBe([])
         ->and(Ticket::query()->forEdition($this->edition->id)->count())->toBe(2);
