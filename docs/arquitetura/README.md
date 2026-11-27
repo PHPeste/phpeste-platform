@@ -25,7 +25,7 @@
 | 19 | Telas: organização (patrocinadores, fornecedores, finanças, tarefas, comunicação; cresce a cada tela do Marco 2) |
 | 20 | Onde estamos e o que falta |
 
-Retrato de 27/11/2026, com a P06 (conta do participante: ingressos, crachá, transferência e pedidos).
+Retrato de 27/11/2026, no fim do Marco 2 (a última entrega foi a P06, conta do participante).
 
 ## Como atualizar
 

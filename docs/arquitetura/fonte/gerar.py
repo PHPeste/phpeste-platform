@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "27/11/2026 · P06 (conta do participante)"
+RETRATO = "27/11/2026 · fim do Marco 2"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -586,9 +586,9 @@ pages.append(page(19, "Telas", "Telas: organização",
 # ================================================== 20 status
 status = [
     ("Marco 0 · Fundação", "Concluído", "esqueleto Laravel 13, módulos, Docker, convenções de API, segurança base, painel e componentes"),
-    ("Marco 1 · Núcleo e CFP", "Backend concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
-    ("Marco 2 · Ingressos", "Backend concluído, telas em andamento", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas prontas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças), A22 (tarefas), A23 (modelos de e-mail); no site, P04 e P05 (checkout com Pix e cartão) e P06 (conta do participante); falta A18"),
-    ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37), check-in com modo offline (B38–B39), push (B40), API pública e checkout embutível (B41), site da edição (P02, P07–P09)"),
+    ("Marco 1 · Núcleo e CFP", "Concluído", "Identity, Community, Branding, Notifications, CFP inteiro, Audit; telas A05–A12, A24, A25; site P01, P03"),
+    ("Marco 2 · Ingressos", "Concluído", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças), A22 (tarefas), A23 (modelos de e-mail); no site, P04 e P05 (checkout com Pix e cartão) e P06 (conta do participante)"),
+    ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37, A13), check-in com modo offline (B38–B39, A18), push (B40), API pública e checkout embutível (B41, P07), site da edição (P02, P08–P10), viagem do palestrante (P11)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
 ]
 pages.append(page(20, "Roadmap", "Onde estamos e o que falta",
