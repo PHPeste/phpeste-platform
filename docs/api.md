@@ -37,6 +37,20 @@ Route::apiV1PublishedEdition('speaker', 'proposals', ['auth:sanctum'])->group(fu
 });
 ```
 
+### Famílias de rota
+
+| Prefixo | Quem usa | Autenticação |
+| --- | --- | --- |
+| `/api/v1/auth/…`, `/api/v1/me/…` | todos | login devolve token Sanctum; o resto pede `Bearer` |
+| `/api/v1/editions/{edition}/…` | painel da organização | `Bearer` e papel na edição (permissões por gate) |
+| `/api/v1/speaker/editions/{edition}/…` | palestrante | `Bearer`, edição publicada |
+| `/api/v1/attendee/editions/{edition}/…` | participante (ingressos, crachá, transferência, pedidos) | `Bearer`, edição publicada; a posse vem do `user_id` ou do e-mail verificado |
+| `/api/v1/checkout/editions/{edition}/orders/…` | quem compra, com ou sem conta | criar pedido pede `Idempotency-Key`; o resto pede o `X-Order-Token` devolvido na criação |
+| `/api/v1/public/…` | site da edição | sem login (resolução pelo host, tema, CFP, ingressos à venda, cupom, recebedor do pagamento) |
+| `/api/v1/webhooks/payments/{token}`, `/api/v1/webhooks/resend` | gateways e Resend | assinatura do remetente, `throttle:webhooks` |
+
+`X-Order-Token` é o `access_token` do pedido (guardado cifrado): quem comprou sem conta acompanha o pedido, paga e vê os ingressos só com ele. Sem o header, a rota responde 404.
+
 ## Envelope de erro
 
 Toda resposta de erro da API (`app/Support/Api/ApiError.php`) segue o mesmo formato, incluindo 404 e 500:
@@ -56,15 +70,12 @@ Toda resposta de erro da API (`app/Support/Api/ApiError.php`) segue o mesmo form
 
 Todo request (web ou API) ganha um `X-Request-Id` — o que vier no header da requisição é respeitado, senão a aplicação gera um UUID (`app/Http/Middleware/AssignRequestId.php`). O valor volta no header da resposta, entra em todo log da requisição e aparece no envelope de erro.
 
-## `Idempotency-Key`
+## Idempotência
 
-Endpoint que cria pedido ou cobrança usa o middleware `idempotent` (alias de `App\Http\Middleware\EnsureIdempotencyKey`):
-
-```php
-Route::post('/orders', StoreOrderController::class)->middleware('idempotent');
-```
-
-Sem o header `Idempotency-Key`, a requisição recebe 400. Com o header, a resposta da primeira chamada fica em cache por 24h; uma segunda chamada com a mesma chave recebe a resposta cacheada em vez de repetir o efeito colateral — é isso que impede dois ingressos quando o gateway reenvia o mesmo webhook.
+- **Criar pedido** (`POST /checkout/editions/{id}/orders`) exige o header `Idempotency-Key` (sem ele, 400). A garantia fica no banco, não no cache: `unique(edition_id, idempotency_key)` mais o hash do corpo. A mesma chave com o mesmo corpo devolve o mesmo pedido; com outro corpo, 409. O site repete a chave enquanto o corpo não muda.
+- **Iniciar o pagamento** trava por pedido (`Cache::lock` no `ChargeService`): dois cliques ao mesmo tempo geram uma cobrança só.
+- **Webhooks** entram numa caixa de entrada (`webhook_events`) com o id do evento único por conta de gateway; evento repetido não é processado de novo, e o status vem sempre de uma consulta ao gateway, nunca do corpo recebido.
+- Para outros endpoints que criam algo, há o middleware genérico `idempotent` (`App\Http\Middleware\EnsureIdempotencyKey`): sem o header, 400; com o header, guarda a resposta por 24h (inclusive 422) e devolve a mesma resposta na repetição. Ele não serve para o checkout, porque um 422 guardado impediria corrigir os dados e tentar de novo com a mesma chave.
 
 ## Rate limiting
 
@@ -72,7 +83,7 @@ Rota sensível usa `throttle:<nome>` com um limiter nomeado em `App\Providers\Se
 
 ## CORS
 
-`config/cors.php` libera só as origens em `CORS_ALLOWED_ORIGINS` (lista separada por vírgula no `.env`) — nunca `*` fora de `local`. `X-Request-Id` está em `exposed_headers`, então o front consegue ler o header da resposta mesmo em requisição cross-origin.
+`config/cors.php` libera só as origens em `CORS_ALLOWED_ORIGINS` (lista separada por vírgula no `.env`) — nunca `*` fora de `local`. Além delas, `AllowEditionSiteOrigins` libera, só nas rotas `/api/v1/public/*` e só naquela requisição, a origem `https` do site próprio cadastrado numa edição que não está em rascunho (ver `site-proprio.md`). `X-Request-Id` está em `exposed_headers`, então o front consegue ler o header da resposta mesmo em requisição cross-origin.
 
 ## Paginação
 

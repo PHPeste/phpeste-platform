@@ -4,7 +4,7 @@ Painel da organização da [PHPeste Platform](../README.md). Nuxt 4, módulo-por
 
 > Design/protótipo das telas: [claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83) · tokens do tema em [`../docs/design/tema-sertao-tokens.png`](../docs/design/tema-sertao-tokens.png).
 
-> **Status:** `login` é o módulo de referência completo (types, service + error class, composable, component, view, testes em cada camada — unitário e e2e). Testes unitários, e2e (Playwright), typecheck e `npm run build` passam.
+> **Status:** 24 módulos em `app/modules/` (um deles é o `shell`, com menu lateral e barra superior), cobrindo o núcleo (login com senha e GitHub, recuperação de senha, convite, comunidades, visão geral, equipe, identidade, configurações, meu perfil), o CFP (configuração, avaliação, palestrantes), ingressos, pedidos, pagamentos, participantes, patrocinadores, fornecedores, finanças, tarefas e comunicação. Faltam a grade e o check-in (Marco 3). `login` continua sendo o módulo de referência para criar um novo.
 
 ```bash
 npm install
