@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import HostedCardPayment from './HostedCardPayment.vue'
 import PixPayment from './PixPayment.vue'
 import ReceiverNotice from './ReceiverNotice.vue'
-import TicketQr from './TicketQr.vue'
+import TicketQr from '@/components/TicketQr.vue'
 import { translatePayment, translateReceiver } from '../composables/translate'
 import { paymentPayload, receiverPayload } from '../composables/fixtures'
 

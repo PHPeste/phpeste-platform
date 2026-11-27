@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import AuthPanel from './AuthPanel.vue'
+import AuthPanel from '@/application/shared/components/AuthPanel.vue'
 import TextAreaField from './TextAreaField.vue'
 import { longDate } from '../composables/translate'
 import { useCfp } from '../composables/useCfp'
 import { useMyProposal } from '../composables/useMyProposals'
-import { useSpeakerAuth } from '../composables/useSpeakerAuth'
+import { useSiteAuth } from '@/application/shared/composables/useSiteAuth'
 import locale from '../locales/pt-br'
 
 const props = defineProps<{ editionId: string, id: string }>()
 const detail = useMyProposal(props.editionId, props.id)
 const { proposal, state, busy } = detail
 const { cfp, load: loadCfp } = useCfp(props.editionId)
-const { isAuthenticated } = useSpeakerAuth()
+const { isAuthenticated } = useSiteAuth()
 const notice = ref<string | null>(null)
 const error = ref<string | null>(null)
 const dialog = ref<'withdraw' | 'decline' | null>(null)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SelectField from './SelectField.vue'
 import TextAreaField from './TextAreaField.vue'
-import TextField from './TextField.vue'
+import TextField from '@/application/shared/components/TextField.vue'
 import locale from '../locales/pt-br'
 import type { CfpInfo, TalkForm } from '../types'
 

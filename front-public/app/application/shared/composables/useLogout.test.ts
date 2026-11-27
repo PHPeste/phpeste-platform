@@ -24,10 +24,15 @@ describe('useLogout', () => {
     const authStore = useAuthStore()
     authStore.setSession({ id: 'user-1', name: 'Ada Lovelace', email: 'ada@example.com', avatarUrl: null }, 'abc123')
 
+    localStorage.setItem('phpeste.account.tickets.ed-1.user-1', '{}')
+    localStorage.setItem('phpeste.cfp.draft.ed-1', '{}')
+
     const { logout } = useLogout()
     await logout()
 
     expect(authService.logout).toHaveBeenCalledOnce()
+    expect(localStorage.getItem('phpeste.account.tickets.ed-1.user-1')).toBeNull()
+    expect(localStorage.getItem('phpeste.cfp.draft.ed-1')).toBe('{}')
     expect(authStore.token).toBeNull()
     expect(authStore.user).toBeNull()
     expect(navigateToMock).toHaveBeenCalledWith('/login')

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from 'vue'
-import TicketQr from './TicketQr.vue'
+import TicketQr from '@/components/TicketQr.vue'
 import { useIssuedTickets } from '../composables/useIssuedTickets'
 import locale from '../locales/pt-br'
 

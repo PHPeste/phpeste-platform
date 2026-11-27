@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { onMounted, watch } from 'vue'
-import AuthPanel from './AuthPanel.vue'
+import AuthPanel from '@/application/shared/components/AuthPanel.vue'
 import { useMyProposals } from '../composables/useMyProposals'
-import { useSpeakerAuth } from '../composables/useSpeakerAuth'
+import { useSiteAuth } from '@/application/shared/composables/useSiteAuth'
 import locale from '../locales/pt-br'
 
 const props = defineProps<{ editionId: string }>()
 const { proposals, state, load } = useMyProposals(props.editionId)
-const { isAuthenticated } = useSpeakerAuth()
+const { isAuthenticated } = useSiteAuth()
 
 onMounted(load)
 watch(isAuthenticated, (value) => { if (value) load() })
