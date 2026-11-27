@@ -1,6 +1,6 @@
 # infra
 
-Docker Compose de desenvolvimento para o `backend/`: MySQL, Redis, Horizon e Mailpit (captura de e-mail local).
+Docker Compose de desenvolvimento para o `backend/`: MySQL, Redis, Horizon (fila), scheduler (rotinas como expirar reservas e conciliar pagamentos) e Mailpit (captura de e-mail local). `./dev.sh up` sobe tudo; `./dev.sh` sem argumento lista os outros comandos.
 
 ## Uso
 

@@ -4,7 +4,7 @@ Plataforma única para organizar o [PHPeste](https://phpeste.dev), o evento anua
 
 A primeira edição a usar a plataforma é o PHPeste 2027, em João Pessoa (PB), organizado pela comunidade PHP-PB.
 
-> **Status:** Marco 0. Backend (Laravel + `internachi/modular`, 10 módulos do MVP já scaffolded) e front-admin (Nuxt, a partir do `base_nuxt_modular`) já rodam localmente. `front-public` (Nuxt SSR, edição resolvida pelo host) já tem a base; `app` ainda não foi iniciado.
+> **Status (27/11/2026):** Marcos 0, 1 e 2 concluídos. Já funcionam o núcleo (comunidades, edições, equipe, identidade visual, domínios), o CFP completo, a venda de ingressos com Pix e cartão no gateway da própria comunidade, e a gestão da organização (patrocinadores, fornecedores, finanças, tarefas, modelos de e-mail). No site da edição já existem o formulário do CFP, a área do palestrante, o checkout e a conta do participante. Próximo: Marco 3 (programação, check-in, site da edição e checkout embutível). O `app` (Flutter) ainda não foi iniciado.
 
 ## Por que esta plataforma existe
 
@@ -26,14 +26,23 @@ Em uma frase: transformar a organização do PHPeste em algo que se herda de um 
 
 ## O que a plataforma cobre
 
-- **Comunidades e edições:** cada edição tem equipe, papéis, status e tema próprios.
-- **Identidade configurável:** cores, logo, fontes e textos por edição, aplicados ao site, ao admin e ao app sem novo deploy.
-- **CFP:** submissão, avaliação por curadores, decisão em lote e confirmação dos palestrantes.
-- **Programação:** salas, sessões e grade com validação de conflitos.
-- **Ingressos e checkout:** tipos, lotes, cupons, Pix, cartão e boleto, com webhooks idempotentes.
-- **Check-in:** leitura de QR no credenciamento.
-- **App do participante:** programação, agenda pessoal e ingresso com QR.
-- **Fornecedores, patrocinadores, despesas e tarefas** da organização.
+Pronto:
+
+- **Comunidades e edições:** cada edição tem equipe, papéis, convites, status e tema próprios. Uma edição nova pode nascer copiando a anterior.
+- **Identidade configurável:** cores, logo, fontes e textos por edição, com pré-visualização e publicação, aplicados ao site sem novo deploy. Cada edição tem domínio próprio ou subdomínio, e a comunidade pode manter o site dela e usar a plataforma só para a área de palestrante e participante ([`docs/site-proprio.md`](docs/site-proprio.md)).
+- **Contas:** cadastro, login por senha ou GitHub, recuperação de senha, perfil global e perfil de palestrante que valem para todas as edições.
+- **CFP:** configuração da chamada, submissão com rascunho e coautores, convite direto, atribuição de revisores, avaliação (anônima ou não), decisão em lote com lista de espera e cota do Nordeste, confirmação do palestrante.
+- **Ingressos:** tipos, lotes com virada automática, cupons, reserva de estoque sem venda acima do limite, pedidos com idempotência, emissão de ingresso com QR assinado, transferência, dados do crachá e importação de compradores de outras plataformas (Sympla, Even3, planilha).
+- **Pagamentos:** Asaas e Mercado Pago com a conta da própria comunidade, Pix e cartão, webhooks assinados e idempotentes, reembolso total ou parcial e conciliação diária com o gateway.
+- **Site da edição:** formulário do CFP e área do palestrante; checkout com Pix e cartão; conta do participante com os ingressos (o QR abre sem internet), crachá, transferência e histórico de pedidos.
+- **Gestão da organização:** patrocinadores (funil, cotas e entregas), fornecedores (cadastro global e contratos por edição), finanças (receitas, despesas, orçamento), tarefas (kanban com lembretes), modelos de e-mail por edição e trilha de auditoria.
+
+A fazer (Marcos 3 e 4, ver o [board](https://github.com/orgs/PHPeste/projects/2)):
+
+- **Programação:** salas, sessões, grade com validação de conflitos e agenda pessoal.
+- **Check-in:** leitura de QR no credenciamento, com modo offline.
+- **Site da edição completo** (template, SEO, termos e LGPD) e **checkout embutível** no site da comunidade.
+- **Push, app do participante**, feedback, certificados, sorteio, relatórios e operação (carga, backups, runbook).
 
 ## Princípios
 
@@ -64,37 +73,42 @@ phpeste-platform/
 ├── backend/        # Laravel: API, filas, webhooks (módulos em app-modules/)
 ├── front-admin/    # Nuxt: painel da organização
 ├── front-public/   # Nuxt SSR: área do palestrante e participante, checkout e site da edição, por host (ou só a área, quando a comunidade tem site próprio)
-└── app/            # (planejado, Marco 3) Flutter: app do participante
+└── app/            # (planejado, ainda sem marco) Flutter: app do participante
 ```
 
 ## Módulos do backend
 
 Cada módulo vive em `backend/app-modules/<nome>` com namespace `PHPeste\<Nome>`.
 
-| Módulo | Responsabilidade |
-| --- | --- |
-| Identity | Usuários, login, perfis e papéis por edição |
-| Community | Comunidades, edições, equipe e onboarding de nova edição |
-| Branding | Tema, domínio e tokens para site e app |
-| Cfp | Chamada, trilhas, propostas, avaliação e decisão |
-| Program | Salas, sessões, grade e agenda pessoal |
-| Ticketing | Tipos, lotes, cupons, pedidos, ingressos e QR |
-| Payments | Interface de gateway, drivers (Asaas, Mercado Pago), webhooks e estornos |
-| CheckIn | Leitura de QR, credenciamento e equipe |
-| Notifications | E-mail transacional e push |
-| Sponsors | Cotas, contrapartidas e contratos |
-| Suppliers | Cadastro de fornecedores e contratos por edição |
-| Finance | Orçamento, despesas e comprovantes |
-| Tasks | Kanban da organização por edição |
-| Engagement | Feedback de sessão, sorteio e certificados |
-| Audit | Trilha de ações sensíveis |
+| Módulo | Responsabilidade | Situação |
+| --- | --- | --- |
+| Identity | Usuários, login por senha e GitHub, recuperação de senha, perfis | Pronto |
+| Community | Comunidades, edições com máquina de estados, equipe, papéis, convites, nova edição a partir da anterior | Pronto |
+| Branding | Tema publicado, logos, domínios por edição, resolução pelo host, site próprio | Pronto |
+| Cfp | Chamada, trilhas, propostas, revisores, avaliação, decisão, confirmação | Pronto |
+| Ticketing | Tipos, lotes, cupons, pedidos, ingressos com QR, participantes, transferência, importação, conciliação | Pronto |
+| Payments | Contrato de gateway, Asaas e Mercado Pago, webhooks, reembolsos | Pronto |
+| Notifications | E-mail transacional por edição, modelos editáveis, webhooks do Resend | E-mail pronto; push no Marco 3 |
+| Sponsors | Funil, cotas, contrapartidas e entregas | Pronto |
+| Suppliers | Fornecedores globais e contratos por edição | Pronto |
+| Finance | Receitas, despesas, comprovantes e orçamento | Pronto |
+| Tasks | Kanban da organização com lembretes | Pronto |
+| Audit | Trilha de ações sensíveis | Pronto |
+| Program | Salas, sessões, grade e agenda pessoal | Só o esqueleto (Marco 3) |
+| CheckIn | Leitura de QR, credenciamento, modo offline | Só o esqueleto (Marco 3) |
+| Engagement | Feedback de sessão, sorteio e certificados | Só o esqueleto (Marco 4) |
 
 Para criar um módulo novo:
 
 ```bash
 php artisan make:module <nome>
-composer update modules/<nome>
+composer update phpeste/<nome>
 ```
+
+## Telas
+
+- **Painel da organização** (`front-admin/`): visão geral, comunidades e edições, equipe, identidade, configurações, meu perfil, CFP (configuração e avaliação), palestrantes, ingressos (tipos, lotes e cupons), pedidos e reembolso, pagamentos (gateway e webhook), participantes, patrocinadores, fornecedores, finanças, tarefas e comunicação (modelos de e-mail). As telas seguem o [design do admin](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83).
+- **Site da edição** (`front-public/`): página inicial da área, `/cfp`, `/palestrante/propostas`, `/ingressos` e `/checkout/pedido/{id}` (compra), `/conta/ingressos` e `/conta/pedidos` (participante).
 
 ## Como rodar
 
@@ -109,7 +123,7 @@ composer update modules/<nome>
   composer check      # pint + phpstan + rector --dry-run + pest
   ```
 
-  Ou via Docker (MySQL + Redis + Horizon + Mailpit): `cd infra && cp .env.example .env && docker compose up -d`.
+  Ou via Docker (MySQL, Redis, Horizon, scheduler e Mailpit): `infra/dev.sh up` (ver [`infra/README.md`](infra/README.md)). Sem Docker, dá para usar SQLite com `DB_CONNECTION=sqlite`, `QUEUE_CONNECTION=sync` e `CACHE_STORE=file` no `.env`. As rotinas (expirar reservas, virar lotes, conciliar pagamentos, reprocessar webhooks, lembretes) rodam pelo `php artisan schedule:work`.
 
 - **Admin** (`front-admin/`):
 
@@ -120,23 +134,44 @@ composer update modules/<nome>
   npm run dev
   ```
 
-- **Site público e checkout** (`front-public/`): base pronta, com a edição e o tema resolvidos pelo host (`docs/adr/0008-front-public-por-host.md`); CFP público e checkout em construção.
-- **App** (`app/`): a definir no Marco 3.
+- **Site da edição** (`front-public/`): a edição e o tema são resolvidos pelo endereço ([ADR 0008](docs/adr/0008-front-public-por-host.md)), então é preciso cadastrar o domínio no painel.
+
+  ```bash
+  cd front-public
+  npm install
+  cp .env.example .env
+  NUXT_TRUST_FORWARDED_HOST=true npm run dev   # http://localhost:3000
+  curl -H 'X-Forwarded-Host: <domínio da edição>' http://localhost:3000/
+  ```
+
+  Os testes dos três projetos rodam com `npm test` e `npm run test:e2e` (Playwright, com a API simulada) nos fronts e `composer check` no backend; o CI roda os mesmos comandos em todo PR.
+- **App** (`app/`): ainda não iniciado.
 
 ## Documentação
 
 Tudo o que não cabe neste README fica em [`docs/`](docs/):
 
-- [`produto.md`](docs/produto.md): visão, módulos do MVP e fases seguintes, decisões em aberto
-- [`arquitetura/`](docs/arquitetura/): documento visual da arquitetura (PDF): tenancy por edição, módulos e como conversam, banco, papéis, fluxos de compra, CFP e dinheiro, segurança, telas
-- [Design do admin](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83): protótipo/telas do `front-admin`
+- [`produto.md`](docs/produto.md): visão, módulos, o que está pronto e o que falta, decisões em aberto
+- [`arquitetura/`](docs/arquitetura/): documento visual da arquitetura ([PDF](docs/arquitetura/PHPeste_Arquitetura.pdf)): tenancy por edição, módulos e como conversam, banco, papéis, fluxos de compra, CFP e dinheiro, segurança, telas
+- [`api.md`](docs/api.md): convenções da API (rotas, erros, idempotência, rate limit, CORS, paginação, Scramble)
+- [`guia-gateways.md`](docs/guia-gateways.md): como a comunidade conecta o Asaas ou o Mercado Pago
+- [`site-proprio.md`](docs/site-proprio.md): usar a plataforma com o site da própria comunidade
+- [`deploy/dominios-e-tls.md`](docs/deploy/dominios-e-tls.md): proxy, domínios das edições e certificados
 - [`adr/`](docs/adr/): o porquê de cada decisão de arquitetura (0001–0009)
+- [Design do admin](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83): protótipo das telas do `front-admin`
 - Guia para a comunidade anfitriã: criar a edição, conectar o gateway, tematizar e abrir o CFP (a escrever)
 
 
 ## Segurança e privacidade
 
-Credenciais de gateway são criptografadas e nunca devolvidas pela API. Webhooks têm assinatura validada e são idempotentes. Cada edição tem política de privacidade própria, e os dados de uma edição são isolados das demais. Para reportar uma vulnerabilidade, a definir.
+- Os dados de uma edição ficam isolados das demais (escopo global por `edition_id`, ver [ADR 0007](docs/adr/0007-tenancy-edicao-como-tenant.md)), e cada papel da equipe só vê o que precisa (o financeiro não vê acessibilidade, o check-in não vê pedidos).
+- Credenciais de gateway são cifradas e nunca devolvidas pela API ([ADR 0006](docs/adr/0006-politica-de-segredos.md)). CPF de quem compra e pedidos de acessibilidade também ficam cifrados.
+- Número de cartão nunca passa pela plataforma: o cartão é digitado na página do gateway ou nos campos seguros do Mercado Pago, e a API recusa campos de cartão.
+- Webhooks têm assinatura validada, entram numa caixa de entrada idempotente e o status sempre vem de uma consulta ao gateway.
+- O QR do ingresso é assinado (HMAC), não leva dado pessoal e muda de versão quando o ingresso é transferido.
+- Ações sensíveis (pagamento manual, reembolso, transferência, mudança de equipe) ficam na trilha de auditoria.
+
+Política de privacidade por edição e consentimento (LGPD) entram no Marco 3. Para reportar uma vulnerabilidade, a definir.
 
 ## Contribuindo
 
