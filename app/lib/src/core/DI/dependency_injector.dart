@@ -5,6 +5,12 @@ import 'package:phpeste_app/src/app/features/auth/domain/repositories/auth_repos
 import 'package:phpeste_app/src/app/features/auth/domain/usecases/login_usecase.dart';
 import 'package:phpeste_app/src/app/features/auth/infrastructure/auth_interceptor.dart';
 import 'package:phpeste_app/src/app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:phpeste_app/src/app/features/edition_theme/data/datasources/edition_branding_local_datasource.dart';
+import 'package:phpeste_app/src/app/features/edition_theme/data/datasources/edition_branding_remote_datasource.dart';
+import 'package:phpeste_app/src/app/features/edition_theme/data/repositories/edition_branding_repository_impl.dart';
+import 'package:phpeste_app/src/app/features/edition_theme/domain/repositories/edition_branding_repository_interface.dart';
+import 'package:phpeste_app/src/app/features/edition_theme/domain/usecases/get_edition_branding_usecase.dart';
+import 'package:phpeste_app/src/app/features/edition_theme/presentation/bloc/edition_theme_bloc.dart';
 import 'package:phpeste_app/src/core/cache/shared_preferences/shared_preferences_impl.dart';
 import 'package:phpeste_app/src/core/client_http/dio/rest_client_dio_impl.dart';
 import 'package:phpeste_app/src/core/client_http/logger/client_interceptor_logger_impl.dart';
@@ -56,5 +62,14 @@ void setupDependencyInjector({bool loggerApi = false, bool useMocks = true, Logg
           authRepository: injector<IAuthRepository>(),
           sessionService: injector<SessionService>(),
         ),
+      ));
+
+  injector.registerLazySingleton<IEditionBrandingRepository>(() => EditionBrandingRepositoryImpl(
+        remote: EditionBrandingRemoteDatasource(restClient: injector<RestClientDioImpl>()),
+        local: EditionBrandingLocalDatasource(cache: SharedPreferencesImpl()),
+      ));
+
+  injector.registerLazySingleton(() => EditionThemeBloc(
+        getBranding: GetEditionBrandingUsecase(repository: injector<IEditionBrandingRepository>()),
       ));
 }
