@@ -64,7 +64,7 @@ flutter build apk --flavor prod --dart-define-from-file=env/prod.json
 flutter build ios --no-codesign --dart-define-from-file=env/prod.json
 ```
 
-Flutter fixado em 3.50.0 (`.fvmrc` e CI). O CI (`../.github/workflows/app-ci.yml`) roda análise, testes e os builds de Android (dev e prod) e iOS sem assinatura em todo PR que mexe em `app/`.
+Flutter fixado em 3.50.0 (`.fvmrc` e CI). O Android segue o que o `flutter create` dessa versão gera (Kotlin DSL, AGP 9.3.1, Kotlin 2.4.20, Gradle 9.5, Java 17); o Flutter 3.50 recusa Gradle abaixo de 9.3.1, então trocar a versão do Flutter pede gerar um projeto novo e comparar `android/`. O CI (`../.github/workflows/app-ci.yml`) roda análise, testes e os builds de Android (dev e prod) e iOS sem assinatura em todo PR que mexe em `app/`.
 
 Depois do `flutter run` em debug, o Marionette MCP (`MarionetteBinding` em `lib/main.dart`) deixa um agente conectado ao `ws://` impresso tocar, digitar, tirar print e ler logs, para conferir uma mudança de tela no app rodando.
 
