@@ -37,6 +37,7 @@ Os 15 módulos existem no backend (`internachi/modular`, namespace `PHPeste\<Nom
 | 2 · Ingressos | Concluído | ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas; painel de tudo isso; checkout e conta do participante no site |
 | 3 · Evento pronto | A fazer | programação e grade, check-in com modo offline, push, API pública e checkout embutível, site da edição (template, SEO, LGPD), área do palestrante com viagem e hospedagem |
 | 4 · Operação | A fazer | feedback, certificados e sorteio, LGPD do titular, relatórios, teste de carga e backups, dados de demonstração, acessibilidade e e2e dos fluxos críticos |
+| 5 · App mobile | Em andamento | app Flutter para participante, palestrante e equipe de check-in (M01–M23); base pronta (M01) |
 
 ## Front-admin
 
@@ -44,7 +45,11 @@ Nuxt a partir do [`base_nuxt_modular`](https://github.com/tecrodrigocastro/base_
 
 ## Front-public
 
-Nuxt SSR, a edição e o tema resolvidos pelo host (ADR 0008), com modo site próprio. Prontos: formulário do CFP e área do palestrante (P01, P03), checkout com Pix e cartão (P04, P05) e conta do participante com ingressos que abrem sem internet, crachá, transferência e pedidos (P06). Faltam o site template da edição, o checkout embutível, SEO, termos e LGPD, descadastro e viagem do palestrante (Marco 3). `app` (Flutter) ainda não foi iniciado.
+Nuxt SSR, a edição e o tema resolvidos pelo host (ADR 0008), com modo site próprio. Prontos: formulário do CFP e área do palestrante (P01, P03), checkout com Pix e cartão (P04, P05) e conta do participante com ingressos que abrem sem internet, crachá, transferência e pedidos (P06). Faltam o site template da edição, o checkout embutível, SEO, termos e LGPD, descadastro e viagem do palestrante (Marco 3). 
+
+## App mobile
+
+Flutter, a partir do [`base_clean_arch_bloc`](https://github.com/tecrodrigocastro/base_clean_arch_bloc), um app só para os três papéis, com a identidade de cada edição vinda da API ([design](https://claude.ai/artifact/3yAeWXmnxFSdActqPdqt7K#page-dcb81aee8d83)). A compra de ingresso continua no site; o app mostra, transfere e usa o ingresso. Decisões de 28/11/2026: transferência de ingresso passa a ter aceite de quem recebe (B54, também no site com a P12); no celular, o check-in da equipe é feito pelo app, e o painel (A18) fica com a mesa de credenciamento e o PWA como plano B. O que o app precisa do backend está no Marco 3 (B50–B56) e nas issues de programação, check-in, push e LGPD.
 
 ## Decisões de arquitetura — ver histórico da conversa de planejamento (3 nov 2026)
 

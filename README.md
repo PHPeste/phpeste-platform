@@ -4,7 +4,7 @@ Plataforma única para organizar o [PHPeste](https://phpeste.dev), o evento anua
 
 A primeira edição a usar a plataforma é o PHPeste 2027, em João Pessoa (PB), organizado pela comunidade PHP-PB.
 
-> **Status (27/11/2026):** Marcos 0, 1 e 2 concluídos. Já funcionam o núcleo (comunidades, edições, equipe, identidade visual, domínios), o CFP completo, a venda de ingressos com Pix e cartão no gateway da própria comunidade, e a gestão da organização (patrocinadores, fornecedores, finanças, tarefas, modelos de e-mail). No site da edição já existem o formulário do CFP, a área do palestrante, o checkout e a conta do participante. Próximo: Marco 3 (programação, check-in, site da edição e checkout embutível). O `app` (Flutter) ainda não foi iniciado.
+> **Status (27/11/2026):** Marcos 0, 1 e 2 concluídos. Já funcionam o núcleo (comunidades, edições, equipe, identidade visual, domínios), o CFP completo, a venda de ingressos com Pix e cartão no gateway da própria comunidade, e a gestão da organização (patrocinadores, fornecedores, finanças, tarefas, modelos de e-mail). No site da edição já existem o formulário do CFP, a área do palestrante, o checkout e a conta do participante. Próximo: Marco 3 (programação, check-in, site da edição e checkout embutível) e o app mobile (Marco 5), cuja base já está em `app/`.
 
 ## Por que esta plataforma existe
 
@@ -37,12 +37,13 @@ Pronto:
 - **Site da edição:** formulário do CFP e área do palestrante; checkout com Pix e cartão; conta do participante com os ingressos (o QR abre sem internet), crachá, transferência e histórico de pedidos.
 - **Gestão da organização:** patrocinadores (funil, cotas e entregas), fornecedores (cadastro global e contratos por edição), finanças (receitas, despesas, orçamento), tarefas (kanban com lembretes), modelos de e-mail por edição e trilha de auditoria.
 
-A fazer (Marcos 3 e 4, ver o [board](https://github.com/orgs/PHPeste/projects/2)):
+A fazer (Marcos 3, 4 e 5, ver o [board](https://github.com/orgs/PHPeste/projects/2)):
 
 - **Programação:** salas, sessões, grade com validação de conflitos e agenda pessoal.
 - **Check-in:** leitura de QR no credenciamento, com modo offline.
 - **Site da edição completo** (template, SEO, termos e LGPD) e **checkout embutível** no site da comunidade.
-- **Push, app do participante**, feedback, certificados, sorteio, relatórios e operação (carga, backups, runbook).
+- **App mobile** (Marco 5): um app só para participante (início, programação, agenda, ingresso que abre sem internet, transferência, notificações), palestrante (propostas e confirmação) e equipe (check-in com leitura de QR, busca e fila offline).
+- **Push**, feedback, certificados, sorteio, relatórios e operação (carga, backups, runbook).
 
 ## Princípios
 
@@ -59,7 +60,7 @@ A fazer (Marcos 3 e 4, ver o [board](https://github.com/orgs/PHPeste/projects/2)
 | Documentação da API | [Scramble](https://github.com/dedoc/scramble) (OpenAPI) |
 | Admin | Nuxt, a partir do [base_nuxt_modular](https://github.com/tecrodrigocastro/base_nuxt_modular) |
 | Site público e checkout | Nuxt (SSR) |
-| App do participante | Flutter, a partir do [base_clean_arch_bloc](https://github.com/tecrodrigocastro/base_clean_arch_bloc) |
+| App mobile | Flutter 3.50, a partir do [base_clean_arch_bloc](https://github.com/tecrodrigocastro/base_clean_arch_bloc) (clean architecture com BLoC) |
 | Autenticação | Laravel Sanctum (token Bearer) |
 | Filas e cache | Redis |
 | Qualidade | Pint, Larastan, Pest e Playwright |
@@ -73,7 +74,7 @@ phpeste-platform/
 ├── backend/        # Laravel: API, filas, webhooks (módulos em app-modules/)
 ├── front-admin/    # Nuxt: painel da organização
 ├── front-public/   # Nuxt SSR: área do palestrante e participante, checkout e site da edição, por host (ou só a área, quando a comunidade tem site próprio)
-└── app/            # (planejado, ainda sem marco) Flutter: app do participante
+└── app/            # Flutter: app do participante, palestrante e equipe de check-in
 ```
 
 ## Módulos do backend
@@ -144,8 +145,15 @@ composer update phpeste/<nome>
   curl -H 'X-Forwarded-Host: <domínio da edição>' http://localhost:3000/
   ```
 
-  Os testes dos três projetos rodam com `npm test` e `npm run test:e2e` (Playwright, com a API simulada) nos fronts e `composer check` no backend; o CI roda os mesmos comandos em todo PR.
-- **App** (`app/`): ainda não iniciado.
+  Os testes dos fronts e do backend rodam com `npm test` e `npm run test:e2e` (Playwright, com a API simulada) nos fronts e `composer check` no backend; o CI roda os mesmos comandos em todo PR.
+- **App** (`app/`): base pronta; as telas entram no Marco 5.
+
+  ```bash
+  cd app
+  flutter pub get
+  flutter run --flavor dev --dart-define-from-file=env/dev.json   # emulador Android, API local em 10.0.2.2:8000
+  flutter analyze && flutter test
+  ```
 
 ## Documentação
 
@@ -159,6 +167,7 @@ Tudo o que não cabe neste README fica em [`docs/`](docs/):
 - [`deploy/dominios-e-tls.md`](docs/deploy/dominios-e-tls.md): proxy, domínios das edições e certificados
 - [`adr/`](docs/adr/): o porquê de cada decisão de arquitetura (0001–0009)
 - [Design do admin](https://claude.ai/artifact/3B7ZWqjBQPDFZ5vhGgNs4N#page-dcb81aee8d83): protótipo das telas do `front-admin`
+- [Design do app](https://claude.ai/artifact/3yAeWXmnxFSdActqPdqt7K#page-dcb81aee8d83): telas e fluxos do `app/` (participante, palestrante e equipe)
 - Guia para a comunidade anfitriã: criar a edição, conectar o gateway, tematizar e abrir o CFP (a escrever)
 
 

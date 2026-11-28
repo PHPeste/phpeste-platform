@@ -13,7 +13,7 @@ from html import escape
 from pathlib import Path
 
 OUT = Path(__file__).with_name("arquitetura.html")
-RETRATO = "27/11/2026 · fim do Marco 2"
+RETRATO = "28/11/2026 · M01 (base do app)"
 
 # ---------------------------------------------------------------- estilo ---
 # Cores do tema Sertão (front-admin) para o que é da plataforma, e neutras
@@ -171,7 +171,7 @@ b.append(group(10, 30, 230, 500, "Quem usa", "client"))
 b.append(box(24, 62, 202, 92, "Painel da organização", ["front-admin · Nuxt 4 SPA", "organizador, financeiro,", "avaliador, check-in"], "client"))
 b.append(box(24, 168, 202, 104, "Site da edição", ["front-public · Nuxt 4 SSR", "site, CFP, checkout,", "área do palestrante e", "do participante"], "client"))
 b.append(box(24, 286, 202, 78, "Site próprio da comunidade", ["opcional: chama só a", "API pública (CORS por edição)"], "client", dashed=True))
-b.append(box(24, 378, 202, 64, "App Flutter", ["ainda não iniciado"], "todo", dashed=True))
+b.append(box(24, 378, 202, 64, "App Flutter", ["participante, palestrante", "e check-in · base pronta"], "todo", dashed=True))
 b.append(box(24, 456, 202, 62, "Gateways (webhooks)", ["Asaas e Mercado Pago"], "external"))
 
 b.append(box(275, 200, 120, 150, "Caddy", ["proxy reverso", "TLS sob demanda", "para domínio de", "cada edição", "(tls-check)"], "infra", center=True))
@@ -590,6 +590,7 @@ status = [
     ("Marco 2 · Ingressos", "Concluído", "backend: ingressos, cupons, pedidos, Asaas, Mercado Pago, webhooks, reembolso, conciliação, QR, importação, patrocínio, fornecedores, finanças, tarefas, webhooks do Resend; telas: A14 (ingressos), A15 (pedidos e reembolso), A16 (pagamentos e gateway), A17 (participantes), A19 (patrocinadores), A20 (fornecedores), A21 (finanças), A22 (tarefas), A23 (modelos de e-mail); no site, P04 e P05 (checkout com Pix e cartão) e P06 (conta do participante)"),
     ("Marco 3 · Evento pronto", "A fazer", "grade e programação (B35–B37, A13), check-in com modo offline (B38–B39, A18), push (B40), API pública e checkout embutível (B41, P07), site da edição (P02, P08–P10), viagem do palestrante (P11)"),
     ("Marco 4 · Operação", "A fazer", "engajamento (B42), LGPD (B43), relatórios (B44), carga, backups e runbook (B45), dados de demonstração (B46), acessibilidade e e2e (A26, A27)"),
+    ("Marco 5 · App mobile", "Em andamento", "base do app Flutter (M01); telas do participante, palestrante e check-in (M02–M23); o backend que o app precisa está no Marco 3 (B50–B56)"),
 ]
 pages.append(page(20, "Roadmap", "Onde estamos e o que falta",
     "Os milestones do GitHub e o board <b>PHPeste Platform</b> são a fonte da verdade do andamento; esta página é o retrato no dia da geração.",

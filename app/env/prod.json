@@ -1,0 +1,6 @@
+{
+  "FLAVOR": "prod",
+  "API_URL": "https://api.phpeste.dev/api/v1",
+  "USE_MOCKS": false,
+  "LOG_API": false
+}
