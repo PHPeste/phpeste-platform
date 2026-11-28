@@ -65,3 +65,5 @@ ios/ExportOptions.plist.local
 *.p8
 *.p12
 *.mobileprovision
+# Diferenças dos testes golden
+**/test/golden/failures/

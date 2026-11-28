@@ -52,6 +52,18 @@ lib/
 
 `SessionService.signedIn` (`ValueNotifier`) é restaurado do armazenamento antes do `runApp` e o `GoRouter` observa ele (`refreshListenable`). `sessionRedirect` manda rota privada sem sessão para `/entrar?de=<destino>` e, com sessão, devolve para o destino (só caminho interno) ou para `/inicio`. Por isso tela nenhuma navega depois de entrar ou sair: basta salvar ou remover o token. Rota nova entra em `AppRoutes`; rota aberta sem sessão entra em `AppRoutes.public`. Os links que abrem o app (B56, M21) chegam por esse mesmo roteador.
 
+## Tema e componentes
+
+- `lib/src/core/theme/`: `PhColors` (os tokens `--ph-*` do tema Sertão como `ThemeExtension`, lidos com `context.ph`), `PhTheme.build(colors)` (o `ThemeData`, com Lexend 400/500/600 de `assets/fonts/lexend/` e alvo mínimo de 44 px) e `contrast.dart`.
+- Tema por edição (`features/edition_theme/`): `GET /public/editions/{id}/theme`, guardado no aparelho para abrir sem internet. Da edição o app usa só marca, destaque, apoio e logo (`PhColors.withEdition`); texto e cores de estado ficam fixos. Cor que não passa de 4,5:1 com o texto dela (ou de 3:1 da marca sobre o fundo) cai para a do Sertão. O `EditionThemeBloc` (singleton) recebe `EditionThemeRequested(editionId)` quando a edição é escolhida (M05) e `EditionThemeCleared` ao sair; o `AppWidget` monta o `ThemeData` a partir dele.
+- `lib/src/core/ui/`: `PhButton` (primário, secundário, perigo, destaque, pequeno, carregando, largura total), `PhChip`, `PhBadge` (estado sempre com texto), `PhCard`, `PhTextField` (rótulo em cima, dica, erro), `PhAppBar` (voltar de 44 px), `PhBottomNav` (5 destinos, Ingresso no centro em destaque), `PhAvatar`, `PhStripe` e os estados `PhOfflineBanner`, `PhMessageState` (vazio), `PhErrorState` e `PhLoadingList`. Tela nova monta com eles antes de estilizar widget do Material na mão.
+- Catálogo em `/_dev/componentes` (só em debug, sem login), com a troca entre o Sertão e um tema de edição de exemplo.
+- Tema escuro fica fora até o design definir.
+
+## Testes
+
+`flutter test` roda tudo. Os golden (`test/golden/`, marcados com `@Tags(['golden'])`) comparam com imagens geradas num Mac; no CI rodam num job em macOS e o resto roda em Linux com `--exclude-tags golden`. `test/flutter_test_config.dart` carrega a Lexend e os ícones e aceita até 0,5% de diferença. Para atualizar as imagens depois de mudar um componente: `flutter test --tags golden --update-goldens`, e conferir as imagens no PR.
+
 ## Comandos
 
 ```bash

@@ -25,7 +25,7 @@
 | 19 | Telas: organização (patrocinadores, fornecedores, finanças, tarefas, comunicação; cresce a cada tela do Marco 2) |
 | 20 | Onde estamos e o que falta |
 
-Retrato de 28/11/2026, com a base do app Flutter (M01) e o Marco 5 no roadmap.
+Retrato de 28/11/2026, com a base, o tema e os componentes do app Flutter (M01 e M02).
 
 ## Como atualizar
 
